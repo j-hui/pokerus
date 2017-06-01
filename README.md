@@ -2,6 +2,7 @@
 
 Using GNU stow to sync my dotfiles
 
+
 ## Darwin Bootstrap
 
 Good to have these.
@@ -16,17 +17,17 @@ Good to have these.
 	defaults write -g InitialKeyRepeat -int 10 # normal minimum is 15 (225 ms)
 	defaults write -g ApplePressAndHoldEnabled -bool true
 
+## Download
+
+	git clone git@github.com:j-hui/pokerus.git
+
+
 ## Prerequisites
 
 	vim tmux
 
+
 ## Usage
-
-Download:
-
-	git clone git@github.com:j-hui/pokerus.git
-
-Run:
 
 	./alias.sh
 	./infect.sh bash git tmux vim
