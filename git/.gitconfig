@@ -1,6 +1,8 @@
 [user]
 	email = jwongsquared@gmail.com
 	name = John Hui
+[push]
+	default = simple
 [alias]
 	co = checkout
 	br = branch
