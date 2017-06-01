@@ -24,7 +24,7 @@ Good to have these.
 
 ## Prerequisites
 
-	vim tmux
+	stow vim tmux
 
 
 ## Usage
