@@ -8,10 +8,15 @@ if [[ "$#" -lt 1 ]]; then
 fi
 
 for dir in "$@"; do
-	if [[ -d "$dir" ]]; then
-		stow "$dir" --target="$HOME" --ignore='\.DS_Store'
-		echo "$TAG infected $HOME with $dir"
-	else
+	if [[ ! -d "$dir" ]]; then
 		echo "$TAG $dir is not a directory"
+	elif [[ "${dir##*.}" == "immune" ]]; then
+		echo "$TAG ignoring $dir"
+	else
+		if stow "$dir" --target="$HOME" --ignore='\.DS_Store'; then
+			echo "$TAG infected $HOME with $dir"
+		else
+			echo "$TAG encountered error infecting $dir"
+		fi
 	fi
 done
