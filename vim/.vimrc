@@ -67,6 +67,10 @@ set foldmethod=indent
 nnoremap j gj
 nnoremap k gk
 
+" Indent-Guides
+let g:indent_guides_start_level = 2
+let g:indent_guides_guide_size = 1
+
 "let vim_markdown_preview_github=1
 "map <F12> :set colorcolumn=81<CR>
 
