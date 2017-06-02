@@ -24,10 +24,11 @@ Good to have these.
 
 ## Prerequisites
 
-	stow vim tmux
+	stow vim tmux make cmake
 
 
 ## Usage
 
 	./alias.sh
 	./infect.sh bash git tmux vim
+	git submodule update --init --recursive
