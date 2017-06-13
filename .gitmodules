@@ -4,9 +4,6 @@
 [submodule "vim/.vim/bundle/vim-airline"]
 	path = vim/.vim/bundle/vim-airline
 	url = https://github.com/bling/vim-airline
-[submodule "vim/.vim/bundle/youcompleteme"]
-	path = vim/.vim/bundle/youcompleteme
-	url = https://github.com/valloric/youcompleteme
 [submodule "vim/.vim/bundle/vim-indent-guides"]
 	path = vim/.vim/bundle/vim-indent-guides
 	url = git://github.com/nathanaelkane/vim-indent-guides.git
