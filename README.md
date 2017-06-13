@@ -24,7 +24,7 @@ Good to have these.
 
 ## Prerequisites
 
-	stow vim tmux make cmake
+	stow vim tmux make
 
 
 ## Usage
@@ -32,3 +32,4 @@ Good to have these.
 	./alias.sh
 	./infect.sh bash git tmux vim
 	git submodule update --init --recursive
+	
