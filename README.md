@@ -26,6 +26,10 @@ Good to have these.
 
 	stow vim tmux make
 
+If GNU stow is unavailable, get it from the GNU mirror directly:
+
+	wget http://mirrors.peers.community/mirrors/gnu/stow/stow-latest.tar.gz
+
 
 ## Usage
 
