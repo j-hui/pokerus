@@ -23,11 +23,15 @@ syntax enable
  colorscheme elflord
  set background=dark
 
-set tabstop=8 noexpandtab shiftwidth=8 softtabstop=8
+ let &colorcolumn=join(range(81,999),",")
+ highlight ColorColumn ctermbg=235 guibg=#2c2d27
 
-autocmd FileType python setlocal tabstop=4 expandtab shiftwidth=4 softtabstop=4
+ " Whitespace rules
+set tabstop=4 expandtab shiftwidth=4 softtabstop=4
+
+"autocmd FileType python setlocal tabstop=4 expandtab shiftwidth=4 softtabstop=4
+autocmd FileType c cpp setlocal tabstop=8 noexpandtab shiftwidth=8 softtabstop=8
 autocmd FileType make setlocal noexpandtab
-autocmd FileType javascript setlocal tabstop=4 expandtab shiftwidth=4 softtabstop=4
 autocmd Filetype ocaml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 inoremap <S-Tab> <C-V><Tab>
 
@@ -67,18 +71,20 @@ set foldmethod=indent
 nnoremap j gj
 nnoremap k gk
 
+" open files where left off
+let g:lastplace_open_folds = 0
+"autocmd BufReadPost *
+"\ if line("'\"") > 0 && line("'\"") <= line("$") |
+"\   exe "normal! g`\"" |
+"\ endif
+
 " Indent-Guides
 let g:indent_guides_start_level = 2
 let g:indent_guides_guide_size = 1
 
-"let vim_markdown_preview_github=1
-"map <F12> :set colorcolumn=81<CR>
-
-"let vim_markdown_preview_toggle=1
-"let vim_markdown_preview_browser='Safari'
-
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
+
 map ,m :!echo; echo '*** make ***'; echo; make<CR>
 map ,t :!echo; echo '*** make test ***'; echo; make test<CR>
 map ,r :!echo; echo '*** make run ***'; echo; make run<CR>
