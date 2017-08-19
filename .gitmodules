@@ -13,3 +13,6 @@
 [submodule "vim/.vim/bundle/vim-surround"]
 	path = vim/.vim/bundle/vim-surround
 	url = git://github.com/tpope/vim-surround.git
+[submodule "vim/.vim/bundle/vim-lastplace"]
+	path = vim/.vim/bundle/vim-lastplace
+	url = git://github.com/farmergreg/vim-lastplace.git
