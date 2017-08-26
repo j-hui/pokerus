@@ -33,7 +33,8 @@ If GNU stow is unavailable, get it from the GNU mirror directly:
 
 ## Usage
 
+    # optional: ./disinfect.sh
+	git submodule update --init --recursive
 	./alias.sh
 	./infect.sh bash git tmux vim
-	git submodule update --init --recursive
 	
