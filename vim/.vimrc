@@ -30,7 +30,7 @@ syntax enable
 set tabstop=4 expandtab shiftwidth=4 softtabstop=4
 
 "autocmd FileType python setlocal tabstop=4 expandtab shiftwidth=4 softtabstop=4
-autocmd FileType c cpp setlocal tabstop=8 noexpandtab shiftwidth=8 softtabstop=8
+autocmd FileType c setlocal tabstop=8 noexpandtab shiftwidth=8 softtabstop=8
 autocmd FileType make setlocal noexpandtab
 autocmd Filetype ocaml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 autocmd Filetype go setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
