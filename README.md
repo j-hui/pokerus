@@ -19,7 +19,8 @@ Good to have these.
 
 ## Download
 
-	git clone git@github.com:j-hui/pokerus.git
+	git clone git@github.com:j-hui/pokerus.git ~/pokerus
+	cd ~/pokerus
 
 
 ## Prerequisites
@@ -33,8 +34,13 @@ If GNU stow is unavailable, get it from the GNU mirror directly:
 
 ## Usage
 
-    # optional: ./disinfect.sh
+	# optional: ./disinfect.sh
 	git submodule update --init --recursive
 	./alias.sh
 	./infect.sh bash git tmux vim
-	
+
+## Extras
+
+	# set up git
+	git config --global user.email 
+	git config --global user.name 
