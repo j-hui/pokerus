@@ -34,6 +34,7 @@ autocmd FileType c setlocal tabstop=8 noexpandtab shiftwidth=8 softtabstop=8
 autocmd FileType make setlocal noexpandtab
 autocmd Filetype ocaml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 autocmd Filetype yaml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
+autocmd Filetype go setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 inoremap <S-Tab> <C-V><Tab>
 
 " Use smart tabs
