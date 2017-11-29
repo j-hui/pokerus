@@ -169,7 +169,7 @@ alias mrproper="rm -rvf .*.swp"
 alias f="find . -name"
 
 rgrep() {
-	grep -r "$1" .
+	grep -r "$@" .
 }
 
 if [ -f ~/.ssh/config ]; then
