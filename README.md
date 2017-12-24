@@ -49,4 +49,4 @@ Set up git:
 
 Ubuntu kernel dev:
 
-    build-essential libqt4-dev pkg-config libncurses5-dev
+    build-essential libssl-dev libqt4-dev pkg-config libncurses5-dev
