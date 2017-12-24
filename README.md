@@ -41,6 +41,12 @@ If GNU stow is unavailable, get it from the GNU mirror directly:
 
 ## Extras
 
-	# set up git
+Set up git:
+
 	git config --global user.email 
 	git config --global user.name 
+
+
+Ubuntu kernel dev:
+
+    build-essential libqt4-dev pkg-config libncurses5-dev
