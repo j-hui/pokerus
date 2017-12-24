@@ -25,7 +25,7 @@ Good to have these.
 
 ## Prerequisites
 
-	stow vim tmux make
+	git stow vim tmux make
 
 If GNU stow is unavailable, get it from the GNU mirror directly:
 
