@@ -25,7 +25,7 @@ Good to have these.
 
 ## Prerequisites
 
-	git stow vim tmux make
+	sudo git stow vim tmux make
 
 If GNU stow is unavailable, get it from the GNU mirror directly:
 
@@ -47,6 +47,6 @@ Set up git:
 	git config --global user.name 
 
 
-Ubuntu kernel dev:
+Linux kernel dev:
 
-    build-essential libncurses5-dev pkg-config python
+    build-essential bc bison libncurses5-dev pkg-config python
