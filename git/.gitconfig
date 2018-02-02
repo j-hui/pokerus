@@ -21,3 +21,5 @@
 	root = rev-parse --show-toplevel
 	conf = config --global -e
     hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+[color]
+	ui = auto
