@@ -52,6 +52,11 @@ Linux kernel dev:
     build-essential bc bison libncurses5-dev pkg-config python
 
 
+No password for `sudo`:
+
+    <user> ALL=(ALL) NOPASSWD:ALL
+
+
 ### Install VirtualBox Guest Additions
 
 Download ISO file:
