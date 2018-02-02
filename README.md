@@ -50,3 +50,17 @@ Set up git:
 Linux kernel dev:
 
     build-essential bc bison libncurses5-dev pkg-config python
+
+
+## Make headless
+
+Write to `/etc/default/grub`:
+    
+    #GRUB_CMDLINE_LINUX_DEFAULT=<whatever>
+    GRUB_CMDLINE_LINUX="text"
+    GRUB_TERMINAL=console
+
+For `systemd`:
+
+    systemctl set-default multi-user.target
+
