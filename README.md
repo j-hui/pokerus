@@ -52,7 +52,19 @@ Linux kernel dev:
     build-essential bc bison libncurses5-dev pkg-config python
 
 
-## Make headless
+### Install VirtualBox Guest Additions
+
+Download ISO file:
+
+    sudo apt-get install virtualbox-guest-additions-iso
+
+Mount & install:
+
+    sudo mount /usr/share/virtualbox/VBoxGuestAdditions.iso /mnt
+    sudo /mnt/VBoxLinuxAdditions.run
+
+
+### Make headless
 
 Write to `/etc/default/grub`:
     
