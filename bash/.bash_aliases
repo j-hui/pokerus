@@ -48,15 +48,6 @@ alias egrep="egrep --color=auto"
 alias fgrep="fgrep --color=auto"
 alias bell="echo -e '\a'"
 
-function backup() {
-        mv $1{,.backup}
-}
-
-function restore() {
-        mv ${1%*.backup}{.backup,}
-}
-
-
 [ -z "$PS1" ] && return
 # color prompt
 GREEN="\[\033[40;0;32m\]"
@@ -137,31 +128,6 @@ ssh-conf() {
 	if [ -w ~/.ssh/config ]; then $EDITOR ~/.ssh/config
 	else errecho 'No ~/.ssh/config found.'; return 1
 	fi
-}
-
-ssh-export() {
-	[ $# -lt 1 ] && errecho "Usage: $0 []" && return 1
-	for host in "$@"; do
-		ssh ${host} > /dev/null <<-EOF
-			set -e 
-			[ -d ~/.ssh ] || mkdir ~/.ssh
-			echo "# $(hostname)" >> ~/.ssh/authorized_keys
-			echo "$(cat ~/.ssh/id_rsa.pub)" >> ~/.ssh/authorized_keys
-EOF
-	done
-}
-
-ssh-bootstrap() {
-	[ $# -lt 1 ] && errecho "Usage: $0 []" && return 1
-	for host in "$@"; do
-		ssh ${host} > /dev/null <<-EOF
-			set -e
-			ssh -o StrictHostKeyChecking=no git@github.com
-			(cd ~ && git clone git@github.com:j-hui/dot-files.git .__tmp && mv .__tmp/.git . && rm -rf .__tmp && git reset --hard)
-			./.init-dot.sh
-			./.init-git-config.sh
-EOF
-	done
 }
 
 alias :w="echo You\'re not in vim, doofus."
