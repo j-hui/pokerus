@@ -15,6 +15,7 @@ case "$OSTYPE" in
 	;;
 *darwin*)
 	alias ls='ls -G'
+    alias nproc='sysctl -n hw.ncpu'
 	;;
 esac
 
