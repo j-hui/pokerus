@@ -6,13 +6,13 @@
 	url = https://github.com/bling/vim-airline
 [submodule "vim/.vim/bundle/vim-indent-guides"]
 	path = vim/.vim/bundle/vim-indent-guides
-	url = git://github.com/nathanaelkane/vim-indent-guides.git
+	url = https://github.com/nathanaelkane/vim-indent-guides.git
 [submodule "vim/.vim/bundle/vim-gitgutter"]
 	path = vim/.vim/bundle/vim-gitgutter
 	url = https://github.com/airblade/vim-gitgutter
 [submodule "vim/.vim/bundle/vim-surround"]
 	path = vim/.vim/bundle/vim-surround
-	url = git://github.com/tpope/vim-surround.git
+	url = https://github.com/tpope/vim-surround.git
 [submodule "vim/.vim/bundle/vim-lastplace"]
 	path = vim/.vim/bundle/vim-lastplace
-	url = git://github.com/farmergreg/vim-lastplace.git
+	url = https://github.com/farmergreg/vim-lastplace.git
