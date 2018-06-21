@@ -41,21 +41,30 @@ If GNU stow is unavailable, get it from the GNU mirror directly:
 
 ## Extras
 
-Set up git:
+### Setup
+
+Git:
 
 	git config --global user.email 
 	git config --global user.name 
 
+Debian `alternative`s:
 
-Linux kernel dev:
-
-    build-essential bc bison libncurses5-dev pkg-config python
-
+    sudo update-alternatives --set editor /usr/bin/vim.basic
 
 No password for `sudo` (put at bottom):
 
     <user> ALL=(ALL) NOPASSWD:ALL
 
+### Common packages
+
+Useful:
+    
+    tree python3 htop
+
+Linux kernel dev:
+
+    build-essential bc bison libncurses5-dev pkg-config python
 
 ### Install VirtualBox Guest Additions
 
