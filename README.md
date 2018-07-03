@@ -39,6 +39,32 @@ If GNU stow is unavailable, get it from the GNU mirror directly:
 	./alias.sh
 	./infect.sh bash git tmux vim
 
+## User Management
+
+### Disable Root SSH Login
+
+Edit:
+
+    /etc/ssh/sshd_config
+
+Set:
+
+    PermitRootLogin no
+
+### Ubuntu
+
+Add regular user:
+
+    adduser <username>
+
+Make `sudo`:
+
+    usermod -aG sudo <username>
+
+Add system user:
+
+    adduser --system --no-create-home --shell /bin/false --group --disabled-login <username>
+
 ## Extras
 
 ### Setup
