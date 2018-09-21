@@ -134,6 +134,7 @@ ssh-conf() {
 alias :w="echo You\'re not in vim, doofus."
 alias mrproper="rm -rvf .*.swp"
 alias f="find . -name"
+alias defob="perl -pi -e 's/[^[:ascii:]]//g'"
 
 rgrep() {
 	grep -r "$@" .
