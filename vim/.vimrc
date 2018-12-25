@@ -39,6 +39,8 @@ autocmd Filetype ocaml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 autocmd Filetype haskell setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 autocmd Filetype yaml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 autocmd Filetype go setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
+autocmd Filetype bib setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
+autocmd Filetype tex setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 
 " Use smart tabs
 set smarttab
@@ -77,6 +79,8 @@ nnoremap k gk
 nnoremap <C-j> <C-d>
 nnoremap <C-k> <C-u>
 
+inoremap kj <Esc>
+vnoremap kj <Esc>
 
 " open files where left off
 let g:lastplace_open_folds = 0
