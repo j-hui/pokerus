@@ -42,6 +42,8 @@ autocmd Filetype go setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 autocmd Filetype bib setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 autocmd Filetype tex setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 
+autocmd FileType c setlocal commentstring=//\ %s
+
 " Use smart tabs
 set smarttab
 
@@ -92,6 +94,7 @@ let g:lastplace_open_folds = 0
 " Indent-Guides
 let g:indent_guides_start_level = 2
 let g:indent_guides_guide_size = 1
+let g:indent_guides_enable_on_vim_startup = 1
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
