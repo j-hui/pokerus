@@ -1,5 +1,3 @@
-;; echo '(load "~/.pokerus.el")' >> ~/.emacs
-
 (require 'package)
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
                     (not (gnutls-available-p))))
@@ -18,8 +16,6 @@ There are two things you can do about this warning:
     (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")))))
 (package-initialize)
 
-;; M-x package-install RET proof-general
-
 ;; M-x package-install RET paradox
 (require 'paradox)
 (paradox-enable)
@@ -28,8 +24,12 @@ There are two things you can do about this warning:
 (color-theme-initialize)
 (color-theme-hober)
 
+(paradox-require 'use-package)
+
 (paradox-require 'evil)
 (evil-mode 1)
+
+(defvar w 'evil-save)
 
 (paradox-require 'evil-search-highlight-persist)
 (global-evil-search-highlight-persist t)
@@ -38,9 +38,23 @@ There are two things you can do about this warning:
 (global-evil-leader-mode)
 ;; (evil-leader/set-leader ",")
 
-;;(paradox-require 'powerline-evil)
-;;(powerline-evil-vim-color-theme)
-;;(display-time-mode t)
+(paradox-require 'evil-escape)
+(evil-escape-mode)
+(setq-default evil-escape-key-sequence "kj")
+
+(paradox-require 'powerline)
+(powerline-evil-vim-color-theme)
+(display-time-mode t)
+(paradox-require 'airline-themes)
+(load-theme 'airline-badwolf)
+
+(paradox-require 'evil-commentary)
+(evil-commentary-mode)
+
+(paradox-require 'linum-relative)
+(linum-relative-global-mode)
+(setq linum-relative-backend 'display-line-numbers-mode)
+(setq linum-relative-current-symbol "")
 
 (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
 (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
@@ -53,6 +67,24 @@ There are two things you can do about this warning:
 
 (define-key global-map (kbd "RET") 'newline-and-indent)
 
+;;; esc quits
+(defun minibuffer-keyboard-quit ()
+  "Abort recursive edit.
+In Delete Selection mode, if the mark is active, just deactivate it;
+then it takes a second \\[keyboard-quit] to abort the minibuffer."
+  (interactive)
+  (if (and delete-selection-mode transient-mark-mode mark-active)
+      (setq deactivate-mark  t)
+    (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
+    (abort-recursive-edit)))
+(define-key evil-normal-state-map [escape] 'keyboard-quit)
+(define-key evil-visual-state-map [escape] 'keyboard-quit)
+(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+
 (setq scroll-margin 5
       scroll-conservatively 9999
       scroll-step 1
@@ -62,9 +94,4 @@ There are two things you can do about this warning:
               tab-width 4
               tab-stop-list (quote (4 8))
               )
-
-(paradox-require 'linum-relative)
-(linum-relative-global-mode)
-(setq linum-relative-backend 'display-line-numbers-mode
-      linum-relative-current-symbol ""
-      )
+(setq vc-follow-symlinks t)
