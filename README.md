@@ -29,7 +29,7 @@ Good to have these.
 
 If GNU stow is unavailable, get it from the GNU mirror directly:
 
-	wget http://mirrors.peers.community/mirrors/gnu/stow/stow-latest.tar.gz
+	wget http://ftp.gnu.org/gnu/stow/stow-latest.tar.gz
 
 
 ## Usage
