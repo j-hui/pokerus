@@ -67,22 +67,21 @@ SFW_ERR='\[\033[40;0;31m\]D:'
 
 BR='############################'
 
-export PS1="$BASE \$(if [[ \$? != 0 ]]; then echo '$ERR'; else echo '$NERR'; fi) $CLEAR"
-export PS2="\[\033[40;0;34m\]8==D \[\033[0m\]"
-
 basic() {
-	PS1='\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-	PS2='> '
+	export PS1='\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+	export PS2='> '
 }
 sfw() {
-    PS1="$BASE \$(if [[ \$? != 0 ]]; then echo '$SFW_ERR'; else echo '$SFW_NERR'; fi) $CLEAR"
-    PS2="\[\033[40;0;34m\]8==D \[\033[0m\]"
+    export PS1="$BASE \$(if [[ \$? != 0 ]]; then echo '$SFW_ERR'; else echo '$SFW_NERR'; fi) $CLEAR"
+    export PS2="\[\033[40;0;34m\]8==D \[\033[0m\]"
 }
 
 nsfw() {
-    PS1="$BASE \$(if [[ \$? != 0 ]]; then echo '$ERR'; else echo '$NERR'; fi) $CLEAR"
-    PS2="\[\033[40;0;34m\]8==D \[\033[0m\]"
+    export PS1="$BASE \$(if [[ \$? != 0 ]]; then echo '$ERR'; else echo '$NERR'; fi) $CLEAR"
+    export PS2="\[\033[40;0;34m\]8==D \[\033[0m\]"
 }
+
+sfw
 
 # show "[hh:mm] user@host:pwd" in xterm title bar
 if [ "$TERM_PROGRAM" = "Apple_Terminal" ]; then
