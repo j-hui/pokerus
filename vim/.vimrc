@@ -31,6 +31,12 @@ autocmd InsertLeave * set nocul
 
  " Whitespace rules
 set tabstop=4 expandtab shiftwidth=4 softtabstop=4
+"
+" Linebreak on 80 characters
+set lbr
+set tw=80
+
+set modeline
 
 "autocmd FileType python setlocal tabstop=4 expandtab shiftwidth=4 softtabstop=4
 autocmd FileType c setlocal tabstop=8 noexpandtab shiftwidth=8 softtabstop=8
@@ -48,9 +54,6 @@ autocmd Filetype markdown setlocal tabstop=4 expandtab shiftwidth=4 softtabstop=
 " Use smart tabs
 set smarttab
 
-" Linebreak on 500 characters
-set lbr
-set tw=500
 
 " Indent
 set si " Smart indent
