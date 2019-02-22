@@ -23,6 +23,8 @@ if grep -q '~/.pokerus.el' ~/$profile; then
 	echo "$TAG error: ~/$profile seems already initialized:"
     echo
     grep -C 3 '~/.pokerus.el' ~/$profile
+    echo "$TAG attempting to install paradox any way"
+    emacs --eval="$sexpr"
 	exit -1
 else
 	echo "$src" >> ~/$profile
