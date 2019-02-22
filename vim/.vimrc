@@ -31,25 +31,29 @@ autocmd InsertLeave * set nocul
 
  " Whitespace rules
 set tabstop=4 expandtab shiftwidth=4 softtabstop=4
+"
+" Linebreak on 80 characters
+set lbr
+set tw=80
+
+set modeline
 
 "autocmd FileType python setlocal tabstop=4 expandtab shiftwidth=4 softtabstop=4
 autocmd FileType c setlocal tabstop=8 noexpandtab shiftwidth=8 softtabstop=8
 autocmd FileType make setlocal noexpandtab
-autocmd Filetype ocaml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
+autocmd Filetype ocaml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2 commentstring=(*%s*)
 autocmd Filetype haskell setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 autocmd Filetype yaml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 autocmd Filetype go setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 autocmd Filetype bib setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
-autocmd Filetype tex setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
+autocmd Filetype tex setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2 textwidth=80
+autocmd Filetype markdown setlocal tabstop=4 expandtab shiftwidth=4 softtabstop=4 textwidth=80
 
-autocmd FileType c setlocal commentstring=//\ %s
+"autocmd FileType c setlocal commentstring=//\ %s
 
 " Use smart tabs
 set smarttab
 
-" Linebreak on 500 characters
-set lbr
-set tw=500
 
 " Indent
 set si " Smart indent
@@ -82,7 +86,6 @@ nnoremap <C-j> <C-d>
 nnoremap <C-k> <C-u>
 
 inoremap kj <Esc>
-vnoremap kj <Esc>
 
 " open files where left off
 let g:lastplace_open_folds = 0
@@ -98,3 +101,5 @@ let g:indent_guides_enable_on_vim_startup = 1
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
+
+nnoremap <C-n> <C-w>
