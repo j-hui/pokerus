@@ -125,8 +125,13 @@ srcbash() {
 }
 
 ssh-conf() {
-	if [ -w ~/.ssh/config ]; then $EDITOR ~/.ssh/config
-	else errecho 'No ~/.ssh/config found.'; return 1
+	if [ -w ~/.ssh/config ]; then
+        $EDITOR ~/.ssh/config
+	else
+        errecho "No ~/.ssh/config found."
+        errecho "Trying to touch ~/.ssh/config, try running $0 again."
+        touch ~/.ssh/config
+        return 1
 	fi
 }
 
