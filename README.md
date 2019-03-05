@@ -31,7 +31,6 @@ If GNU stow is unavailable, get it from the GNU mirror directly:
 
 	wget http://ftp.gnu.org/gnu/stow/stow-latest.tar.gz
 
-
 ## Usage
 
 	# optional: ./disinfect.sh
@@ -88,7 +87,9 @@ Useful:
     
     tree python3 htop
 
-Linux kernel dev:
+### Linux kernel dev
+
+Kernel build packages:
 
     build-essential bc bison libncurses5-dev pkg-config python
 
@@ -98,8 +99,25 @@ And some kernel dev aliases (this will eventually go into a .bash_linux file)
     alias dm='sudo dmesg -c'
     alias lsgrub="grep '\$menuentry_id_option' /boot/grub/grub.cfg | sed 's/menuentry //g' | sed 's/--class.*menuentry_id_option//g' | nl -v 0"
 
+### VirtualBox
 
-### Install VirtualBox Guest Additions
+Some nice `VBoxManage` aliases (before I figure out Vagrant):
+
+    alias vmstart='VBoxManage startvm --type headless'
+    alias vmc='VBoxManage controlvm'
+    function vmpower() {
+        VBoxManage controlvm $1 poweroff
+    }
+    function vmacpi() {
+        VBoxManage controlvm $1 acpipowerbutton
+    }
+    alias vmls='VBoxManage list vms'
+    alias vmlson='VBoxManage list runningvms'
+    vmrestart() {
+        vmpower $1 && vmstart $1
+    }
+
+#### Install VirtualBox Guest Additions
 
 Download ISO file:
 
@@ -122,4 +140,5 @@ Write to `/etc/default/grub`:
 For `systemd`:
 
     systemctl set-default multi-user.target
+
 
