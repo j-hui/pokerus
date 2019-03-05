@@ -141,4 +141,16 @@ For `systemd`:
 
     systemctl set-default multi-user.target
 
+### Darwin
+
+Good for copying keys:
+
+    alias key='cat ~/.ssh/id_rsa.pub'
+
+And then SSH `config`:
+
+    Host *
+        UseKeychain yes
+        AddKeysToAgent yes
+        ForwardAgent yes
 
