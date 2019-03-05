@@ -92,6 +92,13 @@ Linux kernel dev:
 
     build-essential bc bison libncurses5-dev pkg-config python
 
+And some kernel dev aliases (this will eventually go into a .bash_linux file)
+
+    alias dw='sudo dmesg -w'
+    alias dm='sudo dmesg -c'
+    alias lsgrub="grep '\$menuentry_id_option' /boot/grub/grub.cfg | sed 's/menuentry //g' | sed 's/--class.*menuentry_id_option//g' | nl -v 0"
+
+
 ### Install VirtualBox Guest Additions
 
 Download ISO file:
