@@ -144,6 +144,15 @@ rgrep() {
 	grep -r "$@" .
 }
 
+PATH_ADD() {
+    if [[ "$1" ]]; then
+        case ":$PATH:" in
+            *":$1:"*) :;;           # already there
+            *) PATH="$1:$PATH";;    # or PATH="$PATH:$new_entry"
+        esac
+    fi
+}
+
 if [ -f ~/.ssh/config ]; then
 	complete -W "$(grep 'Host ' ~/.ssh/config | sed 's/Host //')" -X '\*' ssh
 fi
@@ -151,3 +160,4 @@ fi
 if [ -f ~/.bash_local ]; then
     . ~/.bash_local
 fi
+
