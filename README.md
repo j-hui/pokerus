@@ -158,4 +158,6 @@ Make Terminal.app aware of _italics_:
 
     curl https://gist.githubusercontent.com/sadsfae/0b4dd18670639f7dce941a1b2a9e4e9e/raw/908b48e6b6370da0568be8d138966c60240a50dd/xterm-256color-italic.terminfo > xterm-256color-italic.terminfo
     tic xterm-256color-italic.terminfo
+
+    # add this to .bashrc
     export TERM=xterm-256color-italic
