@@ -34,7 +34,7 @@ set tabstop=4 expandtab shiftwidth=4 softtabstop=4
 "
 " Linebreak on 80 characters
 set lbr
-set tw=80
+set textwidth=80
 
 set modeline
 
@@ -46,7 +46,6 @@ autocmd Filetype haskell setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 autocmd Filetype yaml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 autocmd Filetype go setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 autocmd Filetype bib setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
-autocmd Filetype tex setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2 textwidth=80
 autocmd Filetype markdown setlocal tabstop=4 expandtab shiftwidth=4 softtabstop=4 textwidth=80
 
 "autocmd FileType c setlocal commentstring=//\ %s
@@ -97,9 +96,31 @@ let g:lastplace_open_folds = 0
 " Indent-Guides
 let g:indent_guides_start_level = 2
 let g:indent_guides_guide_size = 1
-let g:indent_guides_enable_on_vim_startup = 1
+" let g:indent_guides_enable_on_vim_startup = 1
+" just use <Leader>ig
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
 nnoremap <C-n> <C-w>
+
+
+""" Begin: LaTeX """
+
+au Filetype tex setlocal tabstop=2
+au Filetype tex setlocal expandtab
+au Filetype tex setlocal shiftwidth=2
+au Filetype tex setlocal softtabstop=2
+au Filetype tex setlocal textwidth=80
+
+" Vimtex
+let g:tex_flavor='latex'
+" let g:vimtex_view_method='zathura'
+let g:vimtex_quickfix_mode=0
+set conceallevel=2
+let g:tex_conceal='abdmg'
+
+" otherwise rendered symbols render with a weird grey background color
+highlight Conceal ctermfg=NONE ctermbg=NONE
+
+""" End: LaTeX """
