@@ -19,3 +19,6 @@
 [submodule "vim/.vim/bundle/vim-commentary"]
 	path = vim/.vim/bundle/vim-commentary
 	url = https://github.com/tpope/vim-commentary.git
+[submodule "vim/.vim/bundle/vimtex"]
+	path = vim/.vim/bundle/vimtex
+	url = https://github.com/lervag/vimtex.git
