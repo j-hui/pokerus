@@ -9,34 +9,34 @@ Good to have these.
 
 #### Brew
 
-	/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 #### Key Repeat
 
-	defaults write -g KeyRepeat -int 1 # normal minimum is 2 (30 ms)
-	defaults write -g InitialKeyRepeat -int 10 # normal minimum is 15 (225 ms)
-	defaults write -g ApplePressAndHoldEnabled -bool false
+    defaults write -g KeyRepeat -int 1 # normal minimum is 2 (30 ms)
+    defaults write -g InitialKeyRepeat -int 10 # normal minimum is 15 (225 ms)
+    defaults write -g ApplePressAndHoldEnabled -bool false
 
 ## Download
 
-	git clone git@github.com:j-hui/pokerus.git ~/pokerus
-	cd ~/pokerus
+    git clone git@github.com:j-hui/pokerus.git ~/pokerus
+    cd ~/pokerus
 
 
 ## Prerequisites
 
-	sudo git stow vim tmux make
+    sudo git stow vim tmux make
 
 If GNU stow is unavailable, get it from the GNU mirror directly:
 
-	wget http://ftp.gnu.org/gnu/stow/stow-latest.tar.gz
+    wget http://ftp.gnu.org/gnu/stow/stow-latest.tar.gz
 
 ## Usage
 
-	# optional: ./disinfect.sh
-	git submodule update --init --recursive
-	./alias.sh
-	./infect.sh bash git tmux vim
+    # optional: ./disinfect.sh
+    git submodule update --init --recursive
+    ./alias.sh
+    ./infect.sh bash git tmux vim
 
 ## User Management
 
@@ -70,8 +70,8 @@ Add system user:
 
 Git:
 
-	git config --global user.email 
-	git config --global user.name 
+    git config --global user.email
+    git config --global user.name
 
 Debian `alternative`s:
 
@@ -84,7 +84,7 @@ No password for `sudo` (put at bottom):
 ### Common packages
 
 Useful:
-    
+
     tree python3 htop
 
 ### Linux kernel dev
@@ -132,7 +132,7 @@ Mount & install:
 ### Make headless
 
 Write to `/etc/default/grub`:
-    
+
     #GRUB_CMDLINE_LINUX_DEFAULT=<whatever>
     GRUB_CMDLINE_LINUX="text"
     GRUB_TERMINAL=console
@@ -154,3 +154,8 @@ And then SSH `config`:
         AddKeysToAgent yes
         ForwardAgent yes
 
+Make Terminal.app aware of _italics_:
+
+    curl https://gist.githubusercontent.com/sadsfae/0b4dd18670639f7dce941a1b2a9e4e9e/raw/908b48e6b6370da0568be8d138966c60240a50dd/xterm-256color-italic.terminfo > xterm-256color-italic.terminfo
+    tic xterm-256color-italic.terminfo
+    export TERM=xterm-256color-italic
