@@ -12,17 +12,29 @@ fi
 
 echo "$TAG aliasing to using ~/$profile"
 
-src='
+append() {
+    local dst=$1
+    local key=$2
+    local src=$3
+    
+    if grep -q "$key" "$dst"; then
+        echo "$TAG error: $dst seems already aliased:"
+        echo
+        grep -C 3 "$key" "$dst"
+        return 1
+    else
+        echo "$src" >> "$dst"
+        echo "$TAG: $dst aliased"
+    fi
+}
+
+append ~/$profile '~/.bash_aliases' '
 if [ -f ~/.bash_aliases ]; then
 	. ~/.bash_aliases # Pokerus
 fi
 '
 
-if grep -q '~/.bash_aliases' ~/$profile; then
-	echo "$TAG error: ~/$profile seems already aliased:"
-    echo
-    grep -C 3 '~/.bash_aliases' ~/$profile
-	exit -1
-else
-	echo "$src" >> ~/$profile
-fi
+append ~/.gitconfig '~/.pokerus.git' '
+[include]
+    path = ~/.gitpokerus
+'
