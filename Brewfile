@@ -1,3 +1,7 @@
+# Make sure we’re using the latest Homebrew
+update
+
+# Add taps
 tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/cask-fonts"
@@ -57,3 +61,6 @@ cask "mactex"
 brew "pandoc"
 brew "graphviz"
 brew "librsvg"
+
+# Remove outdated versions from the cellar
+cleanup
