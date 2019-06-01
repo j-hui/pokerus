@@ -2,24 +2,58 @@ tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/cask-fonts"
 tap "homebrew/core"
-brew "git"
-brew "htop"
-brew "make"
-brew "node"
+tap "homebrew/services"
+tap "koekeishiya/formulae"
+
+# Core utilities
 brew "python"
+brew "git"
+brew "gnu-tar"
 brew "stow"
-brew "subversion"
+brew "make"
 brew "tmux"
-brew "tree"
 brew "vim"
-cask "1password"
-cask "balenaetcher"
-cask "bitwig-studio"
+brew "wget"
+
+# Usability
+brew "koekeishiya/formulae/skhd"
 cask "font-source-code-pro"
+cask "zerotier-one"
+cask "hyperswitch"
+cask "spectacle"
+
+
+# Core apps
+cask "1password"
 cask "google-chrome"
-cask "mactex"
-cask "spotify"
+cask "wavebox"
+
+# Useful utilities
+brew "htop"
+brew "sshfs"
+brew "subversion"
+brew "tree"
+
+# Useful apps
+cask "balenaetcher"
 cask "transmission"
 cask "virtualbox"
 cask "vlc"
-cask "wavebox"
+
+# Creative apps
+cask "spotify"
+cask "musescore"
+cask "gimp"
+cask "bitwig-studio"
+
+# Language support
+brew "node"
+brew "opam"
+brew "haskell-stack"
+
+# Publishing
+cask "microsoft-office"
+cask "mactex"
+brew "pandoc"
+brew "graphviz"
+brew "librsvg"
