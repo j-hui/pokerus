@@ -43,8 +43,10 @@ There are two things you can do about this warning:
 (setq-default evil-escape-key-sequence "kj")
 
 (paradox-require 'powerline)
-(powerline-evil-vim-color-theme)
-(display-time-mode t)
+(powerline-default-theme)
+
+;;(powerline-evil-vim-color-theme)
+;;(display-time-mode t)
 (paradox-require 'airline-themes)
 (load-theme 'airline-badwolf)
 
@@ -53,7 +55,7 @@ There are two things you can do about this warning:
 
 (paradox-require 'linum-relative)
 (linum-relative-global-mode)
-(setq linum-relative-backend 'display-line-numbers-mode)
+;;(setq linum-relative-backend 'display-line-numbers-mode)
 (setq linum-relative-current-symbol "")
 
 (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
