@@ -38,6 +38,9 @@ set textwidth=80
 
 set modeline
 
+setlocal spelllang=en_us
+set spellfile=~/.vim/spell/en.utf-8.add
+
 "autocmd FileType python setlocal tabstop=4 expandtab shiftwidth=4 softtabstop=4
 autocmd FileType c setlocal tabstop=8 noexpandtab shiftwidth=8 softtabstop=8
 autocmd FileType make setlocal noexpandtab
@@ -46,7 +49,6 @@ autocmd Filetype haskell setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 autocmd Filetype yaml setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 autocmd Filetype go setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
 autocmd Filetype bib setlocal tabstop=2 expandtab shiftwidth=2 softtabstop=2
-autocmd Filetype markdown setlocal tabstop=4 expandtab shiftwidth=4 softtabstop=4 textwidth=80
 
 "autocmd FileType c setlocal commentstring=//\ %s
 
@@ -75,7 +77,7 @@ set undolevels=1000
 
 " Folding
 set foldlevelstart=10
-set foldnestmax=10 
+set foldnestmax=10
 set foldmethod=indent
 
 " Movement
@@ -104,23 +106,62 @@ set backspace=indent,eol,start
 
 nnoremap <C-n> <C-w>
 
+let t_ZH="\e[3m"
+let t_ZR="\e[23m"
+
+hi htmlItalic
+            \ term=standout
+            \ ctermfg=121
+            \ guifg=Green
+highlight htmlBoldItalic
+            \ term=bold,standout
+            \ cterm=bold ctermfg=121
+            \ gui=bold guifg=Green
+highlight htmlUnderlineItalic
+            \ term=underline,standout
+            \ cterm=underline ctermfg=121
+            \ gui=underline guifg=Green
+highlight htmlBoldUnderlineItalic
+            \ term=underline,bold,standout
+            \ cterm=underline,bold ctermfg=121
+            \ gui=underline,bold guifg=Green
 
 """ Begin: LaTeX """
 
-au Filetype tex setlocal tabstop=2
-au Filetype tex setlocal expandtab
-au Filetype tex setlocal shiftwidth=2
-au Filetype tex setlocal softtabstop=2
-au Filetype tex setlocal textwidth=80
+au Filetype tex setlocal
+            \ tabstop=2
+            \ expandtab
+            \ shiftwidth=2
+            \ softtabstop=2
+            \ textwidth=80
+            \ spell
+au Filetype tex highlight Conceal ctermfg=NONE ctermbg=NONE
+" otherwise rendered symbols render with a weird grey background color
 
 " Vimtex
 let g:tex_flavor='latex'
 " let g:vimtex_view_method='zathura'
-let g:vimtex_quickfix_mode=0
+" let g:vimtex_quickfix_mode=0 " wtf this doesn't seem to work
+" let g:vimtex_compiler_enabled = 0
+"
+let g:vimtex_quickfix_open_on_warning=0
+let g:vimtex_quickfix_autoclose_after_keystrokes=2
+let g:vimtex_quickfix_mode=2  " open on errors without focus
+
 set conceallevel=2
 let g:tex_conceal='abdmg'
+let g:Tex_GotoError=0
 
-" otherwise rendered symbols render with a weird grey background color
-highlight Conceal ctermfg=NONE ctermbg=NONE
 
 """ End: LaTeX """
+
+""" Begin: Markdown """
+au Filetype markdown setlocal
+            \ tabstop=4
+            \ expandtab
+            \ shiftwidth=4
+            \ softtabstop=4
+            \ textwidth=80
+            \ spell
+
+""" End: Markdown """
