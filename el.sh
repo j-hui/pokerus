@@ -14,19 +14,21 @@ fi
 echo "$TAG aliasing to using ~/$profile"
 
 src='(load "~/.pokerus.el")'
-sexpr="
-(package-refresh-contents)
-(package-install 'paradox)
-"
+
+install_paradox() {
+    emacs --eval="(package-refresh-contents)"
+    emacs --eval="(package-install 'paradox)"
+}
 
 if grep -q '~/.pokerus.el' ~/$profile; then
 	echo "$TAG error: ~/$profile seems already initialized:"
     echo
     grep -C 3 '~/.pokerus.el' ~/$profile
     echo "$TAG attempting to install paradox any way"
-    emacs --eval="$sexpr"
+    install_paradox
 	exit -1
 else
 	echo "$src" >> ~/$profile
     emacs --eval="$sexpr"
+    install_paradox
 fi
