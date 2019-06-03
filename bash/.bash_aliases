@@ -139,6 +139,13 @@ alias :w="echo You\'re not in vim, doofus."
 alias mrproper="rm -rvf .*.swp"
 alias f="find . -name"
 alias defob="perl -pi -e 's/[^[:ascii:]]//g'"
+alias sl='echo "
+      oooOOOOOOOOOOO
+     o   ____          :::::::::::::::::: :::::::::::::::::: __|-----|__
+     Y_,_|[]| --++++++ |[][][][][][][][]| |[][][][][][][][]| |  [] []  |
+    {|_|_|__|;|______|;|________________|;|________________|;|_________|;
+     /oo--OO   oo  oo   oo oo      oo oo   oo oo      oo oo   oo     oo
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+"'
 
 rgrep() {
 	grep -r "$@" .
