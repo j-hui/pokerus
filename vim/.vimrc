@@ -125,6 +125,7 @@ let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
 
 Plug 'scrooloose/nerdtree'
 map <C-n> :NERDTreeToggle<CR>
+map <Leader>m :NERDTreeToggle<CR>
 
 " Open NERDTree upon startup
 autocmd StdinReadPre * let s:std_in=1

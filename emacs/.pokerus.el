@@ -20,12 +20,36 @@ There are two things you can do about this warning:
 (require 'paradox)
 (paradox-enable)
 
-(paradox-require 'color-theme)
-(color-theme-initialize)
-(color-theme-hober)
-
 (paradox-require 'use-package)
 
+;; (paradox-require 'nyx-theme)
+(paradox-require 'color-theme-sanityinc-tomorrow)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Reclaiming some editor sanity
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq scroll-margin 5
+      scroll-conservatively 9999
+      scroll-step 1
+      )
+
+(setq-default indent-tabs-mode nil
+              tab-width 4
+              tab-stop-list (quote (4 8))
+              )
+(setq vc-follow-symlinks t)
+
+(define-key global-map (kbd "RET") 'newline-and-indent)
+
+(paradox-require 'linum-relative)
+(linum-relative-global-mode)
+;;(setq linum-relative-backend 'display-line-numbers-mode)
+(setq linum-relative-current-symbol "")
+
+;;;;;;;;;;;;
+;; Evil mode
+;;;;;;;;;;;;
 (paradox-require 'evil)
 (evil-mode 1)
 
@@ -41,22 +65,8 @@ There are two things you can do about this warning:
 (paradox-require 'evil-escape)
 (evil-escape-mode)
 (setq-default evil-escape-key-sequence "kj")
-
-(paradox-require 'powerline)
-(powerline-default-theme)
-
-;;(powerline-evil-vim-color-theme)
-;;(display-time-mode t)
-(paradox-require 'airline-themes)
-(load-theme 'airline-badwolf)
-
-(paradox-require 'evil-commentary)
-(evil-commentary-mode)
-
-(paradox-require 'linum-relative)
-(linum-relative-global-mode)
-;;(setq linum-relative-backend 'display-line-numbers-mode)
-(setq linum-relative-current-symbol "")
+(define-key evil-insert-state-map "\C-c" 'evil-force-normal-state)
+(define-key evil-insert-state-map "\C-d" 'evil-force-normal-state)
 
 (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
 (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
@@ -66,8 +76,6 @@ There are two things you can do about this warning:
 (define-key evil-normal-state-map (kbd "C-j") (lambda ()
                         (interactive)
                         (evil-scroll-down nil)))
-
-(define-key global-map (kbd "RET") 'newline-and-indent)
 
 ;;; esc quits
 (defun minibuffer-keyboard-quit ()
@@ -87,13 +95,51 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 
-(setq scroll-margin 5
-      scroll-conservatively 9999
-      scroll-step 1
-      )
+;;;;;;;;;;;;;;;
+;; Evil plugins
+;;;;;;;;;;;;;;;
 
-(setq-default indent-tabs-mode nil
-              tab-width 4
-              tab-stop-list (quote (4 8))
-              )
-(setq vc-follow-symlinks t)
+(paradox-require 'powerline)
+(powerline-default-theme)
+
+;;(powerline-evil-vim-color-theme)
+;;(display-time-mode t)
+(paradox-require 'airline-themes)
+(load-theme 'airline-badwolf t)
+
+(paradox-require 'evil-commentary)
+(evil-commentary-mode)
+
+(paradox-require 'evil-surround)
+(use-package evil-surround
+  :ensure t
+  :config
+  (global-evil-surround-mode 1))
+
+(paradox-require 'evil-easymotion)
+(evilem-default-keybindings "\C-f")
+
+(paradox-require 'neotree)
+(use-package neotree
+  :ensure t
+  :config
+
+	(evil-leader/set-key
+	"m"  'neotree-toggle
+	"n"  'neotree-project-dir)
+
+  (setq projectile-switch-project-action 'neotree-projectile-action)
+  (add-hook 'neotree-mode-hook
+    (lambda ()
+      (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
+      (define-key evil-normal-state-local-map (kbd "I") 'neotree-hidden-file-toggle)
+      (define-key evil-normal-state-local-map (kbd "z") 'neotree-stretch-toggle)
+      (define-key evil-normal-state-local-map (kbd "R") 'neotree-refresh)
+      (define-key evil-normal-state-local-map (kbd "m") 'neotree-rename-node)
+      (define-key evil-normal-state-local-map (kbd "c") 'neotree-create-node)
+      (define-key evil-normal-state-local-map (kbd "d") 'neotree-delete-node)
+
+      (define-key evil-normal-state-local-map (kbd "s") 'neotree-enter-vertical-split)
+      (define-key evil-normal-state-local-map (kbd "S") 'neotree-enter-horizontal-split)
+
+      (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter))))
