@@ -26,7 +26,6 @@ cask "zerotier-one"
 cask "hyperswitch"
 cask "spectacle"
 
-
 # Core apps
 cask "1password"
 cask "google-chrome"
