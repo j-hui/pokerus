@@ -193,7 +193,7 @@ autocmd Filetype tex highlight Conceal ctermfg=NONE ctermbg=NONE
 
 Plug 'lervag/vimtex',   { 'for': 'tex' }
 let g:tex_flavor='latex'
-" let g:vimtex_view_method='zathura'
+" let g:vimtex_view_method='open'
 " let g:vimtex_compiler_enabled = 0
 " let g:vimtex_quickfix_mode=0 " wtf this doesn't seem to work
 let g:vimtex_quickfix_open_on_warning=0
@@ -203,6 +203,9 @@ let g:vimtex_quickfix_mode=2  " open on errors without focus
 set conceallevel=2
 let g:tex_conceal='abdmg'
 let g:Tex_GotoError=0
+
+let g:vimtex_mappings_enabled=0
+autocmd Filetype tex imap <C-]> <plug>(vimtex-delim-close)
 
 """"""""""
 " Markdown
