@@ -8,7 +8,7 @@
 " execute pathogen#infect()
 call plug#begin('~/.vimplugins/plugged')
 
-"set lazyredraw
+" set lazyredraw
 filetype plugin indent on
 
 setlocal spelllang=en_us
@@ -64,7 +64,11 @@ set laststatus=2
 let g:airline#extensions#tabline#enabled = 1
 " let g:airline_powerline_fonts = 1
 
-Plug 'junegunn/indentline'
+Plug 'nathanaelkane/vim-indent-guides'
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_auto_colors = 0
+highlight IndentGuidesOdd   guibg=black     ctermbg=black
+highlight IndentGuidesEven  guibg=darkgrey  ctermbg=232 " ctermbg 233
 
 
 """"""""""""
@@ -122,7 +126,6 @@ map  <C-f>N <Plug>(easymotion-prev)
 
 let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
 
-
 Plug 'scrooloose/nerdtree'
 map <C-n> :NERDTreeToggle<CR>
 map <Leader>m :NERDTreeToggle<CR>
@@ -142,11 +145,23 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") &&
             \ b:NERDTree.isTabTree()) | q | endif
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-rhubarb'
-Plug 'junegunn/gv.vim'
 Plug 'airblade/vim-gitgutter'
+let g:gitgutter_map_keys = 0
+nmap <c-g><c-g> <Plug>GitGutterPreviewHunk
+nmap <c-g>n <Plug>GitGutterNextHunk
+nmap <c-g>p <Plug>GitGutterPrevHunk
+set updatetime=100
+let g:gitgutter_override_sign_column_highlight = 0
+highlight SignColumn        guibg=#073642 ctermbg=0
+highlight GitGutterAdd      guibg=#073642 ctermbg=0 guifg=#009900 ctermfg=2
+highlight GitGutterChange   guibg=#073642 ctermbg=0 guifg=#bbbb00 ctermfg=3
+highlight GitGutterDelete   guibg=#073642 ctermbg=0 guifg=#ff2222 ctermfg=1
 
+Plug 'tpope/vim-fugitive'
+Plug 'junegunn/gv.vim'
+nmap <c-g>vb :GV
+nmap <c-g>vc :GV!
+nmap <c-g>vf :GV?
 
 """"""""""""""
 " Text editing
@@ -173,7 +188,6 @@ cnoreabbrev tt call TrimTrailing()
 
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
-
 Plug 'junegunn/vim-peekaboo'
 
 
