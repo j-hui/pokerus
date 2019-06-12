@@ -294,4 +294,12 @@ autocmd Filetype bib setlocal
             \ softtabstop=2
 
 
+
+"""""
+" Coq
+"""""
+Plug 'tounaishouta/coq.vim', { 'for': 'coq' } 
+autocmd Filetype coq nnoremap <buffer> <c-x><Enter> :CoqRunToCursor<CR>
+
 call plug#end()
+
