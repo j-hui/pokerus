@@ -81,7 +81,13 @@ nnoremap j gj
 nnoremap k gk
 nnoremap <C-j> <C-d>
 nnoremap <C-k> <C-u>
+nnoremap <C-i> <down><C-e>
+nnoremap <C-o> <up><C-y>
 
+inoremap <C-j> <down>
+inoremap <C-k> <up>
+inoremap <C-h> <left>
+inoremap <C-l> <right>
 inoremap kj <Esc>
 " set timeout timeoutlen=200
 
@@ -232,6 +238,19 @@ autocmd Filetype markdown setlocal
             \ textwidth=80
             \ spell
 
+Plug 'tpope/vim-markdown',  { 'for': 'markdown' }
+
+let g:markdown_fenced_languages = [
+            \ 'html',
+            \ 'python',
+            \ 'bash=sh',
+            \ 'c',
+            \ 'cpp',
+            \ 'ocaml',
+            \ 'haskell'
+            \ ]
+
+
 """
 " C
 """
@@ -293,13 +312,30 @@ autocmd Filetype bib setlocal
             \ shiftwidth=2
             \ softtabstop=2
 
-
-
 """""
 " Coq
 """""
-Plug 'tounaishouta/coq.vim', { 'for': 'coq' } 
+Plug 'tounaishouta/coq.vim', { 'for': 'coq' }
 autocmd Filetype coq nnoremap <buffer> <c-x><Enter> :CoqRunToCursor<CR>
 
-call plug#end()
 
+""""""""""""""
+" Scratch Area
+""""""""""""""
+" Plugins I haven't decided I want to use yet
+"""""""""""""""""""""""""""""""""""""""""""""
+
+" Plug 'reedes/vim-wordy'
+"   https://github.com/reedes/vim-wordy
+"
+" Plug 'tpope/vim-abolish'
+"   https://github.com/tpope/vim-abolish
+" Plug 'jdelkins/vim-correction'
+"   https://github.com/jdelkins/vim-correction
+" Plug 'reedes/vim-litecorrect'
+"   https://github.com/reedes/vim-litecorrect
+"
+" Plug 'andymass/vim-matchup'
+"   https://github.com/andymass/vim-matchup
+
+call plug#end()
