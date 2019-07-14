@@ -1,0 +1,60 @@
+# skhd usage:
+#
+# -V | --verbose: Output debug information
+#     skhd -V
+#
+# -P | --profile: Output profiling information
+#     skhd -P
+#
+# -v | --version: Print version number to stdout
+#     skhd -v
+#
+# -c | --config: Specify location of config file
+#     skhd -c ~/.skhdrc
+#
+# -o | --observe: Output keycode and modifiers of event. Ctrl+C to quit
+#     skhd -o
+#
+# -r | --reload: Signal a running instance of skhd to reload its config file
+#     skhd -r
+#
+# -h | --no-hotload: Disable system for hotloading config file
+#     skhd -h
+#
+# -k | --key: Synthesize a keypress (same syntax as when defining a hotkey)
+#     skhd -k "shift + alt - 7"
+#
+# -t | --text: Synthesize a line of text
+#     skhd -t "hello, worldシ"
+#
+#   A list of all built-in modifier and literal keywords can be found at
+#
+#       https://github.com/koekeishiya/skhd/issues/1
+#
+#   General information/usage:
+#
+#       https://github.com/koekeishiya/skhd
+
+pageup   : skhd -k "shift + alt - left"
+pagedown : skhd -k "shift + alt - right"
+home     : skhd -k "f5"
+end      : skhd -k "f6"
+
+ctrl + alt + cmd - down : skhd -k "f6"
+ctrl + alt + cmd - space : skhd -k "ctrl + alt + cmd - up"
+ctrl + alt + cmd + shift - k : skhd -k "ctrl + alt + cmd - up"
+ctrl + alt + cmd + shift - j : skhd -k "ctrl + alt + cmd - down"
+ctrl + alt + cmd + shift - h : skhd -k "ctrl + alt + cmd - left"
+ctrl + alt + cmd + shift - l : skhd -k "ctrl + alt + cmd - right"
+
+ctrl + alt + cmd - t : open -a /Applications/Utilities/Terminal.app
+ctrl + alt + cmd - g : open -a /Applications/Wavebox.app
+ctrl + alt + cmd - b : open -a "/Applications/Google Chrome.app"
+ctrl + alt + cmd - play : open -a /Applications/iTunes.app
+
+ctrl + cmd - j : skhd -k "down"
+ctrl + cmd - k : skhd -k "up"
+ctrl + cmd - h : skhd -k "left"
+ctrl + cmd - l : skhd -k "right"
+ctrl + cmd + shift - h : skhd -k "shift + alt - left"
+ctrl + cmd + shift - l : skhd -k "shift + alt - right"
