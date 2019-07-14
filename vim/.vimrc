@@ -194,6 +194,7 @@ cnoreabbrev tt call TrimTrailing()
 
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-rsi'
 Plug 'junegunn/vim-peekaboo'
 
 
@@ -337,5 +338,7 @@ autocmd Filetype coq nnoremap <buffer> <c-x><Enter> :CoqRunToCursor<CR>
 "
 " Plug 'andymass/vim-matchup'
 "   https://github.com/andymass/vim-matchup
+
+Plug 'al3623/deepsea.vim'
 
 call plug#end()

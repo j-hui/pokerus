@@ -159,6 +159,15 @@ rgrep() {
     grep -r "$@" .
 }
 
+rm() {
+    if [[ "$#" > 5 ]]; then
+        echo "You are about to remove: $@"
+        echo -n "Are you sure? [<C-c> to quit]"
+        read
+    fi
+    /bin/rm "$@"
+}
+
 PATH_ADD() {
     if [[ "$1" ]]; then
         case ":$PATH:" in
