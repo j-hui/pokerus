@@ -1,0 +1,4 @@
+:set prompt  "\x03BB > "
+:set +m
+:set +t
+:set -Wall
