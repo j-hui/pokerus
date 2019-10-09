@@ -196,7 +196,7 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-rsi'
 Plug 'junegunn/vim-peekaboo'
-
+Plug 'tpope/vim-eunuch'
 
 """""""
 " LaTeX
