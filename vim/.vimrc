@@ -341,4 +341,10 @@ autocmd Filetype coq nnoremap <buffer> <c-x><Enter> :CoqRunToCursor<CR>
 
 Plug 'al3623/deepsea.vim'
 
+"""""""
+" Idris
+"""""""
+
+Plug 'idris-hackers/idris-vim', { 'for': 'idris' }
+
 call plug#end()
