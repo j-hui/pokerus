@@ -1,0 +1,10 @@
+:set prompt      "\ESC[1;31mλ \ESC[m"
+:set prompt-cont "\ESC[1;31mλ \ESC[m"
+
+:set +m
+:set +t
+:set -fprint-explicit-foralls
+:set -Wall
+:set editor vim
+
+:def ls \p -> return $ ":! ls --color=auto " ++ p
