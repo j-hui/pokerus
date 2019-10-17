@@ -11,13 +11,15 @@ case "$OSTYPE" in
 *linux*)
     alias dmesg='dmesg --color'
     alias pacman='pacman --color=auto'
-    alias ls='ls --color=auto'
+    # alias ls='ls --color=auto'
     ;;
 *darwin*)
-    alias ls='ls -G'
+    # alias ls='ls -G'
     alias nproc='sysctl -n hw.ncpu'
     ;;
 esac
+
+alias ls='ls --color=auto'
 
 which say &> /dev/null && alias talk='cat - | while read cat; do say $cat; done'
 

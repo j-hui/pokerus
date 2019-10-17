@@ -35,12 +35,12 @@
 #
 #       https://github.com/koekeishiya/skhd
 
-pageup   : skhd -k "shift + alt - left"
-pagedown : skhd -k "shift + alt - right"
-home     : skhd -k "f5"
-end      : skhd -k "f6"
+# pageup   : skhd -k "shift + alt - left"
+# pagedown : skhd -k "shift + alt - right"
+# home     : skhd -k "f5"
+# end      : skhd -k "f6"
+# ctrl + alt + cmd - down : skhd -k "f6"
 
-ctrl + alt + cmd - down : skhd -k "f6"
 ctrl + alt + cmd - space : skhd -k "ctrl + alt + cmd - up"
 ctrl + alt + cmd + shift - k : skhd -k "ctrl + alt + cmd - up"
 ctrl + alt + cmd + shift - j : skhd -k "ctrl + alt + cmd - down"
@@ -56,5 +56,5 @@ ctrl + cmd - j : skhd -k "down"
 ctrl + cmd - k : skhd -k "up"
 ctrl + cmd - h : skhd -k "left"
 ctrl + cmd - l : skhd -k "right"
-ctrl + cmd + shift - h : skhd -k "shift + alt - left"
-ctrl + cmd + shift - l : skhd -k "shift + alt - right"
+# ctrl + cmd + shift - h : skhd -k "shift + alt - left"
+# ctrl + cmd + shift - l : skhd -k "shift + alt - right"
