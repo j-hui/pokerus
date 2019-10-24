@@ -139,6 +139,7 @@ ssh-conf() {
     fi
 }
 
+stty -ixon
 alias :w="echo You\'re not in vim, doofus."
 alias mrproper="rm -rvf .*.swp"
 alias f="find . -name"

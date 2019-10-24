@@ -1,3 +1,5 @@
+" vim: set ts=4 sw=4 tw=80 et :
+
 """"""""""""""""""""""
 " j-hui VIM Settings "
 """"""""""""""""""""""
@@ -24,7 +26,6 @@ set background=dark
 
 set nu
 set rnu
-set modeline
 set ruler
 set scrolloff=5
 set display+=lastline
@@ -59,6 +60,16 @@ highlight htmlBoldUnderlineItalic
             \ cterm=underline,bold ctermfg=121
             \ gui=underline,bold guifg=Green
 
+set modeline
+set modelines=5
+function! PrependModeline()
+  let l:modeline = printf(" vim: set ts=%d sw=%d tw=%d %set :",
+        \ &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
+  let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
+  call append(line("^"), l:modeline)
+endfunction
+nnoremap <silent> <Leader>ml :call PrependModeline()<CR>
+
 Plug 'vim-airline/vim-airline'
 set laststatus=2
 let g:airline#extensions#tabline#enabled = 1
@@ -81,20 +92,26 @@ nnoremap j gj
 nnoremap k gk
 nnoremap <C-j> <C-d>
 nnoremap <C-k> <C-u>
+nnoremap <C-l> g$
+nnoremap <C-h> g^
 nnoremap <C-i> <down><C-e>
 nnoremap <C-o> <up><C-y>
+nnoremap <C-s> :w<CR>
 
 inoremap <C-j> <down>
 inoremap <C-k> <up>
 inoremap <C-h> <left>
 inoremap <C-l> <right>
+inoremap <C-c> <Esc>
 inoremap kj <Esc>
-" set timeout timeoutlen=200
+inoremap <C-s> <Esc>
 
-" Just learn to use <C-[> for <ESC> instead of remapping
-" inoremap <C-d> <Esc>
+vnoremap <C-s> <Esc>
+" set timeout timeoutlen=200
+" Or just learn to use <C-[> for <ESC> instead of remapping
 
 set pastetoggle=<F2>
+set clipboard+=unnamed
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
@@ -187,6 +204,8 @@ set lbr
 set textwidth=80
 set wrap
 
+set nojoinspaces
+
 function TrimTrailing()
     substitute/ *$//g
 endfunction
@@ -216,10 +235,15 @@ Plug 'lervag/vimtex',   { 'for': 'tex' }
 let g:tex_flavor='latex'
 " let g:vimtex_view_method='open'
 " let g:vimtex_compiler_enabled = 0
-" let g:vimtex_quickfix_mode=0 " wtf this doesn't seem to work
-let g:vimtex_quickfix_open_on_warning=0
-let g:vimtex_quickfix_autoclose_after_keystrokes=2
-let g:vimtex_quickfix_mode=2  " open on errors without focus
+" let g:vimtex_quickfix_open_on_warning=0
+" let g:vimtex_quickfix_autoclose_after_keystrokes=2
+let g:vimtex_quickfix_latexlog = {
+      \ 'overfull' : 0,
+      \ 'underfull' : 0,
+      \ 'packages' : {
+      \   'default' : 0,
+      \ },
+      \}
 
 set conceallevel=2
 let g:tex_conceal='abdmg'
