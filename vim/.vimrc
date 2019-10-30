@@ -24,6 +24,8 @@ syntax enable
 colorscheme ron
 set background=dark
 
+set noeb vb t_vb=
+
 set nu
 set rnu
 set ruler
@@ -135,6 +137,11 @@ set wildmenu
 
 set autoread
 
+map <C-w>] <Esc>:bn<CR>
+map <C-w>[ <Esc>:bp<CR>
+map <C-w><backspace> <Esc>:bw<CR>
+map <C-w>t :enew<cr>
+
 Plug 'tpope/vim-repeat'
 
 Plug 'farmergreg/vim-lastplace'
@@ -151,6 +158,7 @@ map  <C-f>/ <Plug>(easymotion-sn)
 omap <C-f>/ <Plug>(easymotion-tn)
 map  <C-f>n <Plug>(easymotion-next)
 map  <C-f>N <Plug>(easymotion-prev)
+
 
 let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
 
