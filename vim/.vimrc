@@ -107,6 +107,11 @@ inoremap kj <Esc>
 inoremap <C-s> <Esc>
 
 vnoremap <C-s> <Esc>
+
+nnoremap <Leader>cd :cd 
+inoremap <Leader>cd <Esc>:cd 
+vnoremap <Leader>cd <Esc>:cd 
+
 " set timeout timeoutlen=200
 " Or just learn to use <C-[> for <ESC> instead of remapping
 
@@ -151,7 +156,6 @@ let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
 
 Plug 'scrooloose/nerdtree'
 map <C-n> :NERDTreeToggle<CR>
-map <Leader>m :NERDTreeToggle<CR>
 
 " Open NERDTree upon startup
 autocmd StdinReadPre * let s:std_in=1
@@ -171,8 +175,9 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'airblade/vim-gitgutter'
 let g:gitgutter_map_keys = 0
 nmap <c-g><c-g> <Plug>GitGutterPreviewHunk
-nmap <c-g>n <Plug>GitGutterNextHunk
-nmap <c-g>p <Plug>GitGutterPrevHunk
+nmap <c-g>g     <Plug>GitGutterPreviewHunk
+nmap <c-g>n     <Plug>GitGutterNextHunk
+nmap <c-g>p     <Plug>GitGutterPrevHunk
 set updatetime=100
 let g:gitgutter_override_sign_column_highlight = 0
 highlight SignColumn        guibg=#073642 ctermbg=0
@@ -185,6 +190,19 @@ Plug 'junegunn/gv.vim'
 nmap <c-g>vb :GV
 nmap <c-g>vc :GV!
 nmap <c-g>vf :GV?
+
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+
+Plug 'mileszs/ack.vim'
+let g:ackprg = 'ag --nogroup --nocolor --column'
+nnoremap <Leader>ag :Ack!<Space>
+inoremap <Leader>ag <Esc>:Ack!<Space>
+vnoremap <Leader>ag <Esc>:Ack!<Space>
+
+nnoremap <Leader>aa :AckAdd!<Space>
+inoremap <Leader>aa <Esc>:AckAdd!<Space>
+vnoremap <Leader>aa <Esc>:AckAdd!<Space>
 
 """"""""""""""
 " Text editing
