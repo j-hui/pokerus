@@ -1,8 +1,5 @@
 export EDITOR=vim
 
-alias sudo='sudo '
-alias json="python -m json.tool"
-
 errecho() {
     echo "Error: $@" >&2
 }
@@ -18,10 +15,6 @@ case "$OSTYPE" in
     alias nproc='sysctl -n hw.ncpu'
     ;;
 esac
-
-alias ls='ls --color=auto'
-
-which say &> /dev/null && alias talk='cat - | while read cat; do say $cat; done'
 
 man() {
     env \
@@ -75,7 +68,7 @@ basic() {
 }
 sfw() {
     export PS1="$BASE \$(if [[ \$? != 0 ]]; then echo '$SFW_ERR'; else echo '$SFW_NERR'; fi) $CLEAR"
-    export PS2="\[\033[40;0;34m\]8==D \[\033[0m\]"
+    export PS2="\[\033[40;0;34m\]> \[\033[0m\]"
 }
 
 nsfw() {
@@ -140,6 +133,11 @@ ssh-conf() {
 }
 
 stty -ixon
+which say &> /dev/null && alias talk='cat - | while read cat; do say $cat; done'
+alias sudo='sudo '
+alias json="python -m json.tool"
+alias ls='ls --color=auto'
+alias rm='rm -I'
 alias :w="echo You\'re not in vim, doofus."
 alias mrproper="rm -rvf .*.swp"
 alias f="find . -name"
@@ -162,14 +160,6 @@ rgrep() {
     grep -r "$@" .
 }
 
-rm() {
-    if [[ "$#" > 5 ]]; then
-        echo "You are about to remove: $@"
-        echo -n "Are you sure? [<C-c> to quit]"
-        read
-    fi
-    /bin/rm "$@"
-}
 
 PATH_ADD() {
     if [[ "$1" ]]; then

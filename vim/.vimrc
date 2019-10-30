@@ -211,11 +211,13 @@ function TrimTrailing()
 endfunction
 cnoreabbrev tt call TrimTrailing()
 
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-rsi'
-Plug 'junegunn/vim-peekaboo'
-Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-commentary'         " use gcc to comment things out
+Plug 'tpope/vim-surround'           " ds, cs, ys to change text surroundings
+Plug 'tpope/vim-rsi'                " readline style commands in insert mode
+Plug 'tpope/vim-characterize'       " use ga to see metadata about unicode
+Plug 'tpope/vim-eunuch'             " UNIX-like functionality in Vim
+Plug 'tpope/vim-sleuth'             " automatically detect indentation
+Plug 'junegunn/vim-peekaboo'        " shows yank buffers
 
 """""""
 " LaTeX
@@ -340,8 +342,20 @@ autocmd Filetype bib setlocal
 """""
 " Coq
 """""
+
 Plug 'tounaishouta/coq.vim', { 'for': 'coq' }
-autocmd Filetype coq nnoremap <buffer> <c-x><Enter> :CoqRunToCursor<CR>
+" autocmd Filetype coq nnoremap <buffer> <c-x><Enter> :CoqRunToCursor<CR>
+" autocmd Filetype coq inoremap <buffer> <c-x><Enter> <Esc>:CoqRunToCursor<CR>
+autocmd Filetype coq nnoremap <buffer> <c-p> :CoqRunToCursor<CR>
+autocmd Filetype coq inoremap <buffer> <c-p> <Esc>:CoqRunToCursor<CR>
+
+autocmd Filetype coq setlocal
+            \ tabstop=2
+            \ expandtab
+            \ shiftwidth=2
+            \ softtabstop=2
+
+" Plug 'trefis/coquille.git'
 
 
 """"""""""""""

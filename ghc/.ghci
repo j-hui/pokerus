@@ -1,5 +1,5 @@
 :set prompt      "\ESC[1;31mλ \ESC[m"
-:set prompt-cont "\ESC[1;31mλ \ESC[m"
+:set prompt-cont "\ESC[1;32m| \ESC[m"
 
 :set +m
 :set +t
