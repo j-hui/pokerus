@@ -44,6 +44,10 @@ alias egrep="egrep --color=auto"
 alias fgrep="fgrep --color=auto"
 alias bell="echo -e '\a'"
 
+rgrep() {
+    grep -r "$@" .
+}
+
 [ -z "$PS1" ] && return
 # color prompt
 GREEN="\[\033[40;0;32m\]"
@@ -121,6 +125,10 @@ srcbash() {
     fi
 }
 
+pokepull() {(
+    cd ~/pokerus && git pull
+)}
+
 ssh-conf() {
     if [ -w ~/.ssh/config ]; then
         $EDITOR ~/.ssh/config
@@ -155,10 +163,6 @@ alias sl='echo "
   (BNSF 1995| |      | |            | __Y______00_| |_         _|
  /-OO----OO^^=^OO--OO^=^OO--------OO^=^OO-------OO^=^OO-------OO^=P
 #####################################################################"'
-
-rgrep() {
-    grep -r "$@" .
-}
 
 
 PATH_ADD() {
