@@ -281,6 +281,7 @@ let g:markdown_fenced_languages = [
 """
 " C
 """
+autocmd BufNewFile,BufReadPost *.h set filetype=c
 autocmd FileType c setlocal
             \ tabstop=8
             \ noexpandtab
@@ -342,18 +343,18 @@ autocmd Filetype bib setlocal
 """""
 " Coq
 """""
+autocmd BufNewFile,BufReadPost *.v set filetype=coq
+autocmd Filetype coq setlocal
+            \ tabstop=2
+            \ expandtab
+            \ shiftwidth=2
+            \ softtabstop=2
 
 Plug 'tounaishouta/coq.vim', { 'for': 'coq' }
 " autocmd Filetype coq nnoremap <buffer> <c-x><Enter> :CoqRunToCursor<CR>
 " autocmd Filetype coq inoremap <buffer> <c-x><Enter> <Esc>:CoqRunToCursor<CR>
 autocmd Filetype coq nnoremap <buffer> <c-p> :CoqRunToCursor<CR>
 autocmd Filetype coq inoremap <buffer> <c-p> <Esc>:CoqRunToCursor<CR>
-
-autocmd Filetype coq setlocal
-            \ tabstop=2
-            \ expandtab
-            \ shiftwidth=2
-            \ softtabstop=2
 
 " Plug 'trefis/coquille.git'
 
