@@ -4,6 +4,69 @@
 " j-hui VIM Settings "
 """"""""""""""""""""""
 
+"""""""""
+" Notes "
+"""""""""
+"
+" Default key bindings that just aren't very useful:
+"
+" s/S (substitute): delete character/line; insert mode
+"   - I can just x/dd i
+"
+" c/C (change): like d/D, except it drops you into insert mode
+"   - I can just d/D i
+"
+" & : repeat :s
+"   - ???
+"
+" f/F (find): f/F<char> jumps to next/previous occurrence of <char>
+"   - actually handy, but I already have easymotion to help me move around
+"
+" t/T (till): t/T<char> jumps to before next/previous occurence of <char>
+"   - actually handy, but I already have easymotion to help me move around
+"
+" ; : repeat f/F/t/T
+"   - I don't use f/F/t/T
+"
+" 0/_ (beginning of line): go to hard/soft beginning of line
+"   - I already map <c-h> for exactly this
+"   - I also have ^ even if it's a little hard to reach
+"   + Note: I've remapped _ to D
+"
+" ^/$ (beginning/end of line): go there
+"   - just too far out of reach
+"   - I already map <c-h>/<c-l> for exactly this
+" 
+" + (next line): go to next line
+"   - just use j
+"
+" W/E/B (next/end/back WORD): seems to be just like w/e/b
+"   - what even is WORD (vs word)
+"
+" Q (ex mode): go to ex mode
+"   - ok but who the fuck uses this
+"
+""""
+"
+" Key bindings I should actually use, but require too much thinking
+"
+" q/@ (record/play macro): q/@<char> records/plays macro at <char>
+"
+" . (repeat): a little unpredictable imo
+"
+""""
+" 
+" Key bindings I should actually use, but don't have muscle memory
+"
+" #/* (prev/next identifier): goto prev/next occurence of token under cursor
+"   - too far out of reach
+"
+" {/} (beginning/end of paragraph): go there
+"   - too far out of reach
+"
+""""
+
+
 """""""""""""
 " Basic stuff
 """""""""""""
@@ -244,6 +307,12 @@ Plug 'tpope/vim-characterize'       " use ga to see metadata about unicode
 Plug 'tpope/vim-eunuch'             " UNIX-like functionality in Vim
 Plug 'tpope/vim-sleuth'             " automatically detect indentation
 Plug 'junegunn/vim-peekaboo'        " shows yank buffers
+Plug 'svermeulen/vim-cutlass'       " sane cut behavior
+
+nnoremap - d
+xnoremap - d
+nnoremap -- dd
+nnoremap _ D
 
 """""""
 " LaTeX
@@ -375,6 +444,7 @@ autocmd Filetype coq setlocal
             \ expandtab
             \ shiftwidth=2
             \ softtabstop=2
+            \ commentstring=(*%s*)
 
 Plug 'tounaishouta/coq.vim', { 'for': 'coq' }
 " autocmd Filetype coq nnoremap <buffer> <c-x><Enter> :CoqRunToCursor<CR>
