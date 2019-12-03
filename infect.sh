@@ -13,7 +13,7 @@ for dir in "$@"; do
 	elif [[ "${dir##*.}" == "immune" ]]; then
 		echo "$TAG ignoring $dir"
 	else
-		if stow "$dir" --target="$HOME" --ignore='\.DS_Store'; then
+		if stow -vv "$dir" --target="$HOME" --ignore='\.DS_Store'; then
 			echo "$TAG infected $HOME with $dir"
 		else
 			echo "$TAG encountered error infecting $dir"

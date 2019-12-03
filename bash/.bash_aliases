@@ -1,4 +1,5 @@
 export EDITOR=vim
+mkdir -p ~/.tmp/backup ~/.tmp/swp ~/.tmp/undo
 
 errecho() {
     echo "Error: $@" >&2
@@ -143,6 +144,7 @@ ssh-conf() {
 stty -ixon
 which say &> /dev/null && alias talk='cat - | while read cat; do say $cat; done'
 alias sudo='sudo '
+alias stonks='stack'
 alias json="python -m json.tool"
 alias ls='ls --color=auto'
 alias rm='rm -I'

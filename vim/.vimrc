@@ -36,7 +36,7 @@
 " ^/$ (beginning/end of line): go there
 "   - just too far out of reach
 "   - I already map <c-h>/<c-l> for exactly this
-" 
+"
 " + (next line): go to next line
 "   - just use j
 "
@@ -55,7 +55,7 @@
 " . (repeat): a little unpredictable imo
 "
 """"
-" 
+"
 " Key bindings I should actually use, but don't have muscle memory
 "
 " #/* (prev/next identifier): goto prev/next occurence of token under cursor
@@ -140,18 +140,16 @@ set laststatus=2
 let g:airline#extensions#tabline#enabled = 1
 " let g:airline_powerline_fonts = 1
 
-Plug 'nathanaelkane/vim-indent-guides'
-let g:indent_guides_enable_on_vim_startup = 1
-let g:indent_guides_auto_colors = 0
-highlight IndentGuidesOdd   guibg=black     ctermbg=black
-highlight IndentGuidesEven  guibg=darkgrey  ctermbg=232 " ctermbg 233
-
+" Plug 'Yggdroot/indentLine'
+" let g:indentLine_setConceal = 0
+" let g:indentLine_leadingSpaceChar = '·'
+" let g:indentLine_leadingSpaceEnabled = 1
+set list lcs=tab:\┆\ " <-- space
+set conceallevel=2
 
 """"""""""""
 " Navigation
 """"""""""""
-set undolevels=1000
-
 " Movement
 nnoremap j gj
 nnoremap k gk
@@ -169,16 +167,12 @@ inoremap <C-h> <left>
 inoremap <C-l> <right>
 inoremap <C-c> <Esc>
 inoremap kj <Esc>
+
 inoremap <C-s> <Esc>
-
 vnoremap <C-s> <Esc>
+onoremap <C-s> <Esc>
 
-nnoremap <Leader>cd :cd 
-inoremap <Leader>cd <Esc>:cd 
-vnoremap <Leader>cd <Esc>:cd 
-
-" set timeout timeoutlen=200
-" Or just learn to use <C-[> for <ESC> instead of remapping
+cnoreabbrev Q q " for when i fat finger :Q
 
 set pastetoggle=<F2>
 set clipboard+=unnamed
@@ -200,10 +194,15 @@ set wildmenu
 
 set autoread
 
-map <C-w>] <Esc>:bn<CR>
-map <C-w>[ <Esc>:bp<CR>
-map <C-w><backspace> <Esc>:bw<CR>
-map <C-w>t :enew<cr>
+noremap <C-w>] <Esc>:bn<CR>
+noremap <C-w>[ <Esc>:bp<CR>
+noremap <C-w><backspace> <Esc>:bw<CR>
+noremap <C-w>t :enew<cr>
+
+Plug 'psliwka/vim-smoothie'
+let g:smoothie_base_speed = 36
+nnoremap <silent> <C-j>      :<C-U>call smoothie#downwards() <CR>
+nnoremap <silent> <C-k>      :<C-U>call smoothie#upwards()   <CR>
 
 Plug 'tpope/vim-repeat'
 
@@ -217,16 +216,17 @@ map <C-f>l <Plug>(easymotion-lineforward)
 map <C-f>j <Plug>(easymotion-j)
 map <C-f>k <Plug>(easymotion-k)
 map <C-f>h <Plug>(easymotion-linebackward)
+map <C-f>w <Plug>(easymotion-w)
+map <C-f>e <Plug>(easymotion-e)
 map  <C-f>/ <Plug>(easymotion-sn)
 omap <C-f>/ <Plug>(easymotion-tn)
 map  <C-f>n <Plug>(easymotion-next)
 map  <C-f>N <Plug>(easymotion-prev)
 
-
 let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
 
 Plug 'scrooloose/nerdtree'
-map <C-n> :NERDTreeToggle<CR>
+noremap <C-n> :NERDTreeToggle<CR>
 
 " Open NERDTree upon startup
 autocmd StdinReadPre * let s:std_in=1
@@ -258,15 +258,21 @@ highlight GitGutterDelete   guibg=#073642 ctermbg=0 guifg=#ff2222 ctermfg=1
 
 Plug 'tpope/vim-fugitive'
 Plug 'junegunn/gv.vim'
-nmap <c-g>vb :GV
-nmap <c-g>vc :GV!
-nmap <c-g>vf :GV?
+nnoremap <c-g>vb :GV
+nnoremap <c-g>vc :GV!
+nnoremap <c-g>vf :GV?
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+nnoremap <c-p> :Files<CR>
 
 Plug 'mileszs/ack.vim'
-let g:ackprg = 'ag --nogroup --nocolor --column'
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+
+nnoremap K :Ack! "\b<C-R><C-W>\b" % <CR>
+
 nnoremap <Leader>ag :Ack!<Space>
 inoremap <Leader>ag <Esc>:Ack!<Space>
 vnoremap <Leader>ag <Esc>:Ack!<Space>
@@ -300,19 +306,52 @@ function TrimTrailing()
 endfunction
 cnoreabbrev tt call TrimTrailing()
 
+" Deliberately avoid using /tmp/ to avoid leaking data on shared computer
+"
+" To allow backup files to be stored locally, run:
+"
+"       mkdir -p .backup .swp .undo
+"
+" To enable backups to be stashed centrally, put the following in .bashrc
+"
+"       mkdir -p ~/.tmp/backup ~/.tmp/swp ~/.tmp/undo
+"
+" Fallback to using current directory . if all else fails
+"
+" Also, put the following in global .gitignore
+"
+"       *~
+"       *.swp
+"
+set backup
+set backupdir=.backup,~/.tmp/backup//,.
+
+set swapfile
+set directory=.swp,~/.tmp/swp//,.
+
+set undofile
+set undodir=.undo,~/.tmp/undo//,.
+set undolevels=1000
+if has('persistent_undo')
+    set undofile
+    set undoreload=10000
+endif
+
+Plug 'svermeulen/vim-cutlass'
+" - retain cut behavior for d specifically
+" - x and D no longer put text into registers
+" - to delete lines without cutting, use D and visual mode 
+nnoremap d d
+xnoremap d d
+vnoremap d d
+nnoremap dd dd
+
 Plug 'tpope/vim-commentary'         " use gcc to comment things out
 Plug 'tpope/vim-surround'           " ds, cs, ys to change text surroundings
 Plug 'tpope/vim-rsi'                " readline style commands in insert mode
 Plug 'tpope/vim-characterize'       " use ga to see metadata about unicode
 Plug 'tpope/vim-eunuch'             " UNIX-like functionality in Vim
-Plug 'tpope/vim-sleuth'             " automatically detect indentation
 Plug 'junegunn/vim-peekaboo'        " shows yank buffers
-Plug 'svermeulen/vim-cutlass'       " sane cut behavior
-
-nnoremap - d
-xnoremap - d
-nnoremap -- dd
-nnoremap _ D
 
 """""""
 " LaTeX
@@ -338,11 +377,10 @@ let g:vimtex_quickfix_latexlog = {
       \ 'overfull' : 0,
       \ 'underfull' : 0,
       \ 'packages' : {
-      \   'default' : 0,
+        \ 'default' : 0,
       \ },
       \}
 
-set conceallevel=2
 let g:tex_conceal='abdmg'
 let g:Tex_GotoError=0
 
@@ -376,6 +414,7 @@ let g:markdown_fenced_languages = [
 """
 " C
 """
+autocmd BufNewFile,BufReadPost *.c set filetype=c
 autocmd BufNewFile,BufReadPost *.h set filetype=c
 autocmd FileType c setlocal
             \ tabstop=8
@@ -447,8 +486,6 @@ autocmd Filetype coq setlocal
             \ commentstring=(*%s*)
 
 Plug 'tounaishouta/coq.vim', { 'for': 'coq' }
-" autocmd Filetype coq nnoremap <buffer> <c-x><Enter> :CoqRunToCursor<CR>
-" autocmd Filetype coq inoremap <buffer> <c-x><Enter> <Esc>:CoqRunToCursor<CR>
 autocmd Filetype coq nnoremap <buffer> <c-p> :CoqRunToCursor<CR>
 autocmd Filetype coq inoremap <buffer> <c-p> <Esc>:CoqRunToCursor<CR>
 
