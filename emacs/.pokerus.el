@@ -22,8 +22,12 @@ There are two things you can do about this warning:
 
 (paradox-require 'use-package)
 
+;;(paradox-require 'spacemacs-theme)
+;;(load-theme 'spacemacs-theme)
+
 ;; (paradox-require 'nyx-theme)
-(paradox-require 'color-theme-sanityinc-tomorrow)
+;; (paradox-require 'color-theme-sanityinc-solarized)
+;;(paradox-require 'color-theme-sanityinc-solarized)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -103,7 +107,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (powerline-default-theme)
 
 ;;(powerline-evil-vim-color-theme)
-;;(display-time-mode t)
+(display-time-mode t)
 (paradox-require 'airline-themes)
 (load-theme 'airline-badwolf t)
 
