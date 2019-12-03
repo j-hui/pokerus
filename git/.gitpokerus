@@ -1,22 +1,24 @@
 [push]
-	default = simple
+    default = simple
 [alias]
-	co = checkout
-	br = branch
-	ci = commit
-	st = status
-	unstage = reset HEAD --
-	last = log -l HEAD
-	visual = !gitk
-	cm = !git add -u && git commit -m
-	up = !git pull --rebase --prune $@ && git submodule update --init --recursive
-	undo = reset HEAD~1 --mixed
-	amend = commit -a --amend
-	this = rev-parse --abbrev-ref HEAD
-	dw = diff --word-diff
-	dc = diff --cached
-	root = rev-parse --show-toplevel
-	conf = config --global -e
+    co = checkout
+    br = branch
+    ci = commit
+    st = status
+    unstage = reset HEAD --
+    last = log -l HEAD
+    visual = !gitk
+    cm = !git add -u && git commit -m
+    up = !git pull --rebase --prune $@ && git submodule update --init --recursive
+    undo = reset HEAD~1 --mixed
+    amend = commit -a --amend
+    this = rev-parse --abbrev-ref HEAD
+    dw = diff --word-diff
+    dc = diff --cached
+    root = rev-parse --show-toplevel
+    conf = config --global -e
     hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
 [color]
-	ui = auto
+    ui = auto
+[core]
+    excludesfile = ~/.gitignore
