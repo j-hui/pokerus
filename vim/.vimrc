@@ -484,13 +484,18 @@ autocmd Filetype coq setlocal
             \ shiftwidth=2
             \ softtabstop=2
             \ commentstring=(*%s*)
+            \ formatoptions=cqort
+            \ comments=sr:(*,mb:*,ex:*)
 
-Plug 'tounaishouta/coq.vim', { 'for': 'coq' }
-autocmd Filetype coq nnoremap <buffer> <c-p> :CoqRunToCursor<CR>
-autocmd Filetype coq inoremap <buffer> <c-p> <Esc>:CoqRunToCursor<CR>
+" Plug 'tounaishouta/coq.vim', { 'for': 'coq' }
+" autocmd Filetype coq nnoremap <buffer> <c-p> :CoqRunToCursor<CR>
+" autocmd Filetype coq inoremap <buffer> <c-p> <Esc>:CoqRunToCursor<CR>
 
-" Plug 'trefis/coquille.git'
+Plug 'let-def/vimbufsync', { 'for': 'coq' }
+Plug 'whonore/coqtail', { 'for': 'coq' }
 
+autocmd Filetype coq nnoremap <buffer> <c-c><enter>          :CoqToLine<CR>
+autocmd Filetype coq inoremap <buffer> <c-c><enter>     <Esc>:CoqToLine<CR>
 
 """"""""""""""
 " Scratch Area
