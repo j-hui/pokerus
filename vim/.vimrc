@@ -161,6 +161,7 @@ nnoremap <C-i> <down><C-e>
 nnoremap <C-o> <up><C-y>
 nnoremap <C-s> :w<CR>
 
+
 inoremap <C-j> <down>
 inoremap <C-k> <up>
 inoremap <C-h> <left>

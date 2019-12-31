@@ -36,6 +36,7 @@ brew "htop"
 brew "sshfs"
 brew "subversion"
 brew "tree"
+brew "ctags"
 
 # Useful apps
 cask "balenaetcher"
