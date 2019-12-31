@@ -103,27 +103,27 @@ highlight ColorColumn ctermbg=235 guibg=#2c2d27
 autocmd InsertEnter * set cul
 autocmd InsertLeave * set nocul
 
-" If terminal supports displaying italics, we need these key sequences
-let t_ZH="\e[3m"
-let t_ZR="\e[23m"
-
-" Otherwise, we just unugly the italics highlighting
-highlight htmlItalic
-            \ term=standout
-            \ ctermfg=121
-            \ guifg=Green
-highlight htmlBoldItalic
-            \ term=bold,standout
-            \ cterm=bold ctermfg=121
-            \ gui=bold guifg=Green
-highlight htmlUnderlineItalic
-            \ term=underline,standout
-            \ cterm=underline ctermfg=121
-            \ gui=underline guifg=Green
-highlight htmlBoldUnderlineItalic
-            \ term=underline,bold,standout
-            \ cterm=underline,bold ctermfg=121
-            \ gui=underline,bold guifg=Green
+"" If terminal supports displaying italics, we need these key sequences
+"let t_ZH="\e[3m"
+"let t_ZR="\e[23m"
+"
+"" Otherwise, we just unugly the italics highlighting
+"highlight htmlItalic
+"            \ term=standout
+"            \ ctermfg=121
+"            \ guifg=Green
+"highlight htmlBoldItalic
+"            \ term=bold,standout
+"            \ cterm=bold ctermfg=121
+"            \ gui=bold guifg=Green
+"highlight htmlUnderlineItalic
+"            \ term=underline,standout
+"            \ cterm=underline ctermfg=121
+"            \ gui=underline guifg=Green
+"highlight htmlBoldUnderlineItalic
+"            \ term=underline,bold,standout
+"            \ cterm=underline,bold ctermfg=121
+"            \ gui=underline,bold guifg=Green
 
 set modeline
 set modelines=5
@@ -135,17 +135,18 @@ function! PrependModeline()
 endfunction
 nnoremap <silent> <Leader>ml :call PrependModeline()<CR>
 
-Plug 'vim-airline/vim-airline'
-set laststatus=2
-let g:airline#extensions#tabline#enabled = 1
+"Plug 'vim-airline/vim-airline'
+"set laststatus=2
+"let g:airline#extensions#tabline#enabled = 1
 " let g:airline_powerline_fonts = 1
 
 " Plug 'Yggdroot/indentLine'
 " let g:indentLine_setConceal = 0
 " let g:indentLine_leadingSpaceChar = '·'
 " let g:indentLine_leadingSpaceEnabled = 1
+" set conceallevel=2
+
 set list lcs=tab:\┆\ " <-- space
-set conceallevel=2
 
 """"""""""""
 " Navigation
@@ -160,7 +161,6 @@ nnoremap <C-h> g^
 nnoremap <C-i> <down><C-e>
 nnoremap <C-o> <up><C-y>
 nnoremap <C-s> :w<CR>
-
 
 inoremap <C-j> <down>
 inoremap <C-k> <up>
@@ -200,15 +200,15 @@ noremap <C-w>[ <Esc>:bp<CR>
 noremap <C-w><backspace> <Esc>:bw<CR>
 noremap <C-w>t :enew<cr>
 
-Plug 'psliwka/vim-smoothie'
-let g:smoothie_base_speed = 36
-nnoremap <silent> <C-j>      :<C-U>call smoothie#downwards() <CR>
-nnoremap <silent> <C-k>      :<C-U>call smoothie#upwards()   <CR>
+" Plug 'psliwka/vim-smoothie'
+" let g:smoothie_base_speed = 36
+" nnoremap <silent> <C-j>      :<C-U>call smoothie#downwards() <CR>
+" nnoremap <silent> <C-k>      :<C-U>call smoothie#upwards()   <CR>
 
 Plug 'tpope/vim-repeat'
 
-Plug 'farmergreg/vim-lastplace'
-let g:lastplace_open_folds = 0
+" Plug 'farmergreg/vim-lastplace'
+" let g:lastplace_open_folds = 0
 
 Plug 'easymotion/vim-easymotion'
 let g:EasyMotion_do_mapping = 0
@@ -226,42 +226,42 @@ map  <C-f>N <Plug>(easymotion-prev)
 
 let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
 
-Plug 'scrooloose/nerdtree'
-noremap <C-n> :NERDTreeToggle<CR>
+" Plug 'scrooloose/nerdtree'
+" noremap <C-n> :NERDTreeToggle<CR>
 
 " Open NERDTree upon startup
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" autocmd StdinReadPre * let s:std_in=1
+" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " Open NERDTree when opening a directory
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) &&
-            \ !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene |
-            \ exe 'cd '.argv()[0] | endif
+" autocmd StdinReadPre * let s:std_in=1
+" autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) &&
+"             \ !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene |
+"             \ exe 'cd '.argv()[0] | endif
+" 
+" " Close vim if NERDTree the only window left
+" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") &&
+"             \ b:NERDTree.isTabTree()) | q | endif
+" Plug 'Xuyuanp/nerdtree-git-plugin'
 
-" Close vim if NERDTree the only window left
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") &&
-            \ b:NERDTree.isTabTree()) | q | endif
-Plug 'Xuyuanp/nerdtree-git-plugin'
+" Plug 'airblade/vim-gitgutter'
+" let g:gitgutter_map_keys = 0
+" nmap <c-g><c-g> <Plug>GitGutterPreviewHunk
+" nmap <c-g>g     <Plug>GitGutterPreviewHunk
+" nmap <c-g>n     <Plug>GitGutterNextHunk
+" nmap <c-g>p     <Plug>GitGutterPrevHunk
+" set updatetime=100
+" let g:gitgutter_override_sign_column_highlight = 0
+" highlight SignColumn        guibg=#073642 ctermbg=0
+" highlight GitGutterAdd      guibg=#073642 ctermbg=0 guifg=#009900 ctermfg=2
+" highlight GitGutterChange   guibg=#073642 ctermbg=0 guifg=#bbbb00 ctermfg=3
+" highlight GitGutterDelete   guibg=#073642 ctermbg=0 guifg=#ff2222 ctermfg=1
 
-Plug 'airblade/vim-gitgutter'
-let g:gitgutter_map_keys = 0
-nmap <c-g><c-g> <Plug>GitGutterPreviewHunk
-nmap <c-g>g     <Plug>GitGutterPreviewHunk
-nmap <c-g>n     <Plug>GitGutterNextHunk
-nmap <c-g>p     <Plug>GitGutterPrevHunk
-set updatetime=100
-let g:gitgutter_override_sign_column_highlight = 0
-highlight SignColumn        guibg=#073642 ctermbg=0
-highlight GitGutterAdd      guibg=#073642 ctermbg=0 guifg=#009900 ctermfg=2
-highlight GitGutterChange   guibg=#073642 ctermbg=0 guifg=#bbbb00 ctermfg=3
-highlight GitGutterDelete   guibg=#073642 ctermbg=0 guifg=#ff2222 ctermfg=1
-
-Plug 'tpope/vim-fugitive'
-Plug 'junegunn/gv.vim'
-nnoremap <c-g>vb :GV
-nnoremap <c-g>vc :GV!
-nnoremap <c-g>vf :GV?
+" Plug 'tpope/vim-fugitive'
+" Plug 'junegunn/gv.vim'
+" nnoremap <c-g>vb :GV
+" nnoremap <c-g>vc :GV!
+" nnoremap <c-g>vf :GV?
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -352,7 +352,7 @@ Plug 'tpope/vim-surround'           " ds, cs, ys to change text surroundings
 Plug 'tpope/vim-rsi'                " readline style commands in insert mode
 Plug 'tpope/vim-characterize'       " use ga to see metadata about unicode
 Plug 'tpope/vim-eunuch'             " UNIX-like functionality in Vim
-Plug 'junegunn/vim-peekaboo'        " shows yank buffers
+" Plug 'junegunn/vim-peekaboo'        " shows yank buffers
 
 """""""
 " LaTeX
