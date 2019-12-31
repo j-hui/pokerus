@@ -18,6 +18,7 @@ brew "make"
 brew "tmux"
 brew "vim"
 brew "wget"
+cask "alacritty"
 
 # Usability
 brew "koekeishiya/formulae/skhd"
