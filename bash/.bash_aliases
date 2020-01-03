@@ -20,10 +20,10 @@ case "$OSTYPE" in
 *linux*)
     alias dmesg='dmesg --color'
     alias pacman='pacman --color=auto'
-    # alias ls='ls --color=auto'
+    alias ls='ls --color=auto'
     ;;
 *darwin*)
-    # alias ls='ls -G'
+    alias ls='ls -G'
     alias nproc='sysctl -n hw.ncpu'
     ;;
 esac
@@ -33,7 +33,6 @@ stty -ixon # enable XON/XOFF flow control (whatever that means)
 ### Handy aliases
 
 ## Navigation/FS
-alias ls='ls --color=auto'
 alias ll='ls -lagF'
 alias la='ls -A'
 alias l='ls -CF'
