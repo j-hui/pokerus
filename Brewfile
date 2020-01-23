@@ -13,19 +13,23 @@ tap "koekeishiya/formulae"
 brew "python"
 brew "git"
 brew "gnu-tar"
+brew "gnutls"
 brew "stow"
 brew "make"
 brew "tmux"
 brew "vim"
 brew "wget"
-cask "alacritty"
 
 # Usability
+brew "koekeishiya/formulae/yabai"
 brew "koekeishiya/formulae/skhd"
+
+cask "kitty"
+
 cask "font-source-code-pro"
 cask "zerotier-one"
-cask "hyperswitch"
-cask "spectacle"
+# cask "hyperswitch"
+# cask "spectacle"
 
 # Core apps
 cask "1password"
@@ -37,7 +41,10 @@ brew "htop"
 brew "sshfs"
 brew "subversion"
 brew "tree"
+brew "ranger"
 brew "ctags"
+brew "dduan/formulae/tre"
+brew "keith/formulae/tag"
 
 # Useful apps
 cask "balenaetcher"
