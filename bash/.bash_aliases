@@ -15,25 +15,26 @@ PATH_ADD() {
 export EDITOR=vim
 mkdir -p ~/.tmp/backup ~/.tmp/swp ~/.tmp/undo
 
+
 ### OS-specific configuration
 case "$OSTYPE" in
 *linux*)
+    alias ls='ls --color=auto'
+    alias rm='rm -I'
     alias dmesg='dmesg --color'
     alias pacman='pacman --color=auto'
-    # alias ls='ls --color=auto'
     ;;
 *darwin*)
-    # alias ls='ls -G'
+    alias ls='ls -G'
+    # if running the GNU implementation of ls, --color=auto is needed instead.
+    # leave this to be reset by .bash_local
     alias nproc='sysctl -n hw.ncpu'
     ;;
 esac
 
 stty -ixon # enable XON/XOFF flow control (whatever that means)
 
-### Handy aliases
-
-## Navigation/FS
-alias ls='ls --color=auto'
+### Navigation/FS
 alias ll='ls -lagF'
 alias la='ls -A'
 alias l='ls -CF'
@@ -45,6 +46,13 @@ alias ...='cd ../../'
 cs() {
     cd "$@" && ls
 }
+
+# Correct spelling errors in arguments supplied to cd
+shopt -s cdspell 2> /dev/null
+
+CDPATH="."
+
+tre() { command tre "$@" -e && source "/tmp/tre_aliases_$USER" 2>/dev/null; }
 
 alias sl='echo "
                  _-====-__-======-__-========-_____-============-__
@@ -60,7 +68,7 @@ alias sl='echo "
  /-OO----OO^^=^OO--OO^=^OO--------OO^=^OO-------OO^=^OO-------OO^=P
 #####################################################################"'
 
-## Searching
+### Searching
 alias grep="grep --color=auto"
 alias egrep="egrep --color=auto"
 alias fgrep="fgrep --color=auto"
@@ -69,7 +77,7 @@ rgrep() {
 }
 alias f="find . -name"
 
-## Utilities
+### Utilities
 alias usage='du -h -d1'
 alias mrproper="rm -rvf .*.swp *~"
 alias dfob="perl -pi -e 's/[^[:ascii:]]//g'"
@@ -77,7 +85,6 @@ alias json="python -m json.tool"
 
 ## Misc
 alias sudo='sudo ' # helps with scripting?
-alias rm='rm -I'
 alias stonks='stack'
 alias :w="echo You\'re not in vim, dingus."
 
@@ -96,13 +103,24 @@ modbash() {
     elif [ -w ~/.bash_profile ];    then rc_file=~/.bash_profile
     else errecho 'No ~/.bashrc{_aliases,rc,_profile} found.'; return 1
     fi
-    $EDITOR "${EDIT_BASH[@]}" $rc_file
+
+    if ! [ -f "$rc_file" ]; then
+        echo "# vim:fileencoding=utf-8:ft=bash" > "$rc_file"
+    fi
+
+    "$EDITOR" "${EDIT_BASH[@]}" "$rc_file"
 }
 
 srcbash() {
-    if [ -e ~/.bashrc ]; then source ~/.bashrc
-    elif [ -e ~/.bash_profile ]; then source ~/.bash_profile
-    else errecho 'No ~/.bashrc or ~/.bash_profile found.'; return 1
+    if [ -e ~/.bashrc ]; then 
+        source ~/.bashrc
+        echo "sourced ~/.bash_profile"
+    elif [ -e ~/.bash_profile ]; then
+        source ~/.bash_profile
+        echo "sourced ~/.bash_profile"
+    else
+        errecho 'No ~/.bashrc or ~/.bash_profile found.'
+        return 1
     fi
 }
 
@@ -111,13 +129,22 @@ pokepull() {(
 )}
 
 ssh-conf() {
-    if [ -w ~/.ssh/config ]; then
-        $EDITOR ~/.ssh/config
+    if [ -w "$HOME/.ssh/config" ]; then
+        $EDITOR "$HOME/.ssh/config"
     else
         errecho "No ~/.ssh/config found."
         errecho "Trying to touch ~/.ssh/config, try running $0 again."
         touch ~/.ssh/config
         return 1
+    fi
+}
+
+config() {
+    if [[ -e "$HOME/.config/$1" ]]; then
+        $EDITOR "$HOME/.config/$1"
+    else
+        echo "Usage:"
+        echo "    config <config>"
     fi
 }
 
@@ -171,6 +198,9 @@ man() {
             man "$@"
 }
 
+# Automatically trim long paths in the prompt (requires Bash 4.x)
+PROMPT_DIRTRIM=2
+
 # show "[hh:mm] user@host:pwd" in xterm title bar
 if [ "$TERM_PROGRAM" = "Apple_Terminal" ]; then
     # for Mac Terminal, omit "User@Users-MacBook-Air"
@@ -191,6 +221,61 @@ fi
 unset show_what_in_title_bar
 
 sfw
+
+### Readline
+
+# Prevent file overwrite on stdout redirection
+# Use `>|` to force redirection to an existing file
+set -o noclobber
+
+# Enable history expansion with space
+# E.g. typing !!<space> will replace the !! with your last command
+bind Space:magic-space
+
+# Perform file completion in a case insensitive fashion
+bind "set completion-ignore-case on"
+
+# Treat hyphens and underscores as equivalent
+bind "set completion-map-case on"
+
+# Display matches for ambiguous patterns at first tab press
+bind "set show-all-if-ambiguous on"
+
+### History
+
+# Append to the history file, don't overwrite it
+shopt -s histappend
+
+# Save multi-line commands as one command
+shopt -s cmdhist
+
+# Record each line as it gets issued
+PROMPT_COMMAND='history -a'
+
+# Huge history
+HISTSIZE=500000
+HISTFILESIZE=100000
+
+# Avoid duplicate entries
+HISTCONTROL="erasedups:ignoreboth"
+
+# Don't record some commands
+export HISTIGNORE="&:[ ]*:exit:ls:ll:bg:fg:history:clear"
+
+# Use standard ISO 8601 timestamp
+# %F equivalent to %Y-%m-%d
+# %T equivalent to %H:%M:%S (24-hours format)
+HISTTIMEFORMAT='%F %T '
+
+# Enable incremental history search with up/down arrows (also Readline goodness)
+# Learn more about this here: http://codeinthehole.com/writing/the-most-important-command-line-tip-incremental-history-searching-with-inputrc/
+bind '"\e[A": history-search-backward'
+bind '"\e[B": history-search-forward'
+bind '"\e[C": forward-char'
+bind '"\e[D": backward-char'
+
+# Record each line as it gets issued
+PROMPT_COMMAND='history -a'
 
 ### Jump to ~/.bash_local
 if [ -f ~/.bash_local ]; then
