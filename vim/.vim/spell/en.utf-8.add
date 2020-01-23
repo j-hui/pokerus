@@ -101,3 +101,6 @@ nondeterministically
 effectful
 unencrypted
 cacheability
+unsynchronized
+idiosynchrasies
+ok

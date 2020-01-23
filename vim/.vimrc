@@ -341,7 +341,7 @@ endif
 Plug 'svermeulen/vim-cutlass'
 " - retain cut behavior for d specifically
 " - x and D no longer put text into registers
-" - to delete lines without cutting, use D and visual mode 
+" - to delete lines without cutting, use D and visual mode
 nnoremap d d
 xnoremap d d
 vnoremap d d
@@ -353,6 +353,9 @@ Plug 'tpope/vim-rsi'                " readline style commands in insert mode
 Plug 'tpope/vim-characterize'       " use ga to see metadata about unicode
 Plug 'tpope/vim-eunuch'             " UNIX-like functionality in Vim
 Plug 'junegunn/vim-peekaboo'        " shows yank buffers
+Plug 'godlygeek/tabular'            " :Tabularize to align stuff
+
+cnoreabbrev Tab Tabularize
 
 """""""
 " LaTeX
