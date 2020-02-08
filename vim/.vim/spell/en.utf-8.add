@@ -104,3 +104,6 @@ cacheability
 unsynchronized
 idiosynchrasies
 ok
+atomicity
+ISA
+underspecified
