@@ -35,6 +35,7 @@ cask "zerotier-one"
 cask "1password"
 cask "google-chrome"
 cask "wavebox"
+cask "marshallofsound-google-play-music-player"
 
 # Useful utilities
 brew "htop"
