@@ -112,16 +112,7 @@ shift + ctrl + cmd - 7 : yabai -m window --space    8
 # ctrl + alt - 1  : yabai -m display --focus 1
 # ctrl + alt - 2  : yabai -m display --focus 2
 # ctrl + alt - 3  : yabai -m display --focus 3
-# 
-# 800 331 0500
-# mobility
-#
-# 277 267 2988
-# digital assistance
-# 877 312 5553
-#
-# 800 331 0500
-#
+ 
 # # send window to monitor and follow focus
 # ctrl + cmd - x  : yabai -m window --display recent; yabai -m display --focus recent
 # ctrl + cmd - z  : yabai -m window --display prev; yabai -m display --focus prev
