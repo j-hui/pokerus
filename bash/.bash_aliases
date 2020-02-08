@@ -35,6 +35,7 @@ esac
 stty -ixon # enable XON/XOFF flow control (whatever that means)
 
 ### Navigation/FS
+
 alias ll='ls -lagF'
 alias la='ls -A'
 alias l='ls -CF'
