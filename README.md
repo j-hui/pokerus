@@ -85,13 +85,13 @@ No password for `sudo` (put at bottom):
 
 Useful:
 
-    tree python3 htop
+    tree python3 htop fzf silversearcher-ag
 
 ### Linux kernel dev
 
 Kernel build packages:
 
-    build-essential bc bison libncurses5-dev pkg-config python
+    build-essential bc bison libncurses5-dev pkg-config python libssl-dev flex
 
 And some kernel dev aliases (this will eventually go into a .bash_linux file)
 
