@@ -85,7 +85,7 @@ No password for `sudo` (put at bottom):
 
 Useful:
 
-    tree python3 htop fzf silversearcher-ag
+    tree python3 htop fzf silversearcher-ag curl wget
 
 ### Linux kernel dev
 
