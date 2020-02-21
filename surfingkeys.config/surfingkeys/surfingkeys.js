@@ -1,0 +1,354 @@
+/* Chord prefix mnemonics:
+ *
+ *   (:): omnibar
+ *   (r)eload: current page
+ *   (z)oom: page resolution
+ *   (g)oto: links, input, and other graphical interaction
+ *   (s)croll: select scroll elements
+ *   (y)ank: yank to clipboard
+ *
+ */
+
+/* Modes */
+unmap(':'); // Command mode is useless to me
+            // (Also this lets me map chords beginning with ':')
+            
+map(':h', '?'); // Open help menu
+
+imap('<Ctrl-[>', '<Esc>');
+imap('<Ctrl-c>', '<Esc>');
+cmap('<Ctrl-[>', '<Esc>');
+cmap('<Ctrl-c>', '<Esc>');
+vmap('<Ctrl-[>', '<Esc>');
+vmap('<Ctrl-c>', '<Esc>');
+
+unmap('<Ctrl-i>'); // Go to edit box with vim editor (duplicate)
+
+/* Page navigation */
+map('<Ctrl-j>', 'd'); // Page down
+map('<Ctrl-d>', 'd'); // Page down
+map('<Ctrl-u>', 'e'); // Page up
+map('<Ctrl-k>', 'e'); // Page up
+unmap('e');
+unmap('d');
+
+vmap('<Ctrl-j>', '<Ctrl-d>'); // Page down
+vmap('<Ctrl-k>', '<Ctrl-u>'); // Page down
+
+map('<Ctrl-h>', '0'); // All the way to the left
+map('^', '0');        // All the way to the left
+map('<Ctrl-l>', '$'); // All the way to the right
+unmap('0');
+
+/* Reload/current page */
+unmap('r');     // We're using this to chord
+
+mapkey('rr', '#4Reload current page', function() {
+    RUNTIME("reloadTab", { nocache: false });
+});
+
+map('r?', 'g?'); // Reload current page without query string
+map('r#', 'g#'); // Reload current page without hash fragment
+unmap('g?');
+unmap('g#');
+
+map('rk', 'gu'); // Go up one path in the URL
+map('rj', 'gU'); // Go up one path in the URL
+unmap('gu');
+unmap('gU');
+
+map('rir', 'sU'); // Edit url, reload
+map('rit', 'su'); // Edit url, new tab
+unmap('sU');
+unmap('su');
+
+map('rh', 'S'); // Go back in history
+map('rl', 'D'); // Go forward in history
+unmap('S');
+unmap('D');
+
+map('ru', 'X'); // Restore closed tab
+unmap('X');
+
+map('rw', 'W'); // New window with current tab
+unmap('W');
+
+map('rd', 'yt'); // Duplicate current tab
+map('rD', 'yT'); // Duplicate current tab in background
+unmap('yt');
+unmap('yT');
+
+map('rp', 'cc'); // Open selected link from clipboard
+unmap('cc');
+
+map('ro', 'on'); // Open new tab
+unmap('on');
+
+map('rq', 'oi'); // Open incognito window
+unmap('oi');
+
+map('r,', 'se'); // Open settings
+unmap('se');
+
+map('rm', 'sm'); // Open markdown preview
+unmap('sm');
+
+map('rz', 'gs'); // View page source
+unmap('gs');
+
+/* Omnibar/search */
+
+/* (Delegate to DuckDuckGo to redirect searches) */
+unmap('og'); // Open search with alias g
+unmap('od'); // Open search with alias d
+unmap('ow'); // Open search with alias w
+unmap('oy'); // Open search with alias y
+unmap('ob'); // Open search with alias b 
+
+map(':e', 'go'); // Open a URL in current tab
+unmap('go');
+map(':t', 't');  // Open a URL in a new tab
+unmap('t');
+map(':r', 'H');  // Open opened page in current tab
+unmap('H');
+map(':d', 'ox'); // Open recently closed URL
+unmap('ox');
+map(':m', 'om'); // Open URL from vim-like marks
+unmap('om');
+map(':u', 'oh'); // Open URL from history
+unmap('oh');
+map(':U', ';dh'); // Delete history older than 30 days
+unmap(';dh');
+
+map(':b', 'b');  // Open a bookmark
+unmap('b');
+map(':p', 'ab'); // Add bookmark
+unmap('ab');
+map(':P', ';db'); // Delete bookmark
+unmap(';db');
+
+map(':v', ';s'); // Toggle PDF viewer
+unmap(';s');
+
+map('o.', 'sql'); // Show last action
+unmap('sql');
+
+/* (Search selection doesn't make sense for normal mode) */
+unmap('sg');
+unmap('sd');
+unmap('sb');
+unmap('sw');
+unmap('ss');
+unmap('sh');
+unmap('sy');
+
+/* Tabs */
+// Note: <nth>T takes you to <nth> tab
+
+map('J', 'E'); // Tab left
+map('K', 'R'); // Tab right
+unmap('E');
+unmap('R');
+
+map(':q<Enter>', 'x'); // Close tab
+
+map('H', 'g0'); // Go to first tab
+map('L', 'g$'); // Go to last tab
+unmap('g0');
+unmap('g$');
+
+unmap('gx0'); // Close all tabs on left
+unmap('gxt'); // Close tab on left
+unmap('gxT'); // Close tab on right
+unmap('gx$'); // Close all tabs on right
+unmap('gxx'); // Close all tabs except current one
+unmap('gt');  // Go to last activated tab
+unmap('<Ctrl-6>'); // Go to last used tab
+
+/* Page interaction */
+map('gI', 'gi'); // Go to the first edit box
+unmap('gi');
+map('gi', 'i');  // Go to edit box
+unmap('i');
+map('ge', 'I');  // Go to edit box with vim editor
+unmap('I');
+
+map('gf', 'f');  // Follow link
+map('F', 'C');   // Open link in non-active new tab
+map('gt', 'C');  // Open link in non-active new tab
+unmap('C'); unmap('af');
+map('gT', 'cf'); // Open multiple links in new tab
+unmap('cf');
+map('gu', 'O');  // Open URL literal
+unmap('O');
+map('g[', '[['); // Click on previous link on current page
+unmap('[[');
+map('g]', ']]'); // Click on next link on current page
+unmap(']]');
+
+map('gv', 'q'); // Click on an image or button
+unmap('q');
+
+/* Scroll */
+map('sf', ';fs'); // Display hints to focus scrollable elements
+unmap(';fs');
+map('sr', 'cS');  // Reset scroll target
+unmap('cS');
+map('ss', 'cs');  // Change scroll target
+unmap('cs');
+
+
+/* Clipboard */
+mapkey('yY', '#7Copy all tabs url', function() {
+    RUNTIME('getTabs', null, function (response) {
+        Clipboard.write([window.location.href].concat(response.tabs.map(tab => tab.url)).join('\n'))
+    })
+});
+
+map('yf', 'ya'); // Yank a link URL
+unmap('ya');
+map('yF', 'yma'); // Yank a link URL
+unmap('yma');
+
+map('yw', 'yv'); // Yank text of an element
+unmap('yv');
+map('yW', 'ymv'); // Yank text of multiple elements
+unmap('ymv');
+
+unmap('yq');  // Yank pre text
+unmap('yc');  // Yank column
+unmap('ymc'); // Yank multiple columns
+
+unmap('yf');  // Copy form data in JSON on current page
+unmap('yp');  // Copy form data for POST on current page
+unmap(';pj'); // Restore settings data from clipboard
+unmap(';pf'); // Fill form with data from yf
+unmap(';pp'); // Paste html on current page
+
+
+/* Sessions */
+unmap('ZZ');
+unmap('ZR');
+
+/* Proxy */
+unmap('cp');
+unmap(';cp');
+unmap(';ap');
+unmap('spa');
+unmap('spb');
+unmap('spc');
+unmap('spd');
+unmap('sps');
+unmap('sfr');
+
+/* Query (translation) */
+unmap('Q');  // Open omnibar for word translation
+unmap('cq'); // Query word with Hints
+unmap(';q'); // Toggle mouseSelectToQuery
+vunmap('q'); // Query under cursor
+unmap('yQ'); // Copy all query history of OmniQuery
+
+/* Misc */
+unmap(';w'); // Focus top window
+unmap('%');  // Scroll to percentage of current page
+unmap(';m'); // Mouse out last element
+unmap('B');  // Go on tab history back
+unmap('gT'); // Go to first activated tab
+unmap(';i'); // Insert jquery library on current page
+unmap(';t'); // Translate selected text with google
+unmap('gr'); // Read selected text or text from clipboard
+
+unmap('<Alt-p>'); // pin/unpin current tab
+unmap('<Alt-m>'); // mute/unmute current tab
+
+/* Insert mode */
+/* (Unmap most things here, delegate to OS readline shortcuts) */
+imap('<Ctrl-a>', '<Ctrl-f>'); // Beginning of line
+iunmap('<Ctrl-f>');
+iunmap('<Ctrl-b>');
+iunmap('<Ctrl-u>');
+iunmap('<Alt-w>');
+iunmap('<Alt-d>');
+
+/* Vim text editor */
+aceVimMap('kj', '<Esc>', 'insert');
+aceVimMap('<Ctrl-j>', '<Ctrl-d>', 'normal');
+aceVimMap('<Ctrl-k>', '<Ctrl-u>', 'normal');
+
+settings.smoothScroll = false;
+settings.defaultSearchEngine = "d"; // DuckDuckGo
+
+// set theme
+settings.theme = `
+.sk_theme {
+    font-family: Input Sans Condensed, Charcoal, sans-serif;
+    font-size: 10pt;
+    background: #24272e;
+    color: #abb2bf;
+}
+.sk_theme tbody {
+    color: #fff;
+}
+.sk_theme input {
+    color: #d0d0d0;
+}
+.sk_theme .url {
+    color: #61afef;
+}
+.sk_theme .annotation {
+    color: #56b6c2;
+}
+.sk_theme .omnibar_highlight {
+    color: #528bff;
+}
+.sk_theme .omnibar_timestamp {
+    color: #e5c07b;
+}
+.sk_theme .omnibar_visitcount {
+    color: #98c379;
+}
+.sk_theme #sk_omnibarSearchResult>ul>li:nth-child(odd) {
+    background: #303030;
+}
+.sk_theme #sk_omnibarSearchResult>ul>li.focused {
+    background: #3e4452;
+}
+#sk_status, #sk_find {
+    font-size: 20pt;
+}
+
+:root {
+    --theme-ace-bg:#282828ab; /*Note the fourth channel, this adds transparency*/
+    --theme-ace-bg-accent:#3c3836;
+    --theme-ace-fg:#ebdbb2;
+    --theme-ace-fg-accent:#7c6f64;
+    --theme-ace-cursor:#928374;
+    --theme-ace-select:#458588;
+}
+#sk_editor {
+    height: 50% !important; /*Remove this to restore the default editor size*/
+    background: var(--theme-ace-bg) !important;
+}
+.ace_dialog-bottom{
+    border-top: 1px solid var(--theme-ace-bg) !important;
+}
+.ace-chrome .ace_print-margin, .ace_gutter, .ace_gutter-cell, .ace_dialog{
+    background: var(--theme-ace-bg-accent) !important;
+}
+.ace-chrome{
+    color: var(--theme-ace-fg) !important;
+}
+.ace_gutter, .ace_dialog {
+    color: var(--theme-ace-fg-accent) !important;
+}
+.ace_cursor{
+    color: var(--theme-ace-cursor) !important;
+}
+.normal-mode .ace_cursor{
+    background-color: var(--theme-ace-cursor) !important;
+    border: var(--theme-ace-cursor) !important;
+}
+.ace_marker-layer .ace_selection {
+    background: var(--theme-ace-select) !important;
+}
+`;
