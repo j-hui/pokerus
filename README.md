@@ -85,7 +85,7 @@ No password for `sudo` (put at bottom):
 
 Useful:
 
-    tree python3 htop fzf silversearcher-ag
+    tree python3 htop fzf silversearcher-ag curl wget
 
 ### Linux kernel dev
 
@@ -161,3 +161,10 @@ Make Terminal.app aware of _italics_:
 
     # add this to .bashrc
     export TERM=xterm-256color-italic
+
+Control where screenshots are sent:
+
+    mkdir -p ~/data/screenshots
+    ln -s ~/data/screenshots ~/Desktop
+    defaults write com.apple.screencapture ~/data/screenshots
+    killall SystemUIServer
