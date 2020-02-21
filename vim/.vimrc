@@ -501,6 +501,12 @@ Plug 'whonore/coqtail', { 'for': 'coq' }
 autocmd Filetype coq nnoremap <buffer> <c-c><enter>          :CoqToLine<CR>
 autocmd Filetype coq inoremap <buffer> <c-c><enter>     <Esc>:CoqToLine<CR>
 
+""""""
+" Lean
+""""""
+Plug 'leanprover/lean.vim'
+
+
 """"""""""""""
 " Scratch Area
 """"""""""""""
@@ -519,6 +525,21 @@ autocmd Filetype coq inoremap <buffer> <c-c><enter>     <Esc>:CoqToLine<CR>
 "
 " Plug 'andymass/vim-matchup'
 "   https://github.com/andymass/vim-matchup
+"
+" Plug 'metakirby5/codi.vim'
+"   https://github.com/metakirby5/codi.vim
+"
+" Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
+"   https://github.com/iamcco/markdown-preview.nvim/
+"
+" Plug 'powerman/vim-plugin-AnsiEsc'
+"   https://github.com/powerman/vim-plugin-AnsiEsc
+"
+" Plug 'majutsushi/tagbar'
+"   https://github.com/majutsushi/tagbar
+"
+" Plug 'Shougo/denite.vim'
+"   https://github.com/Shougo/denite.nvim
 
 Plug 'al3623/deepsea.vim'
 
