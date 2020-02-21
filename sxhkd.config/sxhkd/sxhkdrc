@@ -5,10 +5,12 @@
 # terminal emulator
 ctrl + super + t
 	kitty
+ctrl + super + o
+	google-chrome
 
 # program launcher
 super + @space
-	dmenu_run
+	rofi -modi run,drun -show drun -columns 1 -width 24 -lines 8 -padding 45 -hide-scrollbar -show-icons -drun-icon-theme "Papirus"
 
 # make sxhkd reload its configuration files:
 ctrl + super + Escape
@@ -19,7 +21,7 @@ ctrl + super + Escape
 #
 
 # quit/restart bspwm
-super + alt + {q,r}
+super + ctrl + {q,r}
 	bspc {quit,wm -r}
 
 # close and kill
@@ -71,8 +73,8 @@ ctrl + super + bracket{left,right}
 	bspc desktop -f {prev,next}.local
 
 # focus the last node/desktop
-{ctrl,super} + Tab
-	bspc {node,desktop} -f last
+{super, super + ctrl} + Tab
+	bspc {desktop,node} -f last
 
 # focus the older or newer node in the focus history
 super + {o,i}

@@ -142,7 +142,7 @@ ssh-conf() {
 
 config() {
     if [[ -e "$HOME/.config/$1" ]]; then
-        $EDITOR "$HOME/.config/$1"
+        $EDITOR "$HOME/.config/$1/"*
     else
         echo "Usage:"
         echo "    config <config>"
