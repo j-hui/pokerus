@@ -151,6 +151,7 @@ unmap('E');
 unmap('R');
 
 map(':q<Enter>', 'x'); // Close tab
+map('rx', 'x');        // Close tab
 
 map('H', 'g0'); // Go to first tab
 map('L', 'g$'); // Go to last tab
