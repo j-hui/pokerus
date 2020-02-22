@@ -1,19 +1,60 @@
+settings.defaultSearchEngine = "d"; // DuckDuckGo
+settings.smoothScroll = false;
+settings.hintExplicit = true;
+settings.hintShiftNonActive = true;
+
 /* Chord prefix mnemonics:
  *
- *   (:): omnibar
- *   (r)eload: current page
- *   (z)oom: page resolution
+ *   (r)eload: related to current page
+ *   (z)oom: related to page resolution
+ *   (:): related to omnibar
  *   (g)oto: links, input, and other graphical interaction
  *   (s)croll: select scroll elements
- *   (y)ank: yank to clipboard
+ *   (y)ank: pull to clipboard
  *
  */
+ 
+/* Misc */
+// (Unused; unmap these first so they can be mapped to other things)
+
+unmap(';w'); // Focus top window
+unmap('%');  // Scroll to percentage of current page
+unmap(';m'); // Mouse out last element
+unmap('B');  // Go on tab history back
+unmap('gT'); // Go to first activated tab
+unmap(';i'); // Insert jquery library on current page
+unmap(';t'); // Translate selected text with google
+unmap('gr'); // Read selected text or text from clipboard
+
+unmap('<Alt-p>'); // pin/unpin current tab
+unmap('<Alt-m>'); // mute/unmute current tab
+
+// Search selection
+unmap('sg');
+unmap('sd');
+unmap('sb');
+unmap('sw');
+unmap('ss');
+unmap('sh');
+unmap('sy');
+
+/* (Search selection doesn't make sense for normal mode) */
+unmap('sg');
+unmap('sd');
+unmap('sb');
+unmap('sw');
+unmap('ss');
+unmap('sh');
+unmap('sy');
 
 /* Modes */
-unmap(':'); // Command mode is useless to me
-            // (Also this lets me map chords beginning with ':')
+unmap(':'); // Lets me map chords beginning with ':'
             
 map(':h', '?'); // Open help menu
+mapkey(':!', '#8Open commands', function() {
+    Front.openOmnibar({type: "Commands"});
+});
+
 
 imap('<Ctrl-[>', '<Esc>');
 imap('<Ctrl-c>', '<Esc>');
@@ -24,6 +65,15 @@ vmap('<Ctrl-c>', '<Esc>');
 
 unmap('<Ctrl-i>'); // Go to edit box with vim editor (duplicate)
 
+map(',s', '<Alt-s>'); // Toggle SurfingKeys
+unmap('<Alt-s>');
+map(',S', '<Alt-i>'); // Enter passthrough
+unmap('<Alt-i>');
+map(',,', 'p');       // Enter ephemeral passthrough
+unmap('<Alt-i>');
+
+var commaMappings = [',s', ',S', ',,'];
+
 /* Page navigation */
 map('<Ctrl-j>', 'd'); // Page down
 map('<Ctrl-d>', 'd'); // Page down
@@ -32,16 +82,18 @@ map('<Ctrl-k>', 'e'); // Page up
 unmap('e');
 unmap('d');
 
-vmap('<Ctrl-j>', '<Ctrl-d>'); // Page down
-vmap('<Ctrl-k>', '<Ctrl-u>'); // Page down
-
 map('<Ctrl-h>', '0'); // All the way to the left
 map('^', '0');        // All the way to the left
 map('<Ctrl-l>', '$'); // All the way to the right
 unmap('0');
 
+var ctrlMappings = ['<Ctrl-j>', '<Ctrl-d>', '<Ctrl-u>', '<Ctrl-k>', '<Ctrl-h>', '<Ctrl-l>'];
+
+vmap('<Ctrl-j>', '<Ctrl-d>'); // Page down
+vmap('<Ctrl-k>', '<Ctrl-u>'); // Page down
+
 /* Reload/current page */
-unmap('r');     // We're using this to chord
+unmap('r');     // We're going to use 'r' to chord
 
 mapkey('rr', '#4Reload current page', function() {
     RUNTIME("reloadTab", { nocache: false });
@@ -96,9 +148,45 @@ unmap('sm');
 map('rz', 'gs'); // View page source
 unmap('gs');
 
+map('r/', '/');
+map('r?', '?');
+
+/* Tabs */
+// Note: <nth>T takes you to <nth> tab
+
+map('J', 'E'); // Tab left
+map('rJ', 'E');
+map('K', 'R'); // Tab right
+map('rK', 'R');
+unmap('E');
+unmap('R');
+
+map('rx', 'x');        // Close tab
+
+map('H', 'g0'); // Go to first tab
+map('rH', 'g0');
+map('L', 'g$'); // Go to last tab
+map('rL', 'g$');
+unmap('g0');
+unmap('g$');
+
+unmap('gx0'); // Close all tabs on left
+unmap('gxt'); // Close tab on left
+unmap('gxT'); // Close tab on right
+unmap('gx$'); // Close all tabs on right
+unmap('gxx'); // Close all tabs except current one
+unmap('gt');  // Go to last activated tab
+unmap('<Ctrl-6>'); // Go to last used tab
+
+// My r-chord mappings are mostly common, handy, one-shot commands,
+// so website shortcuts that begin with 'r' be damned.
+var rMappings = ['rr', 'r?', 'r#', 'rk', 'rj', 'rir', 'rit', 'rh', 'rl',
+    'ru', 'rw', 'rd', 'rD', 'rp', 'ro', 'rq', 'r,', 'rm', 'rz',
+    'r/', 'r?', 'rJ', 'rK', 'rH', 'rL', 'rx'];
+
 /* Omnibar/search */
 
-/* (Delegate to DuckDuckGo to redirect searches) */
+// Delegate to DuckDuckGo to redirect searches
 unmap('og'); // Open search with alias g
 unmap('od'); // Open search with alias d
 unmap('ow'); // Open search with alias w
@@ -130,65 +218,45 @@ unmap(';db');
 map(':v', ';s'); // Toggle PDF viewer
 unmap(';s');
 
+map(':q<Enter>', 'x'); // Close tab
+
+var colonMappings = [':e', ':t', ':r', ':d', ':m', ':u', ':U',
+    ':b', ':p', ':P', ':v', ':q<Enter>'];
+
 map('o.', 'sql'); // Show last action
 unmap('sql');
 
-/* (Search selection doesn't make sense for normal mode) */
-unmap('sg');
-unmap('sd');
-unmap('sb');
-unmap('sw');
-unmap('ss');
-unmap('sh');
-unmap('sy');
-
-/* Tabs */
-// Note: <nth>T takes you to <nth> tab
-
-map('J', 'E'); // Tab left
-map('K', 'R'); // Tab right
-unmap('E');
-unmap('R');
-
-map(':q<Enter>', 'x'); // Close tab
-map('rx', 'x');        // Close tab
-
-map('H', 'g0'); // Go to first tab
-map('L', 'g$'); // Go to last tab
-unmap('g0');
-unmap('g$');
-
-unmap('gx0'); // Close all tabs on left
-unmap('gxt'); // Close tab on left
-unmap('gxT'); // Close tab on right
-unmap('gx$'); // Close all tabs on right
-unmap('gxx'); // Close all tabs except current one
-unmap('gt');  // Go to last activated tab
-unmap('<Ctrl-6>'); // Go to last used tab
-
 /* Page interaction */
 map('gI', 'gi'); // Go to the first edit box
+map('rgI', 'gi');
 unmap('gi');
 map('gi', 'i');  // Go to edit box
+map('rgi', 'i');
 unmap('i');
 map('ge', 'I');  // Go to edit box with vim editor
+map('rge', 'I');
 unmap('I');
 
 map('gf', 'f');  // Follow link
+map('rgf', 'f');
 map('F', 'C');   // Open link in non-active new tab
 map('gt', 'C');  // Open link in non-active new tab
 unmap('C'); unmap('af');
 map('gT', 'cf'); // Open multiple links in new tab
 unmap('cf');
+
+map('ga', 'q'); // Click on an image or button
+unmap('q');
 map('gu', 'O');  // Open URL literal
 unmap('O');
+
 map('g[', '[['); // Click on previous link on current page
 unmap('[[');
 map('g]', ']]'); // Click on next link on current page
 unmap(']]');
 
-map('gv', 'q'); // Click on an image or button
-unmap('q');
+var gMappings = ['gI', 'gi', 'ge', 'gf', 'gt', 'gT', 'gu', 'g[', 'g]', 'ga'];
+rMappings = rMappings.concat(['rgi', 'rgI', 'rge', 'rgf']);
 
 /* Scroll */
 map('sf', ';fs'); // Display hints to focus scrollable elements
@@ -198,6 +266,7 @@ unmap('cS');
 map('ss', 'cs');  // Change scroll target
 unmap('cs');
 
+var sMappings = ['sf', 'sr', 'ss'];
 
 /* Clipboard */
 mapkey('yY', '#7Copy all tabs url', function() {
@@ -226,6 +295,7 @@ unmap(';pj'); // Restore settings data from clipboard
 unmap(';pf'); // Fill form with data from yf
 unmap(';pp'); // Paste html on current page
 
+var yMappings = ['yy', 'yY', 'yf', 'yF', 'yw', 'yW'];
 
 /* Sessions */
 unmap('ZZ');
@@ -249,19 +319,6 @@ unmap(';q'); // Toggle mouseSelectToQuery
 vunmap('q'); // Query under cursor
 unmap('yQ'); // Copy all query history of OmniQuery
 
-/* Misc */
-unmap(';w'); // Focus top window
-unmap('%');  // Scroll to percentage of current page
-unmap(';m'); // Mouse out last element
-unmap('B');  // Go on tab history back
-unmap('gT'); // Go to first activated tab
-unmap(';i'); // Insert jquery library on current page
-unmap(';t'); // Translate selected text with google
-unmap('gr'); // Read selected text or text from clipboard
-
-unmap('<Alt-p>'); // pin/unpin current tab
-unmap('<Alt-m>'); // mute/unmute current tab
-
 /* Insert mode */
 /* (Unmap most things here, delegate to OS readline shortcuts) */
 imap('<Ctrl-a>', '<Ctrl-f>'); // Beginning of line
@@ -276,9 +333,43 @@ aceVimMap('kj', '<Esc>', 'insert');
 aceVimMap('<Ctrl-j>', '<Ctrl-d>', 'normal');
 aceVimMap('<Ctrl-k>', '<Ctrl-u>', 'normal');
 
-settings.smoothScroll = false;
-settings.defaultSearchEngine = "d"; // DuckDuckGo
+/* Site-specific */
 
+var numMappings = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+var zMappings = ['zi', 'zo', 'zr'];
+
+// unmapAllExcept([commaMappings, ctrlMappings, rMappings, colonMappings, gMappings, sMappings, yMappings, zMappings].flat(),
+
+unmapAllExcept([commaMappings, ctrlMappings, rMappings, colonMappings, sMappings, yMappings].flat(),
+    /mail\.google\.com/);
+unmapAllExcept([commaMappings, ctrlMappings, rMappings, colonMappings, sMappings, yMappings].flat(),
+    /drive\.google\.com/);
+unmapAllExcept([],
+    /docs\.google\.com/);
+unmapAllExcept([commaMappings, ctrlMappings, rMappings, colonMappings, gMappings, sMappings, yMappings].flat(),
+    /.+\.slack\.com/);
+unmapAllExcept([commaMappings, ctrlMappings, rMappings, colonMappings, gMappings, sMappings, yMappings].flat(),
+    /reddit\.com/);
+unmapAllExcept([],
+    /overfleaf\.com/);
+unmapAllExcept([],
+    /hackerrank\.com/);
+unmapAllExcept([],
+    /cloud\.digitalocean\.com/);
+
+['/', 'j', 'k'].forEach(function(k, i) {
+   unmap(k, /duckduckgo\.com/);
+});
+[['m', 'f'], numMappings].flat().forEach(function(k, i) {
+   unmap(k, /youtube\.com/);
+});
+[['n', 'p', 'z'], numMappings].flat().forEach(function(k, i) {
+   unmap(k, /gradescope\.com/);
+});
+['/', 'j', 'k', 'n', 'p'].forEach(function(k, i) {
+   unmap(k, /vimawesome\.com/);
+});
+    
 // set theme
 settings.theme = `
 .sk_theme {
