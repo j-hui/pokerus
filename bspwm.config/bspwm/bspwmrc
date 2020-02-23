@@ -1,7 +1,12 @@
 #! /bin/sh
 
+# https://github.com/windelicato/dotfiles
+# https://github.com/addy-dclxvi/void-bspwm-dotfiles/blob/master/home/addy/.config/bspwm/bspwmrc
+# https://dotfiles.github.io/inspiration/
+
 sxhkd &
 yabar &
+xsetroot -cursor_name left_ptr &
 xautolock -time 10 -locker 'i3lock -c 000000 -n' &
 
 bspc monitor -d I II III IV V VI VII VIII

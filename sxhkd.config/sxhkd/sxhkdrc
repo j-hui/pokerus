@@ -1,3 +1,5 @@
+# Keycode names: https://github.com/baskerville/sxhkd/blob/master/src/parse.c
+
 #
 # wm independent hotkeys
 #
@@ -6,26 +8,34 @@
 ctrl + super + t
 	kitty
 ctrl + super + o
-	google-chrome
+    firefox
+    # google-chrome
+
+super + alt + 0
+    /opt/enpass/Enpass showassistant
 
 # program launcher
-super + @space
-	rofi -modi run,drun -show drun -columns 1 -width 24 -lines 8 -padding 45 -hide-scrollbar -show-icons -drun-icon-theme "Papirus"
+super + space
+    rofi -modi run,drun -show drun -columns 1 -width 24 -lines 8 -padding 45 -hide-scrollbar -show-icons -drun-icon-theme "Papirus"
 
 # make sxhkd reload its configuration files:
-ctrl + super + Escape
-	pkill -USR1 -x sxhkd
+# ctrl + super + Escape
+# 	pkill -USR1 -x sxhkd
 
 #
 # bspwm hotkeys
 #
 
-# quit/restart bspwm
-super + ctrl + {q,r}
-	bspc {quit,wm -r}
+# quit bspwm/restart sxhkd
+super + ctrl + {_, shift +} z
+	{bspc quit, pkill -USR1 -x sxhkd}
+
+# restart bspwm (?)
+# super + ctrl + shift + z
+# 	bspc wm -r
 
 # close and kill
-super + {_,shift + }w
+super + {_, shift +} q
 	bspc node -{c,k}
 
 # alternate between the tiled and monocle layout
@@ -45,12 +55,12 @@ ctrl + super + f
 #
 
 # set the window state
-super + {t,shift + t,s,f}
-	bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
+# super + {t,shift + t,s,f}
+# 	bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
 
 # set the node flags
-super + ctrl + {m,x,y,z}
-	bspc node -g {marked,locked,sticky,private}
+# super + ctrl + {m,x,y,z}
+# 	bspc node -g {marked,locked,sticky,private}
 
 #
 # focus/swap
@@ -60,16 +70,16 @@ super + ctrl + {m,x,y,z}
 ctrl + super + {_,shift + }{h,j,k,l}
 	bspc node -{f,s} {west,south,north,east}
 
-# focus the node for the given path jump
-super + {p,b,comma,period}
-	bspc node -f @{parent,brother,first,second}
+# # focus the node for the given path jump
+# super + {p,b,comma,period}
+# 	bspc node -f @{parent,brother,first,second}
 
 # focus the next/previous node in the current desktop
-ctrl + super + {_,shift + }c
+super + {_,shift +} grave
 	bspc node -f {next,prev}.local
 
 # focus the next/previous desktop in the current monitor
-ctrl + super + bracket{left,right}
+ctrl + super + {p, n}
 	bspc desktop -f {prev,next}.local
 
 # focus the last node/desktop
@@ -77,10 +87,10 @@ ctrl + super + bracket{left,right}
 	bspc {desktop,node} -f last
 
 # focus the older or newer node in the focus history
-super + {o,i}
-	bspc wm -h off; \
-	bspc node {older,newer} -f; \
-	bspc wm -h on
+# super + {o,i}
+# 	bspc wm -h off; \
+# 	bspc node {older,newer} -f; \
+# 	bspc wm -h on
 
 # focus or send to the given desktop
 ctrl + super + {_,shift + }{1-9,0}
@@ -90,21 +100,21 @@ ctrl + super + {_,shift + }{1-9,0}
 # preselect
 #
 
-# preselect the direction
-shift + super + ctrl + {h,j,k,l}
-	bspc node -p {west,south,north,east}
+# # preselect the direction
+# shift + super + ctrl + {h,j,k,l}
+# 	bspc node -p {west,south,north,east}
 
-# preselect the ratio
-super + ctrl + {1-9}
-	bspc node -o 0.{1-9}
+# # preselect the ratio
+# super + ctrl + {1-9}
+# 	bspc node -o 0.{1-9}
 
-# cancel the preselection for the focused node
-super + ctrl + space
-	bspc node -p cancel
+# # cancel the preselection for the focused node
+# super + ctrl + space
+# 	bspc node -p cancel
 
-# cancel the preselection for the focused desktop
-super + ctrl + shift + space
-	bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
+# # cancel the preselection for the focused desktop
+# super + ctrl + shift + space
+# 	bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
 
 #
 # move/resize
