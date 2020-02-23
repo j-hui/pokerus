@@ -192,12 +192,12 @@ mapkey(':!', '#8Open commands', function() {
     Front.openOmnibar({type: "Commands"});
 });
 
-map(':e', 'sU'); // Edit url, reload
+map(':r', 'sU'); // Edit url, reload
 unmap('sU');
-map(':E', 'su'); // Edit url, new tab
+map(':R', 'su'); // Edit url, new tab
 unmap('su');
 
-map(':o', 'go'); // Open a URL in current tab
+map(':e', 'go'); // Open a URL in current tab
 unmap('go');
 map(':t', 't');  // Open a URL in a new tab
 unmap('t');
