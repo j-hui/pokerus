@@ -17,14 +17,15 @@ settings.hintShiftNonActive = true;
 /* Misc */
 // (Unused; unmap these first so they can be mapped to other things)
 
-unmap(';w'); // Focus top window
-unmap('%');  // Scroll to percentage of current page
-unmap(';m'); // Mouse out last element
-unmap('B');  // Go on tab history back
-unmap('gT'); // Go to first activated tab
-unmap(';i'); // Insert jquery library on current page
-unmap(';t'); // Translate selected text with google
-unmap('gr'); // Read selected text or text from clipboard
+unmap(';w');  // Focus top window
+unmap('%');   // Scroll to percentage of current page
+unmap(';m');  // Mouse out last element
+unmap('B');   // Go on tab history back
+unmap('gT');  // Go to first activated tab
+unmap(';i');  // Insert jquery library on current page
+unmap(';t');  // Translate selected text with google
+unmap('gr');  // Read selected text or text from clipboard
+unmap(';dh'); // Delete history older than 30 days
 
 unmap('<Alt-p>'); // pin/unpin current tab
 unmap('<Alt-m>'); // mute/unmute current tab
@@ -49,13 +50,7 @@ unmap('sy');
 
 /* Modes */
 unmap(':'); // Lets me map chords beginning with ':'
-            
-map(':h', '?'); // Open help menu
-mapkey(':!', '#8Open commands', function() {
-    Front.openOmnibar({type: "Commands"});
-});
-
-
+   
 imap('<Ctrl-[>', '<Esc>');
 imap('<Ctrl-c>', '<Esc>');
 cmap('<Ctrl-[>', '<Esc>');
@@ -109,11 +104,6 @@ map('rj', 'gU'); // Go up one path in the URL
 unmap('gu');
 unmap('gU');
 
-map('rir', 'sU'); // Edit url, reload
-map('rit', 'su'); // Edit url, new tab
-unmap('sU');
-unmap('su');
-
 map('rh', 'S'); // Go back in history
 map('rl', 'D'); // Go forward in history
 unmap('S');
@@ -161,11 +151,11 @@ map('rK', 'R');
 unmap('E');
 unmap('R');
 
-map('rx', 'x');        // Close tab
+map('rx', 'x');   // Close tab
 
-map('H', 'g0'); // Go to first tab
+map('H', 'g0');   // Go to first tab
 map('rH', 'g0');
-map('L', 'g$'); // Go to last tab
+map('L', 'g$');   // Go to last tab
 map('rL', 'g$');
 unmap('g0');
 unmap('g$');
@@ -180,39 +170,53 @@ unmap('<Ctrl-6>'); // Go to last used tab
 
 // My r-chord mappings are mostly common, handy, one-shot commands,
 // so website shortcuts that begin with 'r' be damned.
-var rMappings = ['rr', 'r?', 'r#', 'rk', 'rj', 'rir', 'rit', 'rh', 'rl',
+var rMappings = ['rr', 'r?', 'r#', 'rk', 'rj', 'rh', 'rl',
     'ru', 'rw', 'rd', 'rD', 'rp', 'ro', 'rq', 'r,', 'rm', 'rz',
     'r/', 'r?', 'rJ', 'rK', 'rH', 'rL', 'rx'];
 
 /* Omnibar/search */
 
-// Delegate to DuckDuckGo to redirect searches
+// Delegate to DuckDuckGo to redirect searches, but keep these handy
+map(':/g', 'og');
 unmap('og'); // Open search with alias g
+map(':/d', 'od');
 unmap('od'); // Open search with alias d
+map(':/w', 'ow');
 unmap('ow'); // Open search with alias w
+map(':/y', 'oy');
 unmap('oy'); // Open search with alias y
+map(':/b', 'ob');
 unmap('ob'); // Open search with alias b 
 
-map(':e', 'go'); // Open a URL in current tab
+mapkey(':!', '#8Open commands', function() {
+    Front.openOmnibar({type: "Commands"});
+});
+
+map(':e', 'sU'); // Edit url, reload
+unmap('sU');
+map(':E', 'su'); // Edit url, new tab
+unmap('su');
+
+map(':o', 'go'); // Open a URL in current tab
 unmap('go');
 map(':t', 't');  // Open a URL in a new tab
 unmap('t');
-map(':r', 'H');  // Open opened page in current tab
+map(':O', 'H');  // Open opened page in current tab
 unmap('H');
-map(':d', 'ox'); // Open recently closed URL
+
+map(':u', 'ox'); // Open recently closed URL
 unmap('ox');
+map(':U', 'oh'); // Open URL from history
+unmap('oh');
+
 map(':m', 'om'); // Open URL from vim-like marks
 unmap('om');
-map(':u', 'oh'); // Open URL from history
-unmap('oh');
-map(':U', ';dh'); // Delete history older than 30 days
-unmap(';dh');
 
-map(':b', 'b');  // Open a bookmark
+map(':bo', 'b');   // Open a bookmark
 unmap('b');
-map(':p', 'ab'); // Add bookmark
+map(':ba', 'ab');  // Add bookmark
 unmap('ab');
-map(':P', ';db'); // Delete bookmark
+map(':bd', ';db'); // Delete bookmark
 unmap(';db');
 
 map(':v', ';s'); // Toggle PDF viewer
@@ -220,8 +224,8 @@ unmap(';s');
 
 map(':q<Enter>', 'x'); // Close tab
 
-var colonMappings = [':e', ':t', ':r', ':d', ':m', ':u', ':U',
-    ':b', ':p', ':P', ':v', ':q<Enter>'];
+var colonMappings = [':e', ':E', ':o', ':t', ':O', ':u', ':U',
+    ':m', ':bo', ':ba', ':bd', ':v', ':q<Enter>'];
 
 map('o.', 'sql'); // Show last action
 unmap('sql');
