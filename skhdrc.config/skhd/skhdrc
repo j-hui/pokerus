@@ -160,7 +160,7 @@ shift + ctrl + alt + cmd - right : yabai -m window --resize right:-20:0
 ctrl + cmd - t : skhd -k "ctrl + cmd - 2"; open -a "/Applications/kitty.app"
 shift + ctrl + cmd - t : osascript -e $'tell application "System Events" to tell UI element "kitty" of list 1 of process "Dock"\nperform action "AXShowMenu"\nclick menu item "New OS Window" of menu 1\nend tell'
 
-ctrl + cmd - o : open -a "/Applications/Google Chrome.app"
+ctrl + cmd - o : open -a "/Applications/Firefox.app"
 
 ctrl + cmd - play : open -a "/Applications/iTunes.app"
 ctrl + cmd - y : open -a "/Applications/iTunes.app"
