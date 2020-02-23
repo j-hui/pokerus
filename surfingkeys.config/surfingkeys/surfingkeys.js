@@ -352,8 +352,8 @@ unmapAllExcept([],
     /docs\.google\.com/);
 unmapAllExcept([commaMappings, ctrlMappings, rMappings, colonMappings, gMappings, sMappings, yMappings].flat(),
     /.+\.slack\.com/);
-unmapAllExcept([commaMappings, ctrlMappings, rMappings, colonMappings, gMappings, sMappings, yMappings].flat(),
-    /reddit\.com/);
+// unmapAllExcept([commaMappings, ctrlMappings, rMappings, colonMappings, gMappings, sMappings, yMappings].flat(),
+//     /reddit\.com/);
 unmapAllExcept([],
     /overfleaf\.com/);
 unmapAllExcept([],
