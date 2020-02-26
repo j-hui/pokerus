@@ -366,9 +366,9 @@ unmapAllExcept([],
 ['/', 'j', 'k'].forEach(function(k, i) {
    unmap(k, /duckduckgo\.com/);
 });
-[['m', 'f'], numMappings].flat().forEach(function(k, i) {
-   unmap(k, /youtube\.com/);
-});
+// [['m', 'f'], numMappings].flat().forEach(function(k, i) {
+//    unmap(k, /youtube\.com/);
+// });
 [['n', 'p', 'z'], numMappings].flat().forEach(function(k, i) {
    unmap(k, /gradescope\.com/);
 });

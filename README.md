@@ -162,6 +162,16 @@ Make Terminal.app aware of _italics_:
     # add this to .bashrc
     export TERM=xterm-256color-italic
 
+Show file extensions:
+
+    defaults write -g AppleShowAllExtensions -bool true
+
+Finder in home directory:
+
+    defaults read com.apple.finder NewWindowTargetPath -string file:///Users/`whoami`
+
+TODO: Port more from https://github.com/MartinHarding/macOSuckless
+
 Control where screenshots are sent:
 
     mkdir -p ~/data/screenshots
