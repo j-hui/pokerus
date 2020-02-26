@@ -3,23 +3,33 @@
 # https://github.com/windelicato/dotfiles
 # https://github.com/addy-dclxvi/void-bspwm-dotfiles/blob/master/home/addy/.config/bspwm/bspwmrc
 # https://dotfiles.github.io/inspiration/
+# https://github.com/zSucrilhos/dotfiles/blob/Lyra/nord_dark/.config/bspwm/bspwmrc
+# https://github.com/addy-dclxvi/almighty-dotfiles/tree/master
 
 sxhkd &
 yabar &
+
 xsetroot -cursor_name left_ptr &
-xautolock -time 10 -locker 'i3lock -c 000000 -n' &
+
+betterlockscreen -w ~/.config/xp-share/desktop-bg &
+xautolock -time 10 -locker 'betterlockscreen -l dimblur' &
+xset -dpms &
 
 bspc monitor -d I II III IV V VI VII VIII
 
 bspc config border_width        4
-bspc config window_gap          12
+bspc config window_gap          15
 
 bspc config split_ratio         0.52
 bspc config borderless_monocle  true
-bspc config gapless_monocle     true
+bspc config gapless_monocle     false
 
-bspc rule -a Gimp desktop='^8' state=floating follow=on
-bspc rule -a Chromium desktop='^2'
-bspc rule -a mplayer2 state=floating
-bspc rule -a Kupfer.py focus=on
-bspc rule -a Screenkey manage=off
+bspc config click_to_focus any
+
+bspc rule -a kitty   desktop='^1' follow=on
+bspc rule -a Firefox desktop='^2' follow=on
+
+compton -b &
+
+
+/opt/enpass/Enpass # wait for password
