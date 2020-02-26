@@ -1,5 +1,3 @@
-" vim: set ts=4 sw=4 tw=80 et :
-
 """"""""""""""""""""""
 " j-hui VIM Settings "
 """"""""""""""""""""""
@@ -79,6 +77,7 @@ filetype plugin indent on
 setlocal spelllang=en_us
 set spellfile=~/.vim/spell/en.utf-8.add
 
+Plug 'tpope/vim-repeat'
 
 """"""""""""
 " Appearance
@@ -127,57 +126,27 @@ highlight htmlBoldUnderlineItalic
 
 set modeline
 set modelines=5
-function! PrependModeline()
+function! AppendModeline()
   let l:modeline = printf(" vim: set ts=%d sw=%d tw=%d %set :",
         \ &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
   let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
-  call append(line("^"), l:modeline)
+  call append(line("$"), l:modeline)
 endfunction
-nnoremap <silent> <Leader>ml :call PrependModeline()<CR>
+nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 
-Plug 'vim-airline/vim-airline'
-set laststatus=2
-let g:airline#extensions#tabline#enabled = 1
-" let g:airline_powerline_fonts = 1
-
-" Plug 'Yggdroot/indentLine'
-" let g:indentLine_setConceal = 0
-" let g:indentLine_leadingSpaceChar = '·'
-" let g:indentLine_leadingSpaceEnabled = 1
 set list lcs=tab:\┆\ " <-- space
 set conceallevel=2
+
+if !exists('g:vscode')
+    Plug 'vim-airline/vim-airline'
+    set laststatus=2
+    let g:airline#extensions#tabline#enabled = 1
+    " let g:airline_powerline_fonts = 1
+endif
 
 """"""""""""
 " Navigation
 """"""""""""
-" Movement
-nnoremap j gj
-nnoremap k gk
-nnoremap <C-j> <C-d>
-nnoremap <C-k> <C-u>
-nnoremap <C-l> g$
-nnoremap <C-h> g^
-nnoremap <C-i> <down><C-e>
-nnoremap <C-o> <up><C-y>
-nnoremap <C-s> :w<CR>
-
-
-inoremap <C-j> <down>
-inoremap <C-k> <up>
-inoremap <C-h> <left>
-inoremap <C-l> <right>
-inoremap <C-c> <Esc>
-inoremap kj <Esc>
-
-inoremap <C-s> <Esc>
-vnoremap <C-s> <Esc>
-onoremap <C-s> <Esc>
-
-cnoreabbrev Q q " for when i fat finger :Q
-
-set pastetoggle=<F2>
-set clipboard+=unnamed
-
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
@@ -195,96 +164,147 @@ set wildmenu
 
 set autoread
 
+" Movement
+nnoremap j gj
+nnoremap k gk
+nnoremap <C-j> <C-d>
+nnoremap <C-k> <C-u>
+nnoremap <C-l> g$
+nnoremap <C-h> g^
+" nnoremap <C-J> <down><C-e>
+" nnoremap <C-K> <up><C-y>
+nnoremap <C-s> :w<CR>
+
+
+" inoremap <C-j> <down>
+" inoremap <C-k> <up>
+" inoremap <C-h> <left>
+" inoremap <C-l> <right>
+inoremap <C-c> <Esc>
+inoremap kj <Esc>
+
+inoremap <C-s> <Esc>
+vnoremap <C-s> <Esc>
+onoremap <C-s> <Esc>
+
+cnoreabbrev Q q " for when i fat finger :Q
+
 noremap <C-w>] <Esc>:bn<CR>
 noremap <C-w>[ <Esc>:bp<CR>
 noremap <C-w><backspace> <Esc>:bw<CR>
 noremap <C-w>t :enew<cr>
 
-Plug 'psliwka/vim-smoothie'
-let g:smoothie_base_speed = 36
-nnoremap <silent> <C-j>      :<C-U>call smoothie#downwards() <CR>
-nnoremap <silent> <C-k>      :<C-U>call smoothie#upwards()   <CR>
-
-Plug 'tpope/vim-repeat'
-
-Plug 'farmergreg/vim-lastplace'
-let g:lastplace_open_folds = 0
-
-Plug 'easymotion/vim-easymotion'
-let g:EasyMotion_do_mapping = 0
-let g:EasyMotion_smartcase = 1
-map <C-f>l <Plug>(easymotion-lineforward)
-map <C-f>j <Plug>(easymotion-j)
-map <C-f>k <Plug>(easymotion-k)
-map <C-f>h <Plug>(easymotion-linebackward)
-map <C-f>w <Plug>(easymotion-w)
-map <C-f>e <Plug>(easymotion-e)
-map  <C-f>/ <Plug>(easymotion-sn)
-omap <C-f>/ <Plug>(easymotion-tn)
-map  <C-f>n <Plug>(easymotion-next)
-map  <C-f>N <Plug>(easymotion-prev)
-
-let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
-
-Plug 'scrooloose/nerdtree'
-noremap <C-n> :NERDTreeToggle<CR>
-
-" Open NERDTree upon startup
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-
-" Open NERDTree when opening a directory
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) &&
-            \ !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene |
-            \ exe 'cd '.argv()[0] | endif
-
-" Close vim if NERDTree the only window left
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") &&
-            \ b:NERDTree.isTabTree()) | q | endif
-Plug 'Xuyuanp/nerdtree-git-plugin'
-
-Plug 'airblade/vim-gitgutter'
-let g:gitgutter_map_keys = 0
-nmap <c-g><c-g> <Plug>GitGutterPreviewHunk
-nmap <c-g>g     <Plug>GitGutterPreviewHunk
-nmap <c-g>n     <Plug>GitGutterNextHunk
-nmap <c-g>p     <Plug>GitGutterPrevHunk
-set updatetime=100
-let g:gitgutter_override_sign_column_highlight = 0
-highlight SignColumn        guibg=#073642 ctermbg=0
-highlight GitGutterAdd      guibg=#073642 ctermbg=0 guifg=#009900 ctermfg=2
-highlight GitGutterChange   guibg=#073642 ctermbg=0 guifg=#bbbb00 ctermfg=3
-highlight GitGutterDelete   guibg=#073642 ctermbg=0 guifg=#ff2222 ctermfg=1
-
-Plug 'tpope/vim-fugitive'
-Plug 'junegunn/gv.vim'
-nnoremap <c-g>vb :GV
-nnoremap <c-g>vc :GV!
-nnoremap <c-g>vf :GV?
-
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-nnoremap <c-p> :Files<CR>
-
-Plug 'mileszs/ack.vim'
-if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
+if !exists('g:vscode')
+    Plug 'psliwka/vim-smoothie'
+    let g:smoothie_base_speed = 36
+    nnoremap <silent> <C-j>      :<C-U>call smoothie#downwards() <CR>
+    nnoremap <silent> <C-k>      :<C-U>call smoothie#upwards()   <CR>
 endif
 
-nnoremap K :Ack! "\b<C-R><C-W>\b" % <CR>
+" Plug 'farmergreg/vim-lastplace'
+" let g:lastplace_open_folds = 0
 
-nnoremap <Leader>ag :Ack!<Space>
-inoremap <Leader>ag <Esc>:Ack!<Space>
-vnoremap <Leader>ag <Esc>:Ack!<Space>
+if !exists('g:vscode')
+    Plug 'easymotion/vim-easymotion'
+    let g:EasyMotion_do_mapping = 0
+    let g:EasyMotion_smartcase = 1
+    map <C-f>l <Plug>(easymotion-lineforward)
+    map <C-f>j <Plug>(easymotion-j)
+    map <C-f>k <Plug>(easymotion-k)
+    map <C-f>h <Plug>(easymotion-linebackward)
+    map <C-f>w <Plug>(easymotion-w)
+    map <C-f>e <Plug>(easymotion-e)
+    map  <C-f>/ <Plug>(easymotion-sn)
+    omap <C-f>/ <Plug>(easymotion-tn)
+    map  <C-f>n <Plug>(easymotion-next)
+    map  <C-f>N <Plug>(easymotion-prev)
 
-nnoremap <Leader>aa :AckAdd!<Space>
-inoremap <Leader>aa <Esc>:AckAdd!<Space>
-vnoremap <Leader>aa <Esc>:AckAdd!<Space>
+    let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
+endif
+
+if !exists('g:vscode')
+    Plug 'scrooloose/nerdtree'
+
+    noremap <C-n> :NERDTreeToggle<CR>
+
+    " Open NERDTree upon startup
+    autocmd StdinReadPre * let s:std_in=1
+    autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+    " Open NERDTree when opening a directory
+    autocmd StdinReadPre * let s:std_in=1
+    autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) &&
+                \ !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p |
+                \ ene | exe 'cd '.argv()[0] | endif
+
+    " Close vim if NERDTree the only window left
+    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") &&
+                \ b:NERDTree.isTabTree()) | q | endif
+
+    Plug 'Xuyuanp/nerdtree-git-plugin'
+endif
+
+if !exists('g:vscode')
+    Plug 'airblade/vim-gitgutter'
+    let g:gitgutter_map_keys = 0
+    nmap <c-g><c-g> <Plug>GitGutterPreviewHunk
+    nmap <c-g>g     <Plug>GitGutterPreviewHunk
+    nmap <c-g>n     <Plug>GitGutterNextHunk
+    nmap <c-g>p     <Plug>GitGutterPrevHunk
+    set updatetime=100
+    let g:gitgutter_override_sign_column_highlight = 0
+    highlight SignColumn        guibg=#073642 ctermbg=0
+    highlight GitGutterAdd      guibg=#073642 ctermbg=0 guifg=#009900 ctermfg=2
+    highlight GitGutterChange   guibg=#073642 ctermbg=0 guifg=#bbbb00 ctermfg=3
+    highlight GitGutterDelete   guibg=#073642 ctermbg=0 guifg=#ff2222 ctermfg=1
+endif
+
+if !exists('g:vscode')
+    Plug 'tpope/vim-fugitive'
+    Plug 'junegunn/gv.vim'
+    nnoremap <c-g>vb :GV
+    nnoremap <c-g>vc :GV!
+    nnoremap <c-g>vf :GV?
+endif
+
+if !exists('g:vscode')
+    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+    Plug 'junegunn/fzf.vim'
+    nnoremap <c-p> :Files<CR>
+endif
+
+if !exists('g:vscode')
+    Plug 'mileszs/ack.vim'
+    if executable('ag')
+      let g:ackprg = 'ag --vimgrep'
+    endif
+
+    nnoremap K :Ack! "\b<C-R><C-W>\b" % <CR>
+
+    nnoremap <Leader>ag :Ack!<Space>
+    inoremap <Leader>ag <Esc>:Ack!<Space>
+    vnoremap <Leader>ag <Esc>:Ack!<Space>
+
+    nnoremap <Leader>aa :AckAdd!<Space>
+    inoremap <Leader>aa <Esc>:AckAdd!<Space>
+    vnoremap <Leader>aa <Esc>:AckAdd!<Space>
+endif
 
 """"""""""""""
 " Text editing
 """"""""""""""
+set pastetoggle=<F2>
+
+if system('uname -s') == "Darwin\n"
+  "OSX
+  set clipboard=unnamed 
+else
+  "Linux
+  set clipboard=unnamedplus
+endif
+
+" set clipboard+=unnamed
+
 " Whitespace rules w/ linebreak on 80 characters
 set tabstop=4
 set expandtab
@@ -307,35 +327,40 @@ function TrimTrailing()
 endfunction
 cnoreabbrev tt call TrimTrailing()
 
-" Deliberately avoid using /tmp/ to avoid leaking data on shared computer
-"
-" To allow backup files to be stored locally, run:
-"
-"       mkdir -p .backup .swp .undo
-"
-" To enable backups to be stashed centrally, put the following in .bashrc
-"
-"       mkdir -p ~/.tmp/backup ~/.tmp/swp ~/.tmp/undo
-"
-" Fallback to using current directory . if all else fails
-"
-" Also, put the following in global .gitignore
-"
-"       *~
-"       *.swp
-"
-set backup
-set backupdir=.backup,~/.tmp/backup//,.
+if !exists('g:vscode')
+    " Deliberately avoid using /tmp/ to avoid leaking data on shared computer
+    "
+    " To allow backup files to be stored locally, run:
+    "
+    "       mkdir -p .backup .swp .undo
+    "
+    " To enable backups to be stashed centrally, put the following in .bashrc
+    "
+    "       mkdir -p ~/.tmp/backup ~/.tmp/swp ~/.tmp/undo
+    "
+    " Fallback to using current directory . if all else fails
+    "
+    " Also, put the following in global .gitignore
+    "
+    "       *~
+    "       *.swp
 
-set swapfile
-set directory=.swp,~/.tmp/swp//,.
+    " TODO: backups don't work well on nvim with symlinked files
+    if !has('nvim')
+        set backup
+        set backupdir=.backup,~/.tmp/backup//,.
+    endif
 
-set undofile
-set undodir=.undo,~/.tmp/undo//,.
-set undolevels=1000
-if has('persistent_undo')
+    set swapfile
+    set directory=.swp,~/.tmp/swp//,.
+
     set undofile
-    set undoreload=10000
+    set undodir=.undo,~/.tmp/undo//,.
+    set undolevels=1000
+    if has('persistent_undo')
+        set undofile
+        set undoreload=10000
+    endif
 endif
 
 Plug 'svermeulen/vim-cutlass'
@@ -349,13 +374,17 @@ nnoremap dd dd
 
 Plug 'tpope/vim-commentary'         " use gcc to comment things out
 Plug 'tpope/vim-surround'           " ds, cs, ys to change text surroundings
-Plug 'tpope/vim-rsi'                " readline style commands in insert mode
 Plug 'tpope/vim-characterize'       " use ga to see metadata about unicode
-Plug 'tpope/vim-eunuch'             " UNIX-like functionality in Vim
-Plug 'junegunn/vim-peekaboo'        " shows yank buffers
-Plug 'godlygeek/tabular'            " :Tabularize to align stuff
 
+Plug 'godlygeek/tabular'            " :Tabularize to align stuff
 cnoreabbrev Tab Tabularize
+
+if !exists('g:vscode')
+    Plug 'tpope/vim-rsi'            " readline style commands in insert mode
+    Plug 'tpope/vim-eunuch'         " UNIX-like functionality in Vim
+    Plug 'junegunn/vim-peekaboo'    " shows yank buffers
+endif
+
 
 """""""
 " LaTeX
@@ -512,8 +541,15 @@ autocmd Filetype coq inoremap <buffer> <c-c><enter>     <Esc>:CoqToLine<CR>
 """"""
 " Lean
 """"""
-Plug 'leanprover/lean.vim'
+if !exists('g:vscode')
+    Plug 'leanprover/lean.vim'
+endif
 
+"""""""
+" Idris
+"""""""
+
+Plug 'idris-hackers/idris-vim', { 'for': 'idris' }
 
 """"""""""""""
 " Scratch Area
@@ -551,10 +587,6 @@ Plug 'leanprover/lean.vim'
 
 Plug 'al3623/deepsea.vim'
 
-"""""""
-" Idris
-"""""""
-
-Plug 'idris-hackers/idris-vim', { 'for': 'idris' }
-
 call plug#end()
+
+" vim: set ts=4 sw=4 tw=80 et :

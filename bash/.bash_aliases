@@ -11,10 +11,16 @@ PATH_ADD() {
     fi
 }
 
-### Vim support
-export EDITOR=vim
-mkdir -p ~/.tmp/backup ~/.tmp/swp ~/.tmp/undo
+cd
 
+### Vim
+if which nvim > /dev/null; then
+    export EDITOR=nvim
+elif which vim > /dev/null; then
+    export EDITOR=vim
+fi
+
+mkdir -p ~/.tmp/backup ~/.tmp/swp ~/.tmp/undo
 
 ### OS-specific configuration
 case "$OSTYPE" in
