@@ -63,7 +63,7 @@ shift + alt + ctrl + cmd - j : yabai -m window --insert south
 shift + alt + ctrl + cmd - k : yabai -m window --insert north
 shift + alt + ctrl + cmd - l : yabai -m window --insert east
 
-# balance size of windows
+# balance size of windows (0x18 === '=')
 ctrl + cmd - 0x18 : yabai -m space --balance
 
 # rotate tree
@@ -158,7 +158,8 @@ shift + ctrl + alt + cmd - right : yabai -m window --resize right:-20:0
 ### Applications
 
 ctrl + cmd - t : skhd -k "ctrl + cmd - 2"; open -a "/Applications/kitty.app"
-shift + ctrl + cmd - t : osascript -e $'tell application "System Events" to tell UI element "kitty" of list 1 of process "Dock"\nperform action "AXShowMenu"\nclick menu item "New OS Window" of menu 1\nend tell'
+shift + ctrl + cmd - t : open -a "Terminal.app"
+# shift + ctrl + cmd - t : osascript -e $'tell application "System Events" to tell UI element "kitty" of list 1 of process "Dock"\nperform action "AXShowMenu"\nclick menu item "New OS Window" of menu 1\nend tell'
 
 ctrl + cmd - o : open -a "/Applications/Firefox.app"
 

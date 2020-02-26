@@ -458,6 +458,14 @@ autocmd Filetype yaml setlocal
             \ expandtab
             \ shiftwidth=2
             \ softtabstop=2
+"""""""""""
+" Javscript
+"""""""""""
+autocmd Filetype javascript setlocal
+            \ tabstop=2
+            \ expandtab
+            \ shiftwidth=2
+            \ softtabstop=2
 
 """"
 " Go
