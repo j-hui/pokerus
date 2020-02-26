@@ -266,11 +266,13 @@ rMappings = rMappings.concat(['rgi', 'rgI', 'rge', 'rgf']);
 map('sf', ';fs'); // Display hints to focus scrollable elements
 unmap(';fs');
 map('sr', 'cS');  // Reset scroll target
+map(':w', 'cS');
 unmap('cS');
 map('ss', 'cs');  // Change scroll target
 unmap('cs');
 
 var sMappings = ['sf', 'sr', 'ss'];
+colonMappings = colonMappings.concat([':w']);
 
 /* Clipboard */
 mapkey('yY', '#7Copy all tabs url', function() {
