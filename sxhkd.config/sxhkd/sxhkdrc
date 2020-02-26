@@ -1,54 +1,58 @@
 # Keycode names: https://github.com/baskerville/sxhkd/blob/master/src/parse.c
 
 #
-# wm independent hotkeys
+# App launching
 #
 
-# terminal emulator
 ctrl + super + t
-	kitty
+    xdo activate -N kitty || kitty
+ctrl + super + shift + t
+    kitty
+
 ctrl + super + o
+    xdo activate -N Firefox || firefox
+ctrl + super + shift + o
     firefox
-    # google-chrome
+ 
+ctrl + super + BackSpace
+    xautolock -locknow
+ctrl + super + shift + BackSpace
+    pkill -USR1 -x sxhkd
 
 super + alt + 0
     /opt/enpass/Enpass showassistant
 
-# program launcher
 super + space
-    rofi -modi run,drun -show drun -columns 1 -width 24 -lines 8 -padding 45 -hide-scrollbar -show-icons -drun-icon-theme "Papirus"
+    rofi -modi run,drun -show drun -columns 1 -width 24 -lines 8 -padding 45 -hide-scrollbar -show-icons
 
-# make sxhkd reload its configuration files:
-# ctrl + super + Escape
-# 	pkill -USR1 -x sxhkd
 
 #
 # bspwm hotkeys
 #
 
 # quit bspwm/restart sxhkd
-super + ctrl + {_, shift +} z
-	{bspc quit, pkill -USR1 -x sxhkd}
+super + ctrl + Escape
+    bspc quit
 
 # restart bspwm (?)
 # super + ctrl + shift + z
-# 	bspc wm -r
+#   bspc wm -r
 
 # close and kill
 super + {_, shift +} q
-	bspc node -{c,k}
+    bspc node -{c,k}
 
 # alternate between the tiled and monocle layout
 ctrl + super + f
-	bspc desktop -l next
+    bspc desktop -l next
 
 # send the newest marked node to the newest preselected node
 # super + y
-# 	bspc node newest.marked.local -n newest.!automatic.local
+#   bspc node newest.marked.local -n newest.!automatic.local
 
 # swap the current node and the biggest node
 # super + g
-# 	bspc node -s biggest
+#   bspc node -s biggest
 
 #
 # state/flags
@@ -56,11 +60,11 @@ ctrl + super + f
 
 # set the window state
 # super + {t,shift + t,s,f}
-# 	bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
+#   bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
 
 # set the node flags
 # super + ctrl + {m,x,y,z}
-# 	bspc node -g {marked,locked,sticky,private}
+#   bspc node -g {marked,locked,sticky,private}
 
 #
 # focus/swap
@@ -68,33 +72,33 @@ ctrl + super + f
 
 # focus the node in the given direction
 ctrl + super + {_,shift + }{h,j,k,l}
-	bspc node -{f,s} {west,south,north,east}
+  bspc node -{f,s} {west,south,north,east}
 
 # # focus the node for the given path jump
 # super + {p,b,comma,period}
-# 	bspc node -f @{parent,brother,first,second}
+#   bspc node -f @{parent,brother,first,second}
 
 # focus the next/previous node in the current desktop
 super + {_,shift +} grave
-	bspc node -f {next,prev}.local
+    bspc node -f {next,prev}.local
 
 # focus the next/previous desktop in the current monitor
-ctrl + super + {p, n}
-	bspc desktop -f {prev,next}.local
+ctrl + super + {_,shift + }{p, n}
+    bspc {desktop -f,node -d} {prev,next}.local
 
 # focus the last node/desktop
 {super, super + ctrl} + Tab
-	bspc {desktop,node} -f last
+    bspc {desktop,node} -f last
 
 # focus the older or newer node in the focus history
 # super + {o,i}
-# 	bspc wm -h off; \
-# 	bspc node {older,newer} -f; \
-# 	bspc wm -h on
+#   bspc wm -h off; \
+#   bspc node {older,newer} -f; \
+#   bspc wm -h on
 
 # focus or send to the given desktop
 ctrl + super + {_,shift + }{1-9,0}
-	bspc {desktop -f,node -d} '^{1-9,10}'
+    bspc {desktop -f,node -d} '^{1-9,10}'
 
 #
 # preselect
@@ -102,19 +106,19 @@ ctrl + super + {_,shift + }{1-9,0}
 
 # # preselect the direction
 # shift + super + ctrl + {h,j,k,l}
-# 	bspc node -p {west,south,north,east}
+#   bspc node -p {west,south,north,east}
 
 # # preselect the ratio
 # super + ctrl + {1-9}
-# 	bspc node -o 0.{1-9}
+#   bspc node -o 0.{1-9}
 
 # # cancel the preselection for the focused node
 # super + ctrl + space
-# 	bspc node -p cancel
+#   bspc node -p cancel
 
 # # cancel the preselection for the focused desktop
 # super + ctrl + shift + space
-# 	bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
+#   bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
 
 #
 # move/resize
@@ -122,12 +126,12 @@ ctrl + super + {_,shift + }{1-9,0}
 
 # expand a window by moving one of its side outward
 ctrl + super + alt + {Left,Down,Up,Right}
-	bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
+    bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
 
 # contract a window by moving one of its side inward
 shift + ctrl + super + alt + {Left,Down,Up,Right}
-	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
+    bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
 
 # move a floating window
 shift + ctrl + super + {Left,Down,Up,Right}
-	bspc node -v {-20 0,0 20,0 -20,20 0}
+    bspc node -v {-20 0,0 20,0 -20,20 0}
