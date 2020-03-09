@@ -541,9 +541,19 @@ autocmd Filetype coq inoremap <buffer> <c-c><enter>     <Esc>:CoqToLine<CR>
 """"""
 " Lean
 """"""
-if !exists('g:vscode')
-    Plug 'leanprover/lean.vim'
-endif
+autocmd BufNewFile,BufReadPost *.lean set filetype=lean
+" if !exists('g:vscode')
+Plug 'leanprover/lean.vim', { 'for': 'lean' }
+" endif
+
+autocmd Filetype lean setlocal
+            \ tabstop=2
+            \ expandtab
+            \ shiftwidth=2
+            \ softtabstop=2
+            \ commentstring=--\ %s
+            \ formatoptions=cqort
+            \ comments=s1fl:/-,mb:-,ex:-/,:--
 
 """""""
 " Idris
