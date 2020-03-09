@@ -58,6 +58,13 @@ cmap('<Ctrl-c>', '<Esc>');
 vmap('<Ctrl-[>', '<Esc>');
 vmap('<Ctrl-c>', '<Esc>');
 
+vmapkey('<Ctrl-[>', '#9Exit visual mode', function () {
+  Visual.exit();
+});
+vmapkey('<Ctrl-c>', '#9Exit visual mode', function () {
+  Visual.exit();
+});
+
 unmap('<Ctrl-i>'); // Go to edit box with vim editor (duplicate)
 
 map(',s', '<Alt-s>'); // Toggle SurfingKeys
