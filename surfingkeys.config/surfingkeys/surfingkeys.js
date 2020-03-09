@@ -3,6 +3,8 @@ settings.smoothScroll = false;
 settings.hintExplicit = true;
 settings.hintShiftNonActive = true;
 
+console.log("111");
+
 /* Chord prefix mnemonics:
  *
  *   (r)eload: related to current page
@@ -55,10 +57,11 @@ imap('<Ctrl-[>', '<Esc>');
 imap('<Ctrl-c>', '<Esc>');
 cmap('<Ctrl-[>', '<Esc>');
 cmap('<Ctrl-c>', '<Esc>');
-vmap('<Ctrl-[>', '<Esc>');
-vmap('<Ctrl-c>', '<Esc>');
+// vmap('<Ctrl-[>', '<Esc>');
+// vmap('<Ctrl-c>', '<Esc>');
 
 vmapkey('<Ctrl-[>', '#9Exit visual mode', function () {
+  if (Visual) { console.log("well shit"); }
   if (Visual.state > 1) {
       Visual.hideCursor();
       Visual.selection.collapse(selection.anchorNode, selection.anchorOffset);
