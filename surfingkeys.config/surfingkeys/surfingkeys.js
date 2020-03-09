@@ -59,8 +59,18 @@ vmap('<Ctrl-[>', '<Esc>');
 vmap('<Ctrl-c>', '<Esc>');
 
 vmapkey('<Ctrl-[>', '#9Exit visual mode', function () {
-  Visual.exit();
+  if (Visual.state > 1) {
+      Visual.hideCursor();
+      Visual.selection.collapse(selection.anchorNode, selection.anchorOffset);
+      Visual.showCursor();
+  } else {
+      Visual.visualClear();
+      Visual.exit();
+  }
+  Visual.state--;
+  Visual._onStateChange();
 });
+
 vmapkey('<Ctrl-c>', '#9Exit visual mode', function () {
   Visual.exit();
 });
