@@ -169,6 +169,7 @@ ctrl + cmd - y : open -a "/Applications/iTunes.app"
 ctrl + cmd - m : open -a "/Applications/Wavebox.app"
 shift + ctrl + cmd - m : skhd -k "ctrl + cmd - 3"; open -a "/Applications/Messages.app"
 
+ctrl + alt + cmd - k : shkd -t "GWC Strike Authorization Vote"
 
 ### Deprecated
 # ctrl + alt + cmd - space : skhd -k "ctrl + alt + cmd - up"
