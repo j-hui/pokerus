@@ -532,11 +532,12 @@ autocmd Filetype coq setlocal
 " autocmd Filetype coq nnoremap <buffer> <c-p> :CoqRunToCursor<CR>
 " autocmd Filetype coq inoremap <buffer> <c-p> <Esc>:CoqRunToCursor<CR>
 
-Plug 'let-def/vimbufsync', { 'for': 'coq' }
-Plug 'whonore/coqtail', { 'for': 'coq' }
-
-autocmd Filetype coq nnoremap <buffer> <c-c><enter>          :CoqToLine<CR>
-autocmd Filetype coq inoremap <buffer> <c-c><enter>     <Esc>:CoqToLine<CR>
+if !has('nvim')
+    Plug 'let-def/vimbufsync', { 'for': 'coq' }
+    Plug 'whonore/coqtail', { 'for': 'coq' }
+    autocmd Filetype coq nnoremap <buffer> <c-c><enter>          :CoqToLine<CR>
+    autocmd Filetype coq inoremap <buffer> <c-c><enter>     <Esc>:CoqToLine<CR>
+endif
 
 """"""
 " Lean
