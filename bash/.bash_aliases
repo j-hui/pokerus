@@ -58,9 +58,7 @@ cs() {
 # Correct spelling errors in arguments supplied to cd
 shopt -s cdspell 2> /dev/null
 
-CDPATH="."
-
-tre() { command tre "$@" -e && source "/tmp/tre_aliases_$USER" 2>/dev/null; }
+export CDPATH="."
 
 alias sl='echo "
                  _-====-__-======-__-========-_____-============-__
