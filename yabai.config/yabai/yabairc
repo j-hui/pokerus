@@ -6,7 +6,7 @@ yabai -m config status_bar_text_font         "Helvetica Neue:Bold:12.0"
 yabai -m config status_bar_icon_font         "FontAwesome:Regular:12.0"
 yabai -m config status_bar_background_color  0xff202020
 yabai -m config status_bar_foreground_color  0xffa8a8a8
-yabai -m config status_bar_space_icon_strip  I II III IV V VI VII
+yabai -m config status_bar_space_icon_strip  I II III IV V VI
 yabai -m config status_bar_power_icon_strip  🔋 ⚡ 
 # yabai -m config status_bar_space_icon        ?
 yabai -m config status_bar_clock_icon        🕒
@@ -45,6 +45,10 @@ yabai -m config window_gap                   8
 
 # floating
 yabai -m rule --add app="^Enpass$" manage=off sticky=on topmost=on
+yabai -m rule --add app="^Stickies$" manage=off sticky=on topmost=on
+yabai -m rule --add app="^Activity Monitor$" manage=off sticky=on topmost=on
+yabai -m rule --add app="^System Preferences$" manage=off sticky=on topmost=on
+yabai -m rule --add app="^VirtualBox$" manage=off sticky=on topmost=on
 
 # Space 1: terminal
 
@@ -53,6 +57,9 @@ yabai -m rule --add app="^Messages$" space=2
 yabai -m rule --add app="^Wavebox$" space=2
 yabai -m rule --add app="^Slack$" space=2
 yabai -m rule --add app="^WhatsApp$" space=2
+yabai -m rule --add app="^Caprine$" space=2
+yabai -m rule --add app="^Discord$" space=2
+yabai -m rule --add app="^zoom.us$" space=2
 
 # Space 3: browser
 yabai -m rule --add app="^Google Chrome$" space=3
@@ -66,15 +73,8 @@ yabai -m rule --add app="^Microsoft Excel$" space=4
 yabai -m rule --add app="^Bitwig Studio$" space=4
 yabai -m rule --add app="^Code$" space=4
 
-# Space 5: misc
-yabai -m rule --add app="VirtualBox" space=6 manage=off
-
-# Space 6: music
-yabai -m rule --add app="^Music$" space=6
-yabai -m rule --add app="^Google Play Music Desktop Player$" space=6
-
-# Space 7: monitoring
-yabai -m rule --add app="^Activity Monitor$" space=7
-yabai -m rule --add app="^System Preferences$" space=7 manage=off
+# Space 5: music
+yabai -m rule --add app="^Music$" space=5
+yabai -m rule --add app="^Google Play Music Desktop Player$" space=5
 
 echo "yabai configuration loaded.."

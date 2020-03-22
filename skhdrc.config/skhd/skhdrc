@@ -35,9 +35,9 @@
 #
 #       https://github.com/koekeishiya/skhd
 
-# change layout of desktop
-ctrl + cmd - return    : yabai -m space --layout bsp
-ctrl + cmd - backspace : yabai -m space --layout float
+###
+# Window management
+###
 
 # focus window
 ctrl + cmd - h : yabai -m window --focus west
@@ -45,55 +45,31 @@ ctrl + cmd - j : yabai -m window --focus south
 ctrl + cmd - k : yabai -m window --focus north
 ctrl + cmd - l : yabai -m window --focus east
 
-# swap window
-alt + ctrl + cmd - h : yabai -m window --swap west
-alt + ctrl + cmd - j : yabai -m window --swap south
-alt + ctrl + cmd - k : yabai -m window --swap north
-alt + ctrl + cmd - l : yabai -m window --swap east
-
 # move window
 shift + ctrl + cmd - h : yabai -m window --warp west
 shift + ctrl + cmd - j : yabai -m window --warp south
 shift + ctrl + cmd - k : yabai -m window --warp north
 shift + ctrl + cmd - l : yabai -m window --warp east
 
-# set insertion point in focused container
-shift + alt + ctrl + cmd - h : yabai -m window --insert west
-shift + alt + ctrl + cmd - j : yabai -m window --insert south
-shift + alt + ctrl + cmd - k : yabai -m window --insert north
-shift + alt + ctrl + cmd - l : yabai -m window --insert east
+# toggle monocle/floating
+ctrl + cmd - f : yabai -m window --toggle zoom-fullscreen
+shift + ctrl + cmd - f : yabai -m window --toggle float;\
+                         yabai -m window --grid 4:4:1:1:2:2
+
+# rotate tree
+ctrl + cmd - r          : yabai -m space --rotate 90
+shift + ctrl + cmd - r  : yabai -m space --rotate -90
+
+# Flip vertically/horizontally
+ctrl + cmd - e : yabai -m space --mirror y-axis
+shift + ctrl + cmd - e : yabai -m space --mirror x-axis
 
 # balance size of windows (0x18 === '=')
 ctrl + cmd - 0x18 : yabai -m space --balance
 
-# rotate tree
-ctrl + cmd - r : yabai -m space --rotate 90
-
-# toggle window split type
-shift + ctrl + cmd - r : yabai -m window --toggle split
-
-# mirror tree y-axis
-ctrl + cmd - e : yabai -m space --mirror y-axis
-
-# mirror tree x-axis
-shift + ctrl + cmd - e : yabai -m space --mirror x-axis
-
-# toggle desktop offset
-ctrl + cmd - g : yabai -m space --toggle padding; yabai -m space --toggle gap
-
-# toggle window fullscreen zoom
-ctrl + cmd - f : yabai -m window --toggle zoom-fullscreen
-
-# toggle window parent zoom
-shift + ctrl + cmd - f : yabai -m window --toggle zoom-parent
-
-# toggle window native fullscreen
-ctrl + alt + cmd - f : yabai -m window --toggle native-fullscreen
-
-
 # send window to desktop (don't follow focus)
-shift + ctrl + cmd - p : yabai -m window --space prev # ; skhd -k "ctrl + cmd - p"
-shift + ctrl + cmd - n : yabai -m window --space next # ; skhd -k "ctrl + cmd - n"
+shift + ctrl + cmd - p : yabai -m window --space prev
+shift + ctrl + cmd - n : yabai -m window --space next
 
 shift + ctrl + cmd - 1 : yabai -m window --space    1
 shift + ctrl + cmd - 2 : yabai -m window --space    2
@@ -102,86 +78,52 @@ shift + ctrl + cmd - 4 : yabai -m window --space    4
 shift + ctrl + cmd - 5 : yabai -m window --space    5
 shift + ctrl + cmd - 6 : yabai -m window --space    6
 shift + ctrl + cmd - 7 : yabai -m window --space    7
-shift + ctrl + cmd - 7 : yabai -m window --space    8
-
-# Monitor stuff --- untested
-# # focus monitor
-# ctrl + alt - x  : yabai -m display --focus recent
-# ctrl + alt - z  : yabai -m display --focus prev
-# ctrl + alt - c  : yabai -m display --focus next
-# ctrl + alt - 1  : yabai -m display --focus 1
-# ctrl + alt - 2  : yabai -m display --focus 2
-# ctrl + alt - 3  : yabai -m display --focus 3
- 
-# # send window to monitor and follow focus
-# ctrl + cmd - x  : yabai -m window --display recent; yabai -m display --focus recent
-# ctrl + cmd - z  : yabai -m window --display prev; yabai -m display --focus prev
-# ctrl + cmd - c  : yabai -m window --display next; yabai -m display --focus next
-# ctrl + cmd - 1  : yabai -m window --display 1; yabai -m display --focus 1
-# ctrl + cmd - 2  : yabai -m window --display 2; yabai -m display --focus 2
-# ctrl + cmd - 3  : yabai -m window --display 3; yabai -m display --focus 3
+shift + ctrl + cmd - 8 : yabai -m window --space    8
 
 
-### Floating windows
+# toggle window native fullscreen
+ctrl + alt + cmd - f : yabai -m window --toggle native-fullscreen
 
-# float / unfloat window and center on screen
-ctrl + cmd - q : yabai -m window --toggle float;\
-                 yabai -m window --grid 4:4:1:1:2:2
+# focus to monitor
+ctrl + alt + cmd - p  : yabai -m display --focus prev
+ctrl + alt + cmd - n  : yabai -m display --focus next
 
-# make floating window fill screen
-ctrl + cmd - up     : yabai -m window --grid 1:1:0:0:1:1
+# move to monitor
+shift + ctrl + alt + cmd - p  : yabai -m window --display prev
+shift + ctrl + alt + cmd - n  : yabai -m window --display next
 
-# make floating window fill left-half of screen
-ctrl + cmd - left   : yabai -m window --grid 1:2:0:0:1:1
-
-# make floating window fill right-half of screen
-ctrl + cmd - right  : yabai -m window --grid 1:2:1:0:1:1
+###
+# Floating windows
+###
 
 # move floating window
-shift + ctrl + cmd - left  : yabai -m window --move rel:-20:0
-shift + ctrl + cmd - down  : yabai -m window --move rel:0:20
-shift + ctrl + cmd - up    : yabai -m window --move rel:0:-20
-shift + ctrl + cmd - right : yabai -m window --move rel:20:0
+ctrl + cmd - left  : yabai -m window --move rel:-20:0
+ctrl + cmd - down  : yabai -m window --move rel:0:20
+ctrl + cmd - up    : yabai -m window --move rel:0:-20
+ctrl + cmd - right : yabai -m window --move rel:20:0
 
-# increase floating window size
-ctrl + alt + cmd - left  : yabai -m window --resize left:-20:0
-ctrl + alt + cmd - down  : yabai -m window --resize bottom:0:20
-ctrl + alt + cmd - up    : yabai -m window --resize top:0:-20
-ctrl + alt + cmd - right : yabai -m window --resize right:20:0
+# Tile full screen
+shift + ctrl + cmd - up     : yabai -m window --grid 1:1:0:0:1:1
 
-# decrease floating window size
-shift + ctrl + alt + cmd - left  : yabai -m window --resize left:20:0
-shift + ctrl + alt + cmd - down  : yabai -m window --resize bottom:0:-20
-shift + ctrl + alt + cmd - up    : yabai -m window --resize top:0:20
-shift + ctrl + alt + cmd - right : yabai -m window --resize right:-20:0
+# Tile left/right half
+shift + ctrl + cmd - left   : yabai -m window --grid 1:2:0:0:1:1
+shift + ctrl + cmd - right  : yabai -m window --grid 1:2:1:0:1:1
 
-### Applications
+# Shrink/enlarge window
+ctrl + cmd - 0x18   : yabai -m window --resize bottom_right:20:20
+ctrl + cmd - 0x1B   : yabai -m window --resize bottom_right:-20:-20
 
-ctrl + cmd - t : skhd -k "ctrl + cmd - 2"; open -a "/Applications/kitty.app"
+
+###
+# Applications
+###
+
+ctrl + cmd - t : skhd -k "ctrl + cmd - 1"; open -a "/Applications/kitty.app"
 shift + ctrl + cmd - t : open -a "Terminal.app"
-# shift + ctrl + cmd - t : osascript -e $'tell application "System Events" to tell UI element "kitty" of list 1 of process "Dock"\nperform action "AXShowMenu"\nclick menu item "New OS Window" of menu 1\nend tell'
 
 ctrl + cmd - o : open -a "/Applications/Firefox.app"
 
-ctrl + cmd - play : open -a "/Applications/iTunes.app"
-ctrl + cmd - y : open -a "/Applications/iTunes.app"
+ctrl + cmd - y : open -a "/Applications/Google Play Music Desktop Player.app"
 
-ctrl + cmd - m : open -a "/Applications/Wavebox.app"
-shift + ctrl + cmd - m : skhd -k "ctrl + cmd - 3"; open -a "/Applications/Messages.app"
-
-ctrl + alt + cmd - k : shkd -t "GWC Strike Authorization Vote"
-
-### Deprecated
-# ctrl + alt + cmd - space : skhd -k "ctrl + alt + cmd - up"
-# ctrl + alt + cmd + shift - k : skhd -k "ctrl + alt + cmd - up"
-# ctrl + alt + cmd + shift - j : skhd -k "ctrl + alt + cmd - down"
-# ctrl + alt + cmd + shift - h : skhd -k "ctrl + alt + cmd - left"
-# ctrl + alt + cmd + shift - l : skhd -k "ctrl + alt + cmd - right"
-# 
-# 
-# ctrl + cmd - j : skhd -k "down"
-# ctrl + cmd - k : skhd -k "up"
-# ctrl + cmd - h : skhd -k "left"
-# ctrl + cmd - l : skhd -k "right"
-# # ctrl + cmd + shift - h : skhd -k "shift + alt - left"
-# # ctrl + cmd + shift - l : skhd -k "shift + alt - right"
+ctrl + cmd - 0 : open -a "/Applications/Bitwarden.app"
+shift + ctrl + cmd - 0 : bw generate -uln --length 16 | pbcopy
