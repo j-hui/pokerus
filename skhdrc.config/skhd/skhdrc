@@ -36,6 +36,20 @@
 #       https://github.com/koekeishiya/skhd
 
 ###
+# Applications
+###
+
+ctrl + cmd - t : skhd -k "ctrl + cmd - 1"; open -a "/Applications/kitty.app"
+shift + ctrl + cmd - t : open -a "Terminal.app"
+
+ctrl + cmd - o : open -a "/Applications/Firefox.app"
+
+ctrl + cmd - y : open -a "/Applications/Google Play Music Desktop Player.app"
+
+ctrl + cmd - 0 : open -a "/Applications/Bitwarden.app"
+shift + ctrl + cmd - 0 : bw generate -uln --length 16 | pbcopy
+
+###
 # Window management
 ###
 
@@ -112,18 +126,3 @@ shift + ctrl + cmd - right  : yabai -m window --grid 1:2:1:0:1:1
 # Shrink/enlarge window
 ctrl + cmd - 0x18   : yabai -m window --resize bottom_right:20:20
 ctrl + cmd - 0x1B   : yabai -m window --resize bottom_right:-20:-20
-
-
-###
-# Applications
-###
-
-ctrl + cmd - t : skhd -k "ctrl + cmd - 1"; open -a "/Applications/kitty.app"
-shift + ctrl + cmd - t : open -a "Terminal.app"
-
-ctrl + cmd - o : open -a "/Applications/Firefox.app"
-
-ctrl + cmd - y : open -a "/Applications/Google Play Music Desktop Player.app"
-
-ctrl + cmd - 0 : open -a "/Applications/Bitwarden.app"
-shift + ctrl + cmd - 0 : bw generate -uln --length 16 | pbcopy
