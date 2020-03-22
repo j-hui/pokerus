@@ -187,6 +187,41 @@ Some notes to keep myself synchronized between `bspwm` on Linux and `yabai` on
 macOS. Note that the standard modifier key is `ctrl + cmd` for system-wide
 operations.
 
+Workspaces/applications:
+
+-   `1`: Terminal
+
+    -   `t/T`: Open terminal in designated workspace/anywhere
+
+-   `2`: Messaging
+
+-   `3`: Browser
+
+    -   `o`: Open browser
+
+-   `4`: Productivity
+
+-   `5`: Music player
+
+    -   `y`: YouTube Music Player
+
+-   Floating/services:
+
+    -   `space`: launcher
+
+    -   `0/shift+0`: Password manager/generate password
+    
+    -   `s/S`: Take screenshot
+
+System:
+
+-   `backspace`: Lock
+
+-   `a/A`: Mission control/application windows (macOS only)
+
+-   `d`: Show Desktop (macOS only)
+
+
 Window manager:
 
 -   `h/j/k/l`: Shift focus west/south/north/east
@@ -221,36 +256,3 @@ Floating:
 -   `minus/equal`: Shrink/enlarge window
 
 
-System:
-
--   `backspace`: Lock
-
--   `a/A`: Mission control/application windows (macOS only)
-
--   `d`: Show Desktop (macOS only)
-
-Workspaces/applications:
-
--   `1`: Terminal
-
-    -   `t/T`: Open terminal in designated workspace/anywhere
-
--   `2`: Messaging
-
--   `3`: Browser
-
-    -   `o`: Open browser
-
--   `4`: Productivity
-
--   `5`: Music player
-
-    -   `y`: YouTube Music Player
-
--   Floating/services:
-
-    -   `space`: launcher
-
-    -   `0/shift+0`: Password manager/generate password
-    
-    -   `s/S`: Take screenshot
