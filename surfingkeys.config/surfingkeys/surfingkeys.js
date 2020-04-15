@@ -206,7 +206,7 @@ unmap('oy'); // Open search with alias y
 map(':/b', 'ob');
 unmap('ob'); // Open search with alias b 
 
-mapkey(':!', '#8Open commands', function() {
+mapkey('::', '#8Open commands', function() {
     Front.openOmnibar({type: "Commands"});
 });
 
