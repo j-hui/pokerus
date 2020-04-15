@@ -80,14 +80,12 @@ vmapkey('<Ctrl-c>', '#9Exit visual mode', function () {
 
 unmap('<Ctrl-i>'); // Go to edit box with vim editor (duplicate)
 
-map(',s', '<Alt-s>'); // Toggle SurfingKeys
+map('!', '<Alt-s>'); // Toggle SurfingKeys
 unmap('<Alt-s>');
-map(',S', '<Alt-i>'); // Enter passthrough
+map('|', '<Alt-i>'); // Enter passthrough
 unmap('<Alt-i>');
-map(',,', 'p');       // Enter ephemeral passthrough
-unmap('<Alt-i>');
-
-var commaMappings = [',s', ',S', ',,'];
+map('\\', 'p');       // Enter ephemeral passthrough
+unmap('p');
 
 /* Page navigation */
 map('<Ctrl-j>', 'd'); // Page down
@@ -364,17 +362,17 @@ aceVimMap('<Ctrl-k>', '<Ctrl-u>', 'normal');
 var numMappings = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 var zMappings = ['zi', 'zo', 'zr'];
 
-// unmapAllExcept([commaMappings, ctrlMappings, rMappings, colonMappings, gMappings, sMappings, yMappings, zMappings].flat(),
+// unmapAllExcept([ctrlMappings, rMappings, colonMappings, gMappings, sMappings, yMappings, zMappings].flat(),
 
-unmapAllExcept([commaMappings, ctrlMappings, rMappings, colonMappings, sMappings, yMappings].flat(),
+unmapAllExcept([ctrlMappings, rMappings, colonMappings, sMappings, yMappings].flat(),
     /mail\.google\.com/);
-unmapAllExcept([commaMappings, ctrlMappings, rMappings, colonMappings, sMappings, yMappings].flat(),
+unmapAllExcept([ctrlMappings, rMappings, colonMappings, sMappings, yMappings].flat(),
     /drive\.google\.com/);
 unmapAllExcept([],
     /docs\.google\.com/);
-unmapAllExcept([commaMappings, ctrlMappings, rMappings, colonMappings, gMappings, sMappings, yMappings].flat(),
+unmapAllExcept([ctrlMappings, rMappings, colonMappings, gMappings, sMappings, yMappings].flat(),
     /.+\.slack\.com/);
-// unmapAllExcept([commaMappings, ctrlMappings, rMappings, colonMappings, gMappings, sMappings, yMappings].flat(),
+// unmapAllExcept([ctrlMappings, rMappings, colonMappings, gMappings, sMappings, yMappings].flat(),
 //     /reddit\.com/);
 unmapAllExcept([],
     /overfleaf\.com/);
