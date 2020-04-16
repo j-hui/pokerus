@@ -247,10 +247,10 @@ endif
 if !exists('g:vscode')
     Plug 'airblade/vim-gitgutter'
     let g:gitgutter_map_keys = 0
-    nmap <c-g><c-g> <Plug>GitGutterPreviewHunk
-    nmap <c-g>g     <Plug>GitGutterPreviewHunk
-    nmap <c-g>n     <Plug>GitGutterNextHunk
-    nmap <c-g>p     <Plug>GitGutterPrevHunk
+    nmap <c-g><c-g> <Plug>(GitGutterPreviewHunk)
+    nmap <c-g>g     <Plug>(GitGutterPreviewHunk)
+    nmap <c-g>n     <Plug>(GitGutterNextHunk)
+    nmap <c-g>p     <Plug>(GitGutterPrevHunk)
     set updatetime=100
     let g:gitgutter_override_sign_column_highlight = 0
     highlight SignColumn        guibg=#073642 ctermbg=0
@@ -270,6 +270,7 @@ endif
 if !exists('g:vscode')
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
     Plug 'junegunn/fzf.vim'
+    let g:fzf_preview_window = 'right:60%'
     nnoremap <c-p> :Files<CR>
 endif
 
@@ -290,6 +291,28 @@ if !exists('g:vscode')
     vnoremap <Leader>aa <Esc>:AckAdd!<Space>
 endif
 
+
+if !exists('g:vscode')
+    Plug 'voldikss/vim-floaterm'
+
+    nnoremap <silent> <C-_> :FloatermToggle<CR>
+    tnoremap <silent> <C-_> <C-\><C-n>:FloatermToggle<CR>
+
+    nnoremap <silent> <F9>  :FloatermNew<CR>
+    tnoremap <silent> <F9>  <C-\><C-n>:FloatermNew<CR>
+
+    nnoremap <silent> <F10> :FloatermPrev<CR>
+    tnoremap <silent> <F10> <C-\><C-n>:FloatermPrev<CR>
+
+    nnoremap <silent> <F11> :FloatermNext<CR>
+    tnoremap <silent> <F11> <C-\><C-n>:FloatermNext<CR>
+
+    nnoremap <silent> <F12> :FloatermToggle<CR>
+    tnoremap <silent> <F12> <C-\><C-n>:FloatermToggle<CR>
+
+    tnoremap <silent> <C-[> <C-\><C-n>
+endif
+
 """"""""""""""
 " Text editing
 """"""""""""""
@@ -297,7 +320,7 @@ set pastetoggle=<F2>
 
 if system('uname -s') == "Darwin\n"
   "OSX
-  set clipboard=unnamed 
+  set clipboard=unnamed
 else
   "Linux
   set clipboard=unnamedplus

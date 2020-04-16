@@ -21,6 +21,11 @@ elif which vim > /dev/null; then
     export EDITOR=vim
 fi
 
+if which floaterm > /dev/null; then
+    export EDITOR=floaterm
+    alias vim='floaterm'
+fi
+
 mkdir -p ~/.tmp/backup ~/.tmp/swp ~/.tmp/undo
 
 ### OS-specific configuration
