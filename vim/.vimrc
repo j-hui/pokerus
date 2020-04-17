@@ -290,6 +290,13 @@ if !exists('g:vscode')
     vnoremap <Leader>aa <Esc>:AckAdd!<Space>
 endif
 
+if !exists('g:vscode')
+    let g:maximizer_set_default_mapping = 1
+    let g:maximizer_set_mapping_with_bang = 0
+    let g:maximizer_default_mapping_key = '<C-w>f'
+    Plug 'szw/vim-maximizer'
+endif
+
 """"""""""""""
 " Text editing
 """"""""""""""
