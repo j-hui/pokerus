@@ -187,16 +187,22 @@ inoremap <C-s> <Esc>
 vnoremap <C-s> <Esc>
 onoremap <C-s> <Esc>
 
-cnoreabbrev Q q " for when i fat finger :Q
+" cnoreabbrev Q q " for when i fat finger :Q
 
 noremap <C-w>] <Esc>:bn<CR>
 noremap <C-w>[ <Esc>:bp<CR>
 noremap <C-w><backspace> <Esc>:bw<CR>
 noremap <C-w>t :enew<cr>
 
+Plug 'andymass/vim-matchup'
+augroup matchup_matchparen_highlight
+  autocmd!
+  autocmd ColorScheme * hi MatchParen guifg=red
+augroup END
+
 if !exists('g:vscode')
     Plug 'psliwka/vim-smoothie'
-    let g:smoothie_base_speed = 36
+    let g:smoothie_base_speed = 42
     nnoremap <silent> <C-j>      :<C-U>call smoothie#downwards() <CR>
     nnoremap <silent> <C-k>      :<C-U>call smoothie#upwards()   <CR>
 endif
@@ -564,8 +570,44 @@ autocmd Filetype coq setlocal
 if !has('nvim')
     Plug 'let-def/vimbufsync', { 'for': 'coq' }
     Plug 'whonore/coqtail', { 'for': 'coq' }
-    autocmd Filetype coq nnoremap <buffer> <c-c><enter>          :CoqToLine<CR>
-    autocmd Filetype coq inoremap <buffer> <c-c><enter>     <Esc>:CoqToLine<CR>
+
+    autocmd Filetype coq nnoremap <buffer> <c-c>.            :CoqToLine<CR>
+    autocmd Filetype coq inoremap <buffer> <c-c>.       <Esc>:CoqToLine<CR>
+
+    autocmd Filetype coq nnoremap <buffer> <c-c>l            m`$:CoqToLine<CR>``
+    autocmd Filetype coq inoremap <buffer> <c-c>l       <Esc>m`$:CoqToLine<CR>``
+
+    autocmd Filetype coq nnoremap <buffer> <c-c><CR>         m`$:CoqToLine<CR>``
+    autocmd Filetype coq inoremap <buffer> <c-c><CR>    <Esc>m`$:CoqToLine<CR>``
+
+    autocmd Filetype coq nmap <buffer> <c-c>j        :CoqNext<CR>
+    autocmd Filetype coq imap <buffer> <c-c>j   <Esc>:CoqNext<CR>i
+    autocmd Filetype coq nmap <buffer> <c-c>k        :CoqUndo<CR>
+    autocmd Filetype coq imap <buffer> <c-c>k   <Esc>:CoqUndo<CR>i
+    autocmd Filetype coq nmap <buffer> <c-c>h        :CoqJumpToEnd<CR>
+    autocmd Filetype coq imap <buffer> <c-c>h   <Esc>:CoqJumpToEnd<CR>
+
+    autocmd Filetype coq nmap <buffer> <c-c><space>       :CoqGotoGoal!<CR>
+    autocmd Filetype coq imap <buffer> <c-c><space>  <Esc>:CoqGotoGoal!<CR>i
+
+    ":Coq Check
+    autocmd Filetype coq nmap <buffer> <c-c>c        <leader>ch
+    autocmd Filetype coq imap <buffer> <c-c>c   <Esc><leader>chi
+    ":Coq About
+    autocmd Filetype coq nmap <buffer> <c-c>a        <leader>ca
+    autocmd Filetype coq imap <buffer> <c-c>a   <Esc><leader>cai
+    ":Coq Print
+    autocmd Filetype coq nmap <buffer> <c-c>p        <leader>cp
+    autocmd Filetype coq imap <buffer> <c-c>p   <Esc><leader>cpi
+    ":Coq Locate
+    autocmd Filetype coq nmap <buffer> <c-c>n        <leader>cf
+    autocmd Filetype coq imap <buffer> <c-c>n   <Esc><leader>cfi
+    ":Coq Search
+    autocmd Filetype coq nmap <buffer> <c-c>s        <leader>cs
+    autocmd Filetype coq imap <buffer> <c-c>s   <Esc><leader>csi
+
+    autocmd Filetype coq nmap <buffer> <c-c>x        :CoqStart<CR>
+    autocmd Filetype coq nmap <buffer> <c-c>z        :CoqStop<CR>
 endif
 
 """"""
@@ -624,8 +666,6 @@ Plug 'idris-hackers/idris-vim', { 'for': 'idris' }
 "
 " Plug 'Shougo/denite.vim'
 "   https://github.com/Shougo/denite.nvim
-
-Plug 'al3623/deepsea.vim'
 
 call plug#end()
 
