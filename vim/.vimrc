@@ -563,14 +563,10 @@ autocmd Filetype coq setlocal
             \ formatoptions=cqort
             \ comments=sr:(*,mb:*,ex:*)
 
-" Plug 'tounaishouta/coq.vim', { 'for': 'coq' }
-" autocmd Filetype coq nnoremap <buffer> <c-p> :CoqRunToCursor<CR>
-" autocmd Filetype coq inoremap <buffer> <c-p> <Esc>:CoqRunToCursor<CR>
+Plug 'let-def/vimbufsync', { 'for': 'coq' }
+Plug 'whonore/coqtail', { 'for': 'coq' }
 
 if !has('nvim')
-    Plug 'let-def/vimbufsync', { 'for': 'coq' }
-    Plug 'whonore/coqtail', { 'for': 'coq' }
-
     autocmd Filetype coq nnoremap <buffer> <c-c>.            :CoqToLine<CR>
     autocmd Filetype coq inoremap <buffer> <c-c>.       <Esc>:CoqToLine<CR>
 
@@ -608,6 +604,8 @@ if !has('nvim')
 
     autocmd Filetype coq nmap <buffer> <c-c>x        :CoqStart<CR>
     autocmd Filetype coq nmap <buffer> <c-c>z        :CoqStop<CR>
+else
+    let g:coqtail_nomap = 1
 endif
 
 """"""
