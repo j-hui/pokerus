@@ -76,5 +76,6 @@ yabai -m rule --add app="^Code$" space=4
 # Space 5: music
 yabai -m rule --add app="^Music$" space=5
 yabai -m rule --add app="^Google Play Music Desktop Player$" space=5
+yabai -m rule --add app="^YouTube Music$" space=5
 
 echo "yabai configuration loaded.."
