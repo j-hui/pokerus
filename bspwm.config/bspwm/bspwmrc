@@ -1,10 +1,14 @@
 #! /bin/sh
 
+# Leads:
+#
 # https://github.com/windelicato/dotfiles
 # https://github.com/addy-dclxvi/void-bspwm-dotfiles/blob/master/home/addy/.config/bspwm/bspwmrc
 # https://dotfiles.github.io/inspiration/
 # https://github.com/zSucrilhos/dotfiles/blob/Lyra/nord_dark/.config/bspwm/bspwmrc
 # https://github.com/addy-dclxvi/almighty-dotfiles/tree/master
+# https://github.com/samedamci/biual-dot-conf
+# https://www.reddit.com/r/bspwm/comments/fe6uci/incomplete_rofi_script_to_list_every_hidden_window/?%24deep_link=true&correlation_id=ae5a70c1-d465-49bc-a2c7-10354fe335df&ref=email_digest&ref_campaign=email_digest&ref_source=email&utm_content=post_title&utm_medium=digest&utm_name=top_posts&utm_source=email&utm_term=day&%243p=e_as&%24original_url=https%3A%2F%2Fwww.reddit.com%2Fr%2Fbspwm%2Fcomments%2Ffe6uci%2Fincomplete_rofi_script_to_list_every_hidden_window%2F%3F%24deep_link%3Dtrue%26correlation_id%3Dae5a70c1-d465-49bc-a2c7-10354fe335df%26ref%3Demail_digest%26ref_campaign%3Demail_digest%26ref_source%3Demail%26utm_content%3Dpost_title%26utm_medium%3Ddigest%26utm_name%3Dtop_posts%26utm_source%3Demail%26utm_term%3Dday&_branch_match_id=763288445100087958 
 
 sxhkd &
 yabar &
