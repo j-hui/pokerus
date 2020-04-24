@@ -39,14 +39,14 @@
 # Applications
 ###
 
-ctrl + cmd - t : skhd -k "ctrl + cmd - 1"; open -a "/Applications/kitty.app"
-shift + ctrl + cmd - t : open -a "Terminal.app"
+ctrl + cmd - t : skhd -k "ctrl + cmd - 1"; open -a "kitty"
+shift + ctrl + cmd - t : open -a "Terminal"
 
-ctrl + cmd - o : open -a "/Applications/Firefox.app"
+ctrl + cmd - o : open -a "Firefox"
 
-ctrl + cmd - y : open -a "/Applications/Google Play Music Desktop Player.app"
+ctrl + cmd - y : open -a "Youtube Music"
 
-ctrl + cmd - 0 : open -a "/Applications/Bitwarden.app"
+ctrl + cmd - 0 : open -a "Bitwarden"
 shift + ctrl + cmd - 0 : bw generate -uln --length 16 | pbcopy
 
 ###
