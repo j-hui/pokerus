@@ -18,10 +18,10 @@
 "   - ???
 "
 " f/F (find): f/F<char> jumps to next/previous occurrence of <char>
-"   - actually handy, but I already have easymotion to help me move around
+"   - Now mapped using sneak.vim
 "
 " t/T (till): t/T<char> jumps to before next/previous occurence of <char>
-"   - actually handy, but I already have easymotion to help me move around
+"   - actually handy
 "
 " ; : repeat f/F/t/T
 "   - I don't use f/F/t/T
@@ -94,13 +94,16 @@ set ruler
 set scrolloff=5
 set display+=lastline
 
-" highlight 80-character boundary
-let &colorcolumn=join(range(81,999),",")
-highlight ColorColumn ctermbg=235 guibg=#2c2d27
+highlight ColorColumn ctermbg=235 guibg=#262626
+set colorcolumn=+1,+2
+cnoreabbrev overflow    /\%>80v./+
+cnoreabbrev of          /\%>80v./+
 
-" cursor underline in insert mode
-autocmd InsertEnter * set cul
-autocmd InsertLeave * set nocul
+augroup cursor_underline
+    autocmd!
+    autocmd InsertEnter * set cul
+    autocmd InsertLeave * set nocul
+augroup END
 
 " If terminal supports displaying italics, we need these key sequences
 let t_ZH="\e[3m"
@@ -138,10 +141,60 @@ set list lcs=tab:\┆\ " <-- space
 set conceallevel=2
 
 if !exists('g:vscode')
-    Plug 'vim-airline/vim-airline'
-    set laststatus=2
-    let g:airline#extensions#tabline#enabled = 1
-    " let g:airline_powerline_fonts = 1
+    " Plug 'junegunn/goyo.vim'
+    " This messes with color schemes
+    " -- see https://github.com/junegunn/goyo.vim/issues/156
+
+    Plug 'junegunn/limelight.vim'
+    cnoreabbrev ll    Limelight!!
+
+    let g:limelight_conceal_ctermfg = 'gray'
+    let g:limelight_conceal_ctermfg = 240
+    let g:limelight_conceal_guifg = 'DarkGray'
+    let g:limelight_conceal_guifg = '#777777'
+    let g:limelight_default_coefficient = 0.7
+    let g:limelight_paragraph_span = 1
+    " Beginning/end of paragraph
+    "   When there's no empty line between the paragraphs
+    "   and each paragraph starts with indentation
+    let g:limelight_bop = '^\s'
+    let g:limelight_eop = '\ze\n^\s'
+    " Highlighting priority (default: 10)
+    "   Set it to -1 not to overrule hlsearch
+    let g:limelight_priority = -1
+endif
+
+if !exists('g:vscode')
+    Plug 'itchyny/lightline.vim'
+    let g:lightline = {
+        \ 'active': {
+        \   'left': [ [ 'mode', 'paste' ],
+        \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+        \ },
+        \ 'component_function': {
+        \   'gitbranch': 'FugitiveHead'
+        \ },
+    \ }
+
+    Plug 'ap/vim-buftabline'
+    let g:buftabline_indicators = 1
+    let g:buftabline_numbers = 2
+
+    hi BufTabLineCurrent ctermfg=231 ctermbg=240 guifg=#ffffff guibg=#585858
+    hi BufTabLineActive  ctermfg=231 ctermbg=235 guifg=#bcbcbc guibg=#262626
+    hi BufTabLineHidden  ctermfg=240 ctermbg=235 guifg=#262626 guibg=#262626
+    hi BufTabLineFill    ctermfg=236 ctermbg=235 guifg=#303030 guibg=#262626
+
+    nmap <C-w>1 <Plug>BufTabLine.Go(1)
+    nmap <C-w>2 <Plug>BufTabLine.Go(2)
+    nmap <C-w>3 <Plug>BufTabLine.Go(3)
+    nmap <C-w>4 <Plug>BufTabLine.Go(4)
+    nmap <C-w>5 <Plug>BufTabLine.Go(5)
+    nmap <C-w>6 <Plug>BufTabLine.Go(6)
+    nmap <C-w>7 <Plug>BufTabLine.Go(7)
+    nmap <C-w>8 <Plug>BufTabLine.Go(8)
+    nmap <C-w>9 <Plug>BufTabLine.Go(9)
+    nmap <C-w>0 <Plug>BufTabLine.Go(-1)
 endif
 
 """"""""""""
@@ -158,7 +211,7 @@ set showmatch   " Show matching brackets
 
 set foldlevelstart=10
 set foldnestmax=10
-set foldmethod=indent
+set foldmethod=manual
 
 set wildmenu
 
@@ -169,36 +222,47 @@ nnoremap j gj
 nnoremap k gk
 nnoremap <C-j> <C-d>
 nnoremap <C-k> <C-u>
-nnoremap <C-l> g$
-nnoremap <C-h> g^
-" nnoremap <C-J> <down><C-e>
-" nnoremap <C-K> <up><C-y>
-nnoremap <C-s> :w<CR>
+nnoremap <C-n> <C-e>j
+nnoremap <C-p> <C-y>k
+nnoremap <C-e> g$
+nnoremap <C-s> g^
+" nnoremap <C-l> g$ " bad habits xD
+" nnoremap <C-h> g^
 
-
-" inoremap <C-j> <down>
-" inoremap <C-k> <up>
-" inoremap <C-h> <left>
-" inoremap <C-l> <right>
 inoremap <C-c> <Esc>
 inoremap kj <Esc>
+inoremap <C-down> <C-n>
+inoremap <C-up> <C-p>
+inoremap <C-n> <down>
+inoremap <C-p> <up>
 
-inoremap <C-s> <Esc>
-vnoremap <C-s> <Esc>
-onoremap <C-s> <Esc>
-
-" cnoreabbrev Q q " for when i fat finger :Q
-
-noremap <C-w>] <Esc>:bn<CR>
-noremap <C-w>[ <Esc>:bp<CR>
-noremap <C-w><backspace> <Esc>:bw<CR>
-noremap <C-w>t :enew<cr>
+noremap <C-w>n <Esc>:bn<CR>
+noremap <C-w>p <Esc>:bp<CR>
+noremap <C-w>q <Esc>:bd<CR>
 
 Plug 'andymass/vim-matchup'
 augroup matchup_matchparen_highlight
   autocmd!
   autocmd ColorScheme * hi MatchParen guifg=red
 augroup END
+
+Plug 'itchyny/vim-cursorword'
+let g:cursorword_delay = 369
+let b:cursorword = 1
+function! ToggleCursorWord()
+    if b:cursorword
+        let b:cursorword = 0
+    else
+        let b:cursorword = 1
+    endif
+endfunction
+cnoreabbrev csw call ToggleCursorWord()
+
+Plug 'justinmk/vim-sneak'
+let g:sneak#label = 1
+
+map f <Plug>Sneak_s
+map F <Plug>Sneak_S
 
 if !exists('g:vscode')
     Plug 'psliwka/vim-smoothie'
@@ -207,45 +271,37 @@ if !exists('g:vscode')
     nnoremap <silent> <C-k>      :<C-U>call smoothie#upwards()   <CR>
 endif
 
-" Plug 'farmergreg/vim-lastplace'
-" let g:lastplace_open_folds = 0
-
 if !exists('g:vscode')
-    Plug 'easymotion/vim-easymotion'
-    let g:EasyMotion_do_mapping = 0
-    let g:EasyMotion_smartcase = 1
-    map <C-f>l <Plug>(easymotion-lineforward)
-    map <C-f>j <Plug>(easymotion-j)
-    map <C-f>k <Plug>(easymotion-k)
-    map <C-f>h <Plug>(easymotion-linebackward)
-    map <C-f>w <Plug>(easymotion-w)
-    map <C-f>e <Plug>(easymotion-e)
-    map  <C-f>/ <Plug>(easymotion-sn)
-    omap <C-f>/ <Plug>(easymotion-tn)
-    map  <C-f>n <Plug>(easymotion-next)
-    map  <C-f>N <Plug>(easymotion-prev)
+    Plug 'farmergreg/vim-lastplace'
+    let g:lastplace_open_folds = 0
 
-    let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
+    Plug 'szw/vim-maximizer'
+    let g:maximizer_set_default_mapping = 0
+    nnoremap <silent><C-w>f :MaximizerToggle<CR>
+    vnoremap <silent><C-w>f :MaximizerToggle<CR>gv
 endif
 
 if !exists('g:vscode')
     Plug 'scrooloose/nerdtree'
 
-    noremap <C-n> :NERDTreeToggle<CR>
+    noremap <C-w><space> :NERDTreeToggle<CR>
 
-    " Open NERDTree upon startup
-    autocmd StdinReadPre * let s:std_in=1
-    autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+    augroup nerdtree_triggers
+        autocmd!
+        " Open NERDTree upon startup
+        autocmd StdinReadPre * let s:std_in=1
+        autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
-    " Open NERDTree when opening a directory
-    autocmd StdinReadPre * let s:std_in=1
-    autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) &&
-                \ !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p |
-                \ ene | exe 'cd '.argv()[0] | endif
+        " Open NERDTree when opening a directory
+        autocmd StdinReadPre * let s:std_in=1
+        autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) &&
+                    \ !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p |
+                    \ ene | exe 'cd '.argv()[0] | endif
 
-    " Close vim if NERDTree the only window left
-    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") &&
-                \ b:NERDTree.isTabTree()) | q | endif
+        " Close vim if NERDTree the only window left
+        autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") &&
+                    \ b:NERDTree.isTabTree()) | q | endif
+    augroup END
 
     Plug 'Xuyuanp/nerdtree-git-plugin'
 endif
@@ -263,10 +319,9 @@ if !exists('g:vscode')
     highlight GitGutterAdd      guibg=#073642 ctermbg=0 guifg=#009900 ctermfg=2
     highlight GitGutterChange   guibg=#073642 ctermbg=0 guifg=#bbbb00 ctermfg=3
     highlight GitGutterDelete   guibg=#073642 ctermbg=0 guifg=#ff2222 ctermfg=1
-endif
 
-if !exists('g:vscode')
     Plug 'tpope/vim-fugitive'
+
     Plug 'junegunn/gv.vim'
     nnoremap <c-g>vb :GV
     nnoremap <c-g>vc :GV!
@@ -277,10 +332,8 @@ if !exists('g:vscode')
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
     Plug 'junegunn/fzf.vim'
     let g:fzf_preview_window = 'right:60%'
-    nnoremap <c-p> :Files<CR>
-endif
+    nnoremap <c-w><enter> :Files<CR>
 
-if !exists('g:vscode')
     Plug 'mileszs/ack.vim'
     if executable('ag')
       let g:ackprg = 'ag --vimgrep'
@@ -295,13 +348,6 @@ if !exists('g:vscode')
     nnoremap <Leader>aa :AckAdd!<Space>
     inoremap <Leader>aa <Esc>:AckAdd!<Space>
     vnoremap <Leader>aa <Esc>:AckAdd!<Space>
-endif
-
-if !exists('g:vscode')
-    let g:maximizer_set_default_mapping = 1
-    let g:maximizer_set_mapping_with_bang = 0
-    let g:maximizer_default_mapping_key = '<C-w>f'
-    Plug 'szw/vim-maximizer'
 endif
 
 if !exists('g:vscode')
@@ -398,42 +444,60 @@ if !exists('g:vscode')
     endif
 endif
 
+if !exists('g:vscode')
+    Plug 'mbbill/undotree'
+    nnoremap <C-w>u :UndotreeToggle<cr>:UndotreeFocus<cr>
+endif
+
 Plug 'svermeulen/vim-cutlass'
 " - retain cut behavior for d specifically
 " - x and D no longer put text into registers
 " - to delete lines without cutting, use D and visual mode
-nnoremap d d
-xnoremap d d
-vnoremap d d
+nnoremap d  d
+xnoremap d  d
+vnoremap d  d
 nnoremap dd dd
 
 Plug 'tpope/vim-commentary'         " use gcc to comment things out
 Plug 'tpope/vim-surround'           " ds, cs, ys to change text surroundings
 Plug 'tpope/vim-characterize'       " use ga to see metadata about unicode
+Plug 'tpope/vim-endwise'            " write endings
+Plug 'tpope/vim-speeddating'        " increment/decrement dates
 
-Plug 'godlygeek/tabular'            " :Tabularize to align stuff
-cnoreabbrev Tab Tabularize
+Plug 'junegunn/vim-easy-align'
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
+
+Plug 'tommcdo/vim-exchange'         " exchange text
+Plug 'AndrewRadev/sideways.vim'     " move things sideways in lists
+nnoremap <c-h> :SidewaysLeft<cr>
+nnoremap <c-l> :SidewaysRight<cr>
+
+Plug 'matze/vim-move'               " move things
 
 if !exists('g:vscode')
     Plug 'tpope/vim-rsi'            " readline style commands in insert mode
     Plug 'tpope/vim-eunuch'         " UNIX-like functionality in Vim
     Plug 'junegunn/vim-peekaboo'    " shows yank buffers
+
 endif
 
 
 """""""
 " LaTeX
 """""""
-autocmd Filetype tex setlocal
-            \ tabstop=2
-            \ expandtab
-            \ shiftwidth=2
-            \ softtabstop=2
-            \ textwidth=80
-            \ spell
-
-autocmd Filetype tex highlight Conceal ctermfg=NONE ctermbg=NONE
-" otherwise rendered symbols render with a weird grey background color
+augroup latex_settings
+    autocmd!
+    autocmd Filetype tex setlocal
+                \ tabstop=2
+                \ expandtab
+                \ shiftwidth=2
+                \ softtabstop=2
+                \ textwidth=80
+                \ spell
+    autocmd Filetype tex highlight Conceal ctermfg=NONE ctermbg=NONE
+        " otherwise rendered symbols render with a weird grey background color
+augroup latex_settings
 
 Plug 'lervag/vimtex',   { 'for': 'tex' }
 let g:tex_flavor='latex'
@@ -442,29 +506,46 @@ let g:tex_flavor='latex'
 " let g:vimtex_quickfix_open_on_warning=0
 " let g:vimtex_quickfix_autoclose_after_keystrokes=2
 let g:vimtex_quickfix_latexlog = {
-      \ 'overfull' : 0,
-      \ 'underfull' : 0,
-      \ 'packages' : {
-        \ 'default' : 0,
-      \ },
-      \}
+    \ 'overfull' : 0,
+    \ 'underfull' : 0,
+    \ 'packages' : {
+    \   'default' : 0,
+    \ },
+    \}
 
 let g:tex_conceal='abdmg'
 let g:Tex_GotoError=0
-
 let g:vimtex_mappings_enabled=0
-autocmd Filetype tex imap <C-]> <plug>(vimtex-delim-close)
+augroup vimtex_settings
+    autocmd!
+    autocmd Filetype tex imap <C-]> <plug>(vimtex-delim-close)
+augroup END
+
+"""""
+" Bib
+"""""
+augroup bib_settings
+    autocmd!
+    autocmd Filetype bib setlocal
+                \ tabstop=2
+                \ expandtab
+                \ shiftwidth=2
+                \ softtabstop=2
+augroup END
 
 """"""""""
 " Markdown
 """"""""""
-autocmd Filetype markdown setlocal
-            \ tabstop=4
-            \ expandtab
-            \ shiftwidth=4
-            \ softtabstop=4
-            \ textwidth=80
-            \ spell
+augroup markdown_settings
+    autocmd!
+    autocmd Filetype markdown setlocal
+                \ tabstop=4
+                \ expandtab
+                \ shiftwidth=4
+                \ softtabstop=4
+                \ textwidth=80
+                \ spell
+augroup END
 
 Plug 'tpope/vim-markdown',  { 'for': 'markdown' }
 
@@ -478,132 +559,169 @@ let g:markdown_fenced_languages = [
             \ 'haskell'
             \ ]
 
+"""""""""
+" VimWiki
+"""""""""
+Plug 'vimwiki/vimwiki'
+let g:vimwiki_list = [{'path': '~/vimwiki/',
+                      \ 'syntax': 'markdown',
+                      \ 'ext': '.md'}]
+
+augroup vimwiki_settings
+    autocmd!
+    au BufNewFile ~/vimwiki/diary/*.md :silent 0r
+                \   !~/vimwiki/bin/mk-diary '%'
+augroup END
+
 
 """
 " C
 """
-autocmd BufNewFile,BufReadPost *.c set filetype=c
-autocmd BufNewFile,BufReadPost *.h set filetype=c
-autocmd FileType c setlocal
-            \ tabstop=8
-            \ noexpandtab
-            \ shiftwidth=8
-            \ softtabstop=8
+augroup c_settings
+    autocmd!
+    autocmd BufNewFile,BufReadPost *.c set filetype=c
+    autocmd BufNewFile,BufReadPost *.h set filetype=c
+    autocmd FileType c setlocal
+                \ tabstop=8
+                \ noexpandtab
+                \ shiftwidth=8
+                \ softtabstop=8
+augroup END
 
 """"""""""
 " Makefile
 """"""""""
-autocmd FileType make setlocal noexpandtab
+augroup make_settings
+    autocmd!
+    autocmd FileType make setlocal noexpandtab
+augroup END
 
 """""""
 " OCaml
 """""""
-autocmd Filetype ocaml setlocal
-            \ tabstop=2
-            \ expandtab
-            \ shiftwidth=2
-            \ softtabstop=2
-            \ commentstring=(*%s*)
+augroup ocaml_settings
+    autocmd!
+    autocmd Filetype ocaml setlocal
+                \ tabstop=2
+                \ expandtab
+                \ shiftwidth=2
+                \ softtabstop=2
+                \ commentstring=(*%s*)
+augroup END
 
 """""""""
 " Haskell
 """""""""
-autocmd Filetype haskell setlocal
-            \ tabstop=2
-            \ expandtab
-            \ shiftwidth=2
-            \ softtabstop=2
+augroup haskell_settings
+    autocmd!
+    autocmd Filetype haskell setlocal
+                \ tabstop=2
+                \ expandtab
+                \ shiftwidth=2
+                \ softtabstop=2
+augroup END
 
 """"""
 " YAML
 """"""
-autocmd Filetype yaml setlocal
-            \ tabstop=2
-            \ expandtab
-            \ shiftwidth=2
-            \ softtabstop=2
+augroup yaml_settings
+    autocmd!
+    autocmd Filetype yaml setlocal
+                \ tabstop=2
+                \ expandtab
+                \ shiftwidth=2
+                \ softtabstop=2
+augroup END
+
 """""""""""
 " Javscript
 """""""""""
-autocmd Filetype javascript setlocal
-            \ tabstop=2
-            \ expandtab
-            \ shiftwidth=2
-            \ softtabstop=2
+augroup javascript_settings
+    autocmd!
+    autocmd Filetype javascript setlocal
+                \ tabstop=2
+                \ expandtab
+                \ shiftwidth=2
+                \ softtabstop=2
+augroup END
 
 """"
 " Go
 """"
-autocmd Filetype go setlocal
-            \ tabstop=2
-            \ expandtab
-            \ shiftwidth=2
-            \ softtabstop=2
-Plug 'fatih/vim-go',    { 'for': 'go' } "{ 'do': ':GoUpdateBinaries' }
+augroup go_settings
+    autocmd!
+    autocmd Filetype go setlocal
+                \ tabstop=2
+                \ expandtab
+                \ shiftwidth=2
+                \ softtabstop=2
+augroup END
 
-"""""
-" Bib
-"""""
-autocmd Filetype bib setlocal
-            \ tabstop=2
-            \ expandtab
-            \ shiftwidth=2
-            \ softtabstop=2
+Plug 'fatih/vim-go',    { 'for': 'go' } "{ 'do': ':GoUpdateBinaries' }
 
 """""
 " Coq
 """""
-autocmd BufNewFile,BufReadPost *.v set filetype=coq
-autocmd Filetype coq setlocal
-            \ tabstop=2
-            \ expandtab
-            \ shiftwidth=2
-            \ softtabstop=2
-            \ commentstring=(*%s*)
-            \ formatoptions=cqort
-            \ comments=sr:(*,mb:*,ex:*)
+augroup coq_settings
+    autocmd!
+    autocmd BufNewFile,BufReadPost *.v set filetype=coq
+    autocmd Filetype coq setlocal
+                \ tabstop=2
+                \ expandtab
+                \ shiftwidth=2
+                \ softtabstop=2
+                \ commentstring=(*%s*)
+                \ formatoptions=cqort
+                \ comments=sr:(*,mb:*,ex:*)
+augroup END
 
 Plug 'let-def/vimbufsync', { 'for': 'coq' }
 Plug 'whonore/coqtail', { 'for': 'coq' }
 
 if !has('nvim')
-    autocmd Filetype coq nnoremap <buffer> <c-c>.            :CoqToLine<CR>
-    autocmd Filetype coq inoremap <buffer> <c-c>.       <Esc>:CoqToLine<CR>
+augroup coqtail_mappings
+    autocmd!
 
-    autocmd Filetype coq nnoremap <buffer> <c-c>l            m`$:CoqToLine<CR>``
-    autocmd Filetype coq inoremap <buffer> <c-c>l       <Esc>m`$:CoqToLine<CR>``
+    autocmd Filetype coq
+        \   nmap <buffer> <c-c>x        :CoqStart<CR>
+        \|  nmap <buffer> <c-c>z        :CoqStop<CR>
 
-    autocmd Filetype coq nnoremap <buffer> <c-c><CR>         m`$:CoqToLine<CR>``
-    autocmd Filetype coq inoremap <buffer> <c-c><CR>    <Esc>m`$:CoqToLine<CR>``
+    autocmd Filetype coq
+        \   nnoremap <buffer> <c-c>.             :CoqToLine<CR>
+        \|  inoremap <buffer> <c-c>.        <Esc>:CoqToLine<CR>
+        \|  nnoremap <buffer> <c-c>l             m`$:CoqToLine<CR>``
+        \|  inoremap <buffer> <c-c>l        <Esc>m`$:CoqToLine<CR>``
+        \|  nnoremap <buffer> <c-c><CR>          m`$:CoqToLine<CR>``
+        \|  inoremap <buffer> <c-c><CR>     <Esc>m`$:CoqToLine<CR>``
 
-    autocmd Filetype coq nmap <buffer> <c-c>j        :CoqNext<CR>
-    autocmd Filetype coq imap <buffer> <c-c>j   <Esc>:CoqNext<CR>i
-    autocmd Filetype coq nmap <buffer> <c-c>k        :CoqUndo<CR>
-    autocmd Filetype coq imap <buffer> <c-c>k   <Esc>:CoqUndo<CR>i
-    autocmd Filetype coq nmap <buffer> <c-c>h        :CoqJumpToEnd<CR>
-    autocmd Filetype coq imap <buffer> <c-c>h   <Esc>:CoqJumpToEnd<CR>
+    autocmd Filetype coq
+        \   nmap <buffer> <c-c>j                 :CoqNext<CR>
+        \|  imap <buffer> <c-c>j            <Esc>:CoqNext<CR>i
+        \|  nmap <buffer> <c-c>k                 :CoqUndo<CR>
+        \|  imap <buffer> <c-c>k            <Esc>:CoqUndo<CR>i
+        \|  nmap <buffer> <c-c>h                 :CoqJumpToEnd<CR>
+        \|  imap <buffer> <c-c>h            <Esc>:CoqJumpToEnd<CR>
+        \|  nmap <buffer> <c-c><space>           :CoqGotoGoal!<CR>
+        \|  imap <buffer> <c-c><space>      <Esc>:CoqGotoGoal!<CR>i
 
-    autocmd Filetype coq nmap <buffer> <c-c><space>       :CoqGotoGoal!<CR>
-    autocmd Filetype coq imap <buffer> <c-c><space>  <Esc>:CoqGotoGoal!<CR>i
+    " c => :Coq Check
+    " a => :Coq About
+    " p => :Coq Print
+    " l => :Coq Locate
+    " s => :Coq Search
+    autocmd Filetype coq
+        \   nmap <buffer> <c-c>c        <leader>ch
+        \|  imap <buffer> <c-c>c   <Esc><leader>chi
+        \|  nmap <buffer> <c-c>a        <leader>ca
+        \|  imap <buffer> <c-c>a   <Esc><leader>cai
+        \|  nmap <buffer> <c-c>p        <leader>cp
+        \|  imap <buffer> <c-c>p   <Esc><leader>cpi
+        \|  nmap <buffer> <c-c>n        <leader>cf
+        \|  imap <buffer> <c-c>n   <Esc><leader>cfi
+        \|  nmap <buffer> <c-c>s        <leader>cs
+        \|  imap <buffer> <c-c>s   <Esc><leader>csi
 
-    ":Coq Check
-    autocmd Filetype coq nmap <buffer> <c-c>c        <leader>ch
-    autocmd Filetype coq imap <buffer> <c-c>c   <Esc><leader>chi
-    ":Coq About
-    autocmd Filetype coq nmap <buffer> <c-c>a        <leader>ca
-    autocmd Filetype coq imap <buffer> <c-c>a   <Esc><leader>cai
-    ":Coq Print
-    autocmd Filetype coq nmap <buffer> <c-c>p        <leader>cp
-    autocmd Filetype coq imap <buffer> <c-c>p   <Esc><leader>cpi
-    ":Coq Locate
-    autocmd Filetype coq nmap <buffer> <c-c>n        <leader>cf
-    autocmd Filetype coq imap <buffer> <c-c>n   <Esc><leader>cfi
-    ":Coq Search
-    autocmd Filetype coq nmap <buffer> <c-c>s        <leader>cs
-    autocmd Filetype coq imap <buffer> <c-c>s   <Esc><leader>csi
-
-    autocmd Filetype coq nmap <buffer> <c-c>x        :CoqStart<CR>
-    autocmd Filetype coq nmap <buffer> <c-c>z        :CoqStop<CR>
+augroup END
 else
     let g:coqtail_nomap = 1
 endif
@@ -611,25 +729,35 @@ endif
 """"""
 " Lean
 """"""
-autocmd BufNewFile,BufReadPost *.lean set filetype=lean
 " if !exists('g:vscode')
 Plug 'leanprover/lean.vim', { 'for': 'lean' }
 " endif
 
-autocmd Filetype lean setlocal
-            \ tabstop=2
-            \ expandtab
-            \ shiftwidth=2
-            \ softtabstop=2
-            \ commentstring=--\ %s
-            \ formatoptions=cqort
-            \ comments=s1fl:/-,mb:-,ex:-/,:--
+augroup lean_settings
+    autocmd!
+    autocmd BufNewFile,BufReadPost *.lean set filetype=lean
+    autocmd Filetype lean setlocal
+                \ tabstop=2
+                \ expandtab
+                \ shiftwidth=2
+                \ softtabstop=2
+                \ commentstring=--\ %s
+                \ formatoptions=cqort
+                \ comments=s1fl:/-,mb:-,ex:-/,:--
+augroup END
 
 """""""
 " Idris
 """""""
 
 Plug 'idris-hackers/idris-vim', { 'for': 'idris' }
+
+"""""""
+" Shell
+"""""""
+
+Plug 'z0mbix/vim-shfmt', { 'for': 'sh' }
+
 
 """"""""""""""
 " Scratch Area
@@ -647,9 +775,6 @@ Plug 'idris-hackers/idris-vim', { 'for': 'idris' }
 " Plug 'reedes/vim-litecorrect'
 "   https://github.com/reedes/vim-litecorrect
 "
-" Plug 'andymass/vim-matchup'
-"   https://github.com/andymass/vim-matchup
-"
 " Plug 'metakirby5/codi.vim'
 "   https://github.com/metakirby5/codi.vim
 "
@@ -664,6 +789,25 @@ Plug 'idris-hackers/idris-vim', { 'for': 'idris' }
 "
 " Plug 'Shougo/denite.vim'
 "   https://github.com/Shougo/denite.nvim
+"
+" Plug 'Konfekt/FastFold'
+"   https://github.com/Konfekt/FastFold
+"
+" Plug 'terryma/vim-multiple-cursors'
+"   https://github.com/terryma/vim-multiple-cursors
+"
+" Plug 'dyng/ctrlsf.vim'
+"   https://github.com/dyng/ctrlsf.vim
+"
+" Plug 'wellle/targets/vim' 
+"   https://github.com/wellle/targets.vim
+"
+" Plug 'itchyny/calendar.vim'
+"   https://github.com/itchyny/calendar.vim
+"
+" Plug 'fmoralesc/vim-pad'
+"   https://github.com/fmoralesc/vim-pad
+
 
 call plug#end()
 
