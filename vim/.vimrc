@@ -282,6 +282,7 @@ if !exists('g:vscode')
 endif
 
 if !exists('g:vscode')
+    Plug 'duggiefresh/vim-easydir'
     Plug 'scrooloose/nerdtree'
 
     noremap <C-w><space> :NERDTreeToggle<CR>
@@ -403,10 +404,13 @@ set wrap
 
 set nojoinspaces
 
-function TrimTrailing()
-    substitute/ *$//g
-endfunction
-cnoreabbrev tt call TrimTrailing()
+augroup trim_trailing_def
+    autocmd!
+    function TrimTrailing()
+        substitute/ *$//g
+    endfunction
+    cnoreabbrev tt call TrimTrailing()
+augroup END
 
 if !exists('g:vscode')
     " Deliberately avoid using /tmp/ to avoid leaking data on shared computer
@@ -807,6 +811,13 @@ Plug 'z0mbix/vim-shfmt', { 'for': 'sh' }
 "
 " Plug 'fmoralesc/vim-pad'
 "   https://github.com/fmoralesc/vim-pad
+"
+" Plug 'glacambre/firenvim'
+"   https://github.com/glacambre/firenvim
+"
+" Plug 'sheerun/vim-polyglot'
+"   https://github.com/sheerun/vim-polyglot
+
 
 
 call plug#end()
