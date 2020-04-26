@@ -82,11 +82,7 @@ Plug 'tpope/vim-repeat'
 """"""""""""
 " Appearance
 """"""""""""
-syntax enable
-colorscheme ron
-set background=dark
-
-set noeb vb t_vb=
+set noeb vb t_vb= " No error bell
 
 set nu
 set rnu
@@ -94,38 +90,68 @@ set ruler
 set scrolloff=5
 set display+=lastline
 
-highlight ColorColumn ctermbg=235 guibg=#262626
-set colorcolumn=+1,+2
-cnoreabbrev overflow    /\%>80v./+
-cnoreabbrev of          /\%>80v./+
-
 augroup cursor_underline
     autocmd!
     autocmd InsertEnter * set cul
     autocmd InsertLeave * set nocul
 augroup END
 
+syntax enable
+set background=dark
+" colorscheme ron   " load this last to trigger autocmds
+
 " If terminal supports displaying italics, we need these key sequences
 let t_ZH="\e[3m"
 let t_ZR="\e[23m"
 
-" Otherwise, we just unugly the italics highlighting
-highlight htmlItalic
-            \ term=standout
-            \ ctermfg=121
-            \ guifg=Green
-highlight htmlBoldItalic
-            \ term=bold,standout
-            \ cterm=bold ctermfg=121
-            \ gui=bold guifg=Green
-highlight htmlUnderlineItalic
-            \ term=underline,standout
-            \ cterm=underline ctermfg=121
-            \ gui=underline guifg=Green
-highlight htmlBoldUnderlineItalic
-            \ term=underline,bold,standout
-            \ cterm=underline,bold ctermfg=121
-            \ gui=underline,bold guifg=Green
+set colorcolumn=+1,+2
+cnoreabbrev overflow    /\%>80v./+
+cnoreabbrev of          /\%>80v./+
+
+augroup color_tweaks
+    autocmd!
+    autocmd ColorScheme *
+        \   highlight Conceal ctermfg=NONE ctermbg=NONE
+        \|  highlight SignColumn ctermbg=NONE cterm=NONE guibg=NONE gui=NONE
+        \|  highlight ColorColumn ctermbg=234 guibg=#262626
+        \|  highlight Folded    ctermbg=234 guibg=234
+        \|  highlight FoldColumn    ctermbg=234 guibg=234
+        \|  highlight Search    cterm=underline,bold ctermfg=blue ctermbg=234
+        \|  highlight IncSearch cterm=underline,bold ctermfg=cyan ctermbg=239
+        \|  highlight Pmenu         ctermbg=234 ctermfg=15 guibg=234 guifg=15
+        \|  highlight PmenuSbar     ctermbg=240 ctermfg=15 guibg=234 guifg=15
+        \|  highlight PmenuThumb    ctermbg=240 ctermfg=15 guibg=240 guifg=15
+        \|  highlight PmenuSel      ctermbg=240 ctermfg=15 guibg=240 guifg=15
+        \|  highlight PmenuSel      cterm=bold gui=bold
+        \|  highlight htmlItalic                term=standout
+        \                                       ctermfg=121
+        \                                       guifg=Green
+        \|  highlight htmlBoldItalic            term=bold,standout
+        \                                       cterm=bold ctermfg=121
+        \                                       gui=bold guifg=Green
+        \|  highlight htmlUnderlineItalic       term=underline,standout
+        \                                       cterm=underline ctermfg=121
+        \                                       gui=underline guifg=Green
+        \|  highlight htmlBoldUnderlineItalic   term=underline,bold,standout
+        \                                       cterm=underline,bold ctermfg=121
+        \                                       gui=underline,bold guifg=Green
+        \|  highlight SpellBad      ctermbg=NONE ctermfg=red
+        \                           guibg=NONE   guifg=red      gui=undercurl
+        \|  highlight SpellRare     ctermbg=NONE ctermfg=yellow
+        \                           guibg=NONE   guifg=yellow   gui=undercurl
+        \|  highlight SpellCap      ctermbg=NONE ctermfg=cyan
+        \                           guibg=NONE   guifg=cyan     gui=undercurl
+        \|  highlight SpellLocal    ctermbg=NONE ctermfg=yellow
+        \                           guibg=NONE   guifg=yellow   gui=undercurl
+        \|  highlight DiffAdd       ctermbg=17 cterm=bold
+        \                           guibg=17   gui=bold
+        \|  highlight DiffDelete    ctermbg=234 ctermfg=242
+        \                           guibg=234   guifg=242
+        \|  highlight DiffChange    ctermbg=234
+        \                           guibg=234
+        \|  highlight DiffText      ctermbg=234 cterm=underline
+        \                           guibg=234   gui=undercurl
+augroup END
 
 set modeline
 set modelines=5
@@ -141,12 +167,9 @@ set list lcs=tab:\┆\ " <-- space
 set conceallevel=2
 
 if !exists('g:vscode')
-    " Plug 'junegunn/goyo.vim'
-    " This messes with color schemes
-    " -- see https://github.com/junegunn/goyo.vim/issues/156
-
-    Plug 'junegunn/limelight.vim'
-    cnoreabbrev ll    Limelight!!
+    Plug 'junegunn/goyo.vim',       { 'on': 'Goyo' }
+    Plug 'junegunn/limelight.vim',  { 'on': 'Limelight' }
+    nnoremap <leader>ll :Limelight!!<CR>
 
     let g:limelight_conceal_ctermfg = 'gray'
     let g:limelight_conceal_ctermfg = 240
@@ -180,10 +203,18 @@ if !exists('g:vscode')
     let g:buftabline_indicators = 1
     let g:buftabline_numbers = 2
 
-    hi BufTabLineCurrent ctermfg=231 ctermbg=240 guifg=#ffffff guibg=#585858
-    hi BufTabLineActive  ctermfg=231 ctermbg=235 guifg=#bcbcbc guibg=#262626
-    hi BufTabLineHidden  ctermfg=240 ctermbg=235 guifg=#262626 guibg=#262626
-    hi BufTabLineFill    ctermfg=236 ctermbg=235 guifg=#303030 guibg=#262626
+    augroup buftabline_highlight
+        autocmd!
+        autocmd ColorScheme *
+            \  highlight BufTabLineCurrent
+            \       ctermfg=231 ctermbg=240 guifg=#ffffff guibg=#585858
+            \| highlight BufTabLineActive
+            \       ctermfg=231 ctermbg=234 guifg=#bcbcbc guibg=#262626
+            \| highlight BufTabLineHidden
+            \       ctermfg=240 ctermbg=234 guifg=#262626 guibg=#262626
+            \| highlight BufTabLineFill
+            \       ctermfg=236 ctermbg=234 guifg=#303030 guibg=#262626
+    augroup END
 
     nmap <C-w>1 <Plug>BufTabLine.Go(1)
     nmap <C-w>2 <Plug>BufTabLine.Go(2)
@@ -204,7 +235,7 @@ endif
 set backspace=indent,eol,start
 
 set hlsearch    " highlight search
-set incsearch   " incremental search
+set noincsearch " no incremental search -- to unpredictable
 set ignorecase  " ignores case
 set smartcase   " smart case
 set showmatch   " Show matching brackets
@@ -243,20 +274,8 @@ noremap <C-w>q <Esc>:bd<CR>
 Plug 'andymass/vim-matchup'
 augroup matchup_matchparen_highlight
   autocmd!
-  autocmd ColorScheme * hi MatchParen guifg=red
+  autocmd ColorScheme * highlight MatchParen guifg=red
 augroup END
-
-Plug 'itchyny/vim-cursorword'
-let g:cursorword_delay = 369
-let b:cursorword = 1
-function! ToggleCursorWord()
-    if b:cursorword
-        let b:cursorword = 0
-    else
-        let b:cursorword = 1
-    endif
-endfunction
-cnoreabbrev csw call ToggleCursorWord()
 
 Plug 'justinmk/vim-sneak'
 let g:sneak#label = 1
@@ -264,11 +283,29 @@ let g:sneak#label = 1
 map f <Plug>Sneak_s
 map F <Plug>Sneak_S
 
+Plug 'junegunn/vim-after-object'        " motions for moving after characters
+augroup vim_after_hook
+    autocmd VimEnter * call after_object#enable('=', ':', '-', '#', ' ')
+    " e.g. ya= yanks after first '='; daa= deletes after second '='
+augroup END
+
 if !exists('g:vscode')
     Plug 'psliwka/vim-smoothie'
     let g:smoothie_base_speed = 42
     nnoremap <silent> <C-j>      :<C-U>call smoothie#downwards() <CR>
     nnoremap <silent> <C-k>      :<C-U>call smoothie#upwards()   <CR>
+
+    Plug 'itchyny/vim-cursorword'
+    let g:cursorword_delay = 369
+    let b:cursorword = 1
+    function! ToggleCursorWord()
+        if b:cursorword
+            let b:cursorword = 0
+        else
+            let b:cursorword = 1
+        endif
+    endfunction
+    cnoreabbrev csw call ToggleCursorWord()
 endif
 
 if !exists('g:vscode')
@@ -283,50 +320,47 @@ endif
 
 if !exists('g:vscode')
     Plug 'duggiefresh/vim-easydir'
-    Plug 'scrooloose/nerdtree'
 
+"     Plug 'scrooloose/nerdtree'
+"     augroup nerdtree_triggers
+"         autocmd!
+"         " Open NERDTree upon startup
+"         autocmd StdinReadPre * let s:std_in=1
+"         autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+"         " Open NERDTree when opening a directory
+"         autocmd StdinReadPre * let s:std_in=1
+"         autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) &&
+"                     \ !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p |
+"                     \ ene | exe 'cd '.argv()[0] | endif
+
+"         " Close vim if NERDTree the only window left
+"         autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") &&
+"                     \ b:NERDTree.isTabTree()) | q | endif
+"     augroup END
+
+    Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
     noremap <C-w><space> :NERDTreeToggle<CR>
-
-    augroup nerdtree_triggers
-        autocmd!
-        " Open NERDTree upon startup
-        autocmd StdinReadPre * let s:std_in=1
-        autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-
-        " Open NERDTree when opening a directory
-        autocmd StdinReadPre * let s:std_in=1
-        autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) &&
-                    \ !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p |
-                    \ ene | exe 'cd '.argv()[0] | endif
-
-        " Close vim if NERDTree the only window left
-        autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") &&
-                    \ b:NERDTree.isTabTree()) | q | endif
-    augroup END
 
     Plug 'Xuyuanp/nerdtree-git-plugin'
 endif
 
 if !exists('g:vscode')
-    Plug 'airblade/vim-gitgutter'
-    let g:gitgutter_map_keys = 0
-    nmap <c-g><c-g> <Plug>(GitGutterPreviewHunk)
-    nmap <c-g>g     <Plug>(GitGutterPreviewHunk)
-    nmap <c-g>n     <Plug>(GitGutterNextHunk)
-    nmap <c-g>p     <Plug>(GitGutterPrevHunk)
     set updatetime=100
-    let g:gitgutter_override_sign_column_highlight = 0
-    highlight SignColumn        guibg=#073642 ctermbg=0
-    highlight GitGutterAdd      guibg=#073642 ctermbg=0 guifg=#009900 ctermfg=2
-    highlight GitGutterChange   guibg=#073642 ctermbg=0 guifg=#bbbb00 ctermfg=3
-    highlight GitGutterDelete   guibg=#073642 ctermbg=0 guifg=#ff2222 ctermfg=1
+
+    if has('nvim') || has('patch-8.0.902')
+        Plug 'mhinz/vim-signify'
+    else
+        Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
+    endif
+
+    nnoremap <leader>gh :SignifyToggleHighlight<CR>
+    nnoremap <leader>gf :SignifyFold!<CR>
+    nnoremap <leader>gd :SignifyHunkDiff<CR>
+    nnoremap <leader>gu :SignifyHunkUndo<CR>
 
     Plug 'tpope/vim-fugitive'
-
     Plug 'junegunn/gv.vim'
-    nnoremap <c-g>vb :GV
-    nnoremap <c-g>vc :GV!
-    nnoremap <c-g>vf :GV?
 endif
 
 if !exists('g:vscode')
@@ -343,11 +377,9 @@ if !exists('g:vscode')
     nnoremap K :Ack! "\b<C-R><C-W>\b" % <CR>
 
     nnoremap <Leader>ag :Ack!<Space>
-    inoremap <Leader>ag <Esc>:Ack!<Space>
     vnoremap <Leader>ag <Esc>:Ack!<Space>
 
     nnoremap <Leader>aa :AckAdd!<Space>
-    inoremap <Leader>aa <Esc>:AckAdd!<Space>
     vnoremap <Leader>aa <Esc>:AckAdd!<Space>
 endif
 
@@ -403,6 +435,10 @@ set textwidth=80
 set wrap
 
 set nojoinspaces
+
+nnoremap <leader>d :put =strftime(\"%Y-%m-%d\")<CR>
+inoremap <C-G>d <C-R>=strftime("%Y-%m-%d")<CR>
+inoremap <C-G><TAB> <C-F>
 
 augroup trim_trailing_def
     autocmd!
@@ -480,10 +516,10 @@ nnoremap <c-l> :SidewaysRight<cr>
 Plug 'matze/vim-move'               " move things
 
 if !exists('g:vscode')
-    Plug 'tpope/vim-rsi'            " readline style commands in insert mode
-    Plug 'tpope/vim-eunuch'         " UNIX-like functionality in Vim
     Plug 'junegunn/vim-peekaboo'    " shows yank buffers
-
+    Plug 'tpope/vim-eunuch'         " UNIX-like functionality in Vim
+    Plug 'tpope/vim-rsi'            " readline style commands in insert mode
+    inoremap <C-D> <C-D>
 endif
 
 
@@ -499,8 +535,6 @@ augroup latex_settings
                 \ softtabstop=2
                 \ textwidth=80
                 \ spell
-    autocmd Filetype tex highlight Conceal ctermfg=NONE ctermbg=NONE
-        " otherwise rendered symbols render with a weird grey background color
 augroup latex_settings
 
 Plug 'lervag/vimtex',   { 'for': 'tex' }
@@ -700,30 +734,16 @@ augroup coqtail_mappings
 
     autocmd Filetype coq
         \   nmap <buffer> <c-c>j                 :CoqNext<CR>
-        \|  imap <buffer> <c-c>j            <Esc>:CoqNext<CR>i
         \|  nmap <buffer> <c-c>k                 :CoqUndo<CR>
-        \|  imap <buffer> <c-c>k            <Esc>:CoqUndo<CR>i
         \|  nmap <buffer> <c-c>h                 :CoqJumpToEnd<CR>
-        \|  imap <buffer> <c-c>h            <Esc>:CoqJumpToEnd<CR>
         \|  nmap <buffer> <c-c><space>           :CoqGotoGoal!<CR>
-        \|  imap <buffer> <c-c><space>      <Esc>:CoqGotoGoal!<CR>i
 
-    " c => :Coq Check
-    " a => :Coq About
-    " p => :Coq Print
-    " l => :Coq Locate
-    " s => :Coq Search
     autocmd Filetype coq
-        \   nmap <buffer> <c-c>c        <leader>ch
-        \|  imap <buffer> <c-c>c   <Esc><leader>chi
-        \|  nmap <buffer> <c-c>a        <leader>ca
-        \|  imap <buffer> <c-c>a   <Esc><leader>cai
-        \|  nmap <buffer> <c-c>p        <leader>cp
-        \|  imap <buffer> <c-c>p   <Esc><leader>cpi
-        \|  nmap <buffer> <c-c>n        <leader>cf
-        \|  imap <buffer> <c-c>n   <Esc><leader>cfi
-        \|  nmap <buffer> <c-c>s        <leader>cs
-        \|  imap <buffer> <c-c>s   <Esc><leader>csi
+        \   nmap <buffer> <c-c>c    <leader>ch  " :Coq Check
+        \|  nmap <buffer> <c-c>a    <leader>ca  " :Coq About
+        \|  nmap <buffer> <c-c>p    <leader>cp  " :Coq Print
+        \|  nmap <buffer> <c-c>n    <leader>cf  " :Coq Locate
+        \|  nmap <buffer> <c-c>s    <leader>cs  " :Coq Search
 
 augroup END
 else
@@ -818,8 +838,8 @@ Plug 'z0mbix/vim-shfmt', { 'for': 'sh' }
 " Plug 'sheerun/vim-polyglot'
 "   https://github.com/sheerun/vim-polyglot
 
-
-
 call plug#end()
+
+colorscheme ron   " load this last to trigger autocmds
 
 " vim: set ts=4 sw=4 tw=80 et :
