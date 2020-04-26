@@ -105,8 +105,7 @@ let t_ZH="\e[3m"
 let t_ZR="\e[23m"
 
 set colorcolumn=+1,+2
-cnoreabbrev overflow    /\%>80v./+
-cnoreabbrev of          /\%>80v./+
+nnoremap <leader>of m`/\%>80v./+<CR>``
 
 augroup color_tweaks
     autocmd!
@@ -306,24 +305,6 @@ endif
 
 if !exists('g:vscode')
     Plug 'duggiefresh/vim-easydir'
-
-"     Plug 'scrooloose/nerdtree'
-"     augroup nerdtree_triggers
-"         autocmd!
-"         " Open NERDTree upon startup
-"         autocmd StdinReadPre * let s:std_in=1
-"         autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-
-"         " Open NERDTree when opening a directory
-"         autocmd StdinReadPre * let s:std_in=1
-"         autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) &&
-"                     \ !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p |
-"                     \ ene | exe 'cd '.argv()[0] | endif
-
-"         " Close vim if NERDTree the only window left
-"         autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") &&
-"                     \ b:NERDTree.isTabTree()) | q | endif
-"     augroup END
 
     Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
     noremap <C-w><space> :NERDTreeToggle<CR>
