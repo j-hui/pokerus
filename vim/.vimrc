@@ -110,23 +110,37 @@ nnoremap <leader>of m`/\%>80v./+<CR>``
 augroup color_tweaks
     autocmd!
     autocmd ColorScheme *
-        \   highlight Conceal ctermfg=NONE ctermbg=NONE
+        \   highlight clear Conceal
         \|  highlight clear VertSplit
-        \|  highlight SignColumn ctermbg=NONE cterm=NONE guibg=NONE gui=NONE
-        \|  highlight ColorColumn ctermbg=234 guibg=#262626
-        \|  highlight Folded    ctermbg=234 guibg=234
-        \|  highlight FoldColumn    ctermbg=234 guibg=234
-        \|  highlight Search    cterm=underline,bold ctermfg=blue ctermbg=234
+        \|  highlight SignColumn    ctermbg=NONE cterm=NONE guibg=NONE gui=NONE
+        \|  highlight ColorColumn   ctermbg=234 guibg=#1c1c1c
+        \|  highlight Folded        ctermbg=234 guibg=#1c1c1c
+        \|  highlight FoldColumn    ctermbg=234 guibg=#1c1c1c
+
+    autocmd ColorScheme *
+        \   highlight Search    cterm=underline,bold ctermfg=blue ctermbg=234
+        \                       gui=underline,bold   guifg=blue guibg=#1c1c1c
         \|  highlight IncSearch cterm=underline,bold ctermfg=cyan ctermbg=239
-        \|  highlight Pmenu         ctermbg=234 ctermfg=15 guibg=234 guifg=15
-        \|  highlight PmenuSbar     ctermbg=240 ctermfg=15 guibg=234 guifg=15
-        \|  highlight PmenuThumb    ctermbg=240 ctermfg=15 guibg=240 guifg=15
-        \|  highlight PmenuSel      ctermbg=240 ctermfg=15 guibg=240 guifg=15
-        \|  highlight PmenuSel      cterm=bold gui=bold
-        \|  highlight TabLineSel    ctermfg=231 ctermbg=240
-        \|  highlight TabLine       ctermfg=240 ctermbg=234
-        \|  highlight TabLineFill   ctermfg=234 ctermbg=234
-        \|  highlight htmlItalic                term=standout
+        \                       gui=underline,bold   guifg=cyan guibg=#4e4e4e
+
+    autocmd ColorScheme *
+        \   highlight Pmenu         ctermbg=234 ctermfg=white
+        \                           guibg=#1c1c1c guifg=white
+        \|  highlight PmenuSbar     ctermbg=240 ctermfg=white
+        \                           guibg=#585858 guifg=white
+        \|  highlight PmenuThumb    ctermbg=240 ctermfg=white
+        \                           guibg=#585858 guifg=white
+        \|  highlight PmenuSel      ctermbg=240 ctermfg=white cterm=bold
+        \                           guibg=#585858 guifg=white gui=bold
+        \|  highlight TabLineSel    ctermbg=240 ctermfg=white
+        \                           guibg=#1c1c1c guifg=white
+        \|  highlight TabLine       ctermbg=234 ctermfg=240 
+        \                           guibg=#1c1c1c guifg=#585858
+        \|  highlight TabLineFill   ctermfg=234
+        \                           guibg=#1c1c1c
+
+    autocmd ColorScheme *
+        \   highlight htmlItalic                term=standout
         \                                       ctermfg=121
         \                                       guifg=Green
         \|  highlight htmlBoldItalic            term=bold,standout
@@ -138,7 +152,9 @@ augroup color_tweaks
         \|  highlight htmlBoldUnderlineItalic   term=underline,bold,standout
         \                                       cterm=underline,bold ctermfg=121
         \                                       gui=underline,bold guifg=Green
-        \|  highlight SpellBad      ctermbg=NONE ctermfg=red
+
+    autocmd ColorScheme *
+        \   highlight SpellBad      ctermbg=NONE ctermfg=red
         \                           guibg=NONE   guifg=red      gui=undercurl
         \|  highlight SpellRare     ctermbg=NONE ctermfg=yellow
         \                           guibg=NONE   guifg=yellow   gui=undercurl
@@ -146,14 +162,15 @@ augroup color_tweaks
         \                           guibg=NONE   guifg=cyan     gui=undercurl
         \|  highlight SpellLocal    ctermbg=NONE ctermfg=yellow
         \                           guibg=NONE   guifg=yellow   gui=undercurl
-        \|  highlight DiffAdd       ctermbg=17 cterm=bold
-        \                           guibg=17   gui=bold
-        \|  highlight DiffDelete    ctermbg=234 ctermfg=242
-        \                           guibg=234   guifg=242
+    autocmd ColorScheme *
+        \   highlight DiffAdd       ctermbg=17      cterm=bold
+        \                           guibg=#00005f   gui=bold
+        \|  highlight DiffDelete    ctermbg=234     ctermfg=242
+        \                           guibg=#1c1c1c   guifg=#6c6c6c
         \|  highlight DiffChange    ctermbg=234
-        \                           guibg=234
-        \|  highlight DiffText      ctermbg=234 cterm=underline
-        \                           guibg=234   gui=undercurl
+        \                           guibg=#1c1c1c
+        \|  highlight DiffText      ctermbg=234     cterm=underline
+        \                           guibg=#1c1c1c   gui=undercurl
 augroup END
 
 set modeline
