@@ -112,6 +112,7 @@ augroup color_tweaks
     autocmd!
     autocmd ColorScheme *
         \   highlight Conceal ctermfg=NONE ctermbg=NONE
+        \|  highlight clear VertSplit
         \|  highlight SignColumn ctermbg=NONE cterm=NONE guibg=NONE gui=NONE
         \|  highlight ColorColumn ctermbg=234 guibg=#262626
         \|  highlight Folded    ctermbg=234 guibg=234
@@ -123,6 +124,9 @@ augroup color_tweaks
         \|  highlight PmenuThumb    ctermbg=240 ctermfg=15 guibg=240 guifg=15
         \|  highlight PmenuSel      ctermbg=240 ctermfg=15 guibg=240 guifg=15
         \|  highlight PmenuSel      cterm=bold gui=bold
+        \|  highlight TabLineSel    ctermfg=231 ctermbg=240
+        \|  highlight TabLine       ctermfg=240 ctermbg=234
+        \|  highlight TabLineFill   ctermfg=234 ctermbg=234
         \|  highlight htmlItalic                term=standout
         \                                       ctermfg=121
         \                                       guifg=Green
@@ -177,14 +181,9 @@ if !exists('g:vscode')
     let g:limelight_conceal_guifg = '#777777'
     let g:limelight_default_coefficient = 0.7
     let g:limelight_paragraph_span = 1
-    " Beginning/end of paragraph
-    "   When there's no empty line between the paragraphs
-    "   and each paragraph starts with indentation
-    let g:limelight_bop = '^\s'
-    let g:limelight_eop = '\ze\n^\s'
-    " Highlighting priority (default: 10)
-    "   Set it to -1 not to overrule hlsearch
-    let g:limelight_priority = -1
+    let g:limelight_bop = '^\s'         " beginning of paragraph
+    let g:limelight_eop = '\ze\n^\s'    " end of paragraph
+    let g:limelight_priority = -1       " don't overrule hlsearch
 endif
 
 if !exists('g:vscode')
@@ -202,19 +201,6 @@ if !exists('g:vscode')
     Plug 'ap/vim-buftabline'
     let g:buftabline_indicators = 1
     let g:buftabline_numbers = 2
-
-    augroup buftabline_highlight
-        autocmd!
-        autocmd ColorScheme *
-            \  highlight BufTabLineCurrent
-            \       ctermfg=231 ctermbg=240 guifg=#ffffff guibg=#585858
-            \| highlight BufTabLineActive
-            \       ctermfg=231 ctermbg=234 guifg=#bcbcbc guibg=#262626
-            \| highlight BufTabLineHidden
-            \       ctermfg=240 ctermbg=234 guifg=#262626 guibg=#262626
-            \| highlight BufTabLineFill
-            \       ctermfg=236 ctermbg=234 guifg=#303030 guibg=#262626
-    augroup END
 
     nmap <C-w>1 <Plug>BufTabLine.Go(1)
     nmap <C-w>2 <Plug>BufTabLine.Go(2)
