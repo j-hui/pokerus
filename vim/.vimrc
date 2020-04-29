@@ -134,7 +134,7 @@ augroup color_tweaks
         \                           guibg=#585858 guifg=white gui=bold
         \|  highlight TabLineSel    ctermbg=240 ctermfg=white
         \                           guibg=#1c1c1c guifg=white
-        \|  highlight TabLine       ctermbg=234 ctermfg=240 
+        \|  highlight TabLine       ctermbg=234 ctermfg=240
         \                           guibg=#1c1c1c guifg=#585858
         \|  highlight TabLineFill   ctermfg=234
         \                           guibg=#1c1c1c
@@ -258,9 +258,9 @@ nnoremap <C-k> <C-u>
 nnoremap <C-n> <C-e>j
 nnoremap <C-p> <C-y>k
 nnoremap <C-e> g$
-nnoremap <C-s> g^
+nnoremap <C-a> g0
 " nnoremap <C-l> g$ " bad habits xD
-" nnoremap <C-h> g^
+" nnoremap <C-h> g^ " bad habits xD
 
 inoremap <C-c> <Esc>
 inoremap kj <Esc>
@@ -424,13 +424,7 @@ nnoremap <leader>d :put =strftime(\"%Y-%m-%d\")<CR>
 inoremap <C-G>d <C-R>=strftime("%Y-%m-%d")<CR>
 inoremap <C-G><TAB> <C-F>
 
-augroup trim_trailing_def
-    autocmd!
-    function TrimTrailing()
-        substitute/ *$//g
-    endfunction
-    cnoreabbrev tt call TrimTrailing()
-augroup END
+command! -range TT <line1>,<line2> substitute/ *$//g
 
 if !exists('g:vscode')
     " Deliberately avoid using /tmp/ to avoid leaking data on shared computer
@@ -487,6 +481,18 @@ Plug 'tpope/vim-surround'           " ds, cs, ys to change text surroundings
 Plug 'tpope/vim-characterize'       " use ga to see metadata about unicode
 Plug 'tpope/vim-endwise'            " write endings
 Plug 'tpope/vim-speeddating'        " increment/decrement dates
+
+let g:speeddating_no_mappings = 1
+" We need to do this to force a non-recursive map to the fallback functions
+nnoremap <Plug>SpeedDatingFallbackUp    <C-A>
+nnoremap <Plug>SpeedDatingFallbackDown  <C-X>
+xnoremap <Plug>SpeedDatingFallbackUp    <C-A>
+xnoremap <Plug>SpeedDatingFallbackDown  <C-X>
+
+nmap  <C-S>     <Plug>SpeedDatingUp
+nmap  <C-X>     <Plug>SpeedDatingDown
+xmap  <C-S>     <Plug>SpeedDatingUp
+xmap  <C-X>     <Plug>SpeedDatingDown
 
 Plug 'junegunn/vim-easy-align'
 xmap ga <Plug>(EasyAlign)
@@ -807,7 +813,7 @@ Plug 'z0mbix/vim-shfmt', { 'for': 'sh' }
 " Plug 'dyng/ctrlsf.vim'
 "   https://github.com/dyng/ctrlsf.vim
 "
-" Plug 'wellle/targets/vim' 
+" Plug 'wellle/targets/vim'
 "   https://github.com/wellle/targets.vim
 "
 " Plug 'itchyny/calendar.vim'
