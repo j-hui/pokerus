@@ -258,7 +258,7 @@ nnoremap <C-k> <C-u>
 nnoremap <C-n> <C-e>j
 nnoremap <C-p> <C-y>k
 nnoremap <C-e> g$
-nnoremap <C-a> g0
+nnoremap <C-a> g^
 " nnoremap <C-l> g$ " bad habits xD
 " nnoremap <C-h> g^ " bad habits xD
 
