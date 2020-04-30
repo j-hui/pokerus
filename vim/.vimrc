@@ -77,18 +77,31 @@ filetype plugin indent on
 setlocal spelllang=en_us
 set spellfile=~/.vim/spell/en.utf-8.add
 
+" Disable ex mode
+nnoremap Q <nop>
+
+function! s:refresh()
+  silent! call mkdir(fnamemodify(tempname(), ":p:h"), "", 0700)
+  set nohlsearch
+  redraw
+  redrawstatus
+endfunction
+command! -bang Refresh call s:refresh()
+
 Plug 'tpope/vim-repeat'
 
 """"""""""""
 " Appearance
 """"""""""""
-set noeb vb t_vb= " No error bell
+set noeb vb t_vb=       " No error bell
 
-set nu
-set rnu
-set ruler
-set scrolloff=5
-set display+=lastline
+set nu                  " Line numbers
+set rnu                 " Relative line numbers
+set display+=lastline   " Show as much as possible of the last line
+set nowrap              " Don't wrap lines
+set scrolloff=5         " Keep a few lines under the cursor
+set sidescrolloff=4     " Keep a few lines to the side of the cursor
+set textwidth=80
 
 augroup cursor_underline
     autocmd!
@@ -259,6 +272,8 @@ nnoremap <C-n> <C-e>j
 nnoremap <C-p> <C-y>k
 nnoremap <C-e> g$
 nnoremap <C-a> g^
+nnoremap <C-f> l
+nnoremap <C-b> h
 " nnoremap <C-l> g$ " bad habits xD
 " nnoremap <C-h> g^ " bad habits xD
 
@@ -404,27 +419,22 @@ endif
 " set clipboard+=unnamed
 
 " Whitespace rules w/ linebreak on 80 characters
-set tabstop=4
-set expandtab
-set softtabstop=4
-set shiftwidth=4
-set smarttab
+set expandtab           " Expand tabs to spaces
+set tabstop=4           " Expan tabs to 4 spaces
+set shiftwidth=0        " Use tabstop value for (auto)indent
+set smarttab            " Apply tabs in front of a line according to shiftwidth
+set autoindent          " Automatically indent when starting a new line
+set nojoinspaces        " Only insert single space after J
 
-set smartindent
-set autoindent
+xnoremap < <gv
+xnoremap > >gv
 
-" Linebreak on 80 characters
-set lbr
-set textwidth=80
-set wrap
-
-set nojoinspaces
-
+inoremap # X#
 nnoremap <leader>d :put =strftime(\"%Y-%m-%d\")<CR>
 inoremap <C-G>d <C-R>=strftime("%Y-%m-%d")<CR>
 inoremap <C-G><TAB> <C-F>
 
-command! -range TT <line1>,<line2> substitute/ *$//g
+command! -range TT <line1>,<line2> substitute/\s\+$//g
 
 if !exists('g:vscode')
     " Deliberately avoid using /tmp/ to avoid leaking data on shared computer
@@ -512,6 +522,12 @@ if !exists('g:vscode')
     inoremap <C-D> <C-D>
 endif
 
+""""""
+" Help
+""""""
+
+autocmd FileType help
+  \ noremap <buffer><nowait> q :q<CR>
 
 """""""
 " LaTeX
@@ -771,62 +787,6 @@ Plug 'idris-hackers/idris-vim', { 'for': 'idris' }
 """""""
 
 Plug 'z0mbix/vim-shfmt', { 'for': 'sh' }
-
-
-""""""""""""""
-" Scratch Area
-""""""""""""""
-" Plugins I haven't decided I want to use yet
-"""""""""""""""""""""""""""""""""""""""""""""
-
-" Plug 'reedes/vim-wordy'
-"   https://github.com/reedes/vim-wordy
-"
-" Plug 'tpope/vim-abolish'
-"   https://github.com/tpope/vim-abolish
-" Plug 'jdelkins/vim-correction'
-"   https://github.com/jdelkins/vim-correction
-" Plug 'reedes/vim-litecorrect'
-"   https://github.com/reedes/vim-litecorrect
-"
-" Plug 'metakirby5/codi.vim'
-"   https://github.com/metakirby5/codi.vim
-"
-" Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
-"   https://github.com/iamcco/markdown-preview.nvim/
-"
-" Plug 'powerman/vim-plugin-AnsiEsc'
-"   https://github.com/powerman/vim-plugin-AnsiEsc
-"
-" Plug 'majutsushi/tagbar'
-"   https://github.com/majutsushi/tagbar
-"
-" Plug 'Shougo/denite.vim'
-"   https://github.com/Shougo/denite.nvim
-"
-" Plug 'Konfekt/FastFold'
-"   https://github.com/Konfekt/FastFold
-"
-" Plug 'terryma/vim-multiple-cursors'
-"   https://github.com/terryma/vim-multiple-cursors
-"
-" Plug 'dyng/ctrlsf.vim'
-"   https://github.com/dyng/ctrlsf.vim
-"
-" Plug 'wellle/targets/vim'
-"   https://github.com/wellle/targets.vim
-"
-" Plug 'itchyny/calendar.vim'
-"   https://github.com/itchyny/calendar.vim
-"
-" Plug 'fmoralesc/vim-pad'
-"   https://github.com/fmoralesc/vim-pad
-"
-" Plug 'glacambre/firenvim'
-"   https://github.com/glacambre/firenvim
-"
-" Plug 'sheerun/vim-polyglot'
-"   https://github.com/sheerun/vim-polyglot
 
 call plug#end()
 
