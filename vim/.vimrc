@@ -68,7 +68,6 @@
 """""""""""""
 " Basic stuff
 """""""""""""
-" execute pathogen#infect()
 call plug#begin('~/.vimplugins/plugged')
 
 " set lazyredraw
@@ -111,7 +110,6 @@ augroup END
 
 syntax enable
 set background=dark
-" colorscheme ron   " load this last to trigger autocmds
 
 " If terminal supports displaying italics, we need these key sequences
 let t_ZH="\e[3m"
@@ -266,8 +264,8 @@ set autoread
 " Movement
 nnoremap j gj
 nnoremap k gk
-nnoremap <C-j> <C-d>
-nnoremap <C-k> <C-u>
+" nnoremap <C-j> <C-d>
+" nnoremap <C-k> <C-u>
 nnoremap <C-n> <C-e>j
 nnoremap <C-p> <C-y>k
 nnoremap <C-e> g$
@@ -309,8 +307,8 @@ augroup END
 if !exists('g:vscode')
     Plug 'psliwka/vim-smoothie'
     let g:smoothie_base_speed = 42
-    nnoremap <silent> <C-j>      :<C-U>call smoothie#downwards() <CR>
-    nnoremap <silent> <C-k>      :<C-U>call smoothie#upwards()   <CR>
+    " nnoremap <silent> <C-j>      :<C-U>call smoothie#downwards() <CR>
+    " nnoremap <silent> <C-k>      :<C-U>call smoothie#upwards()   <CR>
 
     Plug 'itchyny/vim-cursorword'
     let g:cursorword_delay = 369
@@ -470,9 +468,7 @@ if !exists('g:vscode')
         set undofile
         set undoreload=10000
     endif
-endif
 
-if !exists('g:vscode')
     Plug 'mbbill/undotree'
     nnoremap <C-w>u :UndotreeToggle<cr>:UndotreeFocus<cr>
 endif
@@ -510,10 +506,11 @@ nmap ga <Plug>(EasyAlign)
 
 Plug 'tommcdo/vim-exchange'         " exchange text
 Plug 'AndrewRadev/sideways.vim'     " move things sideways in lists
-nnoremap <c-h> :SidewaysLeft<cr>
-nnoremap <c-l> :SidewaysRight<cr>
+nnoremap <c-g>l :SidewaysRight<cr>
+nnoremap <c-g>h :SidewaysLeft<cr>
 
 Plug 'matze/vim-move'               " move things
+let g:move_key_modifier = 'C'
 
 if !exists('g:vscode')
     Plug 'junegunn/vim-peekaboo'    " shows yank buffers
@@ -602,21 +599,6 @@ let g:markdown_fenced_languages = [
             \ 'ocaml',
             \ 'haskell'
             \ ]
-
-"""""""""
-" VimWiki
-"""""""""
-Plug 'vimwiki/vimwiki'
-let g:vimwiki_list = [{'path': '~/vimwiki/',
-                      \ 'syntax': 'markdown',
-                      \ 'ext': '.md'}]
-
-augroup vimwiki_settings
-    autocmd!
-    au BufNewFile ~/vimwiki/diary/*.md :silent 0r
-                \   !~/vimwiki/bin/mk-diary '%'
-augroup END
-
 
 """
 " C
@@ -788,8 +770,12 @@ Plug 'idris-hackers/idris-vim', { 'for': 'idris' }
 
 Plug 'z0mbix/vim-shfmt', { 'for': 'sh' }
 
+if filereadable(expand("~/.vim_local"))
+    source ~/.vim_local
+endif
+
 call plug#end()
 
-colorscheme ron   " load this last to trigger autocmds
+colorscheme ron " load this last to trigger autocmds
 
 " vim: set ts=4 sw=4 tw=80 et :
