@@ -15,7 +15,7 @@ console.log("111");
  *   (y)ank: pull to clipboard
  *
  */
- 
+
 /* Misc */
 // (Unused; unmap these first so they can be mapped to other things)
 
@@ -52,7 +52,7 @@ unmap('sy');
 
 /* Modes */
 unmap(':'); // Lets me map chords beginning with ':'
-   
+
 imap('<Ctrl-[>', '<Esc>');
 imap('<Ctrl-c>', '<Esc>');
 cmap('<Ctrl-[>', '<Esc>');
@@ -205,7 +205,7 @@ unmap('ow'); // Open search with alias w
 map(':/y', 'oy');
 unmap('oy'); // Open search with alias y
 map(':/b', 'ob');
-unmap('ob'); // Open search with alias b 
+unmap('ob'); // Open search with alias b
 
 mapkey('::', '#8Open commands', function() {
     Front.openOmnibar({type: "Commands"});
@@ -395,36 +395,35 @@ unmapAllExcept([],
    unmap(k, /vimawesome\.com/);
 });
 
-command('ls', 'list sessions', function() {
-    if (Front.omnibar.style.display === "none") {
-        Front.openOmnibar({ type: "Commands" });
-    }
-    RUNTIME('getSettings', {
-        key: 'sessions'
-    }, function(response) {
-        Omnibar.listResults(Object.keys(response.settings.sessions), function(s) {
-            return createElement(`<li>${s}</li>`);
-        });
-    });
-});
-command('mk', 'createSession [name]', function(args) {
-    RUNTIME('createSession', {
-        name: args[0]
-    });
-});
-command('rm', 'deleteSession [name]', function(args) {
-    RUNTIME('deleteSession', {
-        name: args[0]
-    });
-    return true; // to close omnibar after the command executed.
-});
-command('o', 'openSession [name]', function(args) {
-    RUNTIME('openSession', {
-        name: args[0]
-    });
-});
+// command('ls', 'list sessions', function() {
+//     if (Front.omnibar.style.display === "none") {
+//         Front.openOmnibar({ type: "Commands" });
+//     }
+//     RUNTIME('getSettings', {
+//         key: 'sessions'
+//     }, function(response) {
+//         Omnibar.listResults(Object.keys(response.settings.sessions), function(s) {
+//             return createElement(`<li>${s}</li>`);
+//         });
+//     });
+// });
+// command('mk', 'createSession [name]', function(args) {
+//     RUNTIME('createSession', {
+//         name: args[0]
+//     });
+// });
+// command('rm', 'deleteSession [name]', function(args) {
+//     RUNTIME('deleteSession', {
+//         name: args[0]
+//     });
+//     return true; // to close omnibar after the command executed.
+// });
+// command('o', 'openSession [name]', function(args) {
+//     RUNTIME('openSession', {
+//         name: args[0]
+//     });
+// });
 
-    
 // set theme
 settings.theme = `
 .sk_theme {
