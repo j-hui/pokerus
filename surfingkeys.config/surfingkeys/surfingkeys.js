@@ -95,15 +95,16 @@ map('<Ctrl-u>', 'e'); // Page up
 unmap('e');
 unmap('d');
 
-map('<Ctrl-h>', '0'); // All the way to the left
+vmap('<Ctrl-j>', '<Ctrl-d>'); // Page down
+vmap('<Ctrl-k>', '<Ctrl-u>'); // Page down
+
+map('<Ctrl-a>', '0'); // All the way to the left
 map('^', '0');        // All the way to the left
-map('<Ctrl-l>', '$'); // All the way to the right
+map('<Ctrl-e>', '$'); // All the way to the right
 unmap('0');
 
 var ctrlMappings = ['<Ctrl-j>', '<Ctrl-d>', '<Ctrl-u>', '<Ctrl-k>', '<Ctrl-h>', '<Ctrl-l>'];
 
-vmap('<Ctrl-j>', '<Ctrl-d>'); // Page down
-vmap('<Ctrl-k>', '<Ctrl-u>'); // Page down
 
 /* Reload/current page */
 unmap('r');     // We're going to use 'r' to chord
@@ -354,8 +355,8 @@ iunmap('<Alt-d>');
 
 /* Vim text editor */
 aceVimMap('kj', '<Esc>', 'insert');
-aceVimMap('<Ctrl-j>', '<Ctrl-d>', 'normal');
-aceVimMap('<Ctrl-k>', '<Ctrl-u>', 'normal');
+// aceVimMap('<Ctrl-j>', '<Ctrl-d>', 'normal');
+// aceVimMap('<Ctrl-k>', '<Ctrl-u>', 'normal');
 
 /* Site-specific */
 
