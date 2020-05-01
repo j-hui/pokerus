@@ -88,10 +88,10 @@ map('\\', 'p');       // Enter ephemeral passthrough
 unmap('p');
 
 /* Page navigation */
-map('<Ctrl-j>', 'd'); // Page down
 map('<Ctrl-d>', 'd'); // Page down
 map('<Ctrl-u>', 'e'); // Page up
-map('<Ctrl-k>', 'e'); // Page up
+// map('<Ctrl-j>', 'd'); // Page down
+// map('<Ctrl-k>', 'e'); // Page up
 unmap('e');
 unmap('d');
 
@@ -393,6 +393,36 @@ unmapAllExcept([],
 ['/', 'j', 'k', 'n', 'p'].forEach(function(k, i) {
    unmap(k, /vimawesome\.com/);
 });
+
+command('ls', 'list sessions', function() {
+    if (Front.omnibar.style.display === "none") {
+        Front.openOmnibar({ type: "Commands" });
+    }
+    RUNTIME('getSettings', {
+        key: 'sessions'
+    }, function(response) {
+        Omnibar.listResults(Object.keys(response.settings.sessions), function(s) {
+            return createElement(`<li>${s}</li>`);
+        });
+    });
+});
+command('mk', 'createSession [name]', function(args) {
+    RUNTIME('createSession', {
+        name: args[0]
+    });
+});
+command('rm', 'deleteSession [name]', function(args) {
+    RUNTIME('deleteSession', {
+        name: args[0]
+    });
+    return true; // to close omnibar after the command executed.
+});
+command('o', 'openSession [name]', function(args) {
+    RUNTIME('openSession', {
+        name: args[0]
+    });
+});
+
     
 // set theme
 settings.theme = `
