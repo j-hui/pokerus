@@ -102,8 +102,12 @@ map('<Ctrl-a>', '0'); // All the way to the left
 map('^', '0');        // All the way to the left
 map('<Ctrl-e>', '$'); // All the way to the right
 unmap('0');
+unmap('<Ctrl-j>');
+unmap('<Ctrl-k>');
+unmap('<Ctrl-h>');
+unmap('<Ctrl-l>');
 
-var ctrlMappings = ['<Ctrl-j>', '<Ctrl-d>', '<Ctrl-u>', '<Ctrl-k>', '<Ctrl-h>', '<Ctrl-l>'];
+var ctrlMappings = ['<Ctrl-d>', '<Ctrl-u>', '<Ctrl-j>', '<Ctrl-k>', '<Ctrl-h>', '<Ctrl-l>'];
 
 
 /* Reload/current page */
