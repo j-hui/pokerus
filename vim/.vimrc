@@ -215,13 +215,28 @@ endif
 
 if !exists('g:vscode')
     Plug 'itchyny/lightline.vim'
+
+    Plug 'ojroques/vim-scrollstatus'
+    let g:scrollstatus_size = 20
+
     let g:lightline = {
         \ 'active': {
-        \   'left': [ [ 'mode', 'paste' ],
-        \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+        \   'left': [
+        \       [ 'mode', 'paste' ],
+        \       [ 'gitbranch', 'readonly', 'filename', 'modified' ],
+        \   ],
+        \   'right': [
+        \       [ 'lineinfo' ],
+        \       [ 'percent' ],
+        \       [ 'scrollbar'],
+        \       [ 'fileformat', 'fileencoding', 'filetype' ],
+        \   ],
+        \ },
+        \ 'component': {
+        \   'scrollbar': '%{ScrollStatus()}',
         \ },
         \ 'component_function': {
-        \   'gitbranch': 'FugitiveHead'
+        \   'gitbranch': 'FugitiveHead',
         \ },
     \ }
 
@@ -247,11 +262,9 @@ endif
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
-set hlsearch    " highlight search
-set noincsearch " no incremental search -- to unpredictable
-set ignorecase  " ignores case
-set smartcase   " smart case
-set showmatch   " Show matching brackets
+
+set showmatch                   " show matching brackets
+set virtualedit=block,onemore   " move cursor end of line
 
 set foldlevelstart=10
 set foldnestmax=10
@@ -260,6 +273,8 @@ set foldmethod=manual
 set wildmenu
 
 set autoread
+
+set splitright
 
 " Movement
 nnoremap j gj
@@ -285,6 +300,34 @@ inoremap <C-p> <up>
 noremap <C-w>n <Esc>:bn<CR>
 noremap <C-w>p <Esc>:bp<CR>
 noremap <C-w>q <Esc>:bd<CR>
+
+set hlsearch                    " highlight search
+set incsearch                   " incremental search
+set ignorecase                  " ignores case
+set smartcase                   " smart case
+set wrapscan                    " jump back to top
+
+augroup vimrc-incsearch-highlight
+    autocmd!
+    autocmd cmdlineenter /,\? :set cul
+    autocmd cmdlineleave /,\? :set nocul
+augroup END
+
+Plug 'haya14busa/is.vim'
+Plug 'haya14busa/vim-asterisk'
+let g:is#do_default_mappings = 0
+map n <Plug>(is-n)
+map N <Plug>(is-N)
+map *  <Plug>(asterisk-*)<Plug>(is-nohl-1)
+map g* <Plug>(asterisk-g*)<Plug>(is-nohl-1)
+map #  <Plug>(asterisk-#)<Plug>(is-nohl-1)
+map g# <Plug>(asterisk-g#)<Plug>(is-nohl-1)
+map z*  <Plug>(asterisk-z*)
+map gz* <Plug>(asterisk-gz*)
+map z#  <Plug>(asterisk-z#)
+map gz# <Plug>(asterisk-gz#)
+" cmap <C-j> <C-g>
+" cmap <C-k> <C-t>
 
 Plug 'andymass/vim-matchup'
 augroup matchup_matchparen_highlight
@@ -423,6 +466,7 @@ set shiftwidth=0        " Use tabstop value for (auto)indent
 set smarttab            " Apply tabs in front of a line according to shiftwidth
 set autoindent          " Automatically indent when starting a new line
 set nojoinspaces        " Only insert single space after J
+set formatoptions+=j    " strip comment leader when joining comment lines
 
 xnoremap < <gv
 xnoremap > >gv
@@ -697,8 +741,8 @@ augroup coq_settings
                 \ shiftwidth=2
                 \ softtabstop=2
                 \ commentstring=(*%s*)
-                \ formatoptions=cqort
                 \ comments=sr:(*,mb:*,ex:*)
+                \ formatoptions=cqortj
 augroup END
 
 Plug 'let-def/vimbufsync', { 'for': 'coq' }
@@ -754,8 +798,8 @@ augroup lean_settings
                 \ shiftwidth=2
                 \ softtabstop=2
                 \ commentstring=--\ %s
-                \ formatoptions=cqort
                 \ comments=s1fl:/-,mb:-,ex:-/,:--
+                \ formatoptions+=cqortj
 augroup END
 
 """""""
