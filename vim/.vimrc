@@ -307,12 +307,6 @@ set ignorecase                  " ignores case
 set smartcase                   " smart case
 set wrapscan                    " jump back to top
 
-augroup vimrc-incsearch-highlight
-    autocmd!
-    autocmd cmdlineenter /,\? :set cul
-    autocmd cmdlineleave /,\? :set nocul
-augroup END
-
 Plug 'haya14busa/is.vim'
 Plug 'haya14busa/vim-asterisk'
 let g:is#do_default_mappings = 0
