@@ -3,8 +3,6 @@ settings.smoothScroll = false;
 settings.hintExplicit = true;
 settings.hintShiftNonActive = true;
 
-console.log("111");
-
 /* Chord prefix mnemonics:
  *
  *   (r)eload: related to current page
@@ -57,11 +55,8 @@ imap('<Ctrl-[>', '<Esc>');
 imap('<Ctrl-c>', '<Esc>');
 cmap('<Ctrl-[>', '<Esc>');
 cmap('<Ctrl-c>', '<Esc>');
-// vmap('<Ctrl-[>', '<Esc>');
-// vmap('<Ctrl-c>', '<Esc>');
 
 vmapkey('<Ctrl-[>', '#9Exit visual mode', function () {
-  if (Visual) { console.log("well shit"); }
   if (Visual.state > 1) {
       Visual.hideCursor();
       Visual.selection.collapse(selection.anchorNode, selection.anchorOffset);
@@ -369,23 +364,6 @@ var zMappings = ['zi', 'zo', 'zr'];
 
 // unmapAllExcept([ctrlMappings, rMappings, colonMappings, gMappings, sMappings, yMappings, zMappings].flat(),
 
-unmapAllExcept([ctrlMappings, rMappings, colonMappings, sMappings, yMappings].flat(),
-    /mail\.google\.com/);
-unmapAllExcept([ctrlMappings, rMappings, colonMappings, sMappings, yMappings].flat(),
-    /drive\.google\.com/);
-unmapAllExcept([],
-    /docs\.google\.com/);
-unmapAllExcept([ctrlMappings, rMappings, colonMappings, gMappings, sMappings, yMappings].flat(),
-    /.+\.slack\.com/);
-// unmapAllExcept([ctrlMappings, rMappings, colonMappings, gMappings, sMappings, yMappings].flat(),
-//     /reddit\.com/);
-unmapAllExcept([],
-    /overfleaf\.com/);
-unmapAllExcept([],
-    /hackerrank\.com/);
-unmapAllExcept([],
-    /cloud\.digitalocean\.com/);
-
 ['/', 'j', 'k'].forEach(function(k, i) {
    unmap(k, /duckduckgo\.com/);
 });
@@ -399,34 +377,20 @@ unmapAllExcept([],
    unmap(k, /vimawesome\.com/);
 });
 
-// command('ls', 'list sessions', function() {
-//     if (Front.omnibar.style.display === "none") {
-//         Front.openOmnibar({ type: "Commands" });
-//     }
-//     RUNTIME('getSettings', {
-//         key: 'sessions'
-//     }, function(response) {
-//         Omnibar.listResults(Object.keys(response.settings.sessions), function(s) {
-//             return createElement(`<li>${s}</li>`);
-//         });
-//     });
-// });
-// command('mk', 'createSession [name]', function(args) {
-//     RUNTIME('createSession', {
-//         name: args[0]
-//     });
-// });
-// command('rm', 'deleteSession [name]', function(args) {
-//     RUNTIME('deleteSession', {
-//         name: args[0]
-//     });
-//     return true; // to close omnibar after the command executed.
-// });
-// command('o', 'openSession [name]', function(args) {
-//     RUNTIME('openSession', {
-//         name: args[0]
-//     });
-// });
+unmapAllExcept([ctrlMappings, rMappings, colonMappings, sMappings, yMappings].flat(),
+    /mail\.google\.com/);
+unmapAllExcept([ctrlMappings, rMappings, colonMappings, sMappings, yMappings].flat(),
+    /drive\.google\.com/);
+unmapAllExcept([],
+    /docs\.google\.com/);
+unmapAllExcept([ctrlMappings, rMappings, colonMappings, gMappings, sMappings, yMappings].flat(),
+    /.+\.slack\.com/);
+unmapAllExcept([],
+    /overfleaf\.com/);
+unmapAllExcept([],
+    /hackerrank\.com/);
+unmapAllExcept([],
+    /cloud\.digitalocean\.com/);
 
 // set theme
 settings.theme = `
