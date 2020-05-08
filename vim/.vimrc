@@ -31,8 +31,7 @@ Plug 'tpope/vim-repeat'
 """"""""""""
 set noeb vb t_vb=       " No error bell
 
-set nu                  " Line numbers
-set rnu                 " Relative line numbers
+set nu rnu              " Line numbers and relative line numbers
 set display+=lastline   " Show as much as possible of the last line
 set nowrap              " Don't wrap lines
 set scrolloff=5         " Keep a few lines under the cursor
@@ -268,9 +267,6 @@ augroup END
 
 Plug 'justinmk/vim-sneak'
 let g:sneak#label = 1
-
-map f <Plug>Sneak_s
-map F <Plug>Sneak_S
 
 Plug 'junegunn/vim-after-object'        " motions for moving after characters
 augroup vim_after_hook
