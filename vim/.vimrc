@@ -38,6 +38,10 @@ let t_ZH="\e[3m"
 let t_ZR="\e[23m"
 set updatetime=100
 
+" Print undercurl
+let &t_Cs = "\e[4:3m"
+let &t_Ce = "\e[4:0m"
+
 set lazyredraw
 " }}}
 
@@ -367,7 +371,7 @@ if !exists('g:vscode')
     Plug 'whonore/coqtail', { 'for': 'coq' }
         function! g:CoqtailHighlight()
           hi def CoqtailChecked cterm=underline
-          hi def CoqtailSent    cterm=bold
+          hi def CoqtailSent    cterm=undercurl
         endfunction
         if !has('nvim')
         augroup coqtail_mappings
