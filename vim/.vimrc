@@ -92,6 +92,16 @@ endif
 
 " }}}
 
+" Debugging vim {{{
+" ----------------------------------------------------------------------------
+" Syntax group underneath cursor
+map <F8>
+    \ :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+    \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+    \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+" }}}
+
+
 " }}}
 
 " ============================================================================
@@ -355,6 +365,10 @@ if !exists('g:vscode')
 " Coq {{{
     Plug 'let-def/vimbufsync', { 'for': 'coq' }
     Plug 'whonore/coqtail', { 'for': 'coq' }
+        function! g:CoqtailHighlight()
+          hi def CoqtailChecked cterm=underline
+          hi def CoqtailSent    cterm=bold
+        endfunction
         if !has('nvim')
         augroup coqtail_mappings
             autocmd!
