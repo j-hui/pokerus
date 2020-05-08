@@ -3,7 +3,7 @@ errecho() {
 }
 
 PATH_ADD() {
-    if [[ "$1" ]]; then
+    if [ -n "$1" ]; then
         case ":$PATH:" in
             *":$1:"*) :;;           # already there
             *) PATH="$1:$PATH";;    # or PATH="$PATH:$new_entry"
@@ -27,6 +27,20 @@ if which floaterm > /dev/null; then
 fi
 
 mkdir -p ~/.tmp/backup ~/.tmp/swp ~/.tmp/undo
+
+### fzf
+
+if which bat > /dev/null; then
+    export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always {} | head -500'"
+else
+    export FZF_CTRL_T_OPTS="--preview 'cat {}'"
+fi
+
+if which fd > /dev/null; then
+    export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
+fi
 
 ### OS-specific configuration
 case "$OSTYPE" in
@@ -288,7 +302,8 @@ bind '"\e[D": backward-char'
 # Record each line as it gets issued
 PROMPT_COMMAND='history -a'
 
-### Jump to ~/.bash_local
 if [ -f ~/.bash_local ]; then
-    . ~/.bash_local
+     source ~/.bash_local
 fi
+
+# vim:fileencoding=utf-8:ft=bash
