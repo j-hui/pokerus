@@ -1,6 +1,13 @@
 " ============================================================================
 " Pokerus .vimrc (by J-Hui)
 " ============================================================================
+
+" <leader> prefixes:
+" - <backspace>/<return>: toggle folds
+" - i: insert
+" - f: Find (FZF)
+" - g: Git (vim-signify)
+" - c: Coq (coqtail)
  
 " ============================================================================
 " Core/plumbing/hacks {{{
@@ -10,8 +17,9 @@ let mapleader      = ' '
 let maplocalleader = ' '
 
 " Note: these are already turned on by vim-plug
-" filetype plugin indent on
-" syntax enable 
+set nocompatible
+filetype plugin on
+syntax on
 
 " Input {{{
 " ----------------------------------------------------------------------------
@@ -173,8 +181,8 @@ if !exists('g:vscode')
 
     Plug 'szw/vim-maximizer'            " Maximize window
         let g:maximizer_set_default_mapping = 0
-        nnoremap <silent><C-w>f :MaximizerToggle<CR>
-        vnoremap <silent><C-w>f :MaximizerToggle<CR>gv
+        nnoremap <silent><C-w><return> :MaximizerToggle<CR>
+        vnoremap <silent><C-w><return> :MaximizerToggle<CR>gv
 
     Plug 'psliwka/vim-smoothie'         " Scroll acceleration animation
         let g:smoothie_base_speed = 42
@@ -206,7 +214,14 @@ if !exists('g:vscode')
     Plug 'junegunn/fzf.vim'                                 " Fuzzy finder
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
         let g:fzf_preview_window = 'right:60%'
-        nnoremap <c-w><enter> :Files<CR>
+        nnoremap <leader>ff   :Files    <space>
+        nnoremap <leader>fe   :Files    <CR>
+        nnoremap <leader>fg   :GFiles   <CR>
+        nnoremap <leader>fj   :Lines    <CR>
+        nnoremap <leader>fa   :Ag       <CR>
+        nnoremap <leader>fb   :Buffers  <CR>
+        nnoremap <leader>f:   :History: <CR>
+        nnoremap <leader>f/   :History/ <CR>
 
     Plug 'junegunn/vim-peekaboo'                            " See yank registers
 
@@ -391,6 +406,15 @@ if !exists('g:vscode')
 endif
 " }}}
 
+
+" Local settings
+" ----------------------------------------------------------------------------
+"  Note: This has to be here, in the Plugins block, because otherwise I can't
+"        use Plug
+if filereadable(expand("~/.vim_local"))
+    source ~/.vim_local
+endif
+
 call plug#end()
 " }}}
 
@@ -542,9 +566,9 @@ set modelines=5
 " Highlight characters past 80
 nnoremap <leader>of m`/\%>80v./+<CR>``
 
-" Highlight characters past 80
-nnoremap <leader>f zazz
-nnoremap <leader>F zizz
+" Folds
+nnoremap <leader><backspace> zazz
+nnoremap <leader><return> zizz
 " }}}
 
 " Navigation {{{
@@ -593,7 +617,7 @@ xnoremap > >gv
 inoremap # X#
 
 " Insert date
-nnoremap <leader>d :put =strftime(\"%Y-%m-%d\")<CR>
+nnoremap <leader>id :put =strftime(\"%Y-%m-%d\")<CR>
 inoremap <C-G>d <C-R>=strftime("%Y-%m-%d")<CR>
 
 " Auto indentation
@@ -618,7 +642,7 @@ command! -bang Refresh call s:refresh()
 " }}}
 
 " Trim trailing spaces {{{
-command! -range TT <line1>,<line2> substitute/\s\+$//g | normal! ``
+command! -range Trim <line1>,<line2> substitute/\s\+$//g | normal! ``
 " }}}
 
 " Modeline {{{
@@ -785,12 +809,5 @@ augroup lean_settings " {{{
 augroup END " }}}
 
 " }}}
-
-" ============================================================================
-" Local settings
-" ============================================================================
-if filereadable(expand("~/.vim_local"))
-    source ~/.vim_local
-endif
 
 " vim: set ts=4 sw=4 tw=80 et foldmethod=marker foldlevel=0:
