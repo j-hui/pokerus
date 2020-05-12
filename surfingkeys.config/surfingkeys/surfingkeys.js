@@ -3,6 +3,8 @@ settings.smoothScroll = false;
 settings.hintExplicit = true;
 settings.hintShiftNonActive = true;
 
+function dbg(s) { console.log("[pokerus]: " + s); };
+
 /* Chord prefix mnemonics:
  *
  *   (r)eload: related to current page
@@ -16,6 +18,8 @@ settings.hintShiftNonActive = true;
 
 /* Misc */
 // (Unused; unmap these first so they can be mapped to other things)
+
+dbg("begin mapping");
 
 unmap(';w');  // Focus top window
 unmap('%');   // Scroll to percentage of current page
@@ -391,6 +395,8 @@ unmapAllExcept([],
     /hackerrank\.com/);
 unmapAllExcept([],
     /cloud\.digitalocean\.com/);
+
+dbg("keys mapped");
 
 // set theme
 settings.theme = `
