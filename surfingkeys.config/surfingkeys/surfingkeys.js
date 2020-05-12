@@ -3,7 +3,7 @@ settings.smoothScroll = false;
 settings.hintExplicit = true;
 settings.hintShiftNonActive = true;
 
-function dbg(s) { console.log("[pokerus]: " + s); };
+function dbg(s) { console.log("[pokerus]: " + s); }
 
 /* Chord prefix mnemonics:
  *
@@ -19,7 +19,8 @@ function dbg(s) { console.log("[pokerus]: " + s); };
 /* Misc */
 // (Unused; unmap these first so they can be mapped to other things)
 
-dbg("begin mapping");
+var pk_version = 0.1
+dbg("begin mapping (" + pk_version + ")");
 
 unmap(';w');  // Focus top window
 unmap('%');   // Scroll to percentage of current page
