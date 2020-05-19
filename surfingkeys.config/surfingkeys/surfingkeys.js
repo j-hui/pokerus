@@ -396,6 +396,8 @@ unmapAllExcept([],
     /hackerrank\.com/);
 unmapAllExcept([],
     /cloud\.digitalocean\.com/);
+unmapAllExcept([ctrlMappings].flat(),
+    /learn\.dvorak\.nl/);
 
 dbg("keys mapped");
 
