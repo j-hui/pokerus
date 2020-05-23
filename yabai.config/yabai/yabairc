@@ -6,7 +6,7 @@ yabai -m config status_bar_text_font         "Helvetica Neue:Bold:12.0"
 yabai -m config status_bar_icon_font         "FontAwesome:Regular:12.0"
 yabai -m config status_bar_background_color  0xff202020
 yabai -m config status_bar_foreground_color  0xffa8a8a8
-yabai -m config status_bar_space_icon_strip  I II III IV V VI
+yabai -m config status_bar_space_icon_strip  I II III IV V VI VII VIII
 yabai -m config status_bar_power_icon_strip  🔋 ⚡ 
 # yabai -m config status_bar_space_icon        ?
 yabai -m config status_bar_clock_icon        🕒
@@ -52,30 +52,37 @@ yabai -m rule --add app="^VirtualBox$" manage=off sticky=on topmost=on
 
 # Space 1: terminal
 
-# Space 2: communications
-yabai -m rule --add app="^Messages$" space=2
-yabai -m rule --add app="^Wavebox$" space=2
-yabai -m rule --add app="^Slack$" space=2
-yabai -m rule --add app="^WhatsApp$" space=2
-yabai -m rule --add app="^Caprine$" space=2
-yabai -m rule --add app="^Discord$" space=2
-yabai -m rule --add app="^zoom.us$" space=2
+# Space 2: browser
+yabai -m rule --add app="^Firefox$"         space=2
 
-# Space 3: browser
-yabai -m rule --add app="^Google Chrome$" space=3
-yabai -m rule --add app="^Firefox$" space=3
+# Space 3: mail
+yabai -m rule --add title="^Gmail$"       space=3
+yabai -m rule --add title="^Lionmail$"    space=3
 
-# Space 4: office + creative
-yabai -m rule --add app="^MuseScore 3$" space=4
-yabai -m rule --add app="^Microsoft Word$" space=4
-yabai -m rule --add app="^Microsoft Powerpoint$" space=4
-yabai -m rule --add app="^Microsoft Excel$" space=4
-yabai -m rule --add app="^Bitwig Studio$" space=4
-yabai -m rule --add app="^Code$" space=4
+# Space 4: communications
+yabai -m rule --add app="^Wavebox$"     space=4
+yabai -m rule --add app="^Messages$"    space=4
+yabai -m rule --add app="^WhatsApp$"    space=4
+yabai -m rule --add title="^Messenger$" space=4
+yabai -m rule --add app="^zoom.us$"     space=9
 
-# Space 5: music
-yabai -m rule --add app="^Music$" space=5
-yabai -m rule --add app="^Google Play Music Desktop Player$" space=5
-yabai -m rule --add app="^YouTube Music$" space=5
+yabai -m rule --add app="^Slack$"       space=7
+yabai -m rule --add app="^Discord$"     space=8
+# yabai -m rule --add app="^Slack$"       space=2 display=2
+# yabai -m rule --add app="^Discord$"     space=3 display=2
+
+# Space 5: office + creative
+yabai -m rule --add app="^MuseScore 3$"             space=5
+yabai -m rule --add app="^Microsoft Word$"          space=5
+yabai -m rule --add app="^Microsoft Powerpoint$"    space=5
+yabai -m rule --add app="^Microsoft Excel$"         space=5
+yabai -m rule --add app="^Bitwig Studio$"           space=5
+yabai -m rule --add app="^Code$"                    space=5
+
+# Space 6: music
+yabai -m rule --add app="^Music$"           space=6
+yabai -m rule --add app="^YouTube Music$"   space=6
+# yabai -m rule --add app="^Music$"           space=1 display=2
+# yabai -m rule --add app="^YouTube Music$"   space=1 display=2
 
 echo "yabai configuration loaded.."
