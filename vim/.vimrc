@@ -461,11 +461,11 @@ if !exists('g:vscode')
                 \|  nmap <buffer> <c-c>h                 :CoqJumpToEnd<CR>
                 \|  nmap <buffer> <c-c><space>           :CoqGotoGoal!<CR>
             autocmd Filetype coq
-                \   nmap <buffer> <c-c>c    <leader>ch  " :Coq Check
-                \|  nmap <buffer> <c-c>a    <leader>ca  " :Coq About
-                \|  nmap <buffer> <c-c>p    <leader>cp  " :Coq Print
-                \|  nmap <buffer> <c-c>n    <leader>cf  " :Coq Locate
-                \|  nmap <buffer> <c-c>s    <leader>cs  " :Coq Search
+                \   nmap <buffer> <c-c>c    <leader>ch
+                \|  nmap <buffer> <c-c>a    <leader>ca
+                \|  nmap <buffer> <c-c>p    <leader>cp
+                \|  nmap <buffer> <c-c>n    <leader>cf
+                \|  nmap <buffer> <c-c>s    <leader>cs
                 " <leader>ch => :Coq Check
                 " <leader>ca => :Coq About
                 " <leader>cp => :Coq Print
