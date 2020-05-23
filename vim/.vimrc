@@ -42,6 +42,9 @@ set updatetime=100
 let &t_Cs = "\e[4:3m"
 let &t_Ce = "\e[4:0m"
 
+" Disable background color erase
+let &t_ut=''
+
 set lazyredraw
 " }}}
 
@@ -118,8 +121,52 @@ call plug#begin('~/.vimplugins/plugged')
 if !exists('g:vscode')
 
     Plug 'NLKNguyen/papercolor-theme'
+        let s:paper_color_default = {
+            \   'theme': {
+            \     'default.dark': {
+            \       'override' : {
+            \         'folded_bg': ['#1c1c1c', '234'],
+            \       }
+            \     }
+            \   }
+            \ }
+        let s:paper_color_transparent = {
+            \   'theme': {
+            \     'default.dark': {
+            \       'override' : {
+            \         'color00'       : ['#000000', '0'],
+            \         'linenumber_bg' : ['#000000', '0'],
+            \         'diffadd_bg'    : ['#000000', '0'],
+            \         'diffdelete_bg' : ['#000000', '0'],
+            \         'difftext_bg'   : ['#000000', '0'],
+            \         'diffchange_bg' : ['#000000', '0'],
+            \         'folded_bg'     : ['#1c1c1c', '234'],
+            \         'folded_fg'     : ['#d7875f', '173'],
+            \       }
+            \     }
+            \   }
+            \ }
+        let g:PaperColor_Theme_Options = s:paper_color_default
+        let s:paper_color_transparent_background = 0
+        function! PaperColorToggleBackground()
+            if s:paper_color_transparent_background
+                let g:PaperColor_Theme_Options = s:paper_color_default
+                let s:paper_color_transparent_background = 0
+            else
+                let g:PaperColor_Theme_Options = s:paper_color_transparent
+                let s:paper_color_transparent_background = 1
+            endif
+        endfunction
+        " Some terminals have trouble rendering the full background,
+        " and PaperColor's 'transparent_background' option doesn't handle
+        " removing background colors from other elements.
+        command Bg call PaperColorToggleBackground() | colo PaperColor
+
     Plug 'ajmwagar/vim-deus'
     Plug 'danilo-augusto/vim-afterglow'
+    Plug 'kristijanhusak/vim-hybrid-material'
+        let g:enable_bold_font = 1
+        let g:hybrid_transparent_background = 1
 
     Plug 'itchyny/vim-cursorword'           " Unintrusive * preview
         let g:cursorword_delay = 369
@@ -307,6 +354,38 @@ Plug 'junegunn/vim-after-object'        " motions for moving after chars
 Plug 'junegunn/vim-easy-align'          " Vertically align text by character
     xmap ga <Plug>(EasyAlign)
     nmap ga <Plug>(EasyAlign)
+    let g:easy_align_bypass_fold = 1
+    let g:easy_align_delimiters = {
+        \ '>': { 'pattern': '>>\|=>\|>' },
+        \ '\': { 'pattern': '\\' },
+        \ '/': {
+        \     'pattern': '//\+\|/\*\|\*/',
+        \     'delimiter_align': 'l',
+        \     'ignore_groups': ['!Comment']
+        \   },
+        \ ']': {
+        \     'pattern':       '\]\zs',
+        \     'left_margin':   0,
+        \     'right_margin':  1,
+        \     'stick_to_left': 0
+        \   },
+        \ ')': {
+        \     'pattern':       ')\zs',
+        \     'left_margin':   0,
+        \     'right_margin':  1,
+        \     'stick_to_left': 0
+        \   },
+        \ 'f': {
+        \     'pattern': ' \(\S\+(\)\@=',
+        \     'left_margin': 0,
+        \     'right_margin': 0
+        \   },
+        \ 'd': {
+        \     'pattern': ' \ze\S\+\s*[;=]',
+        \     'left_margin': 0,
+        \     'right_margin': 0
+        \   }
+        \ }
 
 Plug 'svermeulen/vim-cutlass'       " x and D no longer yank text to registers
                                     " but retain cut behavior for d
@@ -360,8 +439,8 @@ if !exists('g:vscode')
     Plug 'let-def/vimbufsync', { 'for': 'coq' }
     Plug 'whonore/coqtail', { 'for': 'coq' }
         function! g:CoqtailHighlight()
-          hi def CoqtailChecked cterm=underline
-          hi def CoqtailSent    cterm=undercurl
+          hi def CoqtailChecked ctermbg=236
+          hi def CoqtailSent    ctermbg=237
         endfunction
         if !has('nvim')
         augroup coqtail_mappings
@@ -387,6 +466,12 @@ if !exists('g:vscode')
                 \|  nmap <buffer> <c-c>p    <leader>cp  " :Coq Print
                 \|  nmap <buffer> <c-c>n    <leader>cf  " :Coq Locate
                 \|  nmap <buffer> <c-c>s    <leader>cs  " :Coq Search
+                " <leader>ch => :Coq Check
+                " <leader>ca => :Coq About
+                " <leader>cp => :Coq Print
+                " <leader>cf => :Coq Locate
+                " <leader>cs => :Coq Search
+            autocmd Filetype coq syntax sync fromstart
         augroup END
         else
             let g:coqtail_nomap = 1
