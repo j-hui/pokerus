@@ -262,7 +262,6 @@ endif
 " ----------------------------------------------------------------------------
 if !exists('g:vscode')
     Plug 'farmergreg/vim-lastplace'
-        let g:lastplace_open_folds = 0
 
     Plug 'duggiefresh/vim-easydir'
 
@@ -278,10 +277,8 @@ Plug 'tpope/vim-commentary'             " use gcc to comment things out
 Plug 'tpope/vim-surround'               " ds, cs, ys to change text surroundings
 Plug 'tpope/vim-characterize'           " use ga to see metadata about unicode
 Plug 'tpope/vim-endwise'                " write endings
-if !exists('g:vscode')
-    Plug 'tpope/vim-rsi'                " readline style commands in insert mode
-        inoremap <C-D> <C-D>
-endif
+Plug 'tpope/vim-rsi'                    " readline style commands in insert mode
+    inoremap <C-D> <C-D>
 Plug 'tpope/vim-speeddating'            " increment/decrement dates
     let g:speeddating_no_mappings = 1   " <C-S> to increment
     " force a non-recursive map to the fallback functions
@@ -311,13 +308,6 @@ Plug 'junegunn/vim-easy-align'          " Vertically align text by character
     xmap ga <Plug>(EasyAlign)
     nmap ga <Plug>(EasyAlign)
 
-Plug 'junegunn/vim-slash'               " Better search with auto :noh
-    if has('timers')                    " ... blinking
-        noremap <expr> <plug>(slash-after) 'zz'.slash#blink(3, 200)
-    else                                " ... centering matches
-        noremap <plug>(slash-after) zz
-    endif                               " ... and non-jumping */#
-
 Plug 'svermeulen/vim-cutlass'       " x and D no longer yank text to registers
                                     " but retain cut behavior for d
     nnoremap d  d
@@ -325,7 +315,7 @@ Plug 'svermeulen/vim-cutlass'       " x and D no longer yank text to registers
     vnoremap d  d
     nnoremap dd dd
 
-Plug 'vim-scripts/ReplaceWithRegister'  " Exchange text with register
+Plug 'vim-scripts/ReplaceWithRegister'  " Exchange text with register gr{motion}
 Plug 'tommcdo/vim-exchange'             " Exchange text with repeated cx{motion}
 
 Plug 'AndrewRadev/sideways.vim'         " Move things sideways in lists
@@ -400,7 +390,7 @@ if !exists('g:vscode')
         augroup END
         else
             let g:coqtail_nomap = 1
-        endif
+      endif
     " }}}
 " Markdown {{{
     Plug 'tpope/vim-markdown',  { 'for': 'markdown' }
@@ -461,7 +451,7 @@ augroup END
 
 set colorcolumn=+1,+2
 
-set list lcs=tab:\┆\ " <-- space
+set list listchars=tab:\┆\ ,trail:·,extends:‥
 set conceallevel=2
 
 set foldlevelstart=10
@@ -621,7 +611,6 @@ noremap <C-w>n <Esc>:bn<CR>
 noremap <C-w>p <Esc>:bp<CR>
 noremap <C-w>q <Esc>:bd<CR>
 
-
 " }}}
 
 " Editing {{{
@@ -661,6 +650,10 @@ command! -bang Refresh call s:refresh()
 
 " Trim trailing spaces {{{
 command! -range Trim <line1>,<line2> substitute/\s\+$//g | normal! ``
+" }}}
+
+" Go to location of file {{{
+command! Here cd %:h
 " }}}
 
 " Modeline {{{
@@ -705,6 +698,11 @@ set spellfile=~/.vim/spell/en.utf-8.add
 augroup help_settings " {{{
     autocmd FileType help
       \ noremap <buffer><nowait> q :q<CR>
+augroup END " }}}
+
+augroup vim_settings " {{{
+    autocmd!
+    autocmd BufNewFile,BufReadPost */.vim_local set filetype=vim
 augroup END " }}}
 
 augroup latex_settings " {{{
