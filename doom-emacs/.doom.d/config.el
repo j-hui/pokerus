@@ -8,10 +8,10 @@
       scroll-step 1
       )
 
-;; (setq-default indent-tabs-mode nil
-;;               tab-width 4
-;;               tab-stop-list (quote (4 8))
-;;               )
+(setq-default indent-tabs-mode nil
+              tab-width 4
+              tab-stop-list (quote (4 8))
+              )
 
 (setq vc-follow-symlinks t)
 
@@ -20,4 +20,12 @@
       :n "C-b" #'backward-char
       :i "C-n" #'next-line
       :i "C-p" #'previous-line
-)
+      )
+
+(map! :map lean-mode-map
+      :n "C-c C-d" #'lean-find-definition
+      )
+
+(after! lean-mode
+      (set-company-backend! 'lean-mode nil)
+      )
