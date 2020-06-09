@@ -3,12 +3,12 @@
 set -e
 TAG="[POKERUS]"
 
-function pecho () { echo "$TAG           " "$@" >&2 ; }
-function wecho () { echo "$TAG  WARN     " "$@" >&2 ; }
-function eecho () { echo "$TAG  ERROR    " "$@" >&2 ; }
+pecho () { echo "$TAG           " "$@" >&2 ; }
+wecho () { echo "$TAG  WARN     " "$@" >&2 ; }
+eecho () { echo "$TAG  ERROR    " "$@" >&2 ; }
 
 # Echoes "." if we want to ignore it
-function ignores () {
+ignores () {
     case "$1" in
         .DS_STORE)
             echo .
@@ -25,7 +25,7 @@ function ignores () {
     esac
 }
 
-function infect () {
+infect () {
     src="$1"
     dst="$2"
 
