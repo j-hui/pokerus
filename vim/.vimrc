@@ -160,7 +160,7 @@ if !exists('g:vscode')
         " Some terminals have trouble rendering the full background,
         " and PaperColor's 'transparent_background' option doesn't handle
         " removing background colors from other elements.
-        command Bg call PaperColorToggleBackground() | colo PaperColor
+        command! Bg call PaperColorToggleBackground() | colo PaperColor
 
     Plug 'ajmwagar/vim-deus'
     Plug 'danilo-augusto/vim-afterglow'
@@ -227,7 +227,7 @@ if !exists('g:vscode')
 
     Plug 'ap/vim-buftabline'            " Tab bar at top
         let g:buftabline_indicators = 1 " Show whether modified
-        let g:buftabline_numbers    = 2 " Show ordinal numbers
+        let g:buftabline_numbers    = 1 " Show buffer numbers
 
         nmap <C-w>1 <Plug>BufTabLine.Go(1)
         nmap <C-w>2 <Plug>BufTabLine.Go(2)
@@ -451,10 +451,10 @@ if !exists('g:vscode')
             autocmd Filetype coq
                 \   nnoremap <buffer> <c-c>.             :CoqToLine<CR>
                 \|  inoremap <buffer> <c-c>.        <Esc>:CoqToLine<CR>
-                \|  nnoremap <buffer> <c-c>l             m`$:CoqToLine<CR>``
-                \|  inoremap <buffer> <c-c>l        <Esc>m`$:CoqToLine<CR>``
-                \|  nnoremap <buffer> <c-c><CR>          m`$:CoqToLine<CR>``
-                \|  inoremap <buffer> <c-c><CR>     <Esc>m`$:CoqToLine<CR>``
+                \|  nnoremap <buffer> <c-c>l             mz$:CoqToLine<CR>`z
+                \|  inoremap <buffer> <c-c>l        <Esc>mz$:CoqToLine<CR>`z
+                \|  nnoremap <buffer> <c-c><CR>          mz$:CoqToLine<CR>`z
+                \|  inoremap <buffer> <c-c><CR>     <Esc>mz$:CoqToLine<CR>`z
             autocmd Filetype coq
                 \   nmap <buffer> <c-c>j                 :CoqNext<CR>
                 \|  nmap <buffer> <c-c>k                 :CoqUndo<CR>
@@ -684,8 +684,8 @@ inoremap kj     <Esc>
 " Readline style navigation (in addition to vim-rsi)
 nnoremap <C-n>      <C-e>j
 nnoremap <C-p>      <C-y>k
-nnoremap <C-e>      g$
-nnoremap <C-a>      g^
+nnoremap <C-e>      $
+nnoremap <C-a>      ^
 nnoremap <C-f>      l
 nnoremap <C-b>      h
 inoremap <C-n>      <down>
@@ -893,7 +893,7 @@ augroup coq_settings " {{{
                 \ softtabstop=2
                 \ commentstring=(*%s*)
                 \ comments=sr:(*,mb:*,ex:*)
-                \ formatoptions=cqortj
+                " \ formatoptions=cqtlj
 augroup END " }}}
 
 augroup lean_settings " {{{
@@ -906,7 +906,7 @@ augroup lean_settings " {{{
                 \ softtabstop=2
                 \ commentstring=--\ %s
                 \ comments=s1fl:/-,mb:-,ex:-/,:--
-                \ formatoptions+=cqortj
+                " \ formatoptions+=cqortj
 augroup END " }}}
 
 " }}}
