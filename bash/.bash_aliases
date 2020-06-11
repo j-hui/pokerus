@@ -14,14 +14,14 @@ PATH_ADD() {
 cd
 
 ### Vim
-if which nvim > /dev/null; then
+if which nvim &> /dev/null; then
     export EDITOR=nvim
     alias vim='nvim'
-elif which vim > /dev/null; then
+elif which vim &> /dev/null; then
     export EDITOR=vim
 fi
 
-if which floaterm > /dev/null; then
+if which floaterm &> /dev/null; then
     export EDITOR=floaterm
     alias vim='floaterm'
 fi
@@ -30,13 +30,13 @@ mkdir -p ~/.tmp/backup ~/.tmp/swp ~/.tmp/undo
 
 ### fzf
 
-if which bat > /dev/null; then
+if which bat &> /dev/null; then
     export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always {} | head -500'"
 else
     export FZF_CTRL_T_OPTS="--preview 'cat {}'"
 fi
 
-if which fd > /dev/null; then
+if which fd &> /dev/null; then
     export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
     export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
     export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
