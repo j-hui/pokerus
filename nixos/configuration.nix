@@ -63,7 +63,7 @@
 
     gtk3
     bspwm sxhkd
-    i3lock-color
+    betterlockscreen
     compton
     yabar
     rofi
