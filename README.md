@@ -1,7 +1,7 @@
 # Pokerus
 
-Using GNU stow to sync my dotfiles
-
+Maintaining my dot files across macOS and Linux.
+This `README.md` contains some handy notes for setting things up.
 
 ## Darwin Bootstrap
 
@@ -25,11 +25,7 @@ Good to have these.
 
 ## Prerequisites
 
-    sudo git stow vim tmux make
-
-If GNU stow is unavailable, get it from the GNU mirror directly:
-
-    wget http://ftp.gnu.org/gnu/stow/stow-latest.tar.gz
+    sudo git vim tmux make
 
 ## Usage
 
@@ -141,18 +137,20 @@ For `systemd`:
 
     systemctl set-default multi-user.target
 
-### Darwin
+### SSH
 
 Good for copying keys:
 
     alias key='cat ~/.ssh/id_rsa.pub'
 
-And then SSH `config`:
+And then SSH `config`, on macOS:
 
     Host *
         UseKeychain yes
         AddKeysToAgent yes
         ForwardAgent yes
+
+### Darwin
 
 Make Terminal.app aware of _italics_:
 
@@ -179,6 +177,15 @@ Control where screenshots are sent:
     defaults write com.apple.screencapture ~/data/screenshots
     killall SystemUIServer
 
+### Doom Emacs
+
+In `pokerus` directory:
+
+    ./infect.sh doom-emacs
+    git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.emacs.d
+    ~/.emacs.d/bin/doom install
+
+If `install` fails, running it a second term fixes it for some reason..
 
 Key bindings
 ------------
