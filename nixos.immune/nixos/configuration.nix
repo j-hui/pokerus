@@ -43,12 +43,12 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     bash sudo
-    git
+    (git.override { guiSupport = false; })
     stow
     tmux
 
     ed
-    vim neovim
+    vimHugeX neovim
     emacs
     vscode
 
@@ -63,7 +63,7 @@
 
     gtk3
     bspwm sxhkd
-    betterlockscreen
+    xautolock betterlockscreen
     compton
     yabar
     rofi
@@ -73,6 +73,7 @@
     scrot
     ranger highlight
     mpv
+    asciinema
 
     zathura
     kitty
@@ -82,6 +83,7 @@
     slack
     discord
     vlc
+    zoom-us
 
     (python3.withPackages(ps: with ps; [
         virtualenvwrapper
