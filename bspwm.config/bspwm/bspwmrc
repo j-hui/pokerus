@@ -15,7 +15,8 @@ yabar &
 
 xsetroot -cursor_name left_ptr &
 
-betterlockscreen -w ~/.config/xp-share/desktop-bg &
+betterlockscreen -u ~/.config/xp-share/desktop-bg && \
+    betterlockscreen -w ~/.config/xp-share/desktop-bg &
 xautolock -time 10 -locker 'betterlockscreen -l dimblur' &
 xset -dpms &
 
