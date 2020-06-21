@@ -164,6 +164,10 @@ ssh-conf() {
     fi
 }
 
+gi() {
+    curl -sL "https://www.toptal.com/developers/gitignore/api/$1"
+}
+
 config() {
     if [[ -e "$HOME/.config/$1" ]]; then
         $EDITOR "$HOME/.config/$1/"*
