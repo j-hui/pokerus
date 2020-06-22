@@ -21,4 +21,4 @@
 [color]
     ui = auto
 [core]
-    excludesfile = ~/.gitignore
+    excludesfile = ~/.gitignore_global
