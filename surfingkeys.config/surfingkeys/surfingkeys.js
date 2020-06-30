@@ -326,6 +326,8 @@ unmap(';pp'); // Paste html on current page
 
 var yMappings = ['yy', 'yY', 'yf', 'yF', 'yw', 'yW'];
 
+map('q', 'x');
+
 /* Sessions */
 unmap('ZZ');
 unmap('ZR');
