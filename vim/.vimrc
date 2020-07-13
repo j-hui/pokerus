@@ -13,8 +13,8 @@
 " Core/plumbing/hacks {{{
 " ============================================================================
 
-let mapleader      = ' '
-let maplocalleader = ' '
+" let mapleader      = ' '
+" let maplocalleader = ' '
 
 " Note: these are already turned on by vim-plug
 set nocompatible
@@ -201,6 +201,7 @@ if !exists('g:vscode')
 
     Plug 'itchyny/lightline.vim'        " Lightweight status line at bottom
         let g:lightline = {
+            \ 'colorscheme': 'PaperColor',
             \ 'active': {
             \   'left': [
             \       [ 'mode', 'paste' ],
@@ -436,13 +437,11 @@ if !exists('g:vscode')
         augroup END
 " }}}
 " Coq {{{
-    Plug 'let-def/vimbufsync', { 'for': 'coq' }
     Plug 'whonore/coqtail', { 'for': 'coq' }
         function! g:CoqtailHighlight()
           hi def CoqtailChecked ctermbg=236
           hi def CoqtailSent    ctermbg=237
         endfunction
-        if !has('nvim')
         augroup coqtail_mappings
             autocmd!
             autocmd Filetype coq
@@ -473,10 +472,7 @@ if !exists('g:vscode')
                 " <leader>cs => :Coq Search
             autocmd Filetype coq syntax sync fromstart
         augroup END
-        else
-            let g:coqtail_nomap = 1
-      endif
-    " }}}
+" }}}
 " Markdown {{{
     Plug 'tpope/vim-markdown',  { 'for': 'markdown' }
         let g:markdown_fenced_languages = [
@@ -527,7 +523,8 @@ set display+=lastline       " Show as much as possible of the last line
 set textwidth=80            " Bound lines to 80 characters
 set nowrap                  " But don't wrap lines
 set scrolloff=5             " Keep a few lines under the cursor
-set sidescrolloff=4         " Keep a few lines to the side of the cursor
+set sidescrolloff=2         " Keep a few lines to the side of the cursor
+set statusline=2
 
 augroup cursor_underline    " Underline cursor in insert mode
     autocmd!
@@ -658,11 +655,11 @@ set modelines=5
 " Appearance {{{
 " ----------------------------------------------------------------------------
 " Highlight characters past 80
-nnoremap <leader>of m`/\%>80v./+<CR>``
+nnoremap <space>of m`/\%>80v./+<CR>``
 
 " Folds
-nnoremap <leader><backspace> zazz
-nnoremap <leader><return> zizz
+nnoremap <space><backspace> zazz
+nnoremap <space><return> zizz
 " }}}
 
 " Navigation {{{
@@ -710,7 +707,7 @@ xnoremap > >gv
 inoremap # X#
 
 " Insert date
-nnoremap <leader>id :put =strftime(\"%Y-%m-%d\")<CR>
+nnoremap <space>id :put =strftime(\"%Y-%m-%d\")<CR>
 inoremap <C-G>d <C-R>=strftime("%Y-%m-%d")<CR>
 
 " Auto indentation
@@ -814,10 +811,10 @@ augroup END " }}}
 augroup markdown_settings " {{{
     autocmd!
     autocmd Filetype markdown setlocal
-                \ tabstop=4
+                \ tabstop=2
                 \ expandtab
-                \ shiftwidth=4
-                \ softtabstop=4
+                \ shiftwidth=2
+                \ softtabstop=2
                 \ textwidth=80
                 \ spell
 augroup END " }}}
