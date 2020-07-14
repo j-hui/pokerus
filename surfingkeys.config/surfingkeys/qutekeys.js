@@ -241,6 +241,11 @@ unmap('yv');
 // map('yW', 'ymv'); // Yank text of multiple elements
 unmap('ymv');
 
+map('gr', '>>');
+unmap('>>');
+map('gl', '<<');
+unmap('<<');
+
 /* Insert mode */
 /* (Unmap most things here, delegate to OS readline shortcuts) */
 imap('<Ctrl-a>', '<Ctrl-f>'); // Beginning of line
