@@ -249,15 +249,15 @@ if !exists('g:vscode')
     Plug 'psliwka/vim-smoothie'         " Scroll acceleration animation
         let g:smoothie_base_speed = 42
 
-    if has('nvim') || has('patch-8.0.902')
-        Plug 'mhinz/vim-signify'        " Version control modification markers
-    else
-        Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
-    endif
-        nnoremap <leader>gh :SignifyToggleHighlight<CR>
-        nnoremap <leader>gf :SignifyFold!<CR>
-        nnoremap <leader>gd :SignifyHunkDiff<CR>
-        nnoremap <leader>gu :SignifyHunkUndo<CR>
+    " if has('nvim') || has('patch-8.0.902')
+    "     Plug 'mhinz/vim-signify'        " Version control modification markers
+    " else
+    "     Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
+    " endif
+    "     nnoremap <leader>gh :SignifyToggleHighlight<CR>
+    "     nnoremap <leader>gf :SignifyFold!<CR>
+    "     nnoremap <leader>gd :SignifyHunkDiff<CR>
+    "     nnoremap <leader>gu :SignifyHunkUndo<CR>
 
 endif " vscode
 " }}}
@@ -491,6 +491,7 @@ if !exists('g:vscode')
     Plug 'fatih/vim-go',            { 'for': 'go' }
     Plug 'leanprover/lean.vim',     { 'for': 'lean' }
     Plug 'idris-hackers/idris-vim', { 'for': 'idris' }
+    Plug 'LnL7/vim-nix',            { 'for': 'nix' }
 " }}}
 endif
 " }}}
