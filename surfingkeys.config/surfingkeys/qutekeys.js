@@ -199,8 +199,8 @@ unmap('i');
 map(';I', 'I');  // Go to edit box with vim editor
 unmap('I');
 
-map('I', '<Alt-s>'); // Toggle SurfingKeys
-unmap('<Alt-s>');
+// map('I', '<Alt-s>'); // Toggle SurfingKeys
+// unmap('<Alt-s>');
 map('i', '<Alt-i>'); // Enter passthrough
 unmap('<Alt-i>');
 map('\\', 'p');       // Enter ephemeral passthrough
@@ -270,9 +270,9 @@ var numMappings = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
    unmap(k, /vimawesome\.com/);
 });
 
-unmapAllExcept([],
+unmapAllExcept(['J', 'K', 'H', 'L'],
     /mail\.google\.com/);
-unmapAllExcept([],
+unmapAllExcept(['J', 'K', 'H', 'L'],
     /drive\.google\.com/);
 unmapAllExcept([],
     /docs\.google\.com/);
