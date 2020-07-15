@@ -42,9 +42,9 @@
 ctrl + cmd - t : skhd -k "ctrl + cmd - 1"; open -a "kitty"
 shift + ctrl + cmd - t : open -a "Terminal"
 
-ctrl + cmd - o : open -a "Firefox"
+ctrl + cmd - o : skhd -k "ctrl + cmd - 2"; open -a "qutebrowser"
 
-ctrl + cmd - y : open -a "Youtube Music"
+ctrl + cmd - y : open -a "Spotify"
 
 ctrl + cmd - 0 : open -a "Bitwarden"
 shift + ctrl + cmd - 0 : bw generate -uln --length 16 | pbcopy
