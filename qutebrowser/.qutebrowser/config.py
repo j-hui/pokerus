@@ -2,6 +2,9 @@
 #   qute://help/configuring.html
 #   qute://help/settings.html
 
+import os
+os.environ['PATH'] += os.pathsep + '/usr/local/bin'
+
 c.aliases = {
         'q': 'close',
         'qa': 'quit',
@@ -13,6 +16,10 @@ c.aliases = {
         't': 'open --background',
         'priv': 'open --private',
         'bookmarks': 'open -t qute://bookmarks/',
+        'mpv': 'spawn mpv --autofit=100%x100% {url}',
+        'ompv': 'hint links spawn mpv --autofit=100%x100% {hint-url}',
+        'chrome': 'spawn open -a "Google Chrome" {url}',
+        'ochrome': 'hint all spawn open -a "Google Chrome" {hint-url}',
 }
 
 # Time interval (in milliseconds) between auto-saves of config/cookies/etc.
@@ -21,14 +28,23 @@ c.auto_save.interval = 15000
 # Always restore open sites when qutebrowser is reopened. Type: Bool
 c.auto_save.session = True
 
-c.editor.command = ["/usr/local/bin/gvim", "-f", "{file}", "-c", "normal {line}G{column0}l"]
+c.editor.command = ["gvim", "-f", "{file}", "-c", "normal {line}G{column0}l"]
 
 c.content.pdfjs = True
 c.content.autoplay = False
+c.tabs.background = True
+c.tabs.close_mouse_button = 'right'
+
+c.colors.webpage.prefers_color_scheme_dark = True
+# config.set('colors.webpage.bg', 'black')
+# config.set('colors.webpage.darkmode.enabled', True)
 
 config.bind('<Ctrl-n>', 'prompt-item-focus next', mode='prompt')
 config.bind('<Ctrl-p>', 'prompt-item-focus prev', mode='prompt')
-
+config.bind('<Ctrl-n>', 'completion-item-focus --history next', mode='command')
+config.bind('<Ctrl-p>', 'completion-item-focus --history prev', mode='command')
+config.bind('<Ctrl-o>', 'open-editor', mode='insert')
+config.unbind('<Ctrl-e>', mode='insert')
 
 
 #### Auto-generated stuff ####
