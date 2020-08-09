@@ -169,7 +169,7 @@ gi() {
 }
 
 config() {
-    if [[ -e "$HOME/.config/$1" ]]; then
+    if [ -e "$HOME/.config/$1" ]; then
         $EDITOR "$HOME/.config/$1/"*
     else
         echo "Usage:"
@@ -182,37 +182,48 @@ if [ -f ~/.ssh/config ]; then
 fi
 
 ### Prompt/display configuration
-# [ -z "$PS1" ] && return
 
-# Colors
-GREEN="\[\033[40;0;32m\]"
-RED="\[\033[40;0;31m\]"
-YELLOW="\[\033[40;0;33m\]"
-CYAN="\[\033[40;1;36m\]"
-BLUE="\[\033[40;0;34m\]"
-GRAY="\[\033[40;0;37m\]"
-CLEAR="\[\033[0m\]"
+# only works on Bash
+if [ "${0#*bash}" != "$0" ]; then
 
-# Prompt formatting
-BASE="$GRAY[$RED\u$YELLOW@$BLUE\h:$YELLOW\W$GRAY]"
-NERR="\[\033[40;0;33m\]8==D\[\033[40;0;36m\]~"
-ERR="\[\033[40;0;31m\]D==\[\033[40;0;36m\]8\[\033[40;0;31m\]<"
-SFW_NERR='\[\033[40;0;33m\]$'
-SFW_ERR='\[\033[40;0;31m\]D:'
-BR='############################'
+    # Colors
+    GREEN="\[\033[40;0;32m\]"
+    RED="\[\033[40;0;31m\]"
+    YELLOW="\[\033[40;0;33m\]"
+    CYAN="\[\033[40;1;36m\]"
+    BLUE="\[\033[40;0;34m\]"
+    GRAY="\[\033[40;0;37m\]"
+    CLEAR="\[\033[0m\]"
 
-basic() {
-    export PS1='\u@\h:\w\$ '
-    export PS2='> '
-}
-sfw() {
-    export PS1="$BASE \$(if [[ \$? != 0 ]]; then echo '$SFW_ERR'; else echo '$SFW_NERR'; fi) $CLEAR"
-    export PS2="\[\033[40;0;34m\]> \[\033[0m\]"
-}
-nsfw() {
-    export PS1="$BASE \$(if [[ \$? != 0 ]]; then echo '$ERR'; else echo '$NERR'; fi) $CLEAR"
-    export PS2="\[\033[40;0;34m\]8==D \[\033[0m\]"
-}
+    # Prompt formatting
+    BASE="$GRAY[$RED\u$YELLOW@$BLUE\h:$YELLOW\W$GRAY]"
+    NERR="\[\033[40;0;33m\]8==D\[\033[40;0;36m\]~"
+    ERR="\[\033[40;0;31m\]D==\[\033[40;0;36m\]8\[\033[40;0;31m\]<"
+    SFW_NERR='\[\033[40;0;33m\]$'
+    SFW_ERR='\[\033[40;0;31m\]D:'
+    BR='############################'
+
+    basic() {
+        PS1='\u@\h:\w\$ '
+        PS2='> '
+    }
+
+    sfw() {
+        PS1="$BASE \$(if [ \$? != 0 ]; then echo '$SFW_ERR'; else echo '$SFW_NERR'; fi) $CLEAR"
+        PS2="\[\033[40;0;34m\]> \[\033[0m\]"
+    }
+
+    nsfw() {
+        PS1="$BASE \$(if [ \$? != 0 ]; then echo '$ERR'; else echo '$NERR'; fi) $CLEAR"
+        PS2="\[\033[40;0;34m\]8==D \[\033[0m\]"
+    }
+
+    # Automatically trim long paths in the prompt (requires Bash 4.x)
+    PROMPT_DIRTRIM=2
+
+    sfw
+
+fi # ["${0#*bash}" != "$0"]
 
 # colored man pages
 man() {
@@ -226,30 +237,6 @@ man() {
         LESS_TERMCAP_us=$(printf "\e[1;32m") \
             man "$@"
 }
-
-# Automatically trim long paths in the prompt (requires Bash 4.x)
-PROMPT_DIRTRIM=2
-
-# show "[hh:mm] user@host:pwd" in xterm title bar
-if [ "$TERM_PROGRAM" = "Apple_Terminal" ]; then
-    # for Mac Terminal, omit "User@Users-MacBook-Air"
-    # and preserve PROMPT_COMMAND set by /etc/bashrc.
-    show_what_in_title_bar='"[$(date +%H:%M)] ${PWD/#$HOME/~}"'
-    PROMPT_COMMAND='printf "\033]0;%s\007" '"$show_what_in_title_bar; $PROMPT_COMMAND"
-else
-    show_what_in_title_bar='"[$(date +%H:%M)] ${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/~}"'
-    case ${TERM} in
-        xterm*|rxvt*|Eterm|aterm|kterm|gnome*)
-            PROMPT_COMMAND='printf "\033]0;%s\007" '$show_what_in_title_bar
-            ;;
-        screen)
-            PROMPT_COMMAND='printf "\033_%s\033\\" '$show_what_in_title_bar
-            ;;
-    esac
-fi
-unset show_what_in_title_bar
-
-sfw
 
 ### Readline
 
@@ -305,6 +292,10 @@ bind '"\e[D": backward-char'
 
 # Record each line as it gets issued
 PROMPT_COMMAND='history -a'
+
+### File security
+
+umask 077
 
 if [ -f ~/.bash_local ]; then
      source ~/.bash_local
