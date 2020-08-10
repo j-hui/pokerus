@@ -485,6 +485,12 @@ if !exists('g:vscode')
                     \ 'haskell'
                     \ ]
 " }}}
+" Promela {{{
+    augroup ftpromela
+        au BufNewFile,BufRead *.prom,*.prm,*.promela    setf promela
+    augroup END
+    Plug 'vim-scripts/promela.vim', { 'for': 'promela' }
+" }}}
 " Others {{{
     Plug 'z0mbix/vim-shfmt',        { 'for': 'sh' }
         let g:shfmt_extra_args = '-i 2 -ci -sr'
