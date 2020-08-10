@@ -251,24 +251,22 @@ unset show_what_in_title_bar
 
 sfw
 
-### Readline
+sbind () { bind "$@" 2>/dev/null ; }
 
-# Prevent file overwrite on stdout redirection
-# Use `>|` to force redirection to an existing file
-set -o noclobber
+### Readline
 
 # Enable history expansion with space
 # E.g. typing !!<space> will replace the !! with your last command
-bind Space:magic-space
+sbind Space:magic-space
 
 # Perform file completion in a case insensitive fashion
-bind "set completion-ignore-case on"
+sbind "set completion-ignore-case on"
 
 # Treat hyphens and underscores as equivalent
-bind "set completion-map-case on"
+sbind "set completion-map-case on"
 
 # Display matches for ambiguous patterns at first tab press
-bind "set show-all-if-ambiguous on"
+sbind "set show-all-if-ambiguous on"
 
 ### History
 
@@ -298,13 +296,15 @@ HISTTIMEFORMAT='%F %T '
 
 # Enable incremental history search with up/down arrows (also Readline goodness)
 # Learn more about this here: http://codeinthehole.com/writing/the-most-important-command-line-tip-incremental-history-searching-with-inputrc/
-bind '"\e[A": history-search-backward'
-bind '"\e[B": history-search-forward'
-bind '"\e[C": forward-char'
-bind '"\e[D": backward-char'
+sbind '"\e[A": history-search-backward'
+sbind '"\e[B": history-search-forward'
+sbind '"\e[C": forward-char'
+sbind '"\e[D": backward-char'
 
 # Record each line as it gets issued
 PROMPT_COMMAND='history -a'
+
+unset sbind
 
 if [ -f ~/.bash_local ]; then
      source ~/.bash_local
