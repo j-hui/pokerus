@@ -10,7 +10,7 @@ ctrl + super + shift + t
     kitty
 
 ctrl + super + o
-    xdo activate -N Firefox || firefox
+    xdo activate -N qutebrowser || qutebrowser
 ctrl + super + shift + o
     firefox
  
@@ -19,8 +19,8 @@ ctrl + super + BackSpace
 ctrl + super + shift + BackSpace
     pkill -USR1 -x sxhkd
 
-super + alt + 0
-    /opt/enpass/Enpass showassistant
+ctrl + super + 0
+    bitwarden
 
 super + space
     rofi -modi run,drun -show drun -columns 1 -width 24 -lines 8 -padding 45 -hide-scrollbar -show-icons

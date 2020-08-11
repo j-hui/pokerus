@@ -7,20 +7,24 @@ configuration {
     terminal: "kitty";
     /* show-icons: false; */
 
-    kb-primary-paste: "Super+V";
 /*  kb-clear-line: "Control+w";*/
 /*  kb-screenshot: "Alt+S";*/
+
+    kb-primary-paste: "Super+V";
+
     kb-move-front: "Control+a";
     kb-move-end: "Control+e";
-    kb-move-word-back: "Alt+b";
-    kb-move-word-forward: "Alt+f";
+    kb-move-word-back: "Alt+Left,Alt+b";
+    kb-move-word-forward: "Alt+Right,Alt+f";
     kb-move-char-back: "Left,Control+b";
     kb-move-char-forward: "Right,Control+f";
-    kb-remove-word-back: "Control+Alt+h,Alt+BackSpace";
+
+    kb-remove-word-back: "Alt+BackSpace,Control+Alt+h";
     kb-remove-word-forward: "Control+Alt+d";
     kb-remove-char-forward: "Delete,Control+d";
     kb-remove-char-back: "BackSpace,Control+h";
     kb-remove-to-eol: "Control+k";
     kb-remove-to-sol: "Control+u";
+
     kb-cancel: "Escape,Control+g,Control+bracketleft";
 }

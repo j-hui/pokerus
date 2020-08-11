@@ -1,6 +1,8 @@
 #! /bin/sh
 
 sxhkd &
+polybar top &
+polybar bottom &
 
 xsetroot -cursor_name left_ptr &
 
@@ -17,3 +19,4 @@ bspc config click_to_focus any
 
 bspc rule -a kitty   desktop='^1' follow=on
 bspc rule -a Firefox desktop='^2' follow=on
+bspc rule -a qutebrowser desktop='^2' follow=on
