@@ -485,12 +485,6 @@ if !exists('g:vscode')
                     \ 'haskell'
                     \ ]
 " }}}
-" Promela {{{
-    augroup ftpromela
-        au BufNewFile,BufRead *.prom,*.prm,*.promela    setf promela
-    augroup END
-    Plug 'vim-scripts/promela.vim', { 'for': 'promela' }
-" }}}
 " Others {{{
     Plug 'z0mbix/vim-shfmt',        { 'for': 'sh' }
         let g:shfmt_extra_args = '-i 2 -ci -sr'
@@ -498,6 +492,7 @@ if !exists('g:vscode')
     Plug 'leanprover/lean.vim',     { 'for': 'lean' }
     Plug 'idris-hackers/idris-vim', { 'for': 'idris' }
     Plug 'LnL7/vim-nix',            { 'for': 'nix' }
+    Plug 'vim-scripts/promela.vim', { 'for': 'promela' }
 " }}}
 endif
 " }}}
@@ -897,6 +892,19 @@ augroup coq_settings " {{{
                 \ softtabstop=2
                 \ commentstring=(*%s*)
                 \ comments=sr:(*,mb:*,ex:*)
+                " \ formatoptions=cqtlj
+augroup END " }}}
+
+augroup promela_settings " {{{
+    autocmd!
+    autocmd BufNewFile,BufReadPost *.prom,*.prm,*.promela  setf promela
+    autocmd Filetype promela setlocal
+                \ tabstop=2
+                \ expandtab
+                \ shiftwidth=2
+                \ softtabstop=2
+                " \ commentstring=/*%s*/
+                " \ comments=sr:/*,mb:*,ex:*/
                 " \ formatoptions=cqtlj
 augroup END " }}}
 
