@@ -908,6 +908,18 @@ augroup promela_settings " {{{
                 " \ formatoptions=cqtlj
 augroup END " }}}
 
+augroup protobuf_settings " {{{
+    autocmd!
+    autocmd Filetype proto setlocal
+                \ tabstop=2
+                \ expandtab
+                \ shiftwidth=2
+                \ softtabstop=2
+                " \ commentstring=/*%s*/
+                " \ comments=sr:/*,mb:*,ex:*/
+                " \ formatoptions=cqtlj
+augroup END " }}}
+
 augroup lean_settings " {{{
     autocmd!
     autocmd BufNewFile,BufReadPost *.lean set filetype=lean
