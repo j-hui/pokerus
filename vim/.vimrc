@@ -388,6 +388,7 @@ Plug 'junegunn/vim-easy-align'          " Vertically align text by character
         \   }
         \ }
 
+
 Plug 'svermeulen/vim-cutlass'       " x and D no longer yank text to registers
                                     " but retain cut behavior for d
     nnoremap d  d
@@ -395,17 +396,22 @@ Plug 'svermeulen/vim-cutlass'       " x and D no longer yank text to registers
     vnoremap d  d
     nnoremap dd dd
 
-Plug 'vim-scripts/ReplaceWithRegister'  " Exchange text with register gr{motion}
-Plug 'tommcdo/vim-exchange'             " Exchange text with repeated cx{motion}
-
+Plug 'AndrewRadev/dsf.vim'              " Delete surrounding function
+Plug 'AndrewRadev/linediff.vim'         " Vimdiff ranges
+Plug 'AndrewRadev/bufferize.vim'        " Put Vim command contents in buffer
 Plug 'AndrewRadev/sideways.vim'         " Move things sideways in lists
     nnoremap <c-g>l :SidewaysRight<cr>
     nnoremap <c-g>h :SidewaysLeft<cr>
+
 Plug 'matze/vim-move'                   " Move things in visual mode
     vmap <C-j> <Plug>MoveBlockDown
     vmap <C-l> <Plug>MoveBlockRight
     vmap <C-h> <Plug>MoveBlockLeft
     vmap <C-k> <Plug>MoveBlockUp
+
+Plug 'vim-scripts/ReplaceWithRegister'  " Exchange text with register gr{motion}
+Plug 'tommcdo/vim-exchange'             " Exchange text with repeated cx{motion}
+
 
 " }}}
 
@@ -628,6 +634,10 @@ set ignorecase                  " ignores case
 set smartcase                   " smart case
 set wrapscan                    " jump back to top
 
+if has('patch-8.1.0360') || has('nvim')
+    set diffopt+=internal,algorithm:patience
+endif
+
 " }}}
 
 " Editing {{{
@@ -787,6 +797,11 @@ augroup END " }}}
 augroup vim_settings " {{{
     autocmd!
     autocmd BufNewFile,BufReadPost */.vim_local set filetype=vim
+    autocmd Filetype vim setlocal
+                \ tabstop=2
+                \ expandtab
+                \ shiftwidth=2
+                \ softtabstop=2
 augroup END " }}}
 
 augroup latex_settings " {{{
