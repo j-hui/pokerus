@@ -303,6 +303,7 @@ if !exists('g:vscode')
         nnoremap <silent> <F12> :FloatermToggle<CR>
         tnoremap <silent> <F12> <C-\><C-n>:FloatermToggle<CR>
         tnoremap <silent> <C-[> <C-\><C-n>
+
 endif
 " }}}
 
@@ -523,7 +524,12 @@ call plug#end()
 " ----------------------------------------------------------------------------
  
 set background=dark
-colorscheme PaperColor
+try
+    colorscheme PaperColor
+catch /^Vim\%((\a\+)\)\=:E185/
+    " deal with it
+    echom 'colorscheme PaperColor not installed, run :PlugInstall'
+endtry
 
 set nu rnu                  " Line numbers and relative line numbers
 set display+=lastline       " Show as much as possible of the last line
@@ -690,15 +696,13 @@ inoremap kj     <Esc>
 " nnoremap <C-l> g$
 " nnoremap <C-h> g^
 
-" Readline style navigation (in addition to vim-rsi)
+" Normal mode readline style navigation
 nnoremap <C-n>      <C-e>j
 nnoremap <C-p>      <C-y>k
 nnoremap <C-e>      $
 nnoremap <C-a>      ^
 nnoremap <C-f>      l
 nnoremap <C-b>      h
-inoremap <C-n>      <down>
-inoremap <C-p>      <up>
 
 " Window navigation
 noremap <C-w>n <Esc>:bn<CR>
@@ -723,6 +727,11 @@ inoremap <C-G>d <C-R>=strftime("%Y-%m-%d")<CR>
 
 " Auto indentation
 inoremap <C-G><TAB> <C-F>
+
+" Insertion mode readline style navigation (in addition to vim-rsi)
+inoremap <C-n>      <down>
+inoremap <C-p>      <up>
+inoremap <C-k>      <Esc>lDi
 
 " }}}
 
