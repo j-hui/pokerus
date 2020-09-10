@@ -304,6 +304,11 @@ if !exists('g:vscode')
         tnoremap <silent> <F12> <C-\><C-n>:FloatermToggle<CR>
         tnoremap <silent> <C-[> <C-\><C-n>
 
+    Plug 'AndrewRadev/bufferize.vim'      " command contents in buffer
+
+    Plug 'dense-analysis/ale'             " Asynchronous linting using LSP
+        let g:ale_sign_column_always = 1
+
 endif
 " }}}
 
@@ -399,7 +404,6 @@ Plug 'svermeulen/vim-cutlass'       " x and D no longer yank text to registers
 
 Plug 'AndrewRadev/dsf.vim'              " Delete surrounding function
 Plug 'AndrewRadev/linediff.vim'         " Vimdiff ranges
-Plug 'AndrewRadev/bufferize.vim'        " Put Vim command contents in buffer
 Plug 'AndrewRadev/sideways.vim'         " Move things sideways in lists
     nnoremap <c-g>l :SidewaysRight<cr>
     nnoremap <c-g>h :SidewaysLeft<cr>
@@ -924,6 +928,18 @@ augroup promela_settings " {{{
     autocmd!
     autocmd BufNewFile,BufReadPost *.prom,*.prm,*.promela  setf promela
     autocmd Filetype promela setlocal
+                \ tabstop=2
+                \ expandtab
+                \ shiftwidth=2
+                \ softtabstop=2
+                " \ commentstring=/*%s*/
+                " \ comments=sr:/*,mb:*,ex:*/
+                " \ formatoptions=cqtlj
+augroup END " }}}
+
+augroup protobuf_settings " {{{
+    autocmd!
+    autocmd Filetype proto setlocal
                 \ tabstop=2
                 \ expandtab
                 \ shiftwidth=2
