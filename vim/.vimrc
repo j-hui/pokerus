@@ -639,10 +639,6 @@ set ignorecase                  " ignores case
 set smartcase                   " smart case
 set wrapscan                    " jump back to top
 
-if has('patch-8.1.0360') || has('nvim')
-    set diffopt+=internal,algorithm:patience
-endif
-
 " }}}
 
 " Editing {{{
