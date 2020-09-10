@@ -738,6 +738,22 @@ command! -range Trim <line1>,<line2> substitute/\s\+$//g | normal! ``
 command! Here cd %:h
 " }}}
 
+
+" "Basic" mode: no mouse interaction, line numbers, or sign column {{{
+" Useful for copying and pasting from buffers as text
+let s:basicmode = 0
+function! s:basicToggle()
+    if s:basicmode
+        set mouse=a nu rnu signcolumn=auto
+        let s:basicmode = 0
+    else
+        set mouse= nonu nornu signcolumn=no
+        let s:basicmode = 1
+    endif
+endfunction
+command! BasicToggle call s:basicToggle()
+" }}}
+
 " Modeline {{{
 function! AppendModeline()
   let l:modeline = printf(" vim: set ts=%d sw=%d tw=%d %set :",
