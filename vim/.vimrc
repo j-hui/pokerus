@@ -308,6 +308,9 @@ if !exists('g:vscode')
 
     Plug 'dense-analysis/ale'             " Asynchronous linting using LSP
         let g:ale_sign_column_always = 1
+        let g:ale_lint_delay = 500
+        nmap <silent> [a <Plug>(ale_previous_wrap)
+        nmap <silent> ]a <Plug>(ale_next_wrap)
 
 endif
 " }}}
@@ -495,6 +498,7 @@ if !exists('g:vscode')
                     \ 'ocaml',
                     \ 'haskell'
                     \ ]
+    Plug 'jtratner/vim-flavored-markdown', { 'for': 'markdown' }
 " }}}
 " Others {{{
     Plug 'z0mbix/vim-shfmt',        { 'for': 'sh' }
@@ -504,6 +508,7 @@ if !exists('g:vscode')
     Plug 'idris-hackers/idris-vim', { 'for': 'idris' }
     Plug 'LnL7/vim-nix',            { 'for': 'nix' }
     Plug 'vim-scripts/promela.vim', { 'for': 'promela' }
+    Plug 'chrisbra/csv.vim',        { 'for': 'csv' }
 " }}}
 endif
 " }}}
@@ -528,7 +533,12 @@ call plug#end()
 " ----------------------------------------------------------------------------
  
 set background=dark
-colorscheme PaperColor
+try
+    colorscheme PaperColor
+catch /^Vim\%((\a\+)\)\=:E185/
+    " deal with it
+    echom 'colorscheme PaperColor not installed, run :PlugInstall'
+endtry
 
 set nu rnu                  " Line numbers and relative line numbers
 set display+=lastline       " Show as much as possible of the last line
@@ -691,15 +701,13 @@ inoremap kj     <Esc>
 " nnoremap <C-l> g$
 " nnoremap <C-h> g^
 
-" Readline style navigation (in addition to vim-rsi)
+" Normal mode readline style navigation
 nnoremap <C-n>      <C-e>j
 nnoremap <C-p>      <C-y>k
 nnoremap <C-e>      $
 nnoremap <C-a>      ^
 nnoremap <C-f>      l
 nnoremap <C-b>      h
-inoremap <C-n>      <down>
-inoremap <C-p>      <up>
 
 " Window navigation
 noremap <C-w>n <Esc>:bn<CR>
@@ -724,6 +732,11 @@ inoremap <C-G>d <C-R>=strftime("%Y-%m-%d")<CR>
 
 " Auto indentation
 inoremap <C-G><TAB> <C-F>
+
+" Insertion mode readline style navigation (in addition to vim-rsi)
+inoremap <C-n>      <down>
+inoremap <C-p>      <up>
+inoremap <C-k>      <Esc>lDi
 
 " }}}
 
@@ -843,7 +856,8 @@ augroup END " }}}
 
 augroup markdown_settings " {{{
     autocmd!
-    autocmd Filetype markdown setlocal
+    autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
+    autocmd Filetype ghmarkdown setlocal
                 \ tabstop=2
                 \ expandtab
                 \ shiftwidth=2
@@ -963,6 +977,11 @@ augroup lean_settings " {{{
                 \ commentstring=--\ %s
                 \ comments=s1fl:/-,mb:-,ex:-/,:--
                 " \ formatoptions+=cqortj
+augroup END " }}}
+
+augroup csv_settings " {{{
+    autocmd!
+    autocmd BufNewFile,BufReadPost *.csv set filetype=csv
 augroup END " }}}
 
 " }}}

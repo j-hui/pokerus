@@ -1,5 +1,7 @@
 [push]
     default = simple
+[pull]
+    rebase = false
 [alias]
     co = checkout
     br = branch
