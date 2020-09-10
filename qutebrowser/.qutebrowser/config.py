@@ -7,8 +7,10 @@
 
 #### Configuration ####
 
-# Put kitty, gvim, etc. in Qutebrowser's PATH, at least on macOS
 import os
+import platform
+
+# Put kitty, gvim, etc. in Qutebrowser's PATH, at least on macOS
 os.environ['PATH'] = '/usr/local/bin' + os.pathsep + os.environ['PATH']
 
 # Time interval (in milliseconds) between auto-saves of config/cookies/etc.
@@ -89,25 +91,30 @@ for mode in ['command', 'prompt']:
 
 config.bind('<Ctrl+o>', 'open-editor', mode='insert')
 
-# c.bindings.commands = {
-#     'insert': {
-#         '<Ctrl-f>'        : 'fake-key <Right>',
-#         '<Ctrl-b>'        : 'fake-key <Left>',
-#         '<Ctrl-a>'        : 'fake-key <Home>',
-#         '<Ctrl-e>'        : 'fake-key <End>',
-#         '<Ctrl-n>'        : 'fake-key <Down>',
-#         '<Ctrl-p>'        : 'fake-key <Up>',
-#         '<Alt-v>'         : 'fake-key <PgUp>',
-#         '<Ctrl-v>'        : 'fake-key <PgDown>',
-#         '<Alt-f>'         : 'fake-key <Ctrl-Right>',
-#         '<Alt-b>'         : 'fake-key <Ctrl-Left>',
-#         '<Ctrl-d>'        : 'fake-key <Delete>',
-#         '<Alt-d>'         : 'fake-key <Ctrl-Delete>',
-#         '<Alt-Backspace>' : 'fake-key <Ctrl-Backspace>',
-#         '<Ctrl-y>'        : 'insert-text {primary}',
-#         '<Ctrl-o>'        : 'open-editor',
-#     }
-# }
+if platform.system() == 'Linux':
+
+    # Readline-style insert mode
+    config.bind('<Ctrl+f>'          , 'fake-key <Right>'            , mode='insert')
+    config.bind('<Ctrl+b>'          , 'fake-key <Left>'             , mode='insert')
+    config.bind('<Ctrl+a>'          , 'fake-key <Home>'             , mode='insert')
+    config.bind('<Ctrl+e>'          , 'fake-key <End>'              , mode='insert')
+    config.bind('<Ctrl+n>'          , 'fake-key <Down>'             , mode='insert')
+    config.bind('<Ctrl+p>'          , 'fake-key <Up>'               , mode='insert')
+    config.bind('<Alt+f>'           , 'fake-key <Ctrl+Right>'       , mode='insert')
+    config.bind('<Alt+b>'           , 'fake-key <Ctrl+Left>'        , mode='insert')
+    config.bind('<Ctrl+d>'          , 'fake-key <Delete>'           , mode='insert')
+    config.bind('<Alt+d>'           , 'fake-key <Ctrl+Delete>'      , mode='insert')
+    config.bind('<Alt+Backspace>'   , 'fake-key <Ctrl+Backspace>'   , mode='insert')
+    config.bind('<Ctrl+y>'          , 'insert-text {primary}'       , mode='insert')
+
+    # macOS-like cut/copy/paste/select-all
+    config.bind('<Meta+c>', 'fake-key <Ctrl+c>', mode='normal')
+
+    for mode in ['insert', 'command', 'prompt']:
+        config.bind('<Meta+x>', 'fake-key <Ctrl+x>', mode=mode)
+        config.bind('<Meta+c>', 'fake-key <Ctrl+c>', mode=mode)
+        config.bind('<Meta+v>', 'fake-key <Ctrl+v>', mode=mode)
+        config.bind('<Meta+a>', 'fake-key <Ctrl+a>', mode=mode)
 
 ### Userscripts ###
 
