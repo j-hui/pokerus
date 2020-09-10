@@ -303,6 +303,12 @@ if !exists('g:vscode')
         nnoremap <silent> <F12> :FloatermToggle<CR>
         tnoremap <silent> <F12> <C-\><C-n>:FloatermToggle<CR>
         tnoremap <silent> <C-[> <C-\><C-n>
+
+    Plug 'AndrewRadev/bufferize.vim'      " command contents in buffer
+
+    Plug 'dense-analysis/ale'             " Asynchronous linting using LSP
+        let g:ale_sign_column_always = 1
+
 endif
 " }}}
 
@@ -398,7 +404,6 @@ Plug 'svermeulen/vim-cutlass'       " x and D no longer yank text to registers
 
 Plug 'AndrewRadev/dsf.vim'              " Delete surrounding function
 Plug 'AndrewRadev/linediff.vim'         " Vimdiff ranges
-Plug 'AndrewRadev/bufferize.vim'        " Put Vim command contents in buffer
 Plug 'AndrewRadev/sideways.vim'         " Move things sideways in lists
     nnoremap <c-g>l :SidewaysRight<cr>
     nnoremap <c-g>h :SidewaysLeft<cr>
