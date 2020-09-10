@@ -500,6 +500,7 @@ if !exists('g:vscode')
     Plug 'idris-hackers/idris-vim', { 'for': 'idris' }
     Plug 'LnL7/vim-nix',            { 'for': 'nix' }
     Plug 'vim-scripts/promela.vim', { 'for': 'promela' }
+    Plug 'chrisbra/csv.vim',        { 'for': 'csv' }
 " }}}
 endif
 " }}}
@@ -943,6 +944,13 @@ augroup lean_settings " {{{
                 \ commentstring=--\ %s
                 \ comments=s1fl:/-,mb:-,ex:-/,:--
                 " \ formatoptions+=cqortj
+augroup END " }}}
+
+" }}}
+
+augroup csv_settings " {{{
+    autocmd!
+    autocmd BufNewFile,BufReadPost *.csv set filetype=csv
 augroup END " }}}
 
 " }}}
