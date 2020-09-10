@@ -249,15 +249,15 @@ if !exists('g:vscode')
     Plug 'psliwka/vim-smoothie'         " Scroll acceleration animation
         let g:smoothie_base_speed = 42
 
-    if has('nvim') || has('patch-8.0.902')
-        Plug 'mhinz/vim-signify'        " Version control modification markers
-    else
-        Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
-    endif
-        nnoremap <leader>gh :SignifyToggleHighlight<CR>
-        nnoremap <leader>gf :SignifyFold!<CR>
-        nnoremap <leader>gd :SignifyHunkDiff<CR>
-        nnoremap <leader>gu :SignifyHunkUndo<CR>
+    " if has('nvim') || has('patch-8.0.902')
+    "     Plug 'mhinz/vim-signify'        " Version control modification markers
+    " else
+    "     Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
+    " endif
+    "     nnoremap <leader>gh :SignifyToggleHighlight<CR>
+    "     nnoremap <leader>gf :SignifyFold!<CR>
+    "     nnoremap <leader>gd :SignifyHunkDiff<CR>
+    "     nnoremap <leader>gu :SignifyHunkUndo<CR>
 
 endif " vscode
 " }}}
@@ -303,6 +303,12 @@ if !exists('g:vscode')
         nnoremap <silent> <F12> :FloatermToggle<CR>
         tnoremap <silent> <F12> <C-\><C-n>:FloatermToggle<CR>
         tnoremap <silent> <C-[> <C-\><C-n>
+
+    Plug 'AndrewRadev/bufferize.vim'      " command contents in buffer
+
+    Plug 'dense-analysis/ale'             " Asynchronous linting using LSP
+        let g:ale_sign_column_always = 1
+
 endif
 " }}}
 
@@ -388,6 +394,7 @@ Plug 'junegunn/vim-easy-align'          " Vertically align text by character
         \   }
         \ }
 
+
 Plug 'svermeulen/vim-cutlass'       " x and D no longer yank text to registers
                                     " but retain cut behavior for d
     nnoremap d  d
@@ -395,17 +402,21 @@ Plug 'svermeulen/vim-cutlass'       " x and D no longer yank text to registers
     vnoremap d  d
     nnoremap dd dd
 
-Plug 'vim-scripts/ReplaceWithRegister'  " Exchange text with register gr{motion}
-Plug 'tommcdo/vim-exchange'             " Exchange text with repeated cx{motion}
-
+Plug 'AndrewRadev/dsf.vim'              " Delete surrounding function
+Plug 'AndrewRadev/linediff.vim'         " Vimdiff ranges
 Plug 'AndrewRadev/sideways.vim'         " Move things sideways in lists
     nnoremap <c-g>l :SidewaysRight<cr>
     nnoremap <c-g>h :SidewaysLeft<cr>
+
 Plug 'matze/vim-move'                   " Move things in visual mode
     vmap <C-j> <Plug>MoveBlockDown
     vmap <C-l> <Plug>MoveBlockRight
     vmap <C-h> <Plug>MoveBlockLeft
     vmap <C-k> <Plug>MoveBlockUp
+
+Plug 'vim-scripts/ReplaceWithRegister'  " Exchange text with register gr{motion}
+Plug 'tommcdo/vim-exchange'             " Exchange text with repeated cx{motion}
+
 
 " }}}
 
@@ -491,6 +502,8 @@ if !exists('g:vscode')
     Plug 'fatih/vim-go',            { 'for': 'go' }
     Plug 'leanprover/lean.vim',     { 'for': 'lean' }
     Plug 'idris-hackers/idris-vim', { 'for': 'idris' }
+    Plug 'LnL7/vim-nix',            { 'for': 'nix' }
+    Plug 'vim-scripts/promela.vim', { 'for': 'promela' }
 " }}}
 endif
 " }}}
@@ -625,6 +638,10 @@ set incsearch                   " incremental search
 set ignorecase                  " ignores case
 set smartcase                   " smart case
 set wrapscan                    " jump back to top
+
+if has('patch-8.1.0360') || has('nvim')
+    set diffopt+=internal,algorithm:patience
+endif
 
 " }}}
 
@@ -801,6 +818,11 @@ augroup END " }}}
 augroup vim_settings " {{{
     autocmd!
     autocmd BufNewFile,BufReadPost */.vim_local set filetype=vim
+    autocmd Filetype vim setlocal
+                \ tabstop=2
+                \ expandtab
+                \ shiftwidth=2
+                \ softtabstop=2
 augroup END " }}}
 
 augroup latex_settings " {{{
@@ -906,6 +928,31 @@ augroup coq_settings " {{{
                 \ softtabstop=2
                 \ commentstring=(*%s*)
                 \ comments=sr:(*,mb:*,ex:*)
+                " \ formatoptions=cqtlj
+augroup END " }}}
+
+augroup promela_settings " {{{
+    autocmd!
+    autocmd BufNewFile,BufReadPost *.prom,*.prm,*.promela  setf promela
+    autocmd Filetype promela setlocal
+                \ tabstop=2
+                \ expandtab
+                \ shiftwidth=2
+                \ softtabstop=2
+                " \ commentstring=/*%s*/
+                " \ comments=sr:/*,mb:*,ex:*/
+                " \ formatoptions=cqtlj
+augroup END " }}}
+
+augroup protobuf_settings " {{{
+    autocmd!
+    autocmd Filetype proto setlocal
+                \ tabstop=2
+                \ expandtab
+                \ shiftwidth=2
+                \ softtabstop=2
+                " \ commentstring=/*%s*/
+                " \ comments=sr:/*,mb:*,ex:*/
                 " \ formatoptions=cqtlj
 augroup END " }}}
 

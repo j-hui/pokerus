@@ -15,7 +15,7 @@ ctrl + super + shift + o
     firefox
  
 ctrl + super + BackSpace
-    xautolock -locknow
+    xset s activate
 ctrl + super + shift + BackSpace
     pkill -USR1 -x sxhkd
 
