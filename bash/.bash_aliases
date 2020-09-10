@@ -238,7 +238,6 @@ man() {
             man "$@"
 }
 
-<<<<<<< HEAD
 # Automatically trim long paths in the prompt (requires Bash 4.x)
 PROMPT_DIRTRIM=2
 
