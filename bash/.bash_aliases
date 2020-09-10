@@ -41,6 +41,13 @@ if which fd &> /dev/null; then
     export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
 
+### rg
+
+if which rg &> /dev/null; then
+    alias rg='rg --smart-case'
+    alias rgv='rg --smart-case --type coq'
+fi
+
 ### OS-specific configuration
 case "$OSTYPE" in
 *linux*)
