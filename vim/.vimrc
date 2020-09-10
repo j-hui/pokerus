@@ -308,6 +308,9 @@ if !exists('g:vscode')
 
     Plug 'dense-analysis/ale'             " Asynchronous linting using LSP
         let g:ale_sign_column_always = 1
+        let g:ale_lint_delay = 500
+        nmap <silent> [a <Plug>(ale_previous_wrap)
+        nmap <silent> ]a <Plug>(ale_next_wrap)
 
 endif
 " }}}
@@ -495,6 +498,7 @@ if !exists('g:vscode')
                     \ 'ocaml',
                     \ 'haskell'
                     \ ]
+    Plug 'jtratner/vim-flavored-markdown', { 'for': 'markdown' }
 " }}}
 " Others {{{
     Plug 'z0mbix/vim-shfmt',        { 'for': 'sh' }
@@ -840,7 +844,8 @@ augroup END " }}}
 
 augroup markdown_settings " {{{
     autocmd!
-    autocmd Filetype markdown setlocal
+    autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
+    autocmd Filetype ghmarkdown setlocal
                 \ tabstop=2
                 \ expandtab
                 \ shiftwidth=2
@@ -961,8 +966,6 @@ augroup lean_settings " {{{
                 \ comments=s1fl:/-,mb:-,ex:-/,:--
                 " \ formatoptions+=cqortj
 augroup END " }}}
-
-" }}}
 
 augroup csv_settings " {{{
     autocmd!
