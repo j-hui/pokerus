@@ -303,6 +303,12 @@ if !exists('g:vscode')
         nnoremap <silent> <F12> :FloatermToggle<CR>
         tnoremap <silent> <F12> <C-\><C-n>:FloatermToggle<CR>
         tnoremap <silent> <C-[> <C-\><C-n>
+
+    Plug 'AndrewRadev/bufferize.vim'      " command contents in buffer
+
+    Plug 'dense-analysis/ale'             " Asynchronous linting using LSP
+        let g:ale_sign_column_always = 1
+
 endif
 " }}}
 
@@ -388,6 +394,7 @@ Plug 'junegunn/vim-easy-align'          " Vertically align text by character
         \   }
         \ }
 
+
 Plug 'svermeulen/vim-cutlass'       " x and D no longer yank text to registers
                                     " but retain cut behavior for d
     nnoremap d  d
@@ -395,17 +402,21 @@ Plug 'svermeulen/vim-cutlass'       " x and D no longer yank text to registers
     vnoremap d  d
     nnoremap dd dd
 
-Plug 'vim-scripts/ReplaceWithRegister'  " Exchange text with register gr{motion}
-Plug 'tommcdo/vim-exchange'             " Exchange text with repeated cx{motion}
-
+Plug 'AndrewRadev/dsf.vim'              " Delete surrounding function
+Plug 'AndrewRadev/linediff.vim'         " Vimdiff ranges
 Plug 'AndrewRadev/sideways.vim'         " Move things sideways in lists
     nnoremap <c-g>l :SidewaysRight<cr>
     nnoremap <c-g>h :SidewaysLeft<cr>
+
 Plug 'matze/vim-move'                   " Move things in visual mode
     vmap <C-j> <Plug>MoveBlockDown
     vmap <C-l> <Plug>MoveBlockRight
     vmap <C-h> <Plug>MoveBlockLeft
     vmap <C-k> <Plug>MoveBlockUp
+
+Plug 'vim-scripts/ReplaceWithRegister'  " Exchange text with register gr{motion}
+Plug 'tommcdo/vim-exchange'             " Exchange text with repeated cx{motion}
+
 
 " }}}
 
@@ -485,12 +496,6 @@ if !exists('g:vscode')
                     \ 'haskell'
                     \ ]
 " }}}
-" Promela {{{
-    augroup ftpromela
-        au BufNewFile,BufRead *.prom,*.prm,*.promela    setf promela
-    augroup END
-    Plug 'vim-scripts/promela.vim', { 'for': 'promela' }
-" }}}
 " Others {{{
     Plug 'z0mbix/vim-shfmt',        { 'for': 'sh' }
         let g:shfmt_extra_args = '-i 2 -ci -sr'
@@ -498,6 +503,7 @@ if !exists('g:vscode')
     Plug 'leanprover/lean.vim',     { 'for': 'lean' }
     Plug 'idris-hackers/idris-vim', { 'for': 'idris' }
     Plug 'LnL7/vim-nix',            { 'for': 'nix' }
+    Plug 'vim-scripts/promela.vim', { 'for': 'promela' }
 " }}}
 endif
 " }}}
@@ -745,6 +751,22 @@ command! -range Trim <line1>,<line2> substitute/\s\+$//g | normal! ``
 command! Here cd %:h
 " }}}
 
+
+" "Basic" mode: no mouse interaction, line numbers, or sign column {{{
+" Useful for copying and pasting from buffers as text
+let s:basicmode = 0
+function! s:basicToggle()
+    if s:basicmode
+        set mouse=a nu rnu signcolumn=auto
+        let s:basicmode = 0
+    else
+        set mouse= nonu nornu signcolumn=no
+        let s:basicmode = 1
+    endif
+endfunction
+command! BasicToggle call s:basicToggle()
+" }}}
+
 " Modeline {{{
 function! AppendModeline()
   let l:modeline = printf(" vim: set ts=%d sw=%d tw=%d %set :",
@@ -792,6 +814,11 @@ augroup END " }}}
 augroup vim_settings " {{{
     autocmd!
     autocmd BufNewFile,BufReadPost */.vim_local set filetype=vim
+    autocmd Filetype vim setlocal
+                \ tabstop=2
+                \ expandtab
+                \ shiftwidth=2
+                \ softtabstop=2
 augroup END " }}}
 
 augroup latex_settings " {{{
@@ -897,6 +924,31 @@ augroup coq_settings " {{{
                 \ softtabstop=2
                 \ commentstring=(*%s*)
                 \ comments=sr:(*,mb:*,ex:*)
+                " \ formatoptions=cqtlj
+augroup END " }}}
+
+augroup promela_settings " {{{
+    autocmd!
+    autocmd BufNewFile,BufReadPost *.prom,*.prm,*.promela  setf promela
+    autocmd Filetype promela setlocal
+                \ tabstop=2
+                \ expandtab
+                \ shiftwidth=2
+                \ softtabstop=2
+                " \ commentstring=/*%s*/
+                " \ comments=sr:/*,mb:*,ex:*/
+                " \ formatoptions=cqtlj
+augroup END " }}}
+
+augroup protobuf_settings " {{{
+    autocmd!
+    autocmd Filetype proto setlocal
+                \ tabstop=2
+                \ expandtab
+                \ shiftwidth=2
+                \ softtabstop=2
+                " \ commentstring=/*%s*/
+                " \ comments=sr:/*,mb:*,ex:*/
                 " \ formatoptions=cqtlj
 augroup END " }}}
 
