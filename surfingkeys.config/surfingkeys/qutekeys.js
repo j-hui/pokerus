@@ -5,8 +5,8 @@ settings.hintShiftNonActive = true;
 
 function dbg(s) { console.log("[pokerus]: " + s); }
 
-var pk_version = 0.2
-dbg("begin mapping (" + pk_version + ")");
+var pk_version = 0.3
+dbg("begin mapping (" + pk_version + ")")
 
 /*** Unmapping ***/
 // (Unused; unmap these first so they can be mapped to other things)
@@ -206,9 +206,9 @@ unmap('<Alt-i>');
 map('\\', 'p');       // Enter ephemeral passthrough
 unmap('p');
 
-map(';b', 'C');   // Open link in non-active new tab
+map('F', 'C');   // Open link in non-active new tab
 unmap('C'); unmap('af');
-map(';B', 'cf'); // Open multiple links in new tab
+map(';R', 'cf'); // Open multiple links in new tab
 unmap('cf');
 
 map(';i', 'q'); // Click on an image or button
