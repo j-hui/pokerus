@@ -33,6 +33,7 @@ c.tabs.last_close = 'close'
 c.tabs.width = '10%'
 
 config.set('content.unknown_url_scheme_policy', 'allow-all', 'zoommtg://*.zoom.us')
+config.set('content.unknown_url_scheme_policy', 'allow-all', 'https://*.slack.com')
 config.set('content.javascript.can_access_clipboard', True, 'https://github.com/*')
 
 
@@ -64,6 +65,8 @@ c.aliases['ochrome'] = 'hint all spawn open -a "Google Chrome" {hint-url}'
 
 config.bind('<Ctrl+Tab>', 'tab-next', mode='normal')
 config.bind('<Ctrl+Shift+Tab>', 'tab-prev', mode='normal')
+config.bind('<Esc>', 'fake-key <Esc>', mode='normal')
+config.bind('<Ctrl+[>', 'clear-messages', mode='normal')
 
 config.bind('<Ctrl+n>', 'prompt-item-focus next', mode='prompt')
 config.bind('<Ctrl+p>', 'prompt-item-focus prev', mode='prompt')
@@ -96,7 +99,6 @@ for mode in ['command', 'prompt']:
     config.bind('<Ctrl+a>'          , 'rl-beginning-of-line'        , mode=mode)
     config.bind('<Ctrl+e>'          , 'rl-end-of-line'              , mode=mode)
 
-
 if platform.system() == 'Linux':
     # Readline-style insert mode
     config.bind('<Ctrl+f>'          , 'fake-key <Right>'            , mode='insert')
@@ -114,7 +116,8 @@ if platform.system() == 'Linux':
     config.bind('<Ctrl+y>'          , 'insert-text {primary}'       , mode='insert')
 
     # macOS-like cut/copy/paste/select-all
-    config.bind('<Meta+c>', 'fake-key <Ctrl+c>', mode='normal')
+    config.bind('<Meta+c>', 'fake-key <Ctrl+c>;;message-info "copied to clipboard"', mode='normal')
+
     for mode in ['insert', 'command', 'prompt']:
         config.bind('<Meta+x>', 'fake-key <Ctrl+x>', mode=mode)
         config.bind('<Meta+c>', 'fake-key <Ctrl+c>', mode=mode)

@@ -1,10 +1,13 @@
 #! /bin/sh
 
 sxhkd &
+dunst &
 polybar top &
 polybar bottom &
 
 xsetroot -cursor_name left_ptr &
+
+amixer sset Master 69%
 
 bspc monitor -d I II III IV V VI VII VIII
 
@@ -17,6 +20,15 @@ bspc config gapless_monocle     false
 
 bspc config click_to_focus any
 
-bspc rule -a kitty   desktop='^1' follow=on
-bspc rule -a Firefox desktop='^2' follow=on
+bspc rule -a kitty desktop='^1' follow=on
+
 bspc rule -a qutebrowser desktop='^2' follow=on
+
+bspc rule -a google-chrome desktop='^3' follow=on
+bspc rule -a firefox desktop='^3' follow=on
+
+bspc rule -a zoom desktop='^6' follow=on
+bspc rule -a slack desktop='^7' follow=on
+bspc rule -a discord desktop='^7' follow=on
+
+bspc rule -a spotify desktop='^8' follow=on
