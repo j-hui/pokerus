@@ -27,6 +27,10 @@ c.tabs.background = True
 c.tabs.close_mouse_button = 'right'
 
 c.colors.webpage.prefers_color_scheme_dark = True
+c.downloads.remove_finished = 6969
+
+c.tabs.last_close = 'close'
+c.tabs.width = '10%'
 
 config.set('content.unknown_url_scheme_policy', 'allow-all', 'zoommtg://*.zoom.us')
 config.set('content.javascript.can_access_clipboard', True, 'https://github.com/*')
@@ -67,32 +71,33 @@ config.bind('<Ctrl+p>', 'prompt-item-focus prev', mode='prompt')
 config.bind('<Ctrl+n>', 'completion-item-focus --history next', mode='command')
 config.bind('<Ctrl+p>', 'completion-item-focus --history prev', mode='command')
 
+config.bind('<Esc>', 'fake-key <Esc>', mode='normal')
+
 config.unbind('<Ctrl+e>', mode='insert')
+config.bind('<Ctrl+o>', 'open-editor', mode='insert')
+
 
 for mode in ['command', 'prompt']:
 
-    config.bind('<Ctrl+d>', 'rl-delete-char', mode=mode)
-    config.bind('<Alt+d>', 'rl-kill-word', mode=mode)
-    config.bind('<Ctrl+k>', 'rl-kill-line', mode=mode)
+    config.bind('<Ctrl+d>'          , 'rl-delete-char'              , mode=mode)
+    config.bind('<Alt+d>'           , 'rl-kill-word'                , mode=mode)
+    config.bind('<Ctrl+k>'          , 'rl-kill-line'                , mode=mode)
+    config.bind('<Ctrl+y>'          , 'rl-yank'                     , mode=mode)
 
-    config.bind('<Ctrl+h>', 'rl-backward-delete-char', mode=mode)
-    config.bind('<Ctrl+w>', 'rl-unix-word-rubout', mode=mode)
-    config.bind('<Alt+Backspace>', 'rl-unix-word-rubout', mode=mode)
-    config.bind('<Ctrl+u>', 'rl-unix-line-discard', mode=mode)
+    config.bind('<Ctrl+h>'          , 'rl-backward-delete-char'     , mode=mode)
+    config.bind('<Ctrl+w>'          , 'rl-unix-word-rubout'         , mode=mode)
+    config.bind('<Alt+Backspace>'   , 'rl-unix-word-rubout'         , mode=mode)
+    config.bind('<Ctrl+u>'          , 'rl-unix-line-discard'        , mode=mode)
 
-    config.bind('<Ctrl+b>', 'rl-backward-char', mode=mode)
-    config.bind('<Ctrl+f>', 'rl-forward-char', mode=mode)
-    config.bind('<Alt+b>', 'rl-backward-word', mode=mode)
-    config.bind('<Alt+f>', 'rl-forward-word', mode=mode)
-    config.bind('<Ctrl+a>', 'rl-beginning-of-line', mode=mode)
-    config.bind('<Ctrl+e>', 'rl-end-of-line', mode=mode)
+    config.bind('<Ctrl+b>'          , 'rl-backward-char'            , mode=mode)
+    config.bind('<Ctrl+f>'          , 'rl-forward-char'             , mode=mode)
+    config.bind('<Alt+b>'           , 'rl-backward-word'            , mode=mode)
+    config.bind('<Alt+f>'           , 'rl-forward-word'             , mode=mode)
+    config.bind('<Ctrl+a>'          , 'rl-beginning-of-line'        , mode=mode)
+    config.bind('<Ctrl+e>'          , 'rl-end-of-line'              , mode=mode)
 
-    config.bind('<Ctrl+y>', 'rl-yank', mode=mode)
-
-config.bind('<Ctrl+o>', 'open-editor', mode='insert')
 
 if platform.system() == 'Linux':
-
     # Readline-style insert mode
     config.bind('<Ctrl+f>'          , 'fake-key <Right>'            , mode='insert')
     config.bind('<Ctrl+b>'          , 'fake-key <Left>'             , mode='insert')
@@ -105,16 +110,24 @@ if platform.system() == 'Linux':
     config.bind('<Ctrl+d>'          , 'fake-key <Delete>'           , mode='insert')
     config.bind('<Alt+d>'           , 'fake-key <Ctrl+Delete>'      , mode='insert')
     config.bind('<Alt+Backspace>'   , 'fake-key <Ctrl+Backspace>'   , mode='insert')
+    config.bind('<Ctrl+w>'          , 'fake-key <Ctrl+Backspace>'   , mode='insert')
     config.bind('<Ctrl+y>'          , 'insert-text {primary}'       , mode='insert')
 
     # macOS-like cut/copy/paste/select-all
     config.bind('<Meta+c>', 'fake-key <Ctrl+c>', mode='normal')
-
     for mode in ['insert', 'command', 'prompt']:
         config.bind('<Meta+x>', 'fake-key <Ctrl+x>', mode=mode)
         config.bind('<Meta+c>', 'fake-key <Ctrl+c>', mode=mode)
         config.bind('<Meta+v>', 'fake-key <Ctrl+v>', mode=mode)
         config.bind('<Meta+a>', 'fake-key <Ctrl+a>', mode=mode)
+
+
+if platform.system() == 'Darwin':
+    # Readline-style insert mode
+    config.bind('<Ctrl+n>'          , 'fake-key <Down>'             , mode='insert')
+    config.bind('<Ctrl+p>'          , 'fake-key <Up>'               , mode='insert')
+    config.bind('<Ctrl+w>'          , 'fake-key <Alt+Backspace>'    , mode='insert')
+
 
 ### Userscripts ###
 

@@ -6,7 +6,6 @@
 " - <backspace>/<return>: toggle folds
 " - i: insert
 " - f: Find (FZF)
-" - g: Git (vim-signify)
 " - c: Coq (coqtail)
  
 " ============================================================================
@@ -312,6 +311,8 @@ if !exists('g:vscode')
         nmap <silent> [a <Plug>(ale_previous_wrap)
         nmap <silent> ]a <Plug>(ale_next_wrap)
 
+        " \   'project_root': '/path/to/root_of_project',
+
 endif
 " }}}
 
@@ -347,7 +348,6 @@ Plug 'tpope/vim-speeddating'            " increment/decrement dates
     nmap  <C-X>     <Plug>SpeedDatingDown
     xmap  <C-S>     <Plug>SpeedDatingUp
     xmap  <C-X>     <Plug>SpeedDatingDown
-
 
 Plug 'andymass/vim-matchup'             " User-defined pairs
 
@@ -397,7 +397,6 @@ Plug 'junegunn/vim-easy-align'          " Vertically align text by character
         \   }
         \ }
 
-
 Plug 'svermeulen/vim-cutlass'       " x and D no longer yank text to registers
                                     " but retain cut behavior for d
     nnoremap d  d
@@ -420,6 +419,12 @@ Plug 'matze/vim-move'                   " Move things in visual mode
 Plug 'vim-scripts/ReplaceWithRegister'  " Exchange text with register gr{motion}
 Plug 'tommcdo/vim-exchange'             " Exchange text with repeated cx{motion}
 
+Plug 'gyim/vim-boxdraw'                 " Draw ASCII text boxes
+Plug 'joom/latex-unicoder.vim'          " Useful for 'pretty' Coq/Lean files
+    let g:unicoder_cancel_normal = 1
+    let g:unicoder_cancel_insert = 1
+    let g:unicoder_cancel_visual = 1
+    inoremap <C-l> <Esc>:call unicoder#start(1)<CR>
 
 " }}}
 
@@ -523,6 +528,7 @@ if filereadable(expand("~/.vim_local"))
 endif
 
 call plug#end()
+
 " }}}
 
 " ============================================================================
@@ -664,8 +670,20 @@ set autoindent          " Automatically indent when starting a new line
 set nojoinspaces        " Only insert single space after J
 set formatoptions+=j    " strip comment leader when joining comment lines
 
+" }}}
+
+" File Navigation {{{
+" ----------------------------------------------------------------------------
 set modeline
 set modelines=5
+
+" Ignore these file patterns
+set wildignore+=*.so,*.swp,*.o,*.a
+set wildignore+=*.opus,*.flac,.*mp3,*.ogg,*.mp4,*.webm
+set wildignore+=*.pdf,*.jpg,*.png,*.jpeg,*.gif
+set wildignore+=*.zip,*.gzip,*.bz2,*.tar,*.xz,*.lrzip,*.lrz
+
+
 " }}}
 
 " }}}
