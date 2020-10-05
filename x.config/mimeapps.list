@@ -27,5 +27,5 @@ image/x-tga=feh.desktop;
 
 video/*=mpv.desktop
 
-application/pdf=zathura.desktop;chromium-browser.desktop;google-chrome.desktop;
-x-scheme-handler/mailto=chromium-browser.desktop;
+application/pdf=org.pwmt.zathura.desktop;chromium-browser.desktop;google-chrome.desktop;
+x-scheme-handler/mailto=google-chrome.desktop;
