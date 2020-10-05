@@ -1,6 +1,8 @@
 #! /bin/sh
 
-sxhkd &
+pgrep ibus-daemon > /dev/null || ibus-daemon &
+pgrep sxhkd > /dev/null || sxhkd &
+
 dunst &
 polybar top &
 polybar bottom &
@@ -19,6 +21,8 @@ bspc config borderless_monocle  true
 bspc config gapless_monocle     false
 
 bspc config click_to_focus any
+
+bspc rule -a Zathura state=tiled follow=on
 
 bspc rule -a kitty desktop='^1' follow=on
 

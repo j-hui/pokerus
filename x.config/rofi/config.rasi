@@ -1,11 +1,15 @@
 configuration {
-    modi: "window,run,ssh,drun";
+    modi: "window,run,ssh,drun,calc:qalc +u8 -nocurrencies";
     /* width: 169; */
     /* lines: 32; */
     /* columns: 1; */
     theme: "/home/j-hui/.config/rofi/Monokai.rasi";
     terminal: "kitty";
     show-icons: true;
+    matching: "fuzzy";
+    sorting-method: "fzf";
+    scroll-method: 1;
+    sidebar-mode: true;
 
     kb-primary-paste: "Super+v";
 
