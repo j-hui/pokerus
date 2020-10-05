@@ -52,6 +52,7 @@ c.aliases['wqa'] = 'quit --save'
 c.aliases['o'] = 'open'
 c.aliases['O'] = 'open --tab'
 c.aliases['t'] = 'open --background'
+c.aliases['b'] = 'tab-focus'
 
 c.aliases['priv'] = 'open --private'
 c.aliases['bookmarks'] = 'open -t qute://bookmarks/'
