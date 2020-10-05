@@ -22,5 +22,7 @@
     hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
 [color]
     ui = auto
+    pager = no
 [core]
     excludesfile = ~/.gitignore_global
+    pager = nvim -R

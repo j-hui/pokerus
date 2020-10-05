@@ -11,21 +11,6 @@ PATH_ADD() {
     fi
 }
 
-### Vim
-if which nvim &> /dev/null; then
-    export EDITOR=nvim
-    alias vim='nvim'
-elif which vim &> /dev/null; then
-    export EDITOR=vim
-fi
-
-if which floaterm &> /dev/null; then
-    export EDITOR=floaterm
-    alias vim='floaterm'
-fi
-
-mkdir -p ~/.tmp/backup ~/.tmp/swp ~/.tmp/undo
-
 ### fzf
 
 if which bat &> /dev/null; then
@@ -47,6 +32,24 @@ if which rg &> /dev/null; then
     alias rg='rg --smart-case'
     alias rgv='rg --smart-case --type coq'
 fi
+
+### Vim
+if which nvim &> /dev/null; then
+    export EDITOR=nvim
+
+    alias vim='nvim -O'
+    alias nvim='nvim -O'            # open multiple files with vertical splits
+
+    export MANPAGER='nvim +Man!'    # use nvim as pager
+    export MANWIDTH=999             # let nvim handle wraparound
+
+elif which vim &> /dev/null; then
+    export EDITOR=vim
+    alias vim='vim -O'
+fi
+
+mkdir -p ~/.tmp/backup ~/.tmp/swp ~/.tmp/undo
+
 
 ### OS-specific configuration
 case "$OSTYPE" in
