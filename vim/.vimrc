@@ -204,7 +204,7 @@ if !exists('g:vscode')
             \ 'active': {
             \   'left': [
             \       [ 'mode', 'paste' ],
-            \       [ 'gitbranch', 'readonly', 'filename', 'modified' ],
+            \       [ 'gitbranch', 'readonly', 'relativepath', 'modified' ],
             \   ],
             \   'right': [
             \       [ 'lineinfo' ],
@@ -312,6 +312,9 @@ if !exists('g:vscode')
         nmap <silent> ]a <Plug>(ale_next_wrap)
 
         " \   'project_root': '/path/to/root_of_project',
+
+    Plug 'Avi-D-coder/fzf-wordnet.vim'
+        imap <C-S> <Plug>(fzf-complete-wordnet)
 
 endif
 " }}}
@@ -514,6 +517,7 @@ if !exists('g:vscode')
     Plug 'LnL7/vim-nix',            { 'for': 'nix' }
     Plug 'vim-scripts/promela.vim', { 'for': 'promela' }
     Plug 'chrisbra/csv.vim',        { 'for': 'csv' }
+    Plug 'rust-lang/rust.vim',      { 'for': 'rust' }
 " }}}
 endif
 " }}}
@@ -642,18 +646,23 @@ set nostartofline               " prevent cursor from jumping to start of line
 set showmatch                   " show matching brackets
 set virtualedit=block,onemore   " move cursor end of line
 
-
-set wildmenu
-
-set autoread
-
-set splitright
+set splitright                  " direction of split
 
 set hlsearch                    " highlight search
 set incsearch                   " incremental search
 set ignorecase                  " ignores case
 set smartcase                   " smart case
 set wrapscan                    " jump back to top
+
+set wildmenu                    " use wildmenu
+set wildmode=longest:full,full  " sane completion interface
+set wildignorecase              " ignore case during completion
+
+" Ignore these file patterns
+set wildignore+=*.so,*.swp,*.o,*.a
+set wildignore+=*.opus,*.flac,.*mp3,*.ogg,*.mp4,*.webm
+set wildignore+=*.pdf,*.jpg,*.png,*.jpeg,*.gif
+set wildignore+=*.zip,*.gzip,*.bz2,*.tar,*.xz,*.lrzip,*.lrz
 
 " }}}
 
@@ -669,20 +678,6 @@ set smarttab            " Apply tabs in front of a line according to shiftwidth
 set autoindent          " Automatically indent when starting a new line
 set nojoinspaces        " Only insert single space after J
 set formatoptions+=j    " strip comment leader when joining comment lines
-
-" }}}
-
-" File Navigation {{{
-" ----------------------------------------------------------------------------
-set modeline
-set modelines=5
-
-" Ignore these file patterns
-set wildignore+=*.so,*.swp,*.o,*.a
-set wildignore+=*.opus,*.flac,.*mp3,*.ogg,*.mp4,*.webm
-set wildignore+=*.pdf,*.jpg,*.png,*.jpeg,*.gif
-set wildignore+=*.zip,*.gzip,*.bz2,*.tar,*.xz,*.lrzip,*.lrz
-
 
 " }}}
 
@@ -713,12 +708,6 @@ nnoremap k gk
 inoremap <C-c>  <Esc>
 inoremap kj     <Esc>
 
-" Bad habits xD
-" nnoremap <C-j> <C-d>
-" nnoremap <C-k> <C-u>
-" nnoremap <C-l> g$
-" nnoremap <C-h> g^
-
 " Normal mode readline style navigation
 nnoremap <C-n>      <C-e>j
 nnoremap <C-p>      <C-y>k
@@ -726,6 +715,14 @@ nnoremap <C-e>      $
 nnoremap <C-a>      ^
 nnoremap <C-f>      l
 nnoremap <C-b>      h
+
+" Virual mode readline style navigation
+vnoremap <C-n>      <C-e>j
+vnoremap <C-p>      <C-y>k
+vnoremap <C-e>      $
+vnoremap <C-a>      ^
+vnoremap <C-f>      l
+vnoremap <C-b>      h
 
 " Window navigation
 noremap <C-w>n <Esc>:bn<CR>
@@ -758,6 +755,22 @@ inoremap <C-k>      <Esc>lDi
 
 " }}}
 
+" Command mode {{{
+" ----------------------------------------------------------------------------
+
+" Don't use <Left> and <Right> key for selecting previous/next match
+cnoremap <Left> <Space><BS><Left>
+cnoremap <Right> <Space><BS><Right>
+
+" Fake page up and page down
+cnoremap <c-d> <c-n><c-n><c-n><c-n><c-n><c-n><c-n><c-n><c-n><c-n>
+cnoremap <c-u> <c-p><c-p><c-p><c-p><c-p><c-p><c-p><c-p><c-p><c-p>
+
+" 'Step into' wild menu selection
+" The backspace apparently necessary to remove ^I artifact
+cnoremap <c-g> <Down><BS>
+
+" }}}
 " }}}
 
 " ============================================================================
@@ -836,6 +849,9 @@ set spellfile=~/.vim/spell/en.utf-8.add
 " ============================================================================
 " File types {{{
 " ============================================================================
+
+set modeline
+set modelines=5
 
 augroup help_settings " {{{
     autocmd FileType help
