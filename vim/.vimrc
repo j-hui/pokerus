@@ -7,7 +7,7 @@
 " - i: insert
 " - f: Find (FZF)
 " - c: Coq (coqtail)
- 
+
 " ============================================================================
 " Core/plumbing/hacks {{{
 " ============================================================================
@@ -284,24 +284,11 @@ if !exists('g:vscode')
         nnoremap <leader>f:   :History: <CR>
         nnoremap <leader>f/   :History/ <CR>
 
-    Plug 'junegunn/vim-peekaboo'                            " See yank registers
+    Plug 'junegunn/vim-peekaboo'          " See yank registers
 
-    Plug 'junegunn/gv.vim'                                  " See Git history
+    Plug 'junegunn/gv.vim'                " See Git history
 
-    Plug 'tpope/vim-fugitive'                               " Git interaction 
-
-    Plug 'voldikss/vim-floaterm'                            " Floating terminal
-        nnoremap <silent> <C-_> :FloatermToggle<CR>
-        tnoremap <silent> <C-_> <C-\><C-n>:FloatermToggle<CR>
-        nnoremap <silent> <F9>  :FloatermNew<CR>
-        tnoremap <silent> <F9>  <C-\><C-n>:FloatermNew<CR>
-        nnoremap <silent> <F10> :FloatermPrev<CR>
-        tnoremap <silent> <F10> <C-\><C-n>:FloatermPrev<CR>
-        nnoremap <silent> <F11> :FloatermNext<CR>
-        tnoremap <silent> <F11> <C-\><C-n>:FloatermNext<CR>
-        nnoremap <silent> <F12> :FloatermToggle<CR>
-        tnoremap <silent> <F12> <C-\><C-n>:FloatermToggle<CR>
-        tnoremap <silent> <C-[> <C-\><C-n>
+    Plug 'tpope/vim-fugitive'             " Git interaction
 
     Plug 'AndrewRadev/bufferize.vim'      " command contents in buffer
 
@@ -310,8 +297,6 @@ if !exists('g:vscode')
         let g:ale_lint_delay = 500
         nmap <silent> [a <Plug>(ale_previous_wrap)
         nmap <silent> ]a <Plug>(ale_next_wrap)
-
-        " \   'project_root': '/path/to/root_of_project',
 
     Plug 'Avi-D-coder/fzf-wordnet.vim'
         imap <C-S> <Plug>(fzf-complete-wordnet)
@@ -541,7 +526,7 @@ call plug#end()
 
 " Appearance {{{
 " ----------------------------------------------------------------------------
- 
+
 set background=dark
 try
     colorscheme PaperColor
@@ -624,7 +609,7 @@ augroup ron_color_tweaks " {{{
     "     \                           guibg=NONE   guifg=cyan     gui=undercurl
     "     \|  highlight SpellLocal    ctermbg=NONE ctermfg=yellow
     "     \                           guibg=NONE   guifg=yellow   gui=undercurl
-    " autocmd ColorScheme 
+    " autocmd ColorScheme
     "     \   highlight DiffAdd       ctermbg=17      cterm=bold
     "     \                           guibg=#00005f   gui=bold
     "     \|  highlight DiffDelete    ctermbg=234     ctermfg=242
