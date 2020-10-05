@@ -43,9 +43,9 @@
   bind "<shift><alt>f" { "move-cursor" (words, 1, 1) };
 
   bind "<alt>Left" { "move-cursor" (words, -1, 0) };
-  unbind "<Control>Left";
+  unbind "<ctrl>Left";
   bind "<alt>Right" { "move-cursor" (words, 1, 0) };
-  unbind "<Control>Right";
+  unbind "<ctrl>Right";
 
   bind "<ctrl>a" { "move-cursor" (paragraph-ends, -1, 0) };
   bind "<shift><ctrl>a" { "move-cursor" (paragraph-ends, -1, 1) };
@@ -61,11 +61,6 @@
                       "insert-at-cursor" (" ") };
   bind "<alt>KP_Space" { "delete-from-cursor" (whitespace, 1)
                          "insert-at-cursor" (" ")  };
-  /*
-   * Some non-Emacs keybindings people are attached to
-   */
-  /* bind "<ctrl>u" { "move-cursor" (paragraph-ends, -1, 0) */
-  /*                  "delete-from-cursor" (paragraph-ends, 1) }; */
 
   bind "<ctrl>h" { "delete-from-cursor" (chars, -1) };
   bind "<ctrl>w" { "delete-from-cursor" (word-ends, -1) };
@@ -113,34 +108,39 @@
   bind "<super>c" { "copy-clipboard" () };
 }
 
-@binding-set mac-select-all-bindings
+@binding-set mac-all-view-bindings
 {
   bind "<super>a" { "select-all" (1) };
 }
 
-@binding-set mac-select-all-entry-bindings
+@binding-set mac-all-entry-bindings
 {
   bind "<super>a" {
     "move-cursor" (paragraph-ends, -1, 0)
     "move-cursor" (paragraph-ends,  1, 1)
   };
+  bind "<super>Left" { "move-cursor" (paragraph-ends, -1, 0) };
+  bind "<super>Right" { "move-cursor" (paragraph-ends, 1, 0) };
+  unbind "<ctrl>BackSpace";
+  bind "<alt>BackSpace" { "delete-from-cursor" (word-ends, -1) };
+  bind "<super>BackSpace" { "delete-from-cursor" (paragraph-ends, -1) };
 }
 
 entry {
   -gtk-key-bindings: gtk-emacs-text-entry,
                      mac-clipboard-bindings,
-                     mac-select-all-entry-bindings;
+                     mac-all-entry-bindings;
 }
 
 textview {
   -gtk-key-bindings: gtk-emacs-text-entry,
                      gtk-emacs-text-view,
                      mac-clipboard-bindings,
-                     mac-select-all-bindings;
+                     mac-all-view-bindings;
 }
 
 treeview {
-  -gtk-key-bindings: gtk-emacs-tree-view, mac-select-all-bindings;
+  -gtk-key-bindings: gtk-emacs-tree-view, mac-all-view-bindings;
 }
 
 GtkMenuShell {
