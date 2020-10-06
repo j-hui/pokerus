@@ -37,15 +37,15 @@ fi
 if which nvim &> /dev/null; then
     export EDITOR=nvim
 
-    alias vim='nvim -O'
-    alias nvim='nvim -O'            # open multiple files with vertical splits
+    alias vim='nvim -O2'
+    alias nvim='nvim -O2'            # open multiple files with vertical splits
 
     export MANPAGER='nvim +Man!'    # use nvim as pager
     export MANWIDTH=999             # let nvim handle wraparound
 
 elif which vim &> /dev/null; then
     export EDITOR=vim
-    alias vim='vim -O'
+    alias vim='vim -O2'
 fi
 
 mkdir -p ~/.tmp/backup ~/.tmp/swp ~/.tmp/undo
