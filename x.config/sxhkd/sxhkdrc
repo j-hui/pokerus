@@ -9,7 +9,10 @@ ctrl + super + slash
 
 ## kitty:
 ctrl + super + t
-    xdo activate -N kitty || kitty
+    bspc desktop -f '^1' && xdo activate -N kitty || kitty
+
+ctrl + super + shift + t
+    kitty
 
 ## qutebrowser:
 ctrl + super + o
@@ -17,7 +20,7 @@ ctrl + super + o
 
 ## google-chrome-stable:
 ctrl + super + shift + o
-    google-chrome-stable
+    bspc desktop -f '^3' && xdo activate -n google-chrome || google-chrome-stable
 
 ## sleep:
 ctrl + super + shift + BackSpace
@@ -77,6 +80,10 @@ ctrl + super + Print
 super + ctrl + {equal,minus}
     amixer sset Master 10%{+,-}
 
+## polybar toggle:
+ctrl + super + b
+    polybar-msg cmd toggle
+
 # ## toggle dvorak
 # super + ctrl + grave
 #     ~/bin/toggle-kbmap
@@ -101,7 +108,6 @@ ctrl + super + shift + g
 ctrl + super + {_,shift + }{h,j,k,l}
   bspc node -{f,s} {west,south,north,east}
 
-
 ## bspc previous/next desktop:
 ctrl + super + {p, n}
     bspc desktop -f {prev,next}.local
@@ -110,26 +116,25 @@ ctrl + super + {p, n}
 ctrl + super + shift + {p,n}
     bspc node -d {prev,next}.local --follow
 
-## bspc send to desktop:
+## bspc go/send to desktop:
 ctrl + super + {_,shift + }{1-9,0}
     bspc {desktop -f,node -d} '^{1-9,10}'
 
-## bspc sticky/stay:
-ctrl + super + {_, shift + } s
-    bspc node -g {sticky,private}
-
 ## bspc toggle monocle:
-ctrl + super + f
+ctrl + super + m
     bspc desktop -l next
 
-## bspc floating:
-super + ctrl + shift + f
-    bspc node -t floating
+## bspc toggle sticky:
+ctrl + super + shift + m
+    bspc node -g sticky
 
-## bspc tiled/pseudo-tiled:
-super + ctrl + {_, shift + } b
-    bspc node -t {tiled,pseudo_tiled}
+## bspc toggle node flag:
+ctrl + super + f ; {h,s,p,l,m}
+    bspc node -g {hidden,sticky,private,locked,mark}
 
+## bspc set node state:
+ctrl + super + shift + f ; {t,p,f,s}
+    bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
 
 # # focus the node for the given path jump
 # super + {p,b,comma,period}
