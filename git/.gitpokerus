@@ -25,4 +25,3 @@
     pager = no
 [core]
     excludesfile = ~/.gitignore_global
-    pager = nvim -R

@@ -178,19 +178,6 @@ if !exists('g:vscode')
             endif
         endfunction
         cnoreabbrev csw call ToggleCursorWord()
-
-    Plug 'junegunn/goyo.vim',       { 'on': 'Goyo' }
-
-    Plug 'junegunn/limelight.vim',  { 'on': 'Limelight' }
-        let g:limelight_conceal_ctermfg = 'gray'
-        let g:limelight_conceal_ctermfg = 240
-        let g:limelight_conceal_guifg = 'DarkGray'
-        let g:limelight_conceal_guifg = '#777777'
-        let g:limelight_default_coefficient = 0.7
-        let g:limelight_paragraph_span = 1
-        " let g:limelight_bop = '^\s'         " beginning of paragraph
-        " let g:limelight_eop = '\ze\n^\s'    " end of paragraph
-        let g:limelight_priority = -1       " don't overrule hlsearch
 endif
 " }}}
 
@@ -248,16 +235,6 @@ if !exists('g:vscode')
     Plug 'psliwka/vim-smoothie'         " Scroll acceleration animation
         let g:smoothie_base_speed = 42
 
-    " if has('nvim') || has('patch-8.0.902')
-    "     Plug 'mhinz/vim-signify'        " Version control modification markers
-    " else
-    "     Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
-    " endif
-    "     nnoremap <leader>gh :SignifyToggleHighlight<CR>
-    "     nnoremap <leader>gf :SignifyFold!<CR>
-    "     nnoremap <leader>gd :SignifyHunkDiff<CR>
-    "     nnoremap <leader>gu :SignifyHunkUndo<CR>
-
 endif " vscode
 " }}}
 
@@ -284,6 +261,9 @@ if !exists('g:vscode')
         nnoremap <leader>f:   :History: <CR>
         nnoremap <leader>f/   :History/ <CR>
 
+    Plug 'Avi-D-coder/fzf-wordnet.vim'    " Dictionary with FZF
+        imap <C-S> <Plug>(fzf-complete-wordnet)
+
     Plug 'junegunn/vim-peekaboo'          " See yank registers
 
     Plug 'junegunn/gv.vim'                " See Git history
@@ -297,9 +277,6 @@ if !exists('g:vscode')
         let g:ale_lint_delay = 500
         nmap <silent> [a <Plug>(ale_previous_wrap)
         nmap <silent> ]a <Plug>(ale_next_wrap)
-
-    Plug 'Avi-D-coder/fzf-wordnet.vim'
-        imap <C-S> <Plug>(fzf-complete-wordnet)
 
 endif
 " }}}
