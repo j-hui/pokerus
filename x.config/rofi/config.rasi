@@ -10,6 +10,7 @@ configuration {
     sorting-method: "fzf";
     scroll-method: 1;
     sidebar-mode: true;
+    window-command: "bspc node {window} -g hidden=off -f";
 
     kb-primary-paste: "Super+v";
 
@@ -32,4 +33,5 @@ configuration {
     kb-page-next: "Page_Down,Control+d";
 
     kb-cancel: "Escape,Control+g,Control+bracketleft";
+    kb-accept-alt: "Shift+Return";
 }

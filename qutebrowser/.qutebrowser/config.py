@@ -27,6 +27,7 @@ c.tabs.background = True
 c.tabs.close_mouse_button = 'right'
 
 c.colors.webpage.prefers_color_scheme_dark = True
+
 c.downloads.remove_finished = 6969
 
 c.tabs.last_close = 'close'
@@ -35,6 +36,8 @@ c.tabs.width = '10%'
 config.set('content.unknown_url_scheme_policy', 'allow-all', 'zoommtg://*.zoom.us')
 config.set('content.unknown_url_scheme_policy', 'allow-all', 'https://*.slack.com')
 config.set('content.javascript.can_access_clipboard', True, 'https://github.com/*')
+config.set('content.javascript.can_access_clipboard', True, 'https://stackoverflow.com/*')
+config.set('content.javascript.can_access_clipboard', True, 'https://*.stackexchange.com/*')
 
 
 #### Aliases and bindings ####
