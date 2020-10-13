@@ -1,0 +1,38 @@
+#! /bin/sh
+
+pgrep ibus-daemon > /dev/null || ibus-daemon &
+pgrep sxhkd > /dev/null || sxhkd &
+
+dunst &
+polybar top &
+polybar bottom &
+
+xsetroot -cursor_name left_ptr &
+
+amixer sset Master 69%
+
+bspc monitor -d I II III IV V VI VII VIII
+
+bspc config border_width        4
+bspc config window_gap          15
+
+bspc config split_ratio         0.52
+bspc config borderless_monocle  true
+bspc config gapless_monocle     false
+
+bspc config click_to_focus any
+
+bspc rule -a Zathura state=tiled follow=on
+
+bspc rule -a kitty desktop='^1' follow=on
+
+bspc rule -a qutebrowser desktop='^2' follow=on
+
+bspc rule -a google-chrome desktop='^3' follow=on
+bspc rule -a firefox desktop='^3' follow=on
+
+bspc rule -a zoom desktop='^6' follow=on
+bspc rule -a slack desktop='^7' follow=on
+bspc rule -a discord desktop='^7' follow=on
+
+bspc rule -a spotify desktop='^8' follow=on

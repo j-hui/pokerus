@@ -1,0 +1,159 @@
+# Keycode names: https://github.com/baskerville/sxhkd/blob/master/src/parse.c
+
+## help:
+ctrl + super + slash
+    grep -E '^##' -A1 ~/.config/sxhkd/sxhkdrc | \
+    tr '\n' ' ' | \
+    sed 's/--/\n/g' | \
+    rofi -dmenu
+
+## kitty:
+ctrl + super + t
+    xdo activate -N kitty || kitty
+
+## qutebrowser:
+ctrl + super + o
+    xdo activate -N qutebrowser || qutebrowser
+
+## google-chrome-stable:
+ctrl + super + shift + o
+    google-chrome-stable
+
+## sleep:
+ctrl + super + shift + BackSpace
+    xset s activate
+
+## rofi-pass:
+ctrl + super + i
+    rofi-pass
+
+## rofi-define:
+ctrl + super + shift + i
+    ~/bin/rofi-define
+
+## rofi run:
+{super, super + ctrl, super + ctrl + shift} + space
+    rofi -show {drun,run,ssh}
+
+## rofi window:
+super + {Tab, grave}
+    rofi -show {window,windowcd}
+
+## scrot full-screen:
+Print
+    scrot --focused \
+        ~/Pictures/screenshots/screenshot-%Y-%m-%d-%H-%M-%S.png \
+        -e 'notify-send "Captured screenshot: $f"'
+
+# NOTE: without the sleep scrot crashes with:
+#   giblib error: couldn't grab keyboard:Resource temporarily unavailable
+## scrot select:
+shift + Print
+    sleep 0.3 && \
+    scrot --select --freeze \
+        ~/Pictures/screenshots/screenshot-%Y-%m-%d-%H-%M-%S.png \
+        -e 'notify-send "Captured screenshot" $f'
+
+## copy + delete most recent screenshot:
+super + Print
+    cd ~/Pictures/screenshots && \
+    ls -1t | head -n 1 | xargs -r xclip -selection clipboard -t image/png && \
+    ls -1t | head -n 1 | xargs -r notify-send "Copied + deleted screenshot" && \
+    ls -1t | head -n 1 | xargs rm -fv
+
+## copy most recent screenshot:
+super + shift + Print
+    cd ~/Pictures/screenshots && \
+    ls -1t | head -n 1 | xargs -r xclip -selection clipboard -t image/png && \
+    ls -1t | head -n 1 | xargs -r notify-send "Copied screenshot"
+
+## delete most recent screenshot:
+ctrl + super + Print
+    cd ~/Pictures/screenshots && \
+    ls -1t | head -n 1 | xargs -r notify-send "Deleted screenshot" && \
+    ls -1t | head -n 1 | xargs rm -fv
+
+## volume +/-:
+super + ctrl + {equal,minus}
+    amixer sset Master 10%{+,-}
+
+# ## toggle dvorak
+# super + ctrl + grave
+#     ~/bin/toggle-kbmap
+
+#
+# bspwm hotkeys
+#
+
+## sxhkd source/bspc quit:
+super + ctrl {_,+ shift +} Escape
+    {pkill -USR1 -x sxhkd,bspc quit}
+
+## bspc close/kill window:
+super + ctrl + {_, shift +} w
+    bspc node -{c,k}
+
+## bspc swap current node with biggest:
+ctrl + super + shift + g
+  bspc node -s biggest
+
+## bspc focus/swap toward direction:
+ctrl + super + {_,shift + }{h,j,k,l}
+  bspc node -{f,s} {west,south,north,east}
+
+
+## bspc previous/next desktop:
+ctrl + super + {p, n}
+    bspc desktop -f {prev,next}.local
+
+## bspc send to previous/next desktop:
+ctrl + super + shift + {p,n}
+    bspc node -d {prev,next}.local --follow
+
+## bspc send to desktop:
+ctrl + super + {_,shift + }{1-9,0}
+    bspc {desktop -f,node -d} '^{1-9,10}'
+
+## bspc sticky/stay:
+ctrl + super + {_, shift + } s
+    bspc node -g {sticky,private}
+
+## bspc toggle monocle:
+ctrl + super + f
+    bspc desktop -l next
+
+## bspc floating:
+super + ctrl + shift + f
+    bspc node -t floating
+
+## bspc tiled/pseudo-tiled:
+super + ctrl + {_, shift + } b
+    bspc node -t {tiled,pseudo_tiled}
+
+
+# # focus the node for the given path jump
+# super + {p,b,comma,period}
+#   bspc node -f @{parent,brother,first,second}
+
+# focus the older or newer node in the focus history
+# super + {o,i}
+#   bspc wm -h off; \
+#   bspc node {older,newer} -f; \
+#   bspc wm -h on
+
+
+#
+# move/resize
+#
+
+# expand a window by moving one of its side outward
+ctrl + super + alt + {Left,Down,Up,Right}
+    bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
+
+# contract a window by moving one of its side inward
+shift + ctrl + super + alt + {Left,Down,Up,Right}
+    bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
+
+# move a floating window
+shift + ctrl + super + {Left,Down,Up,Right}
+    bspc node -v {-20 0,0 20,0 -20,20 0}

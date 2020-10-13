@@ -1,5 +1,7 @@
 [push]
     default = simple
+[pull]
+    rebase = false
 [alias]
     co = checkout
     br = branch
@@ -20,5 +22,7 @@
     hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
 [color]
     ui = auto
+    pager = no
 [core]
     excludesfile = ~/.gitignore_global
+    pager = nvim -R

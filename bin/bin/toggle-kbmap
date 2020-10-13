@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+if setxkbmap -query | grep -q dvorak >/dev/null ; then
+    setxkbmap us "" ctrl:nocaps
+else
+    setxkbmap us dvorak ctrl:nocaps
+fi
