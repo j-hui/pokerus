@@ -1,0 +1,3 @@
+[submodule "bat.config/bat/syntaxes/Sublime-Coq"]
+	path = bat.config/bat/syntaxes/Sublime-Coq
+	url = https://github.com/whitequark/Sublime-Coq.git

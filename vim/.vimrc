@@ -6,9 +6,8 @@
 " - <backspace>/<return>: toggle folds
 " - i: insert
 " - f: Find (FZF)
-" - g: Git (vim-signify)
 " - c: Coq (coqtail)
- 
+
 " ============================================================================
 " Core/plumbing/hacks {{{
 " ============================================================================
@@ -205,7 +204,7 @@ if !exists('g:vscode')
             \ 'active': {
             \   'left': [
             \       [ 'mode', 'paste' ],
-            \       [ 'gitbranch', 'readonly', 'filename', 'modified' ],
+            \       [ 'gitbranch', 'readonly', 'relativepath', 'modified' ],
             \   ],
             \   'right': [
             \       [ 'lineinfo' ],
@@ -285,24 +284,23 @@ if !exists('g:vscode')
         nnoremap <leader>f:   :History: <CR>
         nnoremap <leader>f/   :History/ <CR>
 
-    Plug 'junegunn/vim-peekaboo'                            " See yank registers
+    Plug 'junegunn/vim-peekaboo'          " See yank registers
 
-    Plug 'junegunn/gv.vim'                                  " See Git history
+    Plug 'junegunn/gv.vim'                " See Git history
 
-    Plug 'tpope/vim-fugitive'                               " Git interaction 
+    Plug 'tpope/vim-fugitive'             " Git interaction
 
-    Plug 'voldikss/vim-floaterm'                            " Floating terminal
-        nnoremap <silent> <C-_> :FloatermToggle<CR>
-        tnoremap <silent> <C-_> <C-\><C-n>:FloatermToggle<CR>
-        nnoremap <silent> <F9>  :FloatermNew<CR>
-        tnoremap <silent> <F9>  <C-\><C-n>:FloatermNew<CR>
-        nnoremap <silent> <F10> :FloatermPrev<CR>
-        tnoremap <silent> <F10> <C-\><C-n>:FloatermPrev<CR>
-        nnoremap <silent> <F11> :FloatermNext<CR>
-        tnoremap <silent> <F11> <C-\><C-n>:FloatermNext<CR>
-        nnoremap <silent> <F12> :FloatermToggle<CR>
-        tnoremap <silent> <F12> <C-\><C-n>:FloatermToggle<CR>
-        tnoremap <silent> <C-[> <C-\><C-n>
+    Plug 'AndrewRadev/bufferize.vim'      " command contents in buffer
+
+    Plug 'dense-analysis/ale'             " Asynchronous linting using LSP
+        let g:ale_sign_column_always = 1
+        let g:ale_lint_delay = 500
+        nmap <silent> [a <Plug>(ale_previous_wrap)
+        nmap <silent> ]a <Plug>(ale_next_wrap)
+
+    Plug 'Avi-D-coder/fzf-wordnet.vim'
+        imap <C-S> <Plug>(fzf-complete-wordnet)
+
 endif
 " }}}
 
@@ -338,7 +336,6 @@ Plug 'tpope/vim-speeddating'            " increment/decrement dates
     nmap  <C-X>     <Plug>SpeedDatingDown
     xmap  <C-S>     <Plug>SpeedDatingUp
     xmap  <C-X>     <Plug>SpeedDatingDown
-
 
 Plug 'andymass/vim-matchup'             " User-defined pairs
 
@@ -395,17 +392,27 @@ Plug 'svermeulen/vim-cutlass'       " x and D no longer yank text to registers
     vnoremap d  d
     nnoremap dd dd
 
-Plug 'vim-scripts/ReplaceWithRegister'  " Exchange text with register gr{motion}
-Plug 'tommcdo/vim-exchange'             " Exchange text with repeated cx{motion}
-
+Plug 'AndrewRadev/dsf.vim'              " Delete surrounding function
+Plug 'AndrewRadev/linediff.vim'         " Vimdiff ranges
 Plug 'AndrewRadev/sideways.vim'         " Move things sideways in lists
     nnoremap <c-g>l :SidewaysRight<cr>
     nnoremap <c-g>h :SidewaysLeft<cr>
+
 Plug 'matze/vim-move'                   " Move things in visual mode
     vmap <C-j> <Plug>MoveBlockDown
     vmap <C-l> <Plug>MoveBlockRight
     vmap <C-h> <Plug>MoveBlockLeft
     vmap <C-k> <Plug>MoveBlockUp
+
+Plug 'vim-scripts/ReplaceWithRegister'  " Exchange text with register gr{motion}
+Plug 'tommcdo/vim-exchange'             " Exchange text with repeated cx{motion}
+
+Plug 'gyim/vim-boxdraw'                 " Draw ASCII text boxes
+Plug 'joom/latex-unicoder.vim'          " Useful for 'pretty' Coq/Lean files
+    let g:unicoder_cancel_normal = 1
+    let g:unicoder_cancel_insert = 1
+    let g:unicoder_cancel_visual = 1
+    inoremap <C-l> <Esc>:call unicoder#start(1)<CR>
 
 " }}}
 
@@ -484,6 +491,7 @@ if !exists('g:vscode')
                     \ 'ocaml',
                     \ 'haskell'
                     \ ]
+    Plug 'jtratner/vim-flavored-markdown', { 'for': 'markdown' }
 " }}}
 " Others {{{
     Plug 'z0mbix/vim-shfmt',        { 'for': 'sh' }
@@ -492,6 +500,9 @@ if !exists('g:vscode')
     Plug 'leanprover/lean.vim',     { 'for': 'lean' }
     Plug 'idris-hackers/idris-vim', { 'for': 'idris' }
     Plug 'LnL7/vim-nix',            { 'for': 'nix' }
+    Plug 'vim-scripts/promela.vim', { 'for': 'promela' }
+    Plug 'chrisbra/csv.vim',        { 'for': 'csv' }
+    Plug 'rust-lang/rust.vim',      { 'for': 'rust' }
 " }}}
 endif
 " }}}
@@ -506,6 +517,7 @@ if filereadable(expand("~/.vim_local"))
 endif
 
 call plug#end()
+
 " }}}
 
 " ============================================================================
@@ -514,9 +526,14 @@ call plug#end()
 
 " Appearance {{{
 " ----------------------------------------------------------------------------
- 
+
 set background=dark
-colorscheme PaperColor
+try
+    colorscheme PaperColor
+catch /^Vim\%((\a\+)\)\=:E185/
+    " deal with it
+    echom 'colorscheme PaperColor not installed, run :PlugInstall'
+endtry
 
 set nu rnu                  " Line numbers and relative line numbers
 set display+=lastline       " Show as much as possible of the last line
@@ -592,7 +609,7 @@ augroup ron_color_tweaks " {{{
     "     \                           guibg=NONE   guifg=cyan     gui=undercurl
     "     \|  highlight SpellLocal    ctermbg=NONE ctermfg=yellow
     "     \                           guibg=NONE   guifg=yellow   gui=undercurl
-    " autocmd ColorScheme 
+    " autocmd ColorScheme
     "     \   highlight DiffAdd       ctermbg=17      cterm=bold
     "     \                           guibg=#00005f   gui=bold
     "     \|  highlight DiffDelete    ctermbg=234     ctermfg=242
@@ -614,18 +631,23 @@ set nostartofline               " prevent cursor from jumping to start of line
 set showmatch                   " show matching brackets
 set virtualedit=block,onemore   " move cursor end of line
 
-
-set wildmenu
-
-set autoread
-
-set splitright
+set splitright                  " direction of split
 
 set hlsearch                    " highlight search
 set incsearch                   " incremental search
 set ignorecase                  " ignores case
 set smartcase                   " smart case
 set wrapscan                    " jump back to top
+
+set wildmenu                    " use wildmenu
+set wildmode=longest:full,full  " sane completion interface
+set wildignorecase              " ignore case during completion
+
+" Ignore these file patterns
+set wildignore+=*.so,*.swp,*.o,*.a
+set wildignore+=*.opus,*.flac,.*mp3,*.ogg,*.mp4,*.webm
+set wildignore+=*.pdf,*.jpg,*.png,*.jpeg,*.gif
+set wildignore+=*.zip,*.gzip,*.bz2,*.tar,*.xz,*.lrzip,*.lrz
 
 " }}}
 
@@ -642,8 +664,6 @@ set autoindent          " Automatically indent when starting a new line
 set nojoinspaces        " Only insert single space after J
 set formatoptions+=j    " strip comment leader when joining comment lines
 
-set modeline
-set modelines=5
 " }}}
 
 " }}}
@@ -673,21 +693,21 @@ nnoremap k gk
 inoremap <C-c>  <Esc>
 inoremap kj     <Esc>
 
-" Bad habits xD
-" nnoremap <C-j> <C-d>
-" nnoremap <C-k> <C-u>
-" nnoremap <C-l> g$
-" nnoremap <C-h> g^
-
-" Readline style navigation (in addition to vim-rsi)
+" Normal mode readline style navigation
 nnoremap <C-n>      <C-e>j
 nnoremap <C-p>      <C-y>k
 nnoremap <C-e>      $
 nnoremap <C-a>      ^
 nnoremap <C-f>      l
 nnoremap <C-b>      h
-inoremap <C-n>      <down>
-inoremap <C-p>      <up>
+
+" Virual mode readline style navigation
+vnoremap <C-n>      <C-e>j
+vnoremap <C-p>      <C-y>k
+vnoremap <C-e>      $
+vnoremap <C-a>      ^
+vnoremap <C-f>      l
+vnoremap <C-b>      h
 
 " Window navigation
 noremap <C-w>n <Esc>:bn<CR>
@@ -713,8 +733,29 @@ inoremap <C-G>d <C-R>=strftime("%Y-%m-%d")<CR>
 " Auto indentation
 inoremap <C-G><TAB> <C-F>
 
+" Insertion mode readline style navigation (in addition to vim-rsi)
+inoremap <C-n>      <down>
+inoremap <C-p>      <up>
+inoremap <C-k>      <Esc>lDi
+
 " }}}
 
+" Command mode {{{
+" ----------------------------------------------------------------------------
+
+" Don't use <Left> and <Right> key for selecting previous/next match
+cnoremap <Left> <Space><BS><Left>
+cnoremap <Right> <Space><BS><Right>
+
+" Fake page up and page down
+cnoremap <c-d> <c-n><c-n><c-n><c-n><c-n><c-n><c-n><c-n><c-n><c-n>
+cnoremap <c-u> <c-p><c-p><c-p><c-p><c-p><c-p><c-p><c-p><c-p><c-p>
+
+" 'Step into' wild menu selection
+" The backspace apparently necessary to remove ^I artifact
+cnoremap <c-g> <Down><BS>
+
+" }}}
 " }}}
 
 " ============================================================================
@@ -737,6 +778,22 @@ command! -range Trim <line1>,<line2> substitute/\s\+$//g | normal! ``
 
 " Go to location of file {{{
 command! Here cd %:h
+" }}}
+
+
+" "Basic" mode: no mouse interaction, line numbers, or sign column {{{
+" Useful for copying and pasting from buffers as text
+let s:basicmode = 0
+function! s:basicToggle()
+    if s:basicmode
+        set mouse=a nu rnu signcolumn=auto
+        let s:basicmode = 0
+    else
+        set mouse= nonu nornu signcolumn=no
+        let s:basicmode = 1
+    endif
+endfunction
+command! BasicToggle call s:basicToggle()
 " }}}
 
 " Modeline {{{
@@ -778,6 +835,9 @@ set spellfile=~/.vim/spell/en.utf-8.add
 " File types {{{
 " ============================================================================
 
+set modeline
+set modelines=5
+
 augroup help_settings " {{{
     autocmd FileType help
       \ noremap <buffer><nowait> q :q<CR>
@@ -786,6 +846,11 @@ augroup END " }}}
 augroup vim_settings " {{{
     autocmd!
     autocmd BufNewFile,BufReadPost */.vim_local set filetype=vim
+    autocmd Filetype vim setlocal
+                \ tabstop=2
+                \ expandtab
+                \ shiftwidth=2
+                \ softtabstop=2
 augroup END " }}}
 
 augroup latex_settings " {{{
@@ -810,7 +875,8 @@ augroup END " }}}
 
 augroup markdown_settings " {{{
     autocmd!
-    autocmd Filetype markdown setlocal
+    autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
+    autocmd Filetype ghmarkdown setlocal
                 \ tabstop=2
                 \ expandtab
                 \ shiftwidth=2
@@ -894,6 +960,31 @@ augroup coq_settings " {{{
                 " \ formatoptions=cqtlj
 augroup END " }}}
 
+augroup promela_settings " {{{
+    autocmd!
+    autocmd BufNewFile,BufReadPost *.prom,*.prm,*.promela  setf promela
+    autocmd Filetype promela setlocal
+                \ tabstop=2
+                \ expandtab
+                \ shiftwidth=2
+                \ softtabstop=2
+                " \ commentstring=/*%s*/
+                " \ comments=sr:/*,mb:*,ex:*/
+                " \ formatoptions=cqtlj
+augroup END " }}}
+
+augroup protobuf_settings " {{{
+    autocmd!
+    autocmd Filetype proto setlocal
+                \ tabstop=2
+                \ expandtab
+                \ shiftwidth=2
+                \ softtabstop=2
+                " \ commentstring=/*%s*/
+                " \ comments=sr:/*,mb:*,ex:*/
+                " \ formatoptions=cqtlj
+augroup END " }}}
+
 augroup lean_settings " {{{
     autocmd!
     autocmd BufNewFile,BufReadPost *.lean set filetype=lean
@@ -905,6 +996,11 @@ augroup lean_settings " {{{
                 \ commentstring=--\ %s
                 \ comments=s1fl:/-,mb:-,ex:-/,:--
                 " \ formatoptions+=cqortj
+augroup END " }}}
+
+augroup csv_settings " {{{
+    autocmd!
+    autocmd BufNewFile,BufReadPost *.csv set filetype=csv
 augroup END " }}}
 
 " }}}

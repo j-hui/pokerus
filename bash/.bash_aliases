@@ -11,27 +11,11 @@ PATH_ADD() {
     fi
 }
 
-cd
-
-### Vim
-if which nvim &> /dev/null; then
-    export EDITOR=nvim
-    alias vim='nvim'
-elif which vim &> /dev/null; then
-    export EDITOR=vim
-fi
-
-if which floaterm &> /dev/null; then
-    export EDITOR=floaterm
-    alias vim='floaterm'
-fi
-
-mkdir -p ~/.tmp/backup ~/.tmp/swp ~/.tmp/undo
-
 ### fzf
 
 if which bat &> /dev/null; then
     export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always {} | head -500'"
+    export MANPAGER="sh -c 'col -bx | bat -l man -p --paging always'"
 else
     export FZF_CTRL_T_OPTS="--preview 'cat {}'"
 fi
@@ -41,6 +25,31 @@ if which fd &> /dev/null; then
     export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
     export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
+
+### rg
+
+if which rg &> /dev/null; then
+    alias rg='rg --smart-case'
+    alias rgv='rg --smart-case --type coq'
+fi
+
+### Vim
+if which nvim &> /dev/null; then
+    export EDITOR=nvim
+
+    alias vim='nvim -O2'
+    alias nvim='nvim -O2'            # open multiple files with vertical splits
+
+    export MANPAGER='nvim +Man!'    # use nvim as pager
+    export MANWIDTH=999             # let nvim handle wraparound
+
+elif which vim &> /dev/null; then
+    export EDITOR=vim
+    alias vim='vim -O2'
+fi
+
+mkdir -p ~/.tmp/backup ~/.tmp/swp ~/.tmp/undo
+
 
 ### OS-specific configuration
 case "$OSTYPE" in
@@ -240,24 +249,46 @@ man() {
             man "$@"
 }
 
+# Automatically trim long paths in the prompt (requires Bash 4.x)
+PROMPT_DIRTRIM=2
+
+# show "[hh:mm] user@host:pwd" in xterm title bar
+if [ "$TERM_PROGRAM" = "Apple_Terminal" ]; then
+    # for Mac Terminal, omit "User@Users-MacBook-Air"
+    # and preserve PROMPT_COMMAND set by /etc/bashrc.
+    show_what_in_title_bar='"[$(date +%H:%M)] ${PWD/#$HOME/~}"'
+    PROMPT_COMMAND='printf "\033]0;%s\007" '"$show_what_in_title_bar; $PROMPT_COMMAND"
+else
+    show_what_in_title_bar='"[$(date +%H:%M)] ${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/~}"'
+    case ${TERM} in
+        xterm*|rxvt*|Eterm|aterm|kterm|gnome*)
+            PROMPT_COMMAND='printf "\033]0;%s\007" '$show_what_in_title_bar
+            ;;
+        screen)
+            PROMPT_COMMAND='printf "\033_%s\033\\" '$show_what_in_title_bar
+            ;;
+    esac
+fi
+unset show_what_in_title_bar
+
+sfw
+
 ### Readline
 
-# Prevent file overwrite on stdout redirection
-# Use `>|` to force redirection to an existing file
-set -o noclobber
+sbind () { bind "$@" 2>/dev/null ; }
 
 # Enable history expansion with space
 # E.g. typing !!<space> will replace the !! with your last command
-bind Space:magic-space
+sbind Space:magic-space
 
 # Perform file completion in a case insensitive fashion
-bind "set completion-ignore-case on"
+sbind "set completion-ignore-case on"
 
 # Treat hyphens and underscores as equivalent
-bind "set completion-map-case on"
+sbind "set completion-map-case on"
 
 # Display matches for ambiguous patterns at first tab press
-bind "set show-all-if-ambiguous on"
+sbind "set show-all-if-ambiguous on"
 
 ### History
 
@@ -287,13 +318,15 @@ HISTTIMEFORMAT='%F %T '
 
 # Enable incremental history search with up/down arrows (also Readline goodness)
 # Learn more about this here: http://codeinthehole.com/writing/the-most-important-command-line-tip-incremental-history-searching-with-inputrc/
-bind '"\e[A": history-search-backward'
-bind '"\e[B": history-search-forward'
-bind '"\e[C": forward-char'
-bind '"\e[D": backward-char'
+sbind '"\e[A": history-search-backward'
+sbind '"\e[B": history-search-forward'
+sbind '"\e[C": forward-char'
+sbind '"\e[D": backward-char'
 
 # Record each line as it gets issued
 PROMPT_COMMAND='history -a'
+
+unset sbind
 
 ### File security
 
