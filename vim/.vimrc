@@ -300,8 +300,6 @@ Plug 'tpope/vim-commentary'             " use gcc to comment things out
 Plug 'tpope/vim-surround'               " ds, cs, ys to change text surroundings
 Plug 'tpope/vim-characterize'           " use ga to see metadata about unicode
 Plug 'tpope/vim-endwise'                " write endings
-Plug 'tpope/vim-rsi'                    " readline style commands in insert mode
-    inoremap <C-D> <C-D>
 Plug 'tpope/vim-speeddating'            " increment/decrement dates
     let g:speeddating_no_mappings = 1   " <C-S> to increment
     " force a non-recursive map to the fallback functions
@@ -700,8 +698,8 @@ noremap <C-w>q <Esc>:bd<CR>
 xnoremap < <gv
 xnoremap > >gv
 
-" No clue what the hell this does
-inoremap # X#
+" " No clue what the hell this does
+" inoremap # X#
 
 " Insert date
 nnoremap <space>id :put =strftime(\"%Y-%m-%d\")<CR>
@@ -710,10 +708,78 @@ inoremap <C-G>d <C-R>=strftime("%Y-%m-%d")<CR>
 " Auto indentation
 inoremap <C-G><TAB> <C-F>
 
-" Insertion mode readline style navigation (in addition to vim-rsi)
-inoremap <C-n>      <down>
-inoremap <C-p>      <up>
-inoremap <C-k>      <Esc>lDi
+" Readline-style keybinds adapted from tpope/vim-rsi {{{
+
+inoremap        <C-A> <C-O>^
+inoremap   <C-X><C-A> <C-A>
+cnoremap        <C-A> <Home>
+cnoremap   <C-X><C-A> <C-A>
+
+inoremap <expr> <C-B> getline('.')=~'^\s*$'&&col('.')>strlen(getline('.'))?"0\<Lt>C-D>\<Lt>Esc>kJs":"\<Lt>Left>"
+cnoremap        <C-B> <Left>
+
+" inoremap <expr> <C-D> col('.')>strlen(getline('.'))?"\<Lt>C-D>":"\<Lt>Del>"
+cnoremap <expr> <C-D> getcmdpos()>strlen(getcmdline())?"\<Lt>C-D>":"\<Lt>Del>"
+
+inoremap <expr> <C-E> col('.')>strlen(getline('.'))<bar><bar>pumvisible()?"\<Lt>C-E>":"\<Lt>End>"
+
+inoremap <expr> <C-F> col('.')>strlen(getline('.'))?"\<Lt>C-F>":"\<Lt>Right>"
+cnoremap <expr> <C-F> getcmdpos()>strlen(getcmdline())?&cedit:"\<Lt>Right>"
+
+function! s:ctrl_u()
+  if getcmdpos() > 1
+    let @- = getcmdline()[:getcmdpos()-2]
+  endif
+  return "\<C-U>"
+endfunction
+
+cnoremap <expr> <C-U> <SID>ctrl_u()
+cnoremap        <C-Y> <C-R>-
+
+inoremap        <C-n> <down>
+inoremap        <C-p> <up>
+inoremap        <C-k> <Esc>lDi
+
+if &encoding ==# 'latin1' && has('gui_running') && !empty(findfile('plugin/sensible.vim', escape(&rtp, ' ')))
+  set encoding=utf-8
+endif
+
+function! s:MapMeta() abort
+  noremap!        <M-b> <S-Left>
+  noremap!        <M-f> <S-Right>
+  noremap!        <M-d> <C-O>dw
+  cnoremap        <M-d> <S-Right><C-W>
+  noremap!        <M-n> <Down>
+  noremap!        <M-p> <Up>
+  noremap!        <M-BS> <C-W>
+  noremap!        <M-C-h> <C-W>
+endfunction
+
+if has("gui_running") || has('nvim')
+  call s:MapMeta()
+else
+  silent! exe "set <F29>=\<Esc>b"
+  silent! exe "set <F30>=\<Esc>f"
+  silent! exe "set <F31>=\<Esc>d"
+  silent! exe "set <F32>=\<Esc>n"
+  silent! exe "set <F33>=\<Esc>p"
+  silent! exe "set <F34>=\<Esc>\<C-?>"
+  silent! exe "set <F35>=\<Esc>\<C-H>"
+  noremap!        <F29> <S-Left>
+  noremap!        <F30> <S-Right>
+  noremap!        <F31> <C-O>dw
+  cnoremap        <F31> <S-Right><C-W>
+  noremap!        <F32> <Down>
+  noremap!        <F33> <Up>
+  noremap!        <F34> <C-W>
+  noremap!        <F35> <C-W>
+  augroup rsi_gui
+    autocmd GUIEnter * call s:MapMeta()
+  augroup END
+endif
+
+" }}}
+
 
 " }}}
 
