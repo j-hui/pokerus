@@ -121,11 +121,11 @@ ctrl + super + {_,shift + }{1-9,0}
     bspc {desktop -f,node -d} '^{1-9,10}'
 
 ## bspc toggle monocle:
-ctrl + super + m
+ctrl + super + shift + m
     bspc desktop -l next
 
 ## bspc toggle sticky:
-ctrl + super + shift + m
+ctrl + super + m
     bspc node -g sticky
 
 ## bspc toggle node flag:
