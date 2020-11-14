@@ -8,10 +8,10 @@ ctrl + super + slash
     rofi -dmenu
 
 ## kitty:
-ctrl + super + t
+ctrl + super + Return
     bspc desktop -f '^1' && xdo activate -N kitty || kitty
 
-ctrl + super + shift + t
+ctrl + super + shift + Return
     kitty
 
 ## qutebrowser:
@@ -47,6 +47,10 @@ Print
     scrot --focused \
         ~/Pictures/screenshots/screenshot-%Y-%m-%d-%H-%M-%S.png \
         -e 'notify-send "Captured screenshot: $f"'
+
+## rofi greenclip:
+super + ctrl + v
+    rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'
 
 # NOTE: without the sleep scrot crashes with:
 #   giblib error: couldn't grab keyboard:Resource temporarily unavailable
@@ -84,9 +88,9 @@ super + ctrl + {equal,minus}
 ctrl + super + b
     polybar-msg cmd toggle
 
-# ## toggle dvorak
-# super + ctrl + grave
-#     ~/bin/toggle-kbmap
+## toggle dvorak
+super + ctrl + grave
+    ~/bin/toggle-kbmap
 
 #
 # bspwm hotkeys
@@ -99,10 +103,6 @@ super + ctrl {_,+ shift +} Escape
 ## bspc close/kill window:
 super + ctrl + {_, shift +} w
     bspc node -{c,k}
-
-## bspc swap current node with biggest:
-ctrl + super + shift + g
-  bspc node -s biggest
 
 ## bspc focus/swap toward direction:
 ctrl + super + {_,shift + }{h,j,k,l}
@@ -120,21 +120,29 @@ ctrl + super + shift + {p,n}
 ctrl + super + {_,shift + }{1-9,0}
     bspc {desktop -f,node -d} '^{1-9,10}'
 
+## bspc rotate desktop:
+ctrl + super + {_, shift + } r
+    bspc node @/ -R {90,270}
+
+## bspc set fullscreen
+ctrl + super + {f,shift + f}
+  bspc node -t {fullscreen,floating}
+
+## bspc set tiled/pseudo-tiled
+ctrl + super + {t,shift + t}
+    bspc node -t {tiled,pseudo_tiled}
+
 ## bspc toggle monocle:
-ctrl + super + shift + m
+ctrl + super + m
     bspc desktop -l next
 
 ## bspc toggle sticky:
-ctrl + super + m
+ctrl + super + shift + m
     bspc node -g sticky
 
-## bspc toggle node flag:
-ctrl + super + f ; {h,s,p,l,m}
-    bspc node -g {hidden,sticky,private,locked,mark}
-
-## bspc set node state:
-ctrl + super + shift + f ; {t,p,f,s}
-    bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
+# # bspc toggle node flag:
+# ctrl + super + g ; {h,s,p,l,m}
+#     bspc node -g {hidden,sticky,private,locked,mark}
 
 # # focus the node for the given path jump
 # super + {p,b,comma,period}
@@ -147,18 +155,16 @@ ctrl + super + shift + f ; {t,p,f,s}
 #   bspc wm -h on
 
 
-#
-# move/resize
-#
+## floating window move:
+ctrl + super + {Left,Down,Up,Right}
+    bspc node -v {-20 0,0 20,0 -20,20 0}
 
-# expand a window by moving one of its side outward
+## floating window expand side:
+#[expand a window by moving one of its sides outward
 ctrl + super + alt + {Left,Down,Up,Right}
     bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
 
-# contract a window by moving one of its side inward
+## floating window contract side:
 shift + ctrl + super + alt + {Left,Down,Up,Right}
-    bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
+    bspc node -z {left 20 0,bottom 0 -20,top 0 20,right -20 0}
 
-# move a floating window
-shift + ctrl + super + {Left,Down,Up,Right}
-    bspc node -v {-20 0,0 20,0 -20,20 0}
