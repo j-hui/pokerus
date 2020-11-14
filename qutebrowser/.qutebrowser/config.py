@@ -10,6 +10,18 @@
 import os
 import platform
 
+import dracula.draw
+
+# Load existing settings made via :set
+config.load_autoconfig()
+
+dracula.draw.blood(c, {
+    'spacing': {
+        'vertical': 6,
+        'horizontal': 8
+    }
+})
+
 # Put kitty, gvim, etc. in Qutebrowser's PATH, at least on macOS
 os.environ['PATH'] = '/usr/local/bin' + os.pathsep + os.environ['PATH']
 
@@ -21,14 +33,14 @@ c.auto_save.session = True
 
 c.editor.command = ["kitty", "vim", "-f", "{file}", "-c", "normal {line}G{column0}l"]
 
-c.content.pdfjs = True
+c.content.pdfjs = False
 c.content.autoplay = False
 c.tabs.background = True
 c.tabs.close_mouse_button = 'right'
 
 c.colors.webpage.prefers_color_scheme_dark = True
 
-c.downloads.remove_finished = 6969
+c.downloads.remove_finished = 696969
 
 c.tabs.last_close = 'close'
 c.tabs.width = '10%'
@@ -39,11 +51,15 @@ config.set('content.javascript.can_access_clipboard', True, 'https://github.com/
 config.set('content.javascript.can_access_clipboard', True, 'https://stackoverflow.com/*')
 config.set('content.javascript.can_access_clipboard', True, 'https://*.stackexchange.com/*')
 
-
 #### Aliases and bindings ####
 
 c.aliases['h'] = 'help'
 c.aliases['py'] = 'debug-pyeval'
+c.aliases['noh'] = 'search'
+
+c.aliases['user'] = 'spawn --userscript'
+c.aliases['pass'] = 'spawn --userscript qute-pass'
+c.aliases['readability'] = 'spawn --userscript readability'
 
 c.aliases['q'] = 'close'
 c.aliases['qa'] = 'quit'
@@ -55,17 +71,22 @@ c.aliases['wqa'] = 'quit --save'
 c.aliases['o'] = 'open'
 c.aliases['O'] = 'open --tab'
 c.aliases['t'] = 'open --background'
+
 c.aliases['b'] = 'tab-focus'
+for i in range(1, 20):
+    c.aliases['b'+str(i)] = 'tab-focus ' + str(i)
 
 c.aliases['priv'] = 'open --private'
 c.aliases['bookmarks'] = 'open -t qute://bookmarks/'
 
-c.aliases['mpv'] = 'spawn mpv --autofit=100%x100% --force-window=immediate {url}'
+
+c.aliases['mpv'] = 'spawn mpv --autofit=100%x100% --force-window=immediate --keep-open=yes {url}'
 c.aliases['ompv'] = 'hint links spawn mpv --autofit=100%x100% --force-window=immediate {hint-url}'
+
+c.aliases['dl'] = 'spawn --userscript open_download'
 
 c.aliases['chrome'] = 'spawn open -a "Google Chrome" {url}'
 c.aliases['ochrome'] = 'hint all spawn open -a "Google Chrome" {hint-url}'
-
 
 config.bind('<Ctrl+Tab>', 'tab-next', mode='normal')
 config.bind('<Ctrl+Shift+Tab>', 'tab-prev', mode='normal')
@@ -83,6 +104,12 @@ config.bind('<Esc>', 'fake-key <Esc>', mode='normal')
 config.unbind('<Ctrl+e>', mode='insert')
 config.bind('<Ctrl+o>', 'open-editor', mode='insert')
 
+config.bind('<Ctrl-g>', 'config-cycle content.user_stylesheets     ' +
+        '"~/.config/qutebrowser/css/darculized-all-sites.css"      ' +
+        '"~/.config/qutebrowser/css/solarized-dark-all-sites.css"  ' +
+        '""')
+
+config.bind('<Ctrl+Shift+l>', 'spawn --userscript qute-pass')
 
 for mode in ['command', 'prompt']:
 
