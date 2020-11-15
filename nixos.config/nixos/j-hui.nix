@@ -3,8 +3,9 @@
   config = {
     users.users."j-hui" = {
       isNormalUser = true;
-      extraGroups = [ "wheel" ];
+      extraGroups = [ "wheel" "audio" "jackaudio" ];
     };
-    # services.xserver.displayManager.lightdm.greeters.mini.user = "j-hui";
+
+    services.xserver.displayManager.lightdm.greeters.mini.user = "j-hui";
   };
 }

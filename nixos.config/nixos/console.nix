@@ -16,11 +16,16 @@ in
     };
 
     environment.systemPackages = with pkgs; [
-      bash sudo git tmux screen
+      bash fish zsh
+      sudo git tmux screen
       ed nano vimHugeX neovim emacs
       binutils-unwrapped pv wget curl unzip
-      parted
+      bind whois inetutils
+      parted cryptsetup gptfdisk
+      btrfs-progs
       htop tree
+      killall
+      gotop
       fzf ag ripgrep fd bat diskus page
       smartmontools lsof pciutils glxinfo acpi
       wireguard-tools fuse
@@ -28,10 +33,14 @@ in
       pass
       thefuck
       asciinema
-      aerc gcalcli
+      aerc
+      gcalcli
       astroid notmuch offlineimap msmtp
       libvirt virt-manager qemu
       gitAndTools.gh subversion mercurial
+      radeontop lshw mcelog
+      fwts
+      python38Packages.speedtest-cli
     ];
 
     virtualisation.libvirtd.enable = true;
@@ -40,6 +49,7 @@ in
       openssh.enable = true;
       openssh.forwardX11 = true;
       printing.enable = true;
+      avahi.enable = true;
     };
 
     programs.ssh.askPassword = "";

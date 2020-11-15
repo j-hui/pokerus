@@ -20,8 +20,22 @@ in
       vlc
       inkscape gimp tuxpaint drawing krita
       slack discord zoom-us skypeforlinux
+      signal-desktop signal-cli
+      mattermost-desktop matterhorn
       mimeo
+      pdftk
+      youtube-dl
+      transmission transmission-gtk
     ];
     programs.browserpass.enable = true;
+
+    # services.mattermost = {
+    #   enable = true;
+    #   siteUrl = "localhost/mattermost";
+    # };
+    # services.matterbridge = {
+    #   enable = true;
+    #   configFile = "/home/j-hui/.config/matterbridge/matterbridge.toml";
+    # };
   };
 }
