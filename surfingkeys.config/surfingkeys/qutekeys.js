@@ -279,7 +279,7 @@ unmapAllExcept([],
 unmapAllExcept([],
     /.+\.slack\.com/);
 unmapAllExcept([],
-    /overfleaf\.com/);
+    /overleaf\.com/);
 unmapAllExcept([],
     /hackerrank\.com/);
 unmapAllExcept([],
