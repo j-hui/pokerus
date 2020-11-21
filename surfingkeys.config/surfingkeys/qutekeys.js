@@ -278,8 +278,8 @@ unmapAllExcept([],
     /docs\.google\.com/);
 unmapAllExcept([],
     /.+\.slack\.com/);
-// unmapAllExcept([],
-//     /overleaf\.com/);
+unmapAllExcept([],
+    /overleaf\.com/);
 unmapAllExcept([],
     /hackerrank\.com/);
 unmapAllExcept([],
