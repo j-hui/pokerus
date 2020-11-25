@@ -20,6 +20,7 @@ in
       vlc
       inkscape gimp tuxpaint drawing krita
       slack discord zoom-us skypeforlinux
+      steam
       mimeo
     ];
     programs.browserpass.enable = true;

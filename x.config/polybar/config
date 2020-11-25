@@ -115,7 +115,7 @@ font-1 = FontAwesome:size=8;-2
 ; font-4 = Unifont:size=6;-3
 ; font-5 = MaterialIcons:size=8;-3
 
-; modules-left = temperature battery wlan
+modules-left = temperature battery wlan
 modules-center = xwindow
 modules-right = eth memory cpu
 
@@ -283,18 +283,13 @@ type = internal/temperature
 thermal-zone = 0
 warn-temperature = 60
 
-format = <ramp> <label>
+format = <label>
 format-underline = #f50a4d
-format-warn = <ramp> <label-warn>
-format-warn-underline = ${self.format-underline}
+format-warn = <label-warn>
 
-label = %temperature%
-label-warn = %temperature%
-label-warn-foreground = ${colors.secondary}
-
-ramp-0 = 
-ramp-1 = 
-ramp-2 = 
-ramp-foreground = ${colors.foreground-alt}
+label = Temp: %temperature%
+label-warn = Temp: %temperature%
+label-warn-foreground = ${colors.alert-alt}
+label-warn-underline = ${colors.alert-alt}
 
 ; vim:ft=dosini

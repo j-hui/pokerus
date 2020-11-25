@@ -37,7 +37,6 @@
       enableGhostscriptFonts = true;
       fonts = with pkgs; [
         corefonts
-        vistafonts
         inconsolata
         terminus_font
         proggyfonts
@@ -80,7 +79,7 @@
         enable = true;
         exportConfiguration = true;
         layout = "us";
-        xkbOptions = "ctrl:nocaps";
+        xkbOptions = "ctrl:nocaps,altwin:swap_alt_win";
         autoRepeatDelay = 269;
         autoRepeatInterval = 40;
 
