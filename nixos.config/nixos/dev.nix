@@ -10,13 +10,18 @@
       (python3.withPackages(ps: with ps; [
           virtualenvwrapper
       ]))
+      ghp-import
+      libxml2
 
       vscode
 
+
       highlight
       opam
+      pre-commit
       stack ghc
-      cargo rustfmt rustup
+      go hugo
+      cargo rustfmt rustup rust-analyzer
       tectonic texlive.combined.scheme-full
       pandoc haskellPackages.pandoc-citeproc
     ];
