@@ -277,6 +277,8 @@ if !exists('g:vscode')
         let g:ale_lint_delay = 500
         nmap <silent> [a <Plug>(ale_previous_wrap)
         nmap <silent> ]a <Plug>(ale_next_wrap)
+        let g:ale_linters = {'rust': ['analyzer']}
+
 
 endif
 " }}}
@@ -623,6 +625,10 @@ set wildignore+=*.so,*.swp,*.o,*.a
 set wildignore+=*.opus,*.flac,.*mp3,*.ogg,*.mp4,*.webm
 set wildignore+=*.pdf,*.jpg,*.png,*.jpeg,*.gif
 set wildignore+=*.zip,*.gzip,*.bz2,*.tar,*.xz,*.lrzip,*.lrz
+
+let g:netrw_liststyle = 3
+let g:netrw_preview = 1
+
 
 " }}}
 

@@ -1,9 +1,9 @@
 configuration {
-    modi: "window,run,ssh,drun,calc:qalc +u8 -nocurrencies";
+    modi: "window,run,ssh,drun";
     /* width: 169; */
     /* lines: 32; */
     /* columns: 1; */
-    theme: "/home/j-hui/.config/rofi/Monokai.rasi";
+    theme: "/home/j-hui/.config/rofi/themes/sidetab.rasi";
     terminal: "kitty";
     show-icons: true;
     matching: "fuzzy";
