@@ -24,6 +24,7 @@
       cargo rustfmt rustup rust-analyzer
       tectonic texlive.combined.scheme-full
       pandoc haskellPackages.pandoc-citeproc
+      elan
     ];
   };
 }
