@@ -11,7 +11,7 @@ in
       TERMINAL = "kitty";
     };
     environment.systemPackages = with pkgs; [
-      zathura
+      zathura mupdf
       unstable.kitty
       firefox google-chrome chromium
       unstable.qutebrowser
@@ -19,8 +19,8 @@ in
       spotify spotifywm spotify-tui
       vlc
       inkscape gimp tuxpaint drawing krita
-      slack discord zoom-us skypeforlinux
       steam
+      slack discord zoom-us skypeforlinux zulip
       signal-desktop signal-cli
       mattermost-desktop matterhorn
       mimeo

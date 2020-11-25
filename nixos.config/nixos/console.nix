@@ -18,7 +18,7 @@ in
     environment.systemPackages = with pkgs; [
       bash fish zsh
       sudo git tmux screen
-      ed nano vimHugeX neovim emacs
+      ed nano vimHugeX neovim neovim-remote emacs
       binutils-unwrapped pv wget curl unzip
       bind whois inetutils
       parted cryptsetup gptfdisk
