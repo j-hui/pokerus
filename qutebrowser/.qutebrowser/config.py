@@ -88,6 +88,8 @@ c.aliases['dl'] = 'spawn --userscript open_download'
 c.aliases['chrome'] = 'spawn open -a "Google Chrome" {url}'
 c.aliases['ochrome'] = 'hint all spawn open -a "Google Chrome" {hint-url}'
 
+c.bindings.key_mappings['<Ctrl-3>'] = '<Escape>'
+
 config.bind('<Ctrl+Tab>', 'tab-next', mode='normal')
 config.bind('<Ctrl+Shift+Tab>', 'tab-prev', mode='normal')
 config.bind('<Esc>', 'fake-key <Esc>', mode='normal')
@@ -98,8 +100,6 @@ config.bind('<Ctrl+p>', 'prompt-item-focus prev', mode='prompt')
 
 config.bind('<Ctrl+n>', 'completion-item-focus --history next', mode='command')
 config.bind('<Ctrl+p>', 'completion-item-focus --history prev', mode='command')
-
-config.bind('<Esc>', 'fake-key <Esc>', mode='normal')
 
 config.unbind('<Ctrl+e>', mode='insert')
 config.bind('<Ctrl+o>', 'open-editor', mode='insert')
@@ -150,10 +150,9 @@ if platform.system() == 'Linux':
     config.bind('<Meta+c>', 'fake-key <Ctrl+c>;;message-info "copied to clipboard"', mode='normal')
 
     for mode in ['insert', 'command', 'prompt']:
-        config.bind('<Meta+x>', 'fake-key <Ctrl+x>', mode=mode)
-        config.bind('<Meta+c>', 'fake-key <Ctrl+c>', mode=mode)
-        config.bind('<Meta+v>', 'fake-key <Ctrl+v>', mode=mode)
-        config.bind('<Meta+a>', 'fake-key <Ctrl+a>', mode=mode)
+        config.bind('<Meta+x>', 'fake-key -g <Ctrl+x>;;message-info "cut to clipboard"', mode=mode)
+        config.bind('<Meta+c>', 'fake-key -g <Ctrl+c>;;message-info "copied to clipboard"', mode=mode)
+        config.bind('<Meta+v>', 'fake-key -g <Ctrl+v>;;message-info "pasted from clipboard"', mode=mode)
 
 
 if platform.system() == 'Darwin':

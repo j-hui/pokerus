@@ -22,6 +22,10 @@ ctrl + super + o
 ctrl + super + shift + o
     bspc desktop -f '^3' && xdo activate -n google-chrome || google-chrome-stable
 
+## clear notifications:
+ctrl + super + BackSpace
+    dunstctl close-all
+
 ## sleep:
 ctrl + super + shift + BackSpace
     xset s activate
