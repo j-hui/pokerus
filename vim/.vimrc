@@ -400,24 +400,39 @@ if !exists('g:vscode')
 " TeX/LaTeX {{{
     Plug 'lervag/vimtex',   { 'for': 'tex' }        " TeX/LaTeX
         let g:tex_flavor='latex'
-        " let g:vimtex_view_method='open'
-        " let g:vimtex_compiler_enabled = 0
-        " let g:vimtex_quickfix_open_on_warning=0
-        " let g:vimtex_quickfix_autoclose_after_keystrokes=2
-        let g:vimtex_quickfix_latexlog = {
-            \ 'overfull' : 0,
-            \ 'underfull' : 0,
-            \ 'packages' : {
-            \   'default' : 0,
-            \ },
+        let g:vimtex_compiler_latexmk = {
+            \ 'continuous' : 0,
             \}
 
+        " Automatically open quickfix, but do not focus
+        let g:vimtex_quickfix_mode = 2
+        let g:vimtex_quickfix_autoclose_after_keystrokes = 4
+        let g:vimtex_quickfix_ignore_filters = [
+          \ 'Font shape declaration has incorrect series value',
+          \ 'You are using breakurl while processing',
+          \]
+
         let g:tex_conceal='abdmg'
-        let g:Tex_GotoError=0
         let g:vimtex_mappings_enabled=0
+        let g:vimtex_imaps_enabled=0
+        let g:vimtex_view_method='zathura'
+        let g:vimtex_complete_enabled=1
+
         augroup vimtex_settings
             autocmd!
             autocmd Filetype tex imap <C-]> <plug>(vimtex-delim-close)
+            autocmd Filetype tex nmap <C-c><CR>            <plug>(vimtex-compile-ss)
+            autocmd Filetype tex vmap <C-c><CR>       <ESC><plug>(vimtex-compile-ss)
+            autocmd Filetype tex imap <C-c><CR>       <ESC><plug>(vimtex-compile-ss)
+            autocmd Filetype tex nmap <C-c>l               <plug>(vimtex-compile-ss)
+            autocmd Filetype tex vmap <C-c>l          <ESC><plug>(vimtex-compile-ss)
+            autocmd Filetype tex imap <C-c>l          <ESC><plug>(vimtex-compile-ss)
+            autocmd Filetype tex nmap <C-c><Space>         <plug>(vimtex-view)
+            autocmd Filetype tex vmap <C-c><Space>    <ESC><plug>(vimtex-view)
+            autocmd Filetype tex imap <C-c><Space>    <ESC><plug>(vimtex-view)
+            autocmd Filetype tex nmap <C-c>c               <plug>(vimtex-errors)
+            autocmd Filetype tex vmap <C-c>c          <ESC><plug>(vimtex-errors)
+            autocmd Filetype tex imap <C-c>c          <ESC><plug>(vimtex-errors)
         augroup END
 " }}}
 " Coq {{{
@@ -744,7 +759,7 @@ cnoremap        <C-Y> <C-R>-
 
 inoremap        <C-n> <down>
 inoremap        <C-p> <up>
-inoremap        <C-k> <Esc>lDi
+inoremap        <C-k> <C-o>D
 
 if &encoding ==# 'latin1' && has('gui_running') && !empty(findfile('plugin/sensible.vim', escape(&rtp, ' ')))
   set encoding=utf-8
