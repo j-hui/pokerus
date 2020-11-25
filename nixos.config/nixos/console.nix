@@ -32,6 +32,7 @@ in
       astroid notmuch offlineimap msmtp
       libvirt virt-manager qemu
       gitAndTools.gh subversion mercurial
+      dhcp
     ];
 
     virtualisation.libvirtd.enable = true;
