@@ -145,9 +145,11 @@ if platform.system() == 'Linux':
     config.bind('<Alt+Backspace>'   , 'fake-key <Ctrl+Backspace>'   , mode='insert')
     config.bind('<Ctrl+w>'          , 'fake-key <Ctrl+Backspace>'   , mode='insert')
     config.bind('<Ctrl+y>'          , 'insert-text {primary}'       , mode='insert')
+    config.bind('<Ctrl+h>'          , 'fake-key <Backspace>'        , mode='insert')
 
     # macOS-like cut/copy/paste/select-all
     config.bind('<Meta+c>', 'fake-key <Ctrl+c>;;message-info "copied to clipboard"', mode='normal')
+    config.bind('<Meta+a>', 'fake-key <Ctrl+a>', mode='insert')
 
     for mode in ['insert', 'command', 'prompt']:
         config.bind('<Meta+x>', 'fake-key -g <Ctrl+x>;;message-info "cut to clipboard"', mode=mode)
