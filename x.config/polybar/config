@@ -115,7 +115,7 @@ font-1 = FontAwesome:size=8;-2
 ; font-4 = Unifont:size=6;-3
 ; font-5 = MaterialIcons:size=8;-3
 
-modules-left = temperature battery wlan
+modules-left = temperature avg-battery wlan
 modules-center = xwindow
 modules-right = eth memory cpu
 
@@ -198,28 +198,28 @@ type = internal/memory
 interval = 1
 label = MEM: %gb_used% / %gb_total%
 
-; [module/wlan]
-; type = internal/network
-; interface = net1
-; interval = 3.0
-;
-; format-connected = <ramp-signal> <label-connected>
-; format-connected-underline = #9f78e1
-; label-connected = %essid%
-;
-; format-disconnected = X
-; ;format-disconnected = <label-disconnected>
-; ;format-disconnected-underline = ${self.format-connected-underline}
-; ;label-disconnected = %ifname% disconnected
-; ;label-disconnected-foreground = ${colors.foreground-alt}
-;
-; ramp-signal-0 = ▁
-; ramp-signal-1 = ▂
-; ramp-signal-2 = ▃
-; ramp-signal-3 = ▅
-; ramp-signal-4 = ▆
-; ramp-signal-5 = █
-; ramp-signal-foreground = ${colors.foreground-alt}
+[module/wlan]
+type = internal/network
+interface = wlp4s0
+interval = 3.0
+
+format-connected = <ramp-signal> <label-connected>
+format-connected-underline = #9f78e1
+label-connected = %essid%
+
+format-disconnected = X
+;format-disconnected = <label-disconnected>
+;format-disconnected-underline = ${self.format-connected-underline}
+;label-disconnected = %ifname% disconnected
+;label-disconnected-foreground = ${colors.foreground-alt}
+
+ramp-signal-0 = ${symbols.ramp-0}
+ramp-signal-1 = ${symbols.ramp-1}
+ramp-signal-2 = ${symbols.ramp-2}
+ramp-signal-3 = ${symbols.ramp-3}
+ramp-signal-4 = ${symbols.ramp-4}
+ramp-signal-5 = ${symbols.ramp-5}
+ramp-signal-foreground = ${colors.foreground}
 
 [module/eth]
 type = internal/network
@@ -253,6 +253,7 @@ ramp-volume-2 = ${symbols.volume-ramp-1}
 [module/battery]
 type = internal/battery
 battery = BAT0
+battery_snd = BAT1
 adapter = ADP1
 full-at = 98
 
@@ -278,6 +279,11 @@ animation-charging-2 = 
 animation-charging-foreground = ${colors.foreground-alt}
 animation-charging-framerate = 750
 
+[module/avg-battery]
+type = custom/script
+exec = "count=$(acpi -b | wc -l); sum=$(acpi -b | egrep -o '[0-9]{1,3}%' | tr -d '%' | xargs -I% echo -n '+%'); echo Battery: $(( sum / count ))%"
+interval = 5
+
 [module/temperature]
 type = internal/temperature
 thermal-zone = 0
@@ -287,8 +293,8 @@ format = <label>
 format-underline = #f50a4d
 format-warn = <label-warn>
 
-label = Temp: %temperature%
-label-warn = Temp: %temperature%
+label = Temp: %temperature-c%
+label-warn = Temp: %temperature-c%
 label-warn-foreground = ${colors.alert-alt}
 label-warn-underline = ${colors.alert-alt}
 
