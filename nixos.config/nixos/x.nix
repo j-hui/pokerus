@@ -87,11 +87,9 @@ in
         layout = "us";
         xkbOptions = "ctrl:nocaps,altwin:swap_alt_win";
         # xkbOptions = "ctrl:nocaps";
-        autoRepeatDelay = 269;
-        autoRepeatInterval = 40;
 
-        videoDrivers = [ "amdgpu" # "ati_unfree"
-                        "radeon" "cirrus" "vesa" "modesetting"];
+        # videoDrivers = [ "" # "ati_unfree"
+        #                 "radeon" "cirrus" "vesa" "modesetting"];
 
         # Enable touchpad support.
         libinput = {

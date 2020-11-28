@@ -39,8 +39,8 @@ in
       libvirt virt-manager qemu
       gitAndTools.gh subversion mercurial
       dhcp
-      radeontop lshw mcelog
-      fwts
+
+      radeontop lshw mcelog fwts
       python38Packages.speedtest-cli
     ];
 

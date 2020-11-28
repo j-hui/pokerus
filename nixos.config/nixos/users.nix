@@ -9,7 +9,7 @@ in
 
       users."j-hui" = {
         isNormalUser = true;
-        extraGroups = [ "wheel" "audio" "jackaudio" ];
+        extraGroups = [ "wheel" "audio" "jackaudio" "networkmanager" ];
         hashedPassword = secrets.users."j-hui".hashedPassword;
       };
     };
