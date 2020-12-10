@@ -279,7 +279,11 @@ if !exists('g:vscode')
         nmap <silent> ]a <Plug>(ale_next_wrap)
         let g:ale_linters = {'rust': ['analyzer']}
 
+    Plug 'ojroques/vim-oscyank'
 
+    Plug 'nixon/vim-vmath'
+        vmap <expr>  ++  VMATH_YankAndAnalyse()
+        nmap         ++  vip++
 endif
 " }}}
 
@@ -313,6 +317,12 @@ Plug 'tpope/vim-speeddating'            " increment/decrement dates
     nmap  <C-X>     <Plug>SpeedDatingDown
     xmap  <C-S>     <Plug>SpeedDatingUp
     xmap  <C-X>     <Plug>SpeedDatingDown
+
+Plug 'vim-scripts/vis'                  " Use :B for block mode commands
+
+Plug 'soulston/vim-listtrans'           " Toggle bulleted and inline list
+    nmap  ,l   <Plug>ListtransToggle
+    vmap  ,l   <Plug>ListtransToggleVisual
 
 Plug 'andymass/vim-matchup'             " User-defined pairs
 
@@ -410,6 +420,8 @@ if !exists('g:vscode')
         let g:vimtex_quickfix_ignore_filters = [
           \ 'Font shape declaration has incorrect series value',
           \ 'You are using breakurl while processing',
+          \ 'Underfull',
+          \ 'Overfull',
           \]
 
         let g:tex_conceal='abdmg'
@@ -630,6 +642,7 @@ set incsearch                   " incremental search
 set ignorecase                  " ignores case
 set smartcase                   " smart case
 set wrapscan                    " jump back to top
+set inccommand=split            " preview substitution in split window
 
 set wildmenu                    " use wildmenu
 set wildmode=longest:full,full  " sane completion interface
@@ -760,6 +773,7 @@ cnoremap        <C-Y> <C-R>-
 inoremap        <C-n> <down>
 inoremap        <C-p> <up>
 inoremap        <C-k> <C-o>D
+nnoremap        <C-k> D
 
 if &encoding ==# 'latin1' && has('gui_running') && !empty(findfile('plugin/sensible.vim', escape(&rtp, ' ')))
   set encoding=utf-8
@@ -806,6 +820,9 @@ endif
 
 " Command mode {{{
 " ----------------------------------------------------------------------------
+
+" Eliminate extra key press
+nnoremap ; :
 
 " Don't use <Left> and <Right> key for selecting previous/next match
 cnoremap <Left> <Space><BS><Left>
