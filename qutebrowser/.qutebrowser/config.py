@@ -45,21 +45,31 @@ c.downloads.remove_finished = 696969
 c.tabs.last_close = 'close'
 c.tabs.width = '10%'
 
-config.set('content.unknown_url_scheme_policy', 'allow-all', 'zoommtg://*.zoom.us')
-config.set('content.unknown_url_scheme_policy', 'allow-all', 'https://*.slack.com')
-config.set('content.javascript.can_access_clipboard', True, 'https://github.com/*')
-config.set('content.javascript.can_access_clipboard', True, 'https://stackoverflow.com/*')
-config.set('content.javascript.can_access_clipboard', True, 'https://*.stackexchange.com/*')
+# Open external applications
+for site in ['zoommtg://*.zoom.us'
+            ,'https://*.slack.com'
+            ]:
+    config.set('content.unknown_url_scheme_policy', 'allow-all', site)
+
+# Acess clipboard
+for site in ['https://github.com/*'
+            ,'https://stackoverflow.com/*'
+            ,'https://*.stackexchange.com/*'
+            ]:
+    config.set('content.javascript.can_access_clipboard', True, site)
 
 #### Aliases and bindings ####
 
 c.aliases['h'] = 'help'
 c.aliases['py'] = 'debug-pyeval'
 c.aliases['noh'] = 'search'
+c.aliases['clear'] = 'clear-messages'
+c.aliases['cl'] = 'clear-messages'
 
 c.aliases['user'] = 'spawn --userscript'
 c.aliases['pass'] = 'spawn --userscript qute-pass'
 c.aliases['readability'] = 'spawn --userscript readability'
+c.aliases['reader'] = 'spawn --userscript readability'
 
 c.aliases['q'] = 'close'
 c.aliases['qa'] = 'quit'
@@ -109,18 +119,20 @@ config.bind('<Ctrl-g>', 'config-cycle content.user_stylesheets     ' +
         '"~/.config/qutebrowser/css/solarized-dark-all-sites.css"  ' +
         '""')
 
-config.bind('<Ctrl+Shift+l>', 'spawn --userscript qute-pass')
+config.bind('<Ctrl+Shift+l>', 'spawn --userscript qute-pass', mode='normal')
+config.bind('<Ctrl+Shift+l>', 'spawn --userscript qute-pass', mode='insert')
 
 for mode in ['command', 'prompt']:
-
+    # Readline-style mode
     config.bind('<Ctrl+d>'          , 'rl-delete-char'              , mode=mode)
     config.bind('<Alt+d>'           , 'rl-kill-word'                , mode=mode)
     config.bind('<Ctrl+k>'          , 'rl-kill-line'                , mode=mode)
     config.bind('<Ctrl+y>'          , 'rl-yank'                     , mode=mode)
 
     config.bind('<Ctrl+h>'          , 'rl-backward-delete-char'     , mode=mode)
+    config.bind('<Alt+Backspace>'   , 'rl-backward-kill-word'       , mode=mode)
+    config.bind('<Ctrl+Alt+h>'      , 'rl-backward-kill-word'       , mode=mode)
     config.bind('<Ctrl+w>'          , 'rl-unix-word-rubout'         , mode=mode)
-    config.bind('<Alt+Backspace>'   , 'rl-unix-word-rubout'         , mode=mode)
     config.bind('<Ctrl+u>'          , 'rl-unix-line-discard'        , mode=mode)
 
     config.bind('<Ctrl+b>'          , 'rl-backward-char'            , mode=mode)
