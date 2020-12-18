@@ -32,6 +32,6 @@ configuration {
     kb-page-prev: "Page_Up,Control+u";
     kb-page-next: "Page_Down,Control+d";
 
-    kb-cancel: "Escape,Control+g,Control+bracketleft";
+    kb-cancel: "Escape,Control+g,Control+bracketleft,Control+3";
     kb-accept-alt: "Shift+Return";
 }
