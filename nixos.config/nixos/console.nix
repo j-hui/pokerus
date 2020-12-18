@@ -1,69 +1,121 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
+with lib;
 let
   unstable = import <nixpkgs-unstable> {};
+  cfg = config.pokerus.console;
 in
 {
-  config = {
-    # nixpkgs.config.allowUnfree = true;
+  options.pokerus.console = {
+    enable = mkEnableOption "Console configuration";
+    mail.enable = mkEnableOption "Mail services";
+    virt.enable = mkEnableOption "Virtualization services";
+    print.enable = mkEnableOption "Printing services";
+  };
 
-    console.font = "Lat2-Terminus16";
-    networking.wireguard.enable = true;
-    time.timeZone = "America/New_York";
-    i18n.defaultLocale = "en_US.UTF-8";
+  config = mkMerge [
+    (mkIf cfg.enable {
+      console.font = "Lat2-Terminus16";
+      time.timeZone = "America/New_York";
+      i18n.defaultLocale = "en_US.UTF-8";
 
-    environment.variables = {
-      EDITOR = "vim";
-    };
+      environment.variables.EDITOR = "vim";
 
-    environment.systemPackages = with pkgs; [
-      bash fish zsh
-      sudo git tmux screen
-      ed nano vimHugeX neovim neovim-remote emacs
-      binutils-unwrapped pv wget curl unzip
-      bind whois inetutils
-      parted cryptsetup gptfdisk
-      btrfs-progs
-      htop tree
-      killall
-      gotop
-      fzf ag ripgrep fd bat diskus page
-      smartmontools lsof pciutils glxinfo acpi
-      wireguard-tools fuse
-      neofetch
-      pass
-      thefuck
-      asciinema
-      aerc
-      gcalcli
-      astroid notmuch offlineimap msmtp
-      libvirt virt-manager qemu
-      gitAndTools.gh subversion mercurial
-      dhcp
+      environment.systemPackages = with pkgs; [
+        # shell + terminal
+        bash fish zsh
+        sudo tmux screen
+        neofetch
+        thefuck
+        asciinema
 
-      radeontop lshw mcelog fwts
-      python38Packages.speedtest-cli
-    ];
+        # text editing
+        ed nano vimHugeX neovim neovim-remote emacs
 
-    virtualisation.libvirtd.enable = true;
+        # version control
+        git gitAndTools.gh
+        subversion
+        mercurial
 
-    services = {
-      openssh.enable = true;
-      openssh.forwardX11 = true;
-      printing.enable = true;
-      avahi.enable = true;
-    };
+        # security
+        pass
+        mkpasswd
 
-    programs.ssh.askPassword = "";
-    programs.ssh.startAgent = true;
-    programs.ssh.agentTimeout = "12h";
-    programs.gnupg.agent.enable = true;
-    # To adjust cache duration, add to ~/.gnpupg/gpg-agent.conf:
-    #   default-cache-ttl 360
+        # files
+        ranger
+        fzf
+        ag
+        ripgrep
+        fd
+        bat
+        diskus
 
-    security.sudo = {
-      configFile = ''
+        # utilities
+        binutils-unwrapped
+        unzip
+        pv
+
+        # process management
+        htop
+        tree
+        killall
+        gotop
+
+        # networking
+        wget curl
+        bind whois inetutils
+        wireguard-tools
+        python38Packages.speedtest-cli
+        dhcp
+
+        # disk
+        parted cryptsetup gptfdisk
+        btrfs-progs
+        fuse
+        # hardware management
+        smartmontools lsof pciutils glxinfo acpi
+        radeontop lshw mcelog fwts
+
+      ];
+
+      services = {
+        openssh.enable = true;
+        openssh.forwardX11 = true;
+      };
+
+      networking.wireguard.enable = true;
+
+      programs.ssh.askPassword = "";
+      programs.ssh.startAgent = true;
+      programs.ssh.agentTimeout = "12h";
+      programs.gnupg.agent.enable = true;
+      # To adjust cache duration, add to ~/.gnpupg/gpg-agent.conf:
+      #   default-cache-ttl 360
+
+      security.sudo.configFile = ''
         Defaults timestamp_timeout=240
       '';
-    };
-  };
+    })
+
+    (mkIf cfg.print.enable {
+      services = {
+        printing.enable = true;
+        avahi.enable = true;
+      };
+    })
+
+    (mkIf cfg.virt.enable {
+      environment.systemPackages = with pkgs; [
+        libvirt virt-manager qemu
+      ];
+      virtualisation.libvirtd.enable = true;
+    })
+
+    (mkIf cfg.mail.enable {
+      environment.systemPackages = with pkgs; [
+        aerc
+        gcalcli
+        astroid notmuch offlineimap msmtp
+      ];
+    })
+  ];
 }
