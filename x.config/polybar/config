@@ -219,7 +219,6 @@ label = [ %title:0:69:...% ]
 type = internal/xkeyboard
 blacklist-0 = num lock
 
-label-prefix = ${symbols.keyboard}
 label-layout = %name%
 label-layout-underline = ${colors.secondary}
 label-indicator-background = ${colors.secondary}
