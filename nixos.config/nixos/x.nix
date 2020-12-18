@@ -1,19 +1,41 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
+with lib;
 let
-  unstable = import <nixpkgs-unstable> {};
-  # secrets = import /etc/nixos/secrets.nix;
+  cfg = config.pokerus.x;
+  unstable = import <nixpkgs-unstable> { nixpkgs.config.allowUnfree = true; };
 in
 {
-  config = {
+  options.pokerus.x = {
+    enable = mkEnableOption "Graphical X";
+
+    ibus.enable = mkEnableOption "Input";
+
+    videoDrivers = mkOption {
+      type = types.listOf types.str;
+      default = [];
+    };
+
+    user = mkOption {
+      type = types.str;
+      default = "j-hui";
+    };
+    xkbOptions = mkOption {
+      type = types.str;
+      # "ctrl:nocaps,altwin:swap_alt_win";
+      default = "ctrl:nocaps";
+    };
+  };
+
+  config = mkIf cfg.enable {
     nixpkgs.config.allowUnfree = true;
     console.useXkbConfig = true;
 
-    # i18n.inputMethod = {
-    #   enabled = "ibus";
-    #   ibus.engines = with pkgs.ibus-engines; [ libpinyin ];
-    # };
+    i18n.inputMethod = mkIf cfg.ibus.enable {
+      enabled = "ibus";
+      ibus.engines = with pkgs.ibus-engines; [ libpinyin ];
+    };
 
-    sound.enable = true;
+    hardware.pulseaudio.enable = true;
 
     environment.systemPackages = with pkgs; [
       gtk3 glib unstable.dracula-theme
@@ -27,16 +49,12 @@ in
       dunst libnotify
       pinentry pinentry-gtk2
       pavucontrol
-      spotifyd spotify-tui
-
       xclip
-      feh
       scrot
-      ranger
-      mpv
       simplescreenrecorder
       paper-gtk-theme
       paper-icon-theme
+      mimeo
     ];
 
     fonts = {
@@ -73,25 +91,14 @@ in
     };
 
     services = {
-      compton = {
-        enable = true;
-        vSync = true;
-        backend = "glx";
-        inactiveOpacity = 0.96;
-
-        fade = true;
-        fadeSteps = [ 0.05 0.2 ];
-        fadeDelta = 5;
-      };
       xserver = {
         enable = true;
         exportConfiguration = true;
         layout = "us";
-        xkbOptions = "ctrl:nocaps"; #,altwin:swap_alt_win";
-        # xkbOptions = "ctrl:nocaps";
+        xkbOptions = cfg.xkbOptions;
 
-        videoDrivers = [ "" # "ati_unfree"
-                        "radeon" "cirrus" "vesa" "modesetting"];
+        videoDrivers =
+          [ "radeon" "cirrus" "vesa" "modesetting"] ++ cfg.videoDrivers;
 
         # Enable touchpad support.
         libinput = {
@@ -109,6 +116,7 @@ in
           Option "OffTime" "0"
           '';
 
+        # These aren't working
         autoRepeatDelay = 250;
         autoRepeatInterval = 69;
 
@@ -129,6 +137,7 @@ in
           # greeters.pantheon.enable = true;
           greeters.mini = {
             enable = true;
+            user = cfg.user;
             extraConfig = ''
                   [greeter]
                   show-password-label = true
@@ -161,19 +170,19 @@ in
           };
         };
       };
+
+      compton = {
+        enable = true;
+        vSync = true;
+        backend = "glx";
+        inactiveOpacity = 0.96;
+
+        fade = true;
+        fadeSteps = [ 0.05 0.2 ];
+        fadeDelta = 5;
+      };
+
       greenclip.enable = true;
-      # spotifyd = {
-      #   enable = true;
-      #   config = ''
-      #     [global]
-      #     username = j-hui
-      #     password = pliable-pucker-apply6
-
-      #     backend = pulseaudio
-
-      #     device_name = charizard-x
-      #     '';
-      # };
     };
   };
 }
