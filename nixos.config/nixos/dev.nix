@@ -21,7 +21,8 @@
       pre-commit
       stack ghc
       go hugo
-      cargo rustfmt rustup rust-analyzer
+      # cargo rustfmt
+      rustup  # rust-analyzer
       tectonic texlive.combined.scheme-full
       pandoc haskellPackages.pandoc-citeproc
       elan

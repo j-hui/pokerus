@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 let
-  unstable = import <nixpkgs-unstable> {};
+  unstable = import <nixpkgs-unstable> {
+    config = config.nixpkgs.config;
+  };
 in
 {
   config = {
@@ -14,13 +16,13 @@ in
       zathura mupdf
       unstable.kitty
       firefox google-chrome chromium
-      unstable.qutebrowser
+      qutebrowser
       gparted
       spotify spotifywm spotify-tui
       vlc
-      inkscape gimp tuxpaint drawing krita
+      inkscape gimp tuxpaint drawing gthumb
       steam
-      slack discord zoom-us skypeforlinux zulip
+      slack unstable.discord zoom-us skypeforlinux zulip
       signal-desktop signal-cli
       mattermost-desktop matterhorn
       mimeo

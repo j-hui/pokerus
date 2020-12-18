@@ -54,11 +54,13 @@ in
         source-code-pro
         source-sans-pro
         source-serif-pro
-        # nerdfonts
+        symbola
+        noto-fonts-cjk
         envypn-font
         unifont
         material-icons
         noto-fonts noto-fonts-emoji noto-fonts-extra
+        siji
       ];
     };
 
@@ -85,11 +87,11 @@ in
         enable = true;
         exportConfiguration = true;
         layout = "us";
-        xkbOptions = "ctrl:nocaps,altwin:swap_alt_win";
+        xkbOptions = "ctrl:nocaps"; #,altwin:swap_alt_win";
         # xkbOptions = "ctrl:nocaps";
 
-        # videoDrivers = [ "" # "ati_unfree"
-        #                 "radeon" "cirrus" "vesa" "modesetting"];
+        videoDrivers = [ "" # "ati_unfree"
+                        "radeon" "cirrus" "vesa" "modesetting"];
 
         # Enable touchpad support.
         libinput = {
