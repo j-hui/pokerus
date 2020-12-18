@@ -31,10 +31,33 @@ ramp-5 = ▆
 ramp-6 = ▇
 ramp-7 = █
 
-volume-ramp-0 = VOL:
-volume-ramp-1 = VOL:
-volume-ramp-2 = VOL:
-muted = MUTE
+; Material Icons
+volume-ramp-0 = 
+volume-ramp-1 = 
+volume-ramp-2 = 
+muted = 
+
+cpu = 
+mem = 
+eth = 
+bars = 
+keyboard = 
+
+wifi = 
+wifi-locked = 
+wifi-none = 
+battery = 
+battery-charging = 
+battery-missing = 
+battery-error = 
+
+bspwm-monocle = 
+bspwm-private = 
+bspwm-locked = 
+bspwm-sticky = 
+
+temp = 
+temp-warn = 
 
 [colors]
 ; yellow
@@ -78,11 +101,27 @@ padding-right = 4
 module-margin-left = 4
 module-margin-right = 4
 
-; font-0 = fixed:pixelsize=10;1
-; font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
-; font-2 = siji:pixelsize=10;1
-font-0 = NotoSans-Regular:size=10;0
-font-1 = Font Awesome:size=8;-2
+font-0 = NotoSans:size=8;0
+font-1 = Material Icons:style=Regular
+; font-2 = siji:pixelsize=12;2
+font-2 = unifont:fontformat=truetype:size=10:antialias=false;0
+; font-0 = NotoSans:size=8;0
+; font-1 = Symbola:style=Regular
+; font-1 = siji:pixelsize=12;2
+; font-2 = unifont:fontformat=truetype:size=10:antialias=false;0
+; font-2 = Font Awesome 5 Free Regular:size=8;-2
+; font-3 = Font Awesome 5 Free:style=Solid:pixelsize=18:antialias=false;3
+; font-4 = Font Awesome 5 Brands:style=Solid:pixelsize=18:antialias=false;3
+; font-5 = siji:pixelsize=12;1
+; font-6 = fixed:pixelsize=12;1
+
+; ; font-0 = fixed:pixelsize=10;1
+; ; font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
+; font-0 = NotoSans:style=regular;size=10;0
+; font-1 = Font Awesome 5 Free:size=8;-2
+; font-2 = Siji:pixelsize=10;1
+; font-0 = fixed:pixelsize=12;1
+; font-2 = siji:pixelsize=12;1
 
 modules-left = bspwm
 ; modules-center = xwindow
@@ -109,11 +148,18 @@ padding-right = ${bar/top.padding-right}
 module-margin-left = ${bar/top.module-margin-left}
 module-margin-right = ${bar/top.module-margin-right}
 
-font-0 = NotoSans-Regular:size=8;0
-font-1 = FontAwesome:size=8;-2
-; font-2 = ypn envypn:size=10;-1
-; font-4 = Unifont:size=6;-3
-; font-5 = MaterialIcons:size=8;-3
+font-0 = NotoSans:size=8;0
+font-1 = Material Icons:style=Regular
+; font-2 = siji:pixelsize=12;2
+font-2 = unifont:fontformat=truetype:size=10:antialias=false;0
+; font-0 = NotoSans:size=8;0
+; font-1 = siji:pixelsize=12;2
+; font-2 = unifont:fontformat=truetype:size=10:antialias=false;0
+; font-3 = Material Icons:style=Regular
+; font-1 = Font Awesome 5 Free Regular:size=8;-2
+; font-1 = Font Awesome 5 Free:style=Solid:pixelsize=18:antialias=false;3
+; font-2 = Font Awesome 5 Brands:style=Solid:pixelsize=18:antialias=false;3
+; font-2 = fixed:pixelsize=12;1
 
 modules-left = temperature avg-battery wlan
 modules-center = xwindow
@@ -145,34 +191,35 @@ label-empty-padding = 4
 
 padding = 2
 
-label-monocle = ^
+label-monocle = ${symbols.bspwm-monocle}
 label-monocle-foreground = ${colors.secondary}
 label-monocle-underline = ${colors.secondary}
 label-monocle-padding = ${module/bspwm.padding}
 
-label-locked = .
+label-locked = ${symbols.bspwm-locked}
 label-locked-foreground = ${colors.secondary}
 label-locked-underline = ${colors.secondary}
 label-locked-padding = ${module/bspwm.padding}
 
-label-sticky = =
+label-sticky = ${symbols.bspwm-sticky}
 label-sticky-foreground = ${colors.secondary}
 label-sticky-underline = ${colors.secondary}
 label-sticky-padding = ${module/bspwm.padding}
 
-label-private = /
+label-private = ${symbols.bspwm-private}
 label-private-foreground = ${colors.secondary}
 label-private-underline = ${colors.secondary}
 label-private-padding = ${module/bspwm.padding}
 
 [module/xwindow]
 type = internal/xwindow
-label = %title:0:69:...%
+label = [ %title:0:69:...% ]
 
 [module/xkeyboard]
 type = internal/xkeyboard
 blacklist-0 = num lock
 
+label-prefix = ${symbols.keyboard}
 label-layout = %name%
 label-layout-underline = ${colors.secondary}
 label-indicator-background = ${colors.secondary}
@@ -181,8 +228,9 @@ label-indicator-underline = ${colors.secondary}
 [module/cpu]
 type = internal/cpu
 interval = 1
-label = CPU: %percentage%%
+label = "  %percentage%%"
 
+format-prefix = ${symbols.cpu}
 format = <label> <ramp-coreload>
 ramp-coreload-0 = ${symbols.ramp-0}
 ramp-coreload-1 = ${symbols.ramp-1}
@@ -195,19 +243,22 @@ ramp-coreload-7 = ${symbols.ramp-7}
 
 [module/memory]
 type = internal/memory
-interval = 1
-label = MEM: %gb_used% / %gb_total%
+interval = 2
+format-prefix = ${symbols.mem}
+label-underline = ${colors.primary}
+label = "  %gb_used% / %gb_total%"
 
 [module/wlan]
 type = internal/network
 interface = wlp4s0
 interval = 3.0
 
-format-connected = <ramp-signal> <label-connected>
+; format-connected = <ramp-signal> <label-connected>
+format-connected = <label-connected>
 format-connected-underline = #9f78e1
-label-connected = %essid%
+label-connected = ${symbols.wifi} %essid%
 
-format-disconnected = X
+format-disconnected = ${symbols.wifi-none}
 ;format-disconnected = <label-disconnected>
 ;format-disconnected-underline = ${self.format-connected-underline}
 ;label-disconnected = %ifname% disconnected
@@ -226,11 +277,13 @@ type = internal/network
 interface = eno1
 interval = 3.0
 
+format-connected-prefix = ${symbols.eth}
 format-connected = <label-connected>
-label-connected = %ifname%: %local_ip% (%downspeed% : %upspeed%)
+label-connected = "  %ifname%: %local_ip% (%downspeed% : %upspeed%)"
 
+format-disconnected-prefix = ${symbols.eth}
 format-disconnected = <label-disconnected>
-label-disconnected = %ifname%: disconnected
+label-disconnected = "  %ifname%: disconnected"
 
 [module/clock]
 type = internal/date
@@ -248,36 +301,36 @@ format-volume = <ramp-volume> <label-volume>
 label-volume = %percentage%%
 ramp-volume-0 = ${symbols.volume-ramp-0}
 ramp-volume-1 = ${symbols.volume-ramp-1}
-ramp-volume-2 = ${symbols.volume-ramp-1}
+ramp-volume-2 = ${symbols.volume-ramp-2}
 
-[module/battery]
-type = internal/battery
-battery = BAT0
-battery_snd = BAT1
-adapter = ADP1
-full-at = 98
+; [module/battery]
+; type = internal/battery
+; battery = BAT0
+; battery_snd = BAT1
+; adapter = ADP1
+; full-at = 98
 
-format-charging = <animation-charging> <label-charging>
-format-charging-underline = #ffb52a
+; format-charging = <animation-charging> <label-charging>
+; format-charging-underline = #ffb52a
 
-format-discharging = <ramp-capacity> <label-discharging>
-format-discharging-underline = ${self.format-charging-underline}
+; format-discharging = <ramp-capacity> <label-discharging>
+; format-discharging-underline = ${self.format-charging-underline}
 
-format-full = <ramp-capacity> <label-full>
-format-full-prefix = " "
-format-full-prefix-foreground = ${colors.foreground-alt}
-format-full-underline = ${self.format-charging-underline}
+; format-full = <ramp-capacity> <label-full>
+; format-full-prefix = " "
+; format-full-prefix-foreground = ${colors.foreground-alt}
+; format-full-underline = ${self.format-charging-underline}
 
-ramp-capacity-0 = 
-ramp-capacity-1 = 
-ramp-capacity-2 = 
-ramp-capacity-foreground = ${colors.foreground-alt}
+; ramp-capacity-0 = 
+; ramp-capacity-1 = 
+; ramp-capacity-2 = 
+; ramp-capacity-foreground = ${colors.foreground-alt}
 
-animation-charging-0 = 
-animation-charging-1 = 
-animation-charging-2 = 
-animation-charging-foreground = ${colors.foreground-alt}
-animation-charging-framerate = 750
+; animation-charging-0 = 
+; animation-charging-1 = 
+; animation-charging-2 = 
+; animation-charging-foreground = ${colors.foreground-alt}
+; animation-charging-framerate = 750
 
 [module/avg-battery]
 type = custom/script
@@ -293,8 +346,8 @@ format = <label>
 format-underline = #f50a4d
 format-warn = <label-warn>
 
-label = Temp: %temperature-c%
-label-warn = Temp: %temperature-c%
+label = ${symbols.temp} %temperature-c%
+label-warn = ${symbols.temp-warn} %temperature-c%
 label-warn-foreground = ${colors.alert-alt}
 label-warn-underline = ${colors.alert-alt}
 
