@@ -1,10 +1,10 @@
 { config, pkgs, lib, ...}:
 with lib;
 let
-  cfg = config.pokerus.darling;
+  cfg = config.pokerus.darlings;
 in
 {
-  options.pokerus.darling = {
+  options.pokerus.darlings = {
     enable = mkEnableOption "Darlings";
   };
 
@@ -13,7 +13,6 @@ in
       nixos.source = "/persist/etc/nixos";
       NIXOS.source = "/persist/etc/NIXOS";
     };
-
 
     boot.initrd.postDeviceCommands = pkgs.lib.mkBefore ''
       mkdir -p /mnt
