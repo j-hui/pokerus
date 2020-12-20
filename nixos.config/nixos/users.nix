@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-  # secrets = import /persist/secrets/default.nix;
   cfg = config.pokerus.users;
 in
 {
@@ -20,7 +19,6 @@ in
         isNormalUser = true;
         extraGroups = [ "wheel" "audio" "jackaudio" "networkmanager" ];
         hashedPassword = cfg."j-hui".hashedPassword;
-          # secrets.users."j-hui".hashedPassword;
       };
     };
 

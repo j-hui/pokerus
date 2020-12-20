@@ -70,6 +70,7 @@ c.aliases['user'] = 'spawn --userscript'
 c.aliases['pass'] = 'spawn --userscript qute-pass'
 c.aliases['readability'] = 'spawn --userscript readability'
 c.aliases['reader'] = 'spawn --userscript readability'
+c.aliases['bib'] = 'spawn --userscript getbib'
 
 c.aliases['q'] = 'close'
 c.aliases['qa'] = 'quit'
@@ -191,7 +192,7 @@ c.hints.selectors["code"] = [
     ":not(pre) > code",
     "pre"
 ]
-config.bind(';c', 'hint code userscript ' + userscript('code_select.py'), mode='normal')
+config.bind(';c', 'hint code userscript ' + userscript('code_select'), mode='normal')
 
 
 #### Auto-generated ####

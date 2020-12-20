@@ -21,15 +21,26 @@ in
     { nixpkgs.config.allowUnfree = true; }
 
     (mkIf cfg.web.enable {
+
       environment = {
+
         variables.BROWSER = "qutebrowser";
+
         systemPackages = with pkgs; [
+          (unstable.qutebrowser.overrideAttrs (old: {
+            propagatedBuildInputs =
+              old.propagatedBuildInputs ++ [
+                pkgs.python3Packages.setuptools # TODO: remove after upstream fix
+              ];
+          }))
+
           firefox google-chrome chromium
-          qutebrowser
+
           youtube-dl
           transmission transmission-gtk
         ];
       };
+
       programs.browserpass.enable = true;
     })
 
@@ -47,6 +58,7 @@ in
 
     (mkIf cfg.media.enable {
       environment.systemPackages = with pkgs; [
+        playerctl
         spotify spotifywm spotify-tui spotifyd spotify-tui
         feh
         mpv
@@ -98,7 +110,7 @@ in
         libqalculate wordnet aspell aspellDicts.en scowl
 
         (python3.withPackages(ps: with ps; [
-            virtualenvwrapper
+          virtualenvwrapper
         ]))
         ghp-import
         libxml2

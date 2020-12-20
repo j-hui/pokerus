@@ -5,7 +5,9 @@ pgrep sxhkd > /dev/null || sxhkd &
 
 dunst &
 polybar top &
-polybar bottom &
+
+test -z "$(acpi --battery 2>/dev/null)" && polybar bottom &
+acpi --battery 2>/dev/null | grep Battery >/dev/null && polybar bottom-laptop &
 
 amixer sset Master 69%
 

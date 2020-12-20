@@ -10,6 +10,7 @@ in
     mail.enable = mkEnableOption "Mail services";
     virt.enable = mkEnableOption "Virtualization services";
     print.enable = mkEnableOption "Printing services";
+    laptop.enable = mkEnableOption "Laptop settings";
   };
 
   config = mkMerge [
@@ -94,6 +95,12 @@ in
       security.sudo.configFile = ''
         Defaults timestamp_timeout=240
       '';
+    })
+
+    (mkIf cfg.laptop.enable {
+      environment.systemPackages = with pkgs; [
+        brightnessctl
+      ];
     })
 
     (mkIf cfg.print.enable {
