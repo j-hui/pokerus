@@ -104,12 +104,14 @@ in
       ];
     })
 
-    (mkIf cfg.music.enable {
+    (mkIf cfg.dev.enable {
       environment.systemPackages = with pkgs; [
         gcc gnumake automake cmake autoconf pkg-config m4 libtool dpkg
+        ctags
         libqalculate wordnet aspell aspellDicts.en scowl
 
         (python3.withPackages(ps: with ps; [
+          pynvim ueberzug
           virtualenvwrapper
         ]))
         ghp-import
@@ -117,14 +119,14 @@ in
 
         vscode
 
-
         highlight
         opam
         pre-commit
         stack ghc
         go hugo
         # cargo rustfmt
-        rustup  # rust-analyzer
+        rustup rust-analyzer
+        # rustracer
         tectonic texlive.combined.scheme-full
         pandoc haskellPackages.pandoc-citeproc
         elan

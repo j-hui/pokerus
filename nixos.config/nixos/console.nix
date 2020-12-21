@@ -28,6 +28,7 @@ in
         neofetch
         thefuck
         asciinema
+        tealdeer
 
         # text editing
         ed nano vimHugeX neovim neovim-remote emacs
@@ -40,6 +41,7 @@ in
         # security
         pass
         mkpasswd
+        gopass
 
         # files
         ranger
@@ -49,6 +51,7 @@ in
         fd
         bat
         diskus
+        du-dust
 
         # utilities
         binutils-unwrapped
@@ -60,18 +63,20 @@ in
         tree
         killall
         gotop
+        procs
 
         # networking
         wget curl
         bind whois inetutils
         wireguard-tools
         python38Packages.speedtest-cli
-        dhcp
+        dhcp rustscan
 
         # disk
         parted cryptsetup gptfdisk
         btrfs-progs
         fuse
+
         # hardware management
         smartmontools lsof pciutils glxinfo acpi
         radeontop lshw mcelog fwts
