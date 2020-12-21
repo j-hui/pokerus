@@ -88,6 +88,10 @@ ctrl + super + Print
 super + ctrl + {equal,minus}
     amixer sset Master 10%{+,-}
 
+## playerctl play/prev/next:
+super + ctrl + {backslash,bracketleft,bracketright}
+    playerctl {play-pause,previous,next}
+
 ## polybar toggle:
 ctrl + super + b
     polybar-msg cmd toggle
