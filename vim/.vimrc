@@ -2,18 +2,26 @@
 " Pokerus .vimrc (by J-Hui)
 " ============================================================================
 
-" <leader> prefixes:
-" - <backspace>/<return>: toggle folds
-" - i: insert
-" - f: Find (FZF)
-" - c: Coq (coqtail)
+" Normal mode mnemonics:
+" - <C-l>*: ALE bindings
+" - <C-c>*: Coqtail / Vimtex
+" - <C-g>*: FZF
+" - <C-w>{u,<space>}: Window Undotree / Ranger
+"
+" Insert mode mnemonic:
+" - <C-s>: UltiSnipsExpandTrigger
+" - <C-g>{w,u,d}: Get Word / Unicode / Date
+" - <C-g><C-g>: Auto-indent
+" - <C-l>: correct speLling
+
+" NOTE: I have yet to find <leader> convenient to use.
 
 " ============================================================================
 " Core/plumbing/hacks {{{
 " ============================================================================
 
-" let mapleader      = ' '
-" let maplocalleader = ' '
+let mapleader      = ','
+let maplocalleader = ','
 
 " Note: these are already turned on by vim-plug
 set nocompatible
@@ -242,27 +250,28 @@ endif " vscode
 " ----------------------------------------------------------------------------
 if !exists('g:vscode')
 
-    Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' } " See filesystem
-    Plug 'Xuyuanp/nerdtree-git-plugin'
-        noremap <C-w><space> :NERDTreeToggle<CR>
-
     Plug 'mbbill/undotree'                                  " See undo history
         nnoremap <C-w>u :UndotreeToggle<cr>:UndotreeFocus<cr>
 
     Plug 'junegunn/fzf.vim'                                 " Fuzzy finder
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
         let g:fzf_preview_window = 'right:60%'
-        nnoremap <leader>ff   :Files    <space>
-        nnoremap <leader>fe   :Files    <CR>
-        nnoremap <leader>fg   :GFiles   <CR>
-        nnoremap <leader>fj   :Lines    <CR>
-        nnoremap <leader>fa   :Ag       <CR>
-        nnoremap <leader>fb   :Buffers  <CR>
-        nnoremap <leader>f:   :History: <CR>
-        nnoremap <leader>f/   :History/ <CR>
+        nnoremap <C-g>f   :Files    <space>
+        nnoremap <C-g>e   :Files    <CR>
+        nnoremap <C-g>g   :GFiles   <CR>
+        nnoremap <C-g>l   :Lines    <CR>
+        nnoremap <C-g>r   :Rg
+        nnoremap <C-g>b   :Buffers  <CR>
+        nnoremap <C-g>;   :History: <CR>
+        nnoremap <C-g>/   :History/ <CR>
+
+    " Insert mode completion
+    imap <c-x><c-k> <plug>(fzf-complete-word)
+    imap <c-x><c-f> <plug>(fzf-complete-path)
+    imap <c-x><c-l> <plug>(fzf-complete-line)
 
     Plug 'Avi-D-coder/fzf-wordnet.vim'    " Dictionary with FZF
-        imap <C-S> <Plug>(fzf-complete-wordnet)
+        imap <C-g>w <Plug>(fzf-complete-wordnet)
 
     Plug 'junegunn/vim-peekaboo'          " See yank registers
 
@@ -275,15 +284,60 @@ if !exists('g:vscode')
     Plug 'dense-analysis/ale'             " Asynchronous linting using LSP
         let g:ale_sign_column_always = 1
         let g:ale_lint_delay = 500
+        let g:ale_echo_msg_error_str = 'E'
+        let g:ale_echo_msg_warning_str = 'W'
+        let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+        let g:ale_linters = {'rust': ['analyzer', 'cargo', 'rustc']}
+
         nmap <silent> [a <Plug>(ale_previous_wrap)
         nmap <silent> ]a <Plug>(ale_next_wrap)
-        let g:ale_linters = {'rust': ['analyzer']}
+        nmap <silent> <C-l><C-]>  <Plug>(ale_go_to_definition)
+        nmap <silent> <C-l>g      <Plug>(ale_go_to_definition)
+        nmap <silent> <C-l>h      <Plug>(ale_go_to_definition_in_split)
+        nmap <silent> <C-l>v      <Plug>(ale_go_to_definition_in_vsplit)
+        nmap <silent> <C-l>c      <Plug>(ale_hover)
 
     Plug 'ojroques/vim-oscyank'
 
     Plug 'nixon/vim-vmath'
         vmap <expr>  ++  VMATH_YankAndAnalyse()
         nmap         ++  vip++
+
+    if has('nvim')
+        Plug 'kevinhwang91/rnvimr'
+            nnoremap <C-w><space> :RnvimrToggle<CR>
+            tnoremap <silent> <C-w><space> <C-\><C-n>:RnvimrToggle<CR>
+            let g:rnvimr_enable_ex = 1
+            let g:rnvimr_draw_border = 1
+            let g:rnvimr_hide_gitignore = 1
+            let g:rnvimr_border_attr = {'fg': 5, 'bg': -1}
+            let g:rnvimr_enable_bw = 1
+            let g:rnvimr_ranger_cmd = 'ranger --cmd="set draw_borders both"'
+            highlight link RnvimrNormal CursorLine
+            let g:rnvimr_action = {
+                \ '<C-t>': 'NvimEdit tabedit',
+                \ '<C-x>': 'NvimEdit split',
+                \ '<C-v>': 'NvimEdit vsplit',
+                \ 'gw': 'JumpNvimCwd',
+                \ 'yw': 'EmitRangerCwd'
+                \ }
+    endif
+
+    if has('nvim')
+        Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    else
+        Plug 'Shougo/deoplete.nvim'
+        Plug 'roxma/nvim-yarp'
+        Plug 'roxma/vim-hug-neovim-rpc'
+    endif
+    let g:deoplete#enable_at_startup = 1
+
+    Plug 'SirVer/ultisnips'
+    Plug 'honza/vim-snippets'
+    Plug 'rbonvall/snipmate-snippets-bib'
+        let g:UltiSnipsExpandTrigger='<C-s>'
+        let g:UltiSnipsJumpForwardTrigger='<C-s>'
+        let g:UltiSnipsJumpBackwardTrigger='<C-x>'
 endif
 " }}}
 
@@ -329,12 +383,12 @@ Plug 'andymass/vim-matchup'             " User-defined pairs
 Plug 'justinmk/vim-sneak'               " s works like f/t but with two chars
     let g:sneak#label = 1
 
-Plug 'junegunn/vim-after-object'        " motions for moving after chars
-    augroup vim_after_hook
-        autocmd!
-        autocmd VimEnter * call after_object#enable('=', ':', '-', '#', ' ')
-        " e.g. ya= yanks after first '='; daa= deletes after second '='
-    augroup END
+" Plug 'junegunn/vim-after-object'        " motions for moving after chars
+"     augroup vim_after_hook
+"         autocmd!
+"         autocmd VimEnter * call after_object#enable('=', ':', '-', '#', ' ')
+"         " e.g. ya= yanks after first '='; daa= deletes after second '='
+"     augroup END
 
 Plug 'junegunn/vim-easy-align'          " Vertically align text by character
     xmap ga <Plug>(EasyAlign)
@@ -379,11 +433,11 @@ Plug 'svermeulen/vim-cutlass'       " x and D no longer yank text to registers
     vnoremap d  d
     nnoremap dd dd
 
-Plug 'AndrewRadev/dsf.vim'              " Delete surrounding function
+Plug 'AndrewRadev/dsf.vim'              " Delete/change surrounding function
 Plug 'AndrewRadev/linediff.vim'         " Vimdiff ranges
 Plug 'AndrewRadev/sideways.vim'         " Move things sideways in lists
-    nnoremap <c-g>l :SidewaysRight<cr>
-    nnoremap <c-g>h :SidewaysLeft<cr>
+    nnoremap yl :SidewaysRight<cr>
+    nnoremap yh :SidewaysLeft<cr>
 
 Plug 'matze/vim-move'                   " Move things in visual mode
     vmap <C-j> <Plug>MoveBlockDown
@@ -399,7 +453,7 @@ Plug 'joom/latex-unicoder.vim'          " Useful for 'pretty' Coq/Lean files
     let g:unicoder_cancel_normal = 1
     let g:unicoder_cancel_insert = 1
     let g:unicoder_cancel_visual = 1
-    inoremap <C-l> <Esc>:call unicoder#start(1)<CR>
+    inoremap <C-g>u <Esc>:call unicoder#start(1)<CR>
 
 " }}}
 
@@ -507,6 +561,7 @@ if !exists('g:vscode')
     Plug 'vim-scripts/promela.vim', { 'for': 'promela' }
     Plug 'chrisbra/csv.vim',        { 'for': 'csv' }
     Plug 'rust-lang/rust.vim',      { 'for': 'rust' }
+    Plug 'racer-rust/vim-racer',    { 'for': 'rust' }
 " }}}
 endif
 " }}}
@@ -523,6 +578,15 @@ endif
 call plug#end()
 
 " }}}
+
+try
+    call deoplete#custom#var('omni', 'input_patterns', {
+          \ 'tex': g:vimtex#re#deoplete
+          \})
+catch /^Vim\%((\a\+)\)\=:E117/
+    " deal with it
+    echom 'deoplete not installed, run :PlugInstall'
+endtry
 
 " ============================================================================
 " Settings {{{
@@ -683,12 +747,10 @@ set formatoptions+=j    " strip comment leader when joining comment lines
 
 " Appearance {{{
 " ----------------------------------------------------------------------------
-" Highlight characters past 80
-nnoremap <space>of m`/\%>80v./+<CR>``
 
-" Folds
-nnoremap <space><backspace> zazz
-nnoremap <space><return> zizz
+" Wrangle folds from jumping
+nnoremap za zazz
+nnoremap zi zizz
 " }}}
 
 " Navigation {{{
@@ -700,7 +762,7 @@ nnoremap k gk
 
 " Get out insert mode easily
 inoremap <C-c>  <Esc>
-inoremap kj     <Esc>
+" inoremap kj     <Esc>
 
 " Normal mode readline style navigation
 nnoremap <C-n>      <C-e>j
@@ -732,15 +794,18 @@ noremap <C-w>q <Esc>:bd<CR>
 xnoremap < <gv
 xnoremap > >gv
 
-" " No clue what the hell this does
+" " No clue what the hell this was supposed to do
 " inoremap # X#
+
+" Correct spelling
+inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
 
 " Insert date
 nnoremap <space>id :put =strftime(\"%Y-%m-%d\")<CR>
-inoremap <C-G>d <C-R>=strftime("%Y-%m-%d")<CR>
+inoremap <C-g>d <C-R>=strftime("%Y-%m-%d")<CR>
 
 " Auto indentation
-inoremap <C-G><TAB> <C-F>
+inoremap <C-g><C-g> <C-F>
 
 " Readline-style keybinds adapted from tpope/vim-rsi {{{
 
@@ -843,6 +908,15 @@ cnoremap <c-g> <Down><BS>
 " Commands {{{
 " ============================================================================
 
+" :Qa (quality assurance for my typos) {{{
+command! Qa qa
+" }}}
+
+" Over80: highlight characters past 80 {{{
+command! Over80 normal! m`/\%>80v./+<CR>``
+" }}}
+
+
 " Refresh {{{
 function! s:refresh()
   silent! call mkdir(fnamemodify(tempname(), ":p:h"), "", 0700)
@@ -860,7 +934,6 @@ command! -range Trim <line1>,<line2> substitute/\s\+$//g | normal! ``
 " Go to location of file {{{
 command! Here cd %:h
 " }}}
-
 
 " "Basic" mode: no mouse interaction, line numbers, or sign column {{{
 " Useful for copying and pasting from buffers as text
@@ -952,6 +1025,7 @@ augroup bib_settings " {{{
                 \ expandtab
                 \ shiftwidth=2
                 \ softtabstop=2
+                \ spell
 augroup END " }}}
 
 augroup markdown_settings " {{{
