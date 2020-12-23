@@ -22,9 +22,12 @@ in
 
     (mkIf cfg.web.enable {
 
+      programs.browserpass.enable = true;
+
       environment = {
 
         variables.BROWSER = "qutebrowser";
+        variables.QUTE_BIB_FILEPATH = "/home/j-hui/Documents/qute.bib";
 
         systemPackages = with pkgs; [
           (unstable.qutebrowser.overrideAttrs (old: {
@@ -40,8 +43,6 @@ in
           transmission transmission-gtk
         ];
       };
-
-      programs.browserpass.enable = true;
     })
 
     (mkIf cfg.messaging.enable {
@@ -113,6 +114,7 @@ in
         (python3.withPackages(ps: with ps; [
           pynvim ueberzug
           virtualenvwrapper
+          mypy pylint
         ]))
         ghp-import
         libxml2
@@ -127,7 +129,7 @@ in
         # cargo rustfmt
         rustup rust-analyzer
         # rustracer
-        tectonic texlive.combined.scheme-full
+        tectonic texlive.combined.scheme-full bibclean
         pandoc haskellPackages.pandoc-citeproc
         elan
       ];
