@@ -26,6 +26,17 @@ if which fd &> /dev/null; then
     export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
 
+### git
+
+if [ -f ~/.pokerus-extern/forgit/forgit.plugin.sh ]; then
+    FORGIT_COPY_CMD='xclip -selection clipboard'
+    source ~/.pokerus-extern/forgit/forgit.plugin.sh
+fi
+
+git-ignore() {
+    curl -sL "https://www.toptal.com/developers/gitignore/api/$1"
+}
+
 ### rg
 
 if which rg &> /dev/null; then
@@ -73,9 +84,15 @@ stty -ixon # enable XON/XOFF flow control (whatever that means)
 
 ### Navigation/FS
 
-alias ll='ls -lagF'
-alias la='ls -A'
-alias l='ls -CF'
+if which exa &> /dev/null; then
+    alias ll='exa -lagF'
+    alias la='exa -A'
+    alias l='exa -F'
+else
+    alias ll='ls -lagF'
+    alias la='ls -A'
+    alias l='ls -F'
+fi
 
 alias cd..='cd ..'
 alias ..='cd ..'
@@ -173,10 +190,6 @@ ssh-conf() {
         touch ~/.ssh/config
         return 1
     fi
-}
-
-gi() {
-    curl -sL "https://www.toptal.com/developers/gitignore/api/$1"
 }
 
 config() {
