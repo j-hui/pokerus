@@ -186,6 +186,7 @@ if !exists('g:vscode')
             endif
         endfunction
         cnoreabbrev csw call ToggleCursorWord()
+    Plug 'guns/xterm-color-table.vim'
 endif
 " }}}
 
@@ -265,6 +266,8 @@ if !exists('g:vscode')
         nnoremap <C-g>;   :History: <CR>
         nnoremap <C-g>/   :History/ <CR>
 
+    Plug 'https://gitlab.com/mcepl/vim-fzfspell.git'        " FZF for z=
+
     " Insert mode completion
     imap <c-x><c-k> <plug>(fzf-complete-word)
     imap <c-x><c-f> <plug>(fzf-complete-path)
@@ -288,6 +291,7 @@ if !exists('g:vscode')
         let g:ale_echo_msg_warning_str = 'W'
         let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
         let g:ale_linters = {'rust': ['analyzer', 'cargo', 'rustc']}
+        let g:ale_fixers = {'bib': ['bibclean']}
 
         nmap <silent> [a <Plug>(ale_previous_wrap)
         nmap <silent> ]a <Plug>(ale_next_wrap)
@@ -296,6 +300,7 @@ if !exists('g:vscode')
         nmap <silent> <C-l>h      <Plug>(ale_go_to_definition_in_split)
         nmap <silent> <C-l>v      <Plug>(ale_go_to_definition_in_vsplit)
         nmap <silent> <C-l>c      <Plug>(ale_hover)
+        nmap <silent> <C-l>f      <Plug>(ale_fix)
 
     Plug 'ojroques/vim-oscyank'
 
@@ -605,8 +610,6 @@ endtry
 
 set nu rnu                  " Line numbers and relative line numbers
 set display+=lastline       " Show as much as possible of the last line
-set textwidth=80            " Bound lines to 80 characters
-set nowrap                  " But don't wrap lines
 set scrolloff=5             " Keep a few lines under the cursor
 set sidescrolloff=2         " Keep a few lines to the side of the cursor
 set statusline=2
@@ -617,9 +620,16 @@ augroup cursor_underline    " Underline cursor in insert mode
     autocmd InsertLeave * set nocul
 augroup END
 
-set colorcolumn=+1,+2
+" set nowrap                            " Don't show wrapped lines
+set linebreak                         " If we show wrap, break at a character
+set breakindent                       " ... and try to make it look nice
+set breakindentopt=sbr,min:48,shift:8 " ... with these options
+let &showbreak='  ⇒ '                   " ... and this nice symbol.
 
-set list listchars=tab:\┆\ ,trail:·,extends:‥
+set colorcolumn=80,120,121,+1,+2      " Columns at 80, 120, and textwidth
+
+set list                              " That mysterious, poorly named option
+set listchars=tab:\┆\ ,trail:·,extends:‥,precedes:‥
 set conceallevel=2
 
 set foldlevelstart=10
@@ -729,14 +739,19 @@ let g:netrw_preview = 1
 
 set pastetoggle=<F2>
 
+set textwidth=80        " Bound lines to 80 characters
 set expandtab           " Expand tabs to spaces
-set tabstop=4           " Expan tabs to 4 spaces
+set tabstop=4           " Expand tabs to 4 spaces
 set shiftwidth=0        " Use tabstop value for (auto)indent
 set smarttab            " Apply tabs in front of a line according to shiftwidth
 set autoindent          " Automatically indent when starting a new line
 set nojoinspaces        " Only insert single space after J
-set formatoptions+=j    " strip comment leader when joining comment lines
-
+set formatoptions+=j    " Strip comment leader when joining comment lines
+set formatoptions+=n    " Recognize numbered lists when formatting text
+set formatoptions+=l    " Don't break up my text when in insert mode
+set formatoptions+=1    " Don't break up a line after a one-letter word
+set formatoptions-=t    " Don't auto-wrap text (code)
+set formatoptions-=c    " Don't auto-wrap comments either
 " }}}
 
 " }}}
@@ -912,10 +927,10 @@ cnoremap <c-g> <Down><BS>
 command! Qa qa
 " }}}
 
-" Over80: highlight characters past 80 {{{
+" Over80/120: highlight characters past 80/120 {{{
 command! Over80 normal! m`/\%>80v./+<CR>``
+command! Over120 normal! m`/\%>120v./+<CR>``
 " }}}
-
 
 " Refresh {{{
 function! s:refresh()
@@ -974,6 +989,17 @@ endfunction
 command! Root call s:root()
 " }}}
 
+" DOI: resolve a DOI {{{
+" Example usage: :DOIR 10.1016/j.algal.2015.04.001
+command! -nargs=1 DOIR r! curl -sLH "Accept: application/x-bibtex" https://dx.doi.org/<args>
+command! -nargs=1 DOI r! curl -sLH "Accept: application/x-bibtex" <args>
+" }}}
+
+" BibCommas: add missing commas to BibTeX file {{{
+command! -buffer -range=% -bar BibCommas keeppatterns
+    \ <line1>,<line2>substitute:\v([}"])(\s*\n)+(\s*\a+\s*\=):\1,\2\3:giep
+" }}}
+
 " }}}
 
 " ============================================================================
@@ -1014,7 +1040,6 @@ augroup latex_settings " {{{
                 \ expandtab
                 \ shiftwidth=2
                 \ softtabstop=2
-                \ textwidth=80
                 \ spell
 augroup END " }}}
 
@@ -1036,7 +1061,6 @@ augroup markdown_settings " {{{
                 \ expandtab
                 \ shiftwidth=2
                 \ softtabstop=2
-                \ textwidth=80
                 \ spell
 augroup END " }}}
 
@@ -1112,7 +1136,6 @@ augroup coq_settings " {{{
                 \ softtabstop=2
                 \ commentstring=(*%s*)
                 \ comments=sr:(*,mb:*,ex:*)
-                " \ formatoptions=cqtlj
 augroup END " }}}
 
 augroup promela_settings " {{{
@@ -1125,7 +1148,6 @@ augroup promela_settings " {{{
                 \ softtabstop=2
                 " \ commentstring=/*%s*/
                 " \ comments=sr:/*,mb:*,ex:*/
-                " \ formatoptions=cqtlj
 augroup END " }}}
 
 augroup protobuf_settings " {{{
@@ -1137,7 +1159,6 @@ augroup protobuf_settings " {{{
                 \ softtabstop=2
                 " \ commentstring=/*%s*/
                 " \ comments=sr:/*,mb:*,ex:*/
-                " \ formatoptions=cqtlj
 augroup END " }}}
 
 augroup lean_settings " {{{
@@ -1150,7 +1171,6 @@ augroup lean_settings " {{{
                 \ softtabstop=2
                 \ commentstring=--\ %s
                 \ comments=s1fl:/-,mb:-,ex:-/,:--
-                " \ formatoptions+=cqortj
 augroup END " }}}
 
 augroup csv_settings " {{{
@@ -1160,4 +1180,4 @@ augroup END " }}}
 
 " }}}
 
-" vim: set ts=4 sw=4 tw=80 et foldmethod=marker foldlevel=0:
+" vim: set ts=4 sw=4 tw=120 et foldmethod=marker foldlevel=0:
