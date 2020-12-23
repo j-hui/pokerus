@@ -1,3 +1,5 @@
+[diff]
+    mnemonicPrefix = true
 [push]
     default = simple
 [pull]
@@ -15,13 +17,16 @@
     undo = reset HEAD~1 --mixed
     amend = commit -a --amend
     this = rev-parse --abbrev-ref HEAD
-    dw = diff --word-diff
-    dc = diff --cached
+    diff-words = diff --word-diff
+    diff-cache = diff --cached
     root = rev-parse --show-toplevel
     conf = config --global -e
     hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+    branches = "!git for-each-ref --sort='-authordate' --format='%(authordate)%09%(objectname:short)%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"
+    last = --no-pager log -1 --oneline --color
+    unpushed = log @{u}..
 [color]
     ui = auto
-    pager = no
 [core]
     excludesfile = ~/.gitignore_global
+    pager = bat
