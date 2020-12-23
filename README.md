@@ -25,7 +25,7 @@ Install Bash hook, and setup Git and Bash:
 
 Full terminal rig:
 
-    ./infect.sh vim nvim.config tmux ranger.config ghc
+    ./infect.sh vim nvim.config tmux ranger.config bat.config ghc extern
 
 Darwin/Aqua rig:
 
@@ -33,7 +33,7 @@ Darwin/Aqua rig:
 
 Linux/X11 rig:
 
-    ./infect.sh bspwm.config sxhkd.config # TODO: <bar> <laucher> <gtk> <qutebrowser>
+    ./infect.sh x.config qutebrowser.config qutebrowser zathura.config
 
 Doom Emacs rig:
 
