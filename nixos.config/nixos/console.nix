@@ -29,12 +29,13 @@ in
         thefuck
         asciinema
         tealdeer
+        doge
 
         # text editing
         ed nano vimHugeX neovim neovim-remote emacs
 
         # version control
-        git gitAndTools.gh
+        git gitAndTools.gh gitAndTools.delta
         subversion
         mercurial
 
@@ -52,11 +53,13 @@ in
         bat
         diskus
         du-dust
+        exa
 
         # utilities
         binutils-unwrapped
         unzip
         pv
+        bc
 
         # process management
         htop
