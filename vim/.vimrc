@@ -337,6 +337,10 @@ if !exists('g:vscode')
     endif
     let g:deoplete#enable_at_startup = 1
 
+    Plug 'fszymanski/deoplete-emoji'
+    Plug 'deoplete-plugins/deoplete-dictionary' " TODO: set this up
+    Plug 'thalesmello/webcomplete.vim'          " TODO: set this up
+
     Plug 'SirVer/ultisnips'
     Plug 'honza/vim-snippets'
     Plug 'rbonvall/snipmate-snippets-bib'
@@ -508,10 +512,10 @@ if !exists('g:vscode')
 " }}}
 " Coq {{{
     Plug 'whonore/coqtail', { 'for': 'coq' }
-        function! g:CoqtailHighlight()
-          hi def CoqtailChecked ctermbg=236
-          hi def CoqtailSent    ctermbg=237
-        endfunction
+        " function! g:CoqtailHighlight()
+          highlight CoqtailChecked ctermbg=236
+          highlight CoqtailSent    ctermbg=237
+        " endfunction
         augroup coqtail_mappings
             autocmd!
             autocmd Filetype coq
@@ -586,8 +590,19 @@ call plug#end()
 
 try
     call deoplete#custom#var('omni', 'input_patterns', {
-          \ 'tex': g:vimtex#re#deoplete
-          \})
+                \ 'tex': g:vimtex#re#deoplete
+                \})
+    call deoplete#custom#source('emoji', 'filetypes', [
+                \ 'gitcommit',
+                \ 'markdown',
+                \ 'txt',
+                \ 'rst',
+                \ 'vimwiki',
+                \])
+
+    " call deoplete#custom#option('sources', {
+    "             \ '_': ['ale'],
+    "             \})
 catch /^Vim\%((\a\+)\)\=:E117/
     " deal with it
     echom 'deoplete not installed, run :PlugInstall'
@@ -626,7 +641,7 @@ set breakindent                       " ... and try to make it look nice
 set breakindentopt=sbr,min:48,shift:8 " ... with these options
 let &showbreak='  ⇒ '                   " ... and this nice symbol.
 
-set colorcolumn=80,120,121,+1,+2      " Columns at 80, 120, and textwidth
+set colorcolumn=81,121,+1,+2          " Columns past 80, 120, and textwidth
 
 set list                              " That mysterious, poorly named option
 set listchars=tab:\┆\ ,trail:·,extends:‥,precedes:‥
