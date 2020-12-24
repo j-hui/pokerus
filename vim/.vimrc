@@ -175,18 +175,30 @@ if !exists('g:vscode')
         let g:enable_bold_font = 1
         let g:hybrid_transparent_background = 1
 
+    Plug 'guns/xterm-color-table.vim'
+
+    Plug 'lfv89/vim-interestingwords'     " * but better and still lightweight
+        let g:interestingWordsDefaultMappings = 0
+        " Shadow existing */# bindings
+        nnoremap <silent> * :call InterestingWords('n')<cr>
+        vnoremap <silent> * :call InterestingWords('v')<cr>
+        nnoremap <silent> # :call UncolorAllWords()<cr>
+
+        nnoremap <silent> n :call WordNavigation(1)<cr>
+        nnoremap <silent> N :call WordNavigation(0)<cr>
+        command! Noh noh | call UncolorAllWords()
+
     Plug 'itchyny/vim-cursorword'           " Unintrusive * preview
         let g:cursorword_delay = 369
         let b:cursorword = 1
-        function! ToggleCursorWord()
+        function! CursorWordToggleFn()
             if b:cursorword
                 let b:cursorword = 0
             else
                 let b:cursorword = 1
             endif
         endfunction
-        cnoreabbrev csw call ToggleCursorWord()
-    Plug 'guns/xterm-color-table.vim'
+        command! ToggleCursorWord call CursorWordToggleFn()
 endif
 " }}}
 
@@ -347,6 +359,7 @@ if !exists('g:vscode')
         let g:UltiSnipsExpandTrigger='<C-s>'
         let g:UltiSnipsJumpForwardTrigger='<C-s>'
         let g:UltiSnipsJumpBackwardTrigger='<C-x>'
+    Plug 'strboul/urlview.vim'
 endif
 " }}}
 
