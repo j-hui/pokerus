@@ -124,7 +124,7 @@ in
         highlight
         opam
         pre-commit
-        stack ghc
+        stack ghc haskell-language-server
         go hugo
         # cargo rustfmt
         rustup rust-analyzer
