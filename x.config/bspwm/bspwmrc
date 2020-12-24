@@ -13,6 +13,8 @@ amixer sset Master 69%
 
 xsetroot -cursor_name left_ptr &
 
+xset r rate 250 69
+
 bspc monitor -d I II III IV V VI VII VIII
 
 bspc config border_width        4
