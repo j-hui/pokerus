@@ -124,6 +124,7 @@ in
         highlight
         opam
         pre-commit
+        vale
         stack ghc haskellPackages.haskell-language-server
         go hugo
         # cargo rustfmt

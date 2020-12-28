@@ -200,7 +200,7 @@ if !exists('g:vscode')
 
     nnoremap <silent> gn :call WordNavigation(1)<cr>
     nnoremap <silent> gN :call WordNavigation(0)<cr>
-    command! Noh noh | call UncolorAllWords()
+      command! Noh noh | call UncolorAllWords()
 
   Plug 'itchyny/vim-cursorword'       " Unintrusive * preview
     let g:cursorword_delay = 369
@@ -367,6 +367,10 @@ if !exists('g:vscode')
     " Plug 'roxma/vim-hug-neovim-rpc'
   endif
   let g:deoplete#enable_at_startup = 1
+
+  Plug 'fszymanski/deoplete-emoji'
+  Plug 'deoplete-plugins/deoplete-dictionary' " TODO: set this up
+  Plug 'thalesmello/webcomplete.vim'          " TODO: set this up
 
   Plug 'SirVer/ultisnips'
   Plug 'honza/vim-snippets'
@@ -682,7 +686,15 @@ if has('nvim')
     call deoplete#custom#option('sources', {
         \ 'rust': ['ale', 'around', 'buffer'],
         \})
-  catch /^Vim\%((\a\+)\)\=:E117/
+    call deoplete#custom#source('emoji', 'filetypes', [
+                \ 'gitcommit',
+                \ 'markdown',
+                \ 'txt',
+                \ 'rst',
+                \ 'vimwiki',
+                \])
+
+catch /^Vim\%((\a\+)\)\=:E117/
     " deal with it
     echom 'deoplete not installed, run :PlugInstall'
   endtry
@@ -719,21 +731,21 @@ augroup cursor_underline  " Underline cursor in insert mode
   autocmd InsertLeave * set nocul
 augroup END
 
-" set nowrap              " Don't show wrapped lines
-set linebreak             " If we show wrap, break at a character
-set breakindent             " ... and try to make it look nice
-set breakindentopt=sbr,min:48,shift:8 " ... with these options
-let &showbreak='  ⇒ '           " ... and this nice symbol.
+" set nowrap                            " Don't show wrapped lines
+set linebreak                           " If we show wrap, break at a character
+set breakindent                         " ... and try to make it look nice
+set breakindentopt=sbr,min:48,shift:8   " ... with these options
+let &showbreak='  ⇒ '                   " ... and this nice symbol.
 
-set colorcolumn=80,120,121,+1,+2    " Columns at 80, 120, and textwidth
+set colorcolumn=80,120,121,+1,+2        " Columns at 80, 120, and textwidth
 
-set list                " That mysterious, poorly named option
-                    " that changes how things are displayed,
-                    " as configured by the following option:
+set list                                " That mysterious, poorly named option
+                                        " that changes how things are displayed,
+                                        " as configured by the following option:
 set listchars=tab:\┆\ ,trail:·,extends:‥,precedes:‥
 
-set conceallevel=2            " Concealed text is completely hidden unless
-                    " custom replacement character is defined
+set conceallevel=2                      " Concealed text is completely hidden unless
+                                        " custom replacement character is defined
 
 set foldlevelstart=10
 set foldnestmax=10
