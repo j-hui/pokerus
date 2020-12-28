@@ -88,6 +88,14 @@ ctrl + super + Print
 super + ctrl + {equal,minus}
     amixer sset Master 10%{+,-}
 
+## XF86 volume control:
+{XF86AudioRaiseVolume,XF86AudioLowerVolume,XF86AudioMute}
+    amixer sset Master {10%+,10%-,0%}
+
+## XF86 brightness control:
+{XF86MonBrightnessUp,XF86MonBrightnessDown}
+    brightnessctl set {+10%,10%-}
+
 ## playerctl play/prev/next:
 super + ctrl + {backslash,bracketleft,bracketright}
     playerctl {play-pause,previous,next}
