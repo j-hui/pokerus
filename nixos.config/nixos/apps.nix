@@ -124,7 +124,7 @@ in
         highlight
         opam
         pre-commit
-        vale
+        nodePackages.write-good proselint
         stack ghc haskellPackages.haskell-language-server
         go hugo
         # cargo rustfmt
