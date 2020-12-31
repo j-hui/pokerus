@@ -676,7 +676,8 @@ if !exists('g:vscode')
         nmap <buffer> <c-c>s        <Plug>CoqSearch
         xmap <buffer> <c-c>s        <Plug>CoqSearch
         nmap <buffer> <c-c>d        <Plug>CoqPrint
-        xmap <buffer> <c-c>d        <Plug>CoqPrint        nmap <buffer> <c-c>f        <Plug>CoqLocate
+        xmap <buffer> <c-c>d        <Plug>CoqPrint
+        nmap <buffer> <c-c>f        <Plug>CoqLocate
         xmap <buffer> <c-c>f        <Plug>CoqLocate
     endfunction
 
