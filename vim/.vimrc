@@ -192,16 +192,6 @@ if !exists('g:vscode')
 
   Plug 'guns/xterm-color-table.vim'
 
-  Plug 'lfv89/vim-interestingwords'   " * but better and still lightweight
-    let g:interestingWordsDefaultMappings = 0
-    nnoremap <silent> g* :call InterestingWords('n')<cr>
-    vnoremap <silent> g* :call InterestingWords('v')<cr>
-    nnoremap <silent> g# :call UncolorAllWords()<cr>
-
-    nnoremap <silent> gn :call WordNavigation(1)<cr>
-    nnoremap <silent> gN :call WordNavigation(0)<cr>
-      command! Noh noh | call UncolorAllWords()
-
   Plug 'itchyny/vim-cursorword'       " Unintrusive * preview
     let g:cursorword_delay = 369
     let b:cursorword = 1
@@ -213,7 +203,7 @@ if !exists('g:vscode')
       endif
     endfunction
     command! ToggleCursorWord call CursorWordToggleFn()
-endif
+endif " vscode
 " }}}
 
 " Window appearance {{{
@@ -276,6 +266,7 @@ endif " vscode
 " Interactive subsystems {{{
 " ----------------------------------------------------------------------------
 if !exists('g:vscode')
+  Plug 'junegunn/vader.vim'
 
   Plug 'mbbill/undotree'                  " See undo history
     nnoremap <C-w>u :UndotreeToggle<cr>:UndotreeFocus<cr>
@@ -299,18 +290,13 @@ if !exists('g:vscode')
   imap <c-x><c-f> <plug>(fzf-complete-path)
   imap <c-x><c-l> <plug>(fzf-complete-line)
 
-  Plug 'Avi-D-coder/fzf-wordnet.vim'  " Dictionary with FZF
-    imap <C-g>w <Plug>(fzf-complete-wordnet)
+  Plug 'junegunn/vim-peekaboo'                  " See yank registers
 
-  Plug 'junegunn/vim-peekaboo'      " See yank registers
+  Plug 'junegunn/gv.vim'                        " See Git history
 
-  Plug 'junegunn/gv.vim'        " See Git history
+  Plug 'tpope/vim-fugitive'                     " Git interaction
 
-  Plug 'tpope/vim-fugitive'       " Git interaction
-
-  Plug 'AndrewRadev/bufferize.vim'    " command contents in buffer
-
-  Plug 'dense-analysis/ale'       " Asynchronous linting using LSP
+  Plug 'dense-analysis/ale'                     " Asynchronous linting using LSP
     let g:ale_sign_column_always = 1
     let g:ale_lint_delay = 500
     let g:ale_echo_msg_error_str = 'Err'
@@ -328,6 +314,7 @@ if !exists('g:vscode')
     nmap <silent> [a <Plug>(ale_previous_wrap)
     nmap <silent> ]a <Plug>(ale_next_wrap)
 
+    nmap <silent> <C-l>q      <Plug>(ale_toggle)
     nmap <silent> <C-l><C-]>  <Plug>(ale_go_to_definition)
     nmap <silent> <C-l>gg     <Plug>(ale_go_to_definition)
     nmap <silent> <C-l>gs     <Plug>(ale_go_to_definition_in_split)
@@ -340,12 +327,6 @@ if !exists('g:vscode')
 
     nmap <silent> <C-l>c      <Plug>(ale_hover)
     nmap <silent> <C-l>x      <Plug>(ale_fix)
-
-  Plug 'ojroques/vim-oscyank'
-
-  Plug 'nixon/vim-vmath'
-    vmap <expr>  ++  VMATH_YankAndAnalyse()
-    nmap     ++  vip++
 
   Plug 'francoiscabrol/ranger.vim'
     if has('nvim') " nvim dependency
@@ -368,189 +349,227 @@ if !exists('g:vscode')
   endif
   let g:deoplete#enable_at_startup = 1
 
-  Plug 'fszymanski/deoplete-emoji'
-  Plug 'deoplete-plugins/deoplete-dictionary' " TODO: set this up
-  Plug 'thalesmello/webcomplete.vim'          " TODO: set this up
+  Plug 'fszymanski/deoplete-emoji'            " Auto-complete emojus
+  Plug 'deoplete-plugins/deoplete-dictionary' " Auto-complete dictionary word
+  Plug 'thalesmello/webcomplete.vim'          " Auto-complete from open browser
 
-  Plug 'SirVer/ultisnips'
-  Plug 'honza/vim-snippets'
-  Plug 'rbonvall/snipmate-snippets-bib'
+  Plug 'SirVer/ultisnips'                     " Snippet management
     let g:UltiSnipsExpandTrigger='<C-s>'
     let g:UltiSnipsJumpForwardTrigger='<C-s>'
     let g:UltiSnipsJumpBackwardTrigger='<C-x>'
-  Plug 'strboul/urlview.vim'
+  Plug 'honza/vim-snippets'                   " Std lib for snippets
+  Plug 'rbonvall/snipmate-snippets-bib'       " Snippets for .bib files
+endif " vscode
+" }}}
+
+" Window/buffer management {{{
+" ----------------------------------------------------------------------------
+if !exists('g:vscode')
+  Plug 'moll/vim-bbye'
+  Plug 'zhaocai/GoldenView.Vim'       " Split buffer size management
+  Plug 'AndrewRadev/bufferize.vim'    " Command contents in buffer
+  Plug 'AndrewRadev/linediff.vim'     " Vimdiff line ranges
 endif
+
 " }}}
 
 " File system {{{
 " ----------------------------------------------------------------------------
 if !exists('g:vscode')
-  Plug 'farmergreg/vim-lastplace'
-
-  Plug 'duggiefresh/vim-easydir'
-
-  Plug 'tpope/vim-eunuch'     " UNIX-like functionality in Vim
+  Plug 'tpope/vim-eunuch'             " UNIX-like functionality in Vim
+  Plug 'ojroques/vim-oscyank'         " Yank across the terminal
+  Plug 'farmergreg/vim-lastplace'     " Open where last opened
+  Plug 'duggiefresh/vim-easydir'      " Create directories when non-existent
+  Plug 'strboul/urlview.vim'          " See all URLs in buffer
 endif
 " }}}
 
-" Utilities {{{
+" Drawing {{{
 " ----------------------------------------------------------------------------
+Plug 'gyim/vim-boxdraw'                 " Draw ASCII text boxes
+Plug 'joom/latex-unicoder.vim'          " Useful for 'pretty' Coq/Lean files
+  let g:unicoder_cancel_normal = 1
+  let g:unicoder_cancel_insert = 1
+  let g:unicoder_cancel_visual = 1
+  inoremap <C-g>u <Esc>:call unicoder#start(1)<CR>
+Plug 'tpope/vim-characterize'           " use ga to see metadata about unicode
+" }}}
 
-Plug 'tpope/vim-repeat'         " User-defined dot-repeatable actions
-Plug 'tpope/vim-commentary'       " use gcc to comment things out
-Plug 'tpope/vim-surround'         " ds, cs, ys to change text surroundings
-Plug 'tpope/vim-characterize'       " use ga to see metadata about unicode
-Plug 'tpope/vim-endwise'        " write endings
-Plug 'tpope/vim-speeddating'      " increment/decrement dates
-  let g:speeddating_no_mappings = 1   " <C-S> to increment
+" Simple Utilities {{{
+" ----------------------------------------------------------------------------
+" Low-cost utilities that stay out of my way but are handy to keep around
+" (i.e., stuff I think should have been built into Vim/available as settings).
+
+Plug 'tpope/vim-repeat'                   " User-defined dot-repeatable actions
+Plug 'tpope/vim-commentary'               " use gcc to comment things out
+Plug 'tpope/vim-surround'                 " ds, cs, ys to change text surroundings
+Plug 'tpope/vim-endwise'                  " write endings
+Plug 'tpope/vim-speeddating'              " increment/decrement dates
+  let g:speeddating_no_mappings = 1       " <C-S> to increment
   " force a non-recursive map to the fallback functions
-  nnoremap <Plug>SpeedDatingFallbackUp  <C-A>
+  nnoremap <Plug>SpeedDatingFallbackUp    <C-A>
   nnoremap <Plug>SpeedDatingFallbackDown  <C-X>
-  xnoremap <Plug>SpeedDatingFallbackUp  <C-A>
+  xnoremap <Plug>SpeedDatingFallbackUp    <C-A>
   xnoremap <Plug>SpeedDatingFallbackDown  <C-X>
   nmap  <C-S>   <Plug>SpeedDatingUp
   nmap  <C-X>   <Plug>SpeedDatingDown
   xmap  <C-S>   <Plug>SpeedDatingUp
   xmap  <C-X>   <Plug>SpeedDatingDown
 
-Plug 'vim-scripts/vis'          " Use :B for block mode commands
-
-Plug 'soulston/vim-listtrans'       " Toggle bulleted and inline list
-  nmap  ,l   <Plug>ListtransToggle
-  vmap  ,l   <Plug>ListtransToggleVisual
-
-Plug 'andymass/vim-matchup'       " User-defined pairs
-
-Plug 'justinmk/vim-sneak'         " s works like f/t but with two chars
-  let g:sneak#label = 1         " Easy-motion labels
-  let g:sneak#s_next = 1        " Empty search uses most recent recent
-
-  " 2-character Sneak (default)
-  nmap gz <Plug>Sneak_s
-  nmap gZ <Plug>Sneak_S
-
-  " Already mapped ; to :
-  map , <Plug>Sneak_;
-  map ], <Plug>Sneak_;
-  map [, <Plug>Sneak_,
-
-  " 1-character enhanced 'f'
-  nmap f <Plug>Sneak_f
-  nmap F <Plug>Sneak_F
-  xmap f <Plug>Sneak_f
-  xmap F <Plug>Sneak_F
-  omap f <Plug>Sneak_f
-  omap F <Plug>Sneak_F
-
-  " 1-character enhanced 't'
-  nmap t <Plug>Sneak_t
-  nmap T <Plug>Sneak_T
-  xmap t <Plug>Sneak_t
-  xmap T <Plug>Sneak_T
-  omap t <Plug>Sneak_t
-  omap T <Plug>Sneak_T
-
-" Plug 'junegunn/vim-after-object'    " motions for moving after chars
-"   augroup vim_after_hook
-"     autocmd!
-"     autocmd VimEnter * call after_object#enable('=', ':', '-', '#', ' ')
-"     " e.g. ya= yanks after first '='; daa= deletes after second '='
-"   augroup END
-
-Plug 'junegunn/vim-easy-align'      " Vertically align text by character
-  xmap ga <Plug>(EasyAlign)
-  nmap ga <Plug>(EasyAlign)
-  let g:easy_align_bypass_fold = 1
-  let g:easy_align_delimiters = {
-    \ '>': { 'pattern': '>>\|=>\|>' },
-    \ '\': { 'pattern': '\\' },
-    \ '/': {
-    \   'pattern': '//\+\|/\*\|\*/',
-    \   'delimiter_align': 'l',
-    \   'ignore_groups': ['!Comment']
-    \   },
-    \ ']': {
-    \   'pattern':     '\]\zs',
-    \   'left_margin':   0,
-    \   'right_margin':  1,
-    \   'stick_to_left': 0
-    \   },
-    \ ')': {
-    \   'pattern':     ')\zs',
-    \   'left_margin':   0,
-    \   'right_margin':  1,
-    \   'stick_to_left': 0
-    \   },
-    \ 'f': {
-    \   'pattern': ' \(\S\+(\)\@=',
-    \   'left_margin': 0,
-    \   'right_margin': 0
-    \   },
-    \ 'd': {
-    \   'pattern': ' \ze\S\+\s*[;=]',
-    \   'left_margin': 0,
-    \   'right_margin': 0
-    \   }
-    \ }
-
-Plug 'svermeulen/vim-cutlass'       " x and D only delete, no yank/cut
-                    " but retain cut behavior for d
+Plug 'svermeulen/vim-cutlass'               " x and D only delete, no yank/cut
+                                            " but retain cut behavior for d
   nnoremap d  d
   xnoremap d  d
   vnoremap d  d
   nnoremap dd dd
 
-Plug 'svermeulen/vim-yoink'       " Yoink (yank) ring
-  " nmap p <plug>(YoinkPaste_p)
-  " nmap P <plug>(YoinkPaste_P)
+Plug 'vim-scripts/vis'                    " Use :B for block mode commands
 
-  " First time we hit p, paste; subsequent times cycles through yoink ring
-  nmap <expr> p yoink#canSwap() ? '<plug>(YoinkPostPasteSwapBack)' : '<plug>(YoinkPaste_p)'
-  nmap <expr> P yoink#canSwap() ? '<plug>(YoinkPostPasteSwapForward)' : '<plug>(YoinkPaste_P)'
+Plug 'andymass/vim-matchup'               " %-navigate user-defined pairs
 
-  nmap [y <plug>(YoinkRotateBack)
-  nmap ]y <plug>(YoinkRotateForward)
-  nmap <c-=> <plug>(YoinkPostPasteToggleFormat)
-  let g:yoinkSwapClampAtEnds = 0    " allow cycling through yank ring
-  let g:yoinkIncludeDeleteOperations = 1
-  let g:yoinkMoveCursorToEndOfPaste = 1
-  let g:yoinkSyncSystemClipboardOnFocus = 0
-
-Plug 'svermeulen/vim-subversive'    " Substitute from yank
-  nmap s <plug>(SubversiveSubstitute)
-  nmap ss <plug>(SubversiveSubstituteLine)
-  nmap S <plug>(SubversiveSubstituteToEndOfLine)
-  " Substitute word under cursor in motion
-  nmap <leader>ss <plug>(SubversiveSubstituteWordRange)
-  nmap <leader>css <plug>(SubversiveSubstituteWordRangeConfirm)
-  " Paste in visual mode
-  xmap s <plug>(SubversiveSubstitute)
-  xmap p <plug>(SubversiveSubstitute)
-  xmap P <plug>(SubversiveSubstitute)
-  let g:subversivePreserveCursorPosition = 1
-  let g:subversivePromptWithActualCommand = 1
-
-Plug 'AndrewRadev/dsf.vim'        " Delete/change surrounding function
-Plug 'AndrewRadev/linediff.vim'     " Vimdiff ranges
-Plug 'AndrewRadev/sideways.vim'     " Move things sideways in lists
-  nnoremap yl :SidewaysRight<cr>
-  nnoremap yh :SidewaysLeft<cr>
-
-Plug 'matze/vim-move'           " Move things in visual mode
+Plug 'matze/vim-move'                     " Move blocks in visual mode
   vmap <C-j> <Plug>MoveBlockDown
   vmap <C-l> <Plug>MoveBlockRight
   vmap <C-h> <Plug>MoveBlockLeft
   vmap <C-k> <Plug>MoveBlockUp
 
-Plug 'vim-scripts/ReplaceWithRegister'  " Exchange text with register gr{motion}
-Plug 'tommcdo/vim-exchange'       " Exchange text with repeated cx{motion}
+Plug 'AndrewRadev/dsf.vim'                " Delete/change surrounding function
+Plug 'tommcdo/vim-exchange'               " Exchange text with repeated cx{motion}
+Plug 'AndrewRadev/sideways.vim'           " Move things sideways in lists
+  nnoremap cl :SidewaysRight<cr>
+  nnoremap ch :SidewaysLeft<cr>
 
-Plug 'gyim/vim-boxdraw'         " Draw ASCII text boxes
-Plug 'joom/latex-unicoder.vim'      " Useful for 'pretty' Coq/Lean files
-  let g:unicoder_cancel_normal = 1
-  let g:unicoder_cancel_insert = 1
-  let g:unicoder_cancel_visual = 1
-  inoremap <C-g>u <Esc>:call unicoder#start(1)<CR>
+Plug 'nixon/vim-vmath'              " Basic stats on visual selection
+    vmap <expr>  ++  VMATH_YankAndAnalyse()
+    nmap         ++  vip++
+" }}}
+
+" Rich Utilities {{{
+" ----------------------------------------------------------------------------
+" Utilities that have a steeper learning curve than Simple Utilities,
+" and are probably not as portable, but are not as involved as Interactive Subsystems.
+
+if !exists('g:vscode')
+  Plug 'gcmt/wildfire.vim'                    " Smart text object selection
+    let g:wildfire_objects = {
+        \ "*" : ["i'", 'i"', "i)", "i]", "i}"],
+        \ "html,xml" : ["at", "it"],
+    \ }
+
+  Plug 'AndrewRadev/splitjoin.vim'            " Toggle between single-/multi-line syntax
+      let g:splitjoin_split_mapping = 'gK'
+      let g:splitjoin_join_mapping = 'gJ'
+
+  Plug 'justinmk/vim-sneak'                   " s works like f/t but with two chars
+    let g:sneak#label = 1                     " Easy-motion-like labels
+    let g:sneak#s_next = 1                    " Empty search uses most recent recent
+
+    " 2-character Sneak (default)
+    nmap gz <Plug>Sneak_s
+    nmap gZ <Plug>Sneak_S
+    xmap z <Plug>Sneak_s
+    xmap Z <Plug>Sneak_S
+    omap z <Plug>Sneak_s
+    omap Z <Plug>Sneak_S
+
+    " Already mapped ; to :
+    map , <Plug>Sneak_;
+    map ]f <Plug>Sneak_;
+    map [f <Plug>Sneak_,
+
+    " 1-character enhanced 'f'
+    nmap f <Plug>Sneak_f
+    nmap F <Plug>Sneak_F
+    xmap f <Plug>Sneak_f
+    xmap F <Plug>Sneak_F
+    omap f <Plug>Sneak_f
+    omap F <Plug>Sneak_F
+
+    " 1-character enhanced 't'
+    nmap t <Plug>Sneak_t
+    nmap T <Plug>Sneak_T
+    xmap t <Plug>Sneak_t
+    xmap T <Plug>Sneak_T
+    omap t <Plug>Sneak_t
+    omap T <Plug>Sneak_T
+
+  Plug 'junegunn/vim-easy-align'      " Vertically align text by character
+    xmap ga <Plug>(EasyAlign)
+    nmap ga <Plug>(EasyAlign)
+    let g:easy_align_bypass_fold = 1
+    let g:easy_align_delimiters = {
+      \ '>': { 'pattern': '>>\|=>\|>' },
+      \ '\': { 'pattern': '\\' },
+      \ '/': {
+      \   'pattern': '//\+\|/\*\|\*/',
+      \   'delimiter_align': 'l',
+      \   'ignore_groups': ['!Comment']
+      \   },
+      \ ']': {
+      \   'pattern':     '\]\zs',
+      \   'left_margin':   0,
+      \   'right_margin':  1,
+      \   'stick_to_left': 0
+      \   },
+      \ ')': {
+      \   'pattern':     ')\zs',
+      \   'left_margin':   0,
+      \   'right_margin':  1,
+      \   'stick_to_left': 0
+      \   },
+      \ 'f': {
+      \   'pattern': ' \(\S\+(\)\@=',
+      \   'left_margin': 0,
+      \   'right_margin': 0
+      \   },
+      \ 'd': {
+      \   'pattern': ' \ze\S\+\s*[;=]',
+      \   'left_margin': 0,
+      \   'right_margin': 0
+      \   }
+      \ }
+
+  Plug 'svermeulen/vim-yoink'       " Yoink (yank) ring
+    " nmap p <plug>(YoinkPaste_p)
+    " nmap P <plug>(YoinkPaste_P)
+
+    " First time we hit p, paste; subsequent times cycles through yoink ring
+    nmap <expr> p yoink#canSwap() ? '<plug>(YoinkPostPasteSwapBack)' : '<plug>(YoinkPaste_p)'
+    nmap <expr> P yoink#canSwap() ? '<plug>(YoinkPostPasteSwapForward)' : '<plug>(YoinkPaste_P)'
+
+    nmap [p <plug>(YoinkRotateBack)
+    nmap ]p <plug>(YoinkRotateForward)
+    nmap <c-=> <plug>(YoinkPostPasteToggleFormat)
+    let g:yoinkSwapClampAtEnds = 0              " allow cycling through yank ring
+    let g:yoinkIncludeDeleteOperations = 1
+    let g:yoinkMoveCursorToEndOfPaste = 1
+    let g:yoinkSyncSystemClipboardOnFocus = 0
+
+  Plug 'svermeulen/vim-subversive'    " Substitute from yank
+    nmap s <plug>(SubversiveSubstitute)
+    nmap ss <plug>(SubversiveSubstituteLine)
+    nmap S <plug>(SubversiveSubstituteToEndOfLine)
+    " Substitute word under cursor in motion
+    nmap <leader>ss <plug>(SubversiveSubstituteWordRange)
+    nmap <leader>css <plug>(SubversiveSubstituteWordRangeConfirm)
+    " Paste in visual mode
+    xmap p <plug>(SubversiveSubstitute)
+    xmap P <plug>(SubversiveSubstitute)
+    let g:subversivePreserveCursorPosition = 1
+    let g:subversivePromptWithActualCommand = 1
+
+  Plug 'lfv89/vim-interestingwords'   " * but better and still lightweight
+    let g:interestingWordsDefaultMappings = 0
+    nnoremap <silent> gm :call InterestingWords('n')<cr>
+    vnoremap <silent> gm :call InterestingWords('v')<cr>
+    nnoremap <silent> gM :call UncolorAllWords()<cr>
+
+    nnoremap <silent> ]g :call WordNavigation(1)<cr>
+    nnoremap <silent> [g :call WordNavigation(0)<cr>
+
+    command! Noh noh | call UncolorAllWords()
+
+endif " vscode
 
 " }}}
 
@@ -581,62 +600,95 @@ if !exists('g:vscode')
     let g:vimtex_view_method='zathura'
     let g:vimtex_complete_enabled=1
 
+    function! DefineVimtexMappings()
+      imap <buffer> <C-]>             <plug>(vimtex-delim-close)
+
+      nmap <buffer> <C-c><CR>         <plug>(vimtex-compile-ss)
+      vmap <buffer> <C-c><CR>    <ESC><plug>(vimtex-compile-ss)
+      imap <buffer> <C-c><CR>    <ESC><plug>(vimtex-compile-ss)
+      nmap <buffer> <C-c>l            <plug>(vimtex-compile-ss)
+      vmap <buffer> <C-c>l       <ESC><plug>(vimtex-compile-ss)
+      imap <buffer> <C-c>l       <ESC><plug>(vimtex-compile-ss)
+
+      nmap <buffer> <C-c><Space>      <plug>(vimtex-view)
+      vmap <buffer> <C-c><Space> <ESC><plug>(vimtex-view)
+      imap <buffer> <C-c><Space> <ESC><plug>(vimtex-view)
+
+      nmap <buffer> <C-c>c            <plug>(vimtex-errors)
+      vmap <buffer> <C-c>c       <ESC><plug>(vimtex-errors)
+      imap <buffer> <C-c>c       <ESC><plug>(vimtex-errors)
+    endfunction
+
     augroup vimtex_settings
       autocmd!
-      autocmd Filetype tex imap <C-]> <plug>(vimtex-delim-close)
-      autocmd Filetype tex nmap <C-c><CR>      <plug>(vimtex-compile-ss)
-      autocmd Filetype tex vmap <C-c><CR>     <ESC><plug>(vimtex-compile-ss)
-      autocmd Filetype tex imap <C-c><CR>     <ESC><plug>(vimtex-compile-ss)
-      autocmd Filetype tex nmap <C-c>l         <plug>(vimtex-compile-ss)
-      autocmd Filetype tex vmap <C-c>l      <ESC><plug>(vimtex-compile-ss)
-      autocmd Filetype tex imap <C-c>l      <ESC><plug>(vimtex-compile-ss)
-      autocmd Filetype tex nmap <C-c><Space>     <plug>(vimtex-view)
-      autocmd Filetype tex vmap <C-c><Space>  <ESC><plug>(vimtex-view)
-      autocmd Filetype tex imap <C-c><Space>  <ESC><plug>(vimtex-view)
-      autocmd Filetype tex nmap <C-c>c         <plug>(vimtex-errors)
-      autocmd Filetype tex vmap <C-c>c      <ESC><plug>(vimtex-errors)
-      autocmd Filetype tex imap <C-c>c      <ESC><plug>(vimtex-errors)
+      autocmd Filetype tex call DefineVimtexMappings()
     augroup END
 " }}}
+
 " Coq {{{
   Plug 'whonore/coqtail', { 'for': 'coq' }
     function! g:CoqtailHighlight()
       hi def CoqtailChecked ctermbg=236
       hi def CoqtailSent  ctermbg=237
     endfunction
+    let g:coqtail_match_shift = 1
+    let g:coqtail_indent_on_dot = 1
+    let g:coqtail_proof_diffs = 1
+
+    let g:coqtail_update_tagstack = 1
+
+    " let g:coqtail_map_prefix = '<C-c>'
+    let g:coqtail_nomap = 1
+
+    function! DefineCoqtailMappings()
+        " Coqtail control
+        nmap <buffer> <c-c>Q        <Plug>CoqStart
+        nmap <buffer> <c-c>q        <Plug>CoqStop
+        nmap <buffer> <c-c>D        <Plug>CoqToggleDebug
+        nmap <buffer> <c-c>r        <Plug>CoqRestorePanels
+        nmap <buffer> <c-c><c-c>    <Plug>CoqRestorePanels
+
+        " Checked region navigation
+        nmap <buffer> <c-c>.                <Plug>CoqToLine
+        imap <buffer> <c-c>.           <Esc><Plug>CoqToLine
+        nmap <buffer> <c-c>l             mz$<Plug>CoqToLine`z
+        imap <buffer> <c-c>l        <Esc>mz$<Plug>CoqToLine`z
+        nmap <buffer> <c-c><CR>          mz$<Plug>CoqToLine`z
+        imap <buffer> <c-c><CR>     <Esc>mz$<Plug>CoqToLine`z
+        nmap <buffer> <c-c>j                <Plug>CoqNext
+        nmap <buffer> <c-c>k                <Plug>CoqUndo
+        nmap <buffer> <c-c>h                <Plug>CoqJumpToEnd
+
+        " Goal buffer navigation
+        nmap <buffer> <c-c>g        <Plug>CoqGotoGoalStart
+        nmap <buffer> <c-c>G        <Plug>CoqGotoGoalEnd
+        nmap <buffer> <c-c>]]       <Plug>CoqGotoGoalNextStart
+        nmap <buffer> <c-c>][       <Plug>CoqGotoGoalNextEnd
+        nmap <buffer> <c-c>[[       <Plug>CoqGotoGoalPrevStart
+        nmap <buffer> <c-c>[]       <Plug>CoqGotoGoalPrevEnd
+
+        " Semantic features
+        nmap <buffer> <c-c><c-]>    <Plug>CoqGotoDef
+        nmap <buffer> <c-c>c        <Plug>CoqCheck
+        xmap <buffer> <c-c>c        <Plug>CoqCheck
+        nmap <buffer> <c-c>a        <Plug>CoqAbout
+        xmap <buffer> <c-c>a        <Plug>CoqAbout
+        nmap <buffer> <c-c>s        <Plug>CoqSearch
+        xmap <buffer> <c-c>s        <Plug>CoqSearch
+        nmap <buffer> <c-c>d        <Plug>CoqPrint
+        xmap <buffer> <c-c>d        <Plug>CoqPrint        nmap <buffer> <c-c>f        <Plug>CoqLocate
+        xmap <buffer> <c-c>f        <Plug>CoqLocate
+    endfunction
+
     augroup coqtail_mappings
       autocmd!
-      autocmd Filetype coq
-        \   nmap <buffer> <c-c>x    :CoqStart<CR>
-        \|  nmap <buffer> <c-c>z    :CoqStop<CR>
-      autocmd Filetype coq
-        \   nnoremap <buffer> <c-c>.       :CoqToLine<CR>
-        \|  inoremap <buffer> <c-c>.    <Esc>:CoqToLine<CR>
-        \|  nnoremap <buffer> <c-c>l       mz$:CoqToLine<CR>`z
-        \|  inoremap <buffer> <c-c>l    <Esc>mz$:CoqToLine<CR>`z
-        \|  nnoremap <buffer> <c-c><CR>      mz$:CoqToLine<CR>`z
-        \|  inoremap <buffer> <c-c><CR>   <Esc>mz$:CoqToLine<CR>`z
-      autocmd Filetype coq
-        \   nmap <buffer> <c-c>j         :CoqNext<CR>
-        \|  nmap <buffer> <c-c>k         :CoqUndo<CR>
-        \|  nmap <buffer> <c-c>h         :CoqJumpToEnd<CR>
-        \|  nmap <buffer> <c-c><space>       :CoqGotoGoal!<CR>
-      autocmd Filetype coq
-        \   nmap <buffer> <c-c>c  <leader>ch
-        \|  nmap <buffer> <c-c>a  <leader>ca
-        \|  nmap <buffer> <c-c>p  <leader>cp
-        \|  nmap <buffer> <c-c>n  <leader>cf
-        \|  nmap <buffer> <c-c>s  <leader>cs
-        " <leader>ch => :Coq Check
-        " <leader>ca => :Coq About
-        " <leader>cp => :Coq Print
-        " <leader>cf => :Coq Locate
-        " <leader>cs => :Coq Search
+      autocmd Filetype coq,coq-infos,coq-goals call DefineCoqtailMappings()
       autocmd Filetype coq syntax sync fromstart
     augroup END
 " }}}
+
 " Markdown {{{
-  Plug 'tpope/vim-markdown',  { 'for': 'markdown' }
+  Plug 'tpope/vim-markdown',                { 'for': 'markdown' }
     let g:markdown_fenced_languages = [
           \ 'html',
           \ 'python',
@@ -646,24 +698,25 @@ if !exists('g:vscode')
           \ 'ocaml',
           \ 'haskell'
           \ ]
-  Plug 'jtratner/vim-flavored-markdown', { 'for': 'markdown' }
+  Plug 'jtratner/vim-flavored-markdown',    { 'for': 'markdown' }
 " }}}
-" Others {{{
-  Plug 'z0mbix/vim-shfmt',    { 'for': 'sh' }
+
+" Other filetypes {{{
+  Plug 'z0mbix/vim-shfmt',                  { 'for': 'sh' }
     let g:shfmt_extra_args = '-i 2 -ci -sr'
-  Plug 'fatih/vim-go',      { 'for': 'go' }
-  Plug 'leanprover/lean.vim',   { 'for': 'lean' }
-  Plug 'idris-hackers/idris-vim', { 'for': 'idris' }
-  Plug 'LnL7/vim-nix',      { 'for': 'nix' }
-  Plug 'vim-scripts/promela.vim', { 'for': 'promela' }
-  Plug 'chrisbra/csv.vim',    { 'for': 'csv' }
-  Plug 'rust-lang/rust.vim',    { 'for': 'rust' }
+  Plug 'fatih/vim-go',                      { 'for': 'go' }
+  Plug 'leanprover/lean.vim',               { 'for': 'lean' }
+  Plug 'idris-hackers/idris-vim',           { 'for': 'idris' }
+  Plug 'LnL7/vim-nix',                      { 'for': 'nix' }
+  Plug 'vim-scripts/promela.vim',           { 'for': 'promela' }
+  Plug 'chrisbra/csv.vim',                  { 'for': 'csv' }
+  Plug 'rust-lang/rust.vim',                { 'for': 'rust' }
     " let g:rust_conceal = 1
     let g:rust_recommended_style = 0
     " let g:rust_conceal_mod_path = 1
     " let g:rust_conceal_pub = 1
 " }}}
-endif
+endif " vscode
 " }}}
 
 
@@ -693,6 +746,62 @@ if has('nvim')
                 \ 'rst',
                 \ 'vimwiki',
                 \])
+
+" lua <<EOF
+
+" -- nvim_lsp object
+" -- vim.cmd('packadd nvim-lspconfig')  -- installed as a Vim "package".
+" -- vim.cmd('packadd lsp-status.nvim')  -- installed as a Vim "package".
+
+" local nvim_lsp = require'lspconfig'
+" local lsp_status = require'lsp-status'
+
+
+" -- use LSP SymbolKinds themselves as the kind labels
+" local kind_labels_mt = {__index = function(_, k) return k end}
+" local kind_labels = {}
+" setmetatable(kind_labels, kind_labels_mt)
+
+" -- Register the progress callback
+" lsp_status.register_progress()
+" lsp_status.config({
+"     kind_labels = kind_labels,
+"     indicator_errors = "×",
+"     indicator_warnings = "!",
+"     indicator_info = "i",
+"     indicator_hint = "›",
+"     -- the default is a wide codepoint which breaks absolute and relative
+"     -- line counts if placed before airline's Z section
+"     status_symbol = "",
+" })
+
+" -- Set default client capabilities plus window/workDoneProgress
+" -- config.capabilities = vim.tbl_extend('keep', config.capabilities or {}, lsp_status.capabilities)
+
+" -- function to attach completion and diagnostics
+" -- when setting up lsp
+" local on_attach = function(client, bufnr)
+"     require'completion'.on_attach(client, bufnr)
+"     lsp_status.on_attach(client, bufnr)
+" end
+
+" -- Enable rust_analyzer
+" nvim_lsp.rust_analyzer.setup({
+"     on_attach=on_attach,
+"     capabilities = lsp_status.capabilities
+" })
+
+" -- Enable gopls
+" nvim_lsp.gopls.setup({
+"     on_attach=on_attach,
+"     capabilities = lsp_status.capabilities
+" })
+
+" EOF
+
+"   call sign_define("LspDiagnosticsSignError", {"text" : "×", "texthl" : "LspDiagnosticsSignError"})
+"   call sign_define("LspDiagnosticsSignWarning", {"text" : "•", "texthl" : "LspDiagnosticsSignWarning"})
+
 
 catch /^Vim\%((\a\+)\)\=:E117/
     " deal with it
