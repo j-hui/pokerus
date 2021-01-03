@@ -633,7 +633,8 @@ if !exists('g:vscode')
     endfunction
     let g:coqtail_match_shift = 1
     let g:coqtail_indent_on_dot = 1
-    let g:coqtail_proof_diffs = 1
+    let g:coqtail_auto_enable_proof_diffs = ""
+    " let g:coqtail_proof_diffs = 1
 
     let g:coqtail_update_tagstack = 1
 

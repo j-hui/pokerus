@@ -115,6 +115,7 @@ in
           pynvim ueberzug
           virtualenvwrapper
           mypy pylint
+          tox
         ]))
         ghp-import
         libxml2
