@@ -13,7 +13,8 @@
 "
 " Insert mode mnemonics:
 " - <C-s>: UltiSnipsExpandTrigger
-" - <C-g>{w,u,d}: Get Word / Unicode / Date
+" - <C-g>{w,u,d,s,%}: Get Word / Unicode / Date
+" - <C-g>{s,%}: Auto-pairs surround (Auto-Pairs) / jump to close
 " - <C-g><C-g>: Auto-indent
 " - <C-l>: correct speLling
 
@@ -353,12 +354,14 @@ if !exists('g:vscode')
   Plug 'deoplete-plugins/deoplete-dictionary' " Auto-complete dictionary word
   Plug 'thalesmello/webcomplete.vim'          " Auto-complete from open browser
 
-  Plug 'SirVer/ultisnips'                     " Snippet management
-    let g:UltiSnipsExpandTrigger='<C-s>'
-    let g:UltiSnipsJumpForwardTrigger='<C-s>'
-    let g:UltiSnipsJumpBackwardTrigger='<C-x>'
-  Plug 'honza/vim-snippets'                   " Std lib for snippets
-  Plug 'rbonvall/snipmate-snippets-bib'       " Snippets for .bib files
+  if !has("gui_running")
+    Plug 'SirVer/ultisnips'                     " Snippet management
+      let g:UltiSnipsExpandTrigger='<C-s>'
+      let g:UltiSnipsJumpForwardTrigger='<C-s>'
+      let g:UltiSnipsJumpBackwardTrigger='<C-x>'
+    Plug 'honza/vim-snippets'                   " Std lib for snippets
+    Plug 'rbonvall/snipmate-snippets-bib'       " Snippets for .bib files
+  endif
 endif " vscode
 " }}}
 
@@ -400,10 +403,10 @@ Plug 'tpope/vim-characterize'           " use ga to see metadata about unicode
 " Low-cost utilities that stay out of my way but are handy to keep around
 " (i.e., stuff I think should have been built into Vim/available as settings).
 
+" Normal mode {{{
 Plug 'tpope/vim-repeat'                   " User-defined dot-repeatable actions
 Plug 'tpope/vim-commentary'               " use gcc to comment things out
 Plug 'tpope/vim-surround'                 " ds, cs, ys to change text surroundings
-Plug 'tpope/vim-endwise'                  " write endings
 Plug 'tpope/vim-speeddating'              " increment/decrement dates
   let g:speeddating_no_mappings = 1       " <C-S> to increment
   " force a non-recursive map to the fallback functions
@@ -415,7 +418,6 @@ Plug 'tpope/vim-speeddating'              " increment/decrement dates
   nmap  <C-X>   <Plug>SpeedDatingDown
   xmap  <C-S>   <Plug>SpeedDatingUp
   xmap  <C-X>   <Plug>SpeedDatingDown
-
 Plug 'svermeulen/vim-cutlass'               " x and D only delete, no yank/cut
                                             " but retain cut behavior for d
   nnoremap d  d
@@ -423,25 +425,47 @@ Plug 'svermeulen/vim-cutlass'               " x and D only delete, no yank/cut
   vnoremap d  d
   nnoremap dd dd
 
-Plug 'vim-scripts/vis'                    " Use :B for block mode commands
-
 Plug 'andymass/vim-matchup'               " %-navigate user-defined pairs
-
-Plug 'matze/vim-move'                     " Move blocks in visual mode
-  vmap <C-j> <Plug>MoveBlockDown
-  vmap <C-l> <Plug>MoveBlockRight
-  vmap <C-h> <Plug>MoveBlockLeft
-  vmap <C-k> <Plug>MoveBlockUp
-
 Plug 'AndrewRadev/dsf.vim'                " Delete/change surrounding function
+
 Plug 'tommcdo/vim-exchange'               " Exchange text with repeated cx{motion}
 Plug 'AndrewRadev/sideways.vim'           " Move things sideways in lists
   nnoremap cl :SidewaysRight<cr>
   nnoremap ch :SidewaysLeft<cr>
 
-Plug 'nixon/vim-vmath'              " Basic stats on visual selection
+" }}}
+
+" Visual mode {{{
+Plug 'vim-scripts/vis'                    " Use :B for block mode commands
+Plug 'matze/vim-move'                     " Move blocks in visual mode
+  vmap <C-j> <Plug>MoveBlockDown
+  vmap <C-l> <Plug>MoveBlockRight
+  vmap <C-h> <Plug>MoveBlockLeft
+  vmap <C-k> <Plug>MoveBlockUp
+Plug 'nixon/vim-vmath'                    " Basic stats on visual selection
     vmap <expr>  ++  VMATH_YankAndAnalyse()
     nmap         ++  vip++
+
+" }}}
+
+" Insert mode {{{
+if !exists('g:vscode')
+  Plug 'tpope/vim-endwise'                " Write endings
+  Plug 'jiangmiao/auto-pairs'             " Auto-insert brackets/parens/quotes
+    let g:AutoPairsCenterLine = 0         " Preserve buffer view
+    let g:AutoPairsShortcutToggle = ''    " No need to toggle in insert mode
+    command! AutoPair call AutoPairsToggle()
+    let g:AutoPairsMapBS = 0              " Rely on <C-h> to delete pairs
+    let g:AutoPairsShortcutFastWrap = '<c-g>s'
+    let g:AutoPairsShortcutJump = '<c-g>%'
+    augroup auto_filetypes
+      autocmd!
+      autocmd Filetype html let b:AutoPairs = AutoPairsDefine({'<!--' : '-->'}, ['{'])
+    augroup END
+endif
+
+" }}}
+
 " }}}
 
 " Rich Utilities {{{
@@ -633,7 +657,7 @@ if !exists('g:vscode')
     endfunction
     let g:coqtail_match_shift = 1
     let g:coqtail_indent_on_dot = 1
-    let g:coqtail_auto_enable_proof_diffs = ""
+    let g:coqtail_auto_enable_proof_diffs = "on"
     " let g:coqtail_proof_diffs = 1
 
     let g:coqtail_update_tagstack = 1
@@ -717,6 +741,9 @@ if !exists('g:vscode')
     let g:rust_recommended_style = 0
     " let g:rust_conceal_mod_path = 1
     " let g:rust_conceal_pub = 1
+  Plug 'LucHermitte/valgrind.vim',          { 'for': 'c' }
+    let g:valgrind_arguments='--leak-check=yes '
+
 " }}}
 endif " vscode
 " }}}
