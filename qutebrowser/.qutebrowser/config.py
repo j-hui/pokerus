@@ -44,6 +44,9 @@ c.downloads.remove_finished = 696969
 
 c.tabs.last_close = 'close'
 c.tabs.width = '10%'
+c.tabs.mousewheel_switching = False
+
+c.zoom.mouse_divider = 0
 
 # Open external applications
 for site in ['zoommtg://*.zoom.us'
