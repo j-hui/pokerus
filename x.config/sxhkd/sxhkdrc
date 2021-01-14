@@ -1,60 +1,60 @@
 # Keycode names: https://github.com/baskerville/sxhkd/blob/master/src/parse.c
 
 ## help:
-ctrl + super + slash
+super + slash
     grep -E '^##' -A1 ~/.config/sxhkd/sxhkdrc | \
     tr '\n' ' ' | \
     sed 's/--/\n/g' | \
     rofi -dmenu
 
 ## kitty:
-ctrl + super + Return
+super + Return
     bspc desktop -f '^1' && xdo activate -N kitty || kitty
 
-ctrl + super + shift + Return
+super + shift + Return
     kitty
 
 ## qutebrowser:
-ctrl + super + o
+super + o
     xdo activate -N qutebrowser || qutebrowser
 
 ## google-chrome-stable:
-ctrl + super + shift + o
+super + shift + o
     bspc desktop -f '^3' && xdo activate -n google-chrome || google-chrome-stable
 
 ## clear notifications:
-ctrl + super + BackSpace
+super + BackSpace
     dunstctl close-all
 
 ## sleep:
-ctrl + super + shift + BackSpace
+super + shift + BackSpace
     xset s activate
 
 ## rofi-pass:
-ctrl + super + i
+super + i
     rofi-pass
 
 ## rofi-define:
-ctrl + super + shift + i
+super + shift + i
     ~/bin/rofi-define
 
 ## rofi run:
-{super, super + ctrl, super + ctrl + shift} + space
-    rofi -show {drun,run,ssh}
+{super, super + ctrl} + space
+    rofi -show {drun,run}
 
 ## rofi window:
-super + {Tab, grave}
+super {+ Tab, + grave}
     rofi -show {window,windowcd}
+
+## rofi greenclip:
+super + b
+    rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'
 
 ## scrot full-screen:
 Print
     scrot --focused \
         ~/Pictures/screenshots/screenshot-%Y-%m-%d-%H-%M-%S.png \
         -e 'notify-send "Captured screenshot: $f"'
-
-## rofi greenclip:
-super + ctrl + v
-    rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'
 
 # NOTE: without the sleep scrot crashes with:
 #   giblib error: couldn't grab keyboard:Resource temporarily unavailable
@@ -85,7 +85,7 @@ ctrl + super + Print
     ls -1t | head -n 1 | xargs rm -fv
 
 ## volume +/-:
-super + ctrl + {equal,minus}
+super {+ equal,+ minus}
     amixer sset Master 10%{+,-}
 
 ## XF86 volume control:
@@ -97,15 +97,11 @@ super + ctrl + {equal,minus}
     brightnessctl set {+10%,10%-}
 
 ## playerctl play/prev/next:
-super + ctrl + {backslash,bracketleft,bracketright}
+super {+ backslash, + bracketleft, + bracketright}
     playerctl {play-pause,previous,next}
 
-## polybar toggle:
-ctrl + super + b
-    polybar-msg cmd toggle
-
-## toggle dvorak
-super + ctrl + grave
+## toggle dvorak:
+super + grave
     ~/bin/toggle-kbmap
 
 #
@@ -113,51 +109,51 @@ super + ctrl + grave
 #
 
 ## sxhkd source/bspc quit:
-super + ctrl {_,+ shift +} Escape
+super {_, + shift} + Escape
     {pkill -USR1 -x sxhkd,bspc quit}
 
 ## bspc close/kill window:
-super + ctrl + {_, shift +} w
+super {_, + shift} + w
     bspc node -{c,k}
 
 ## bspc focus/swap toward direction:
-ctrl + super + {_,shift + }{h,j,k,l}
-  bspc node -{f,s} {west,south,north,east}
+super {_, + shift}{+ h, + j, + k, + l}
+  bspc node -{f,s} {west, south, north, east}
 
 ## bspc previous/next desktop:
-ctrl + super + {p, n}
+super {+ p, + n}
     bspc desktop -f {prev,next}.local
 
 ## bspc send to previous/next desktop:
-ctrl + super + shift + {p,n}
+super + shift {+ p, + n}
     bspc node -d {prev,next}.local --follow
 
 ## bspc go/send to desktop:
-ctrl + super + {_,shift + }{1-9,0}
+super {_, + shift} + {1-9,0}
     bspc {desktop -f,node -d} '^{1-9,10}'
 
 ## bspc rotate desktop:
-ctrl + super + {_, shift + } r
+super {_, + shift} + r
     bspc node @/ -R {90,270}
 
 ## bspc set fullscreen
-ctrl + super + {f,shift + f}
+super {_, + shift} + f
   bspc node -t {fullscreen,floating}
 
 ## bspc set tiled/pseudo-tiled
-ctrl + super + {t,shift + t}
+super {_, + shift} + t
     bspc node -t {tiled,pseudo_tiled}
 
 ## bspc toggle monocle:
-ctrl + super + m
+super + m
     bspc desktop -l next
 
 ## bspc toggle sticky:
-ctrl + super + shift + m
+super + shift + m
     bspc node -g sticky
 
 # # bspc toggle node flag:
-# ctrl + super + g ; {h,s,p,l,m}
+# super + g ; {h,s,p,l,m}
 #     bspc node -g {hidden,sticky,private,locked,mark}
 
 # # focus the node for the given path jump
@@ -172,15 +168,13 @@ ctrl + super + shift + m
 
 
 ## floating window move:
-ctrl + super + {Left,Down,Up,Right}
+super {+ Left, + Down, + Up, + Right}
     bspc node -v {-20 0,0 20,0 -20,20 0}
 
-## floating window expand side:
-#[expand a window by moving one of its sides outward
-ctrl + super + alt + {Left,Down,Up,Right}
+## floating window expand side (outward):
+super + alt {+ Left, + Down, + Up, + Right}
     bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
 
 ## floating window contract side:
-shift + ctrl + super + alt + {Left,Down,Up,Right}
+shift + super + alt {+ Left, + Down, + Up, + Right}
     bspc node -z {left 20 0,bottom 0 -20,top 0 20,right -20 0}
-
