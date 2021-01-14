@@ -35,7 +35,8 @@ xdotool_delay=12
 
 ## Programs to be used
 # Editor
-EDITOR='gvim -f'
+# EDITOR='gvim -f'
+EDITOR='kitty vim -f'
 
 # Browser
 BROWSER='xdg-open'
