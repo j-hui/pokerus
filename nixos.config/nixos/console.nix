@@ -85,6 +85,7 @@ in
         pv
         bc
         man-pages
+        miller
 
         # process management
         htop

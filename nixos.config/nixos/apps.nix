@@ -97,6 +97,7 @@ in
       environment.systemPackages = with pkgs; [
         pulseaudioFull
         bitwig-studio
+        carla
 
         audacity
         supercollider
@@ -108,6 +109,7 @@ in
     (mkIf cfg.dev.enable {
       environment.systemPackages = with pkgs; [
         gcc gnumake automake cmake autoconf pkg-config m4 libtool dpkg
+        valgrind
         ctags
         libqalculate wordnet aspell aspellDicts.en scowl
 
