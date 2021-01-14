@@ -267,12 +267,10 @@ endif " vscode
 " Interactive subsystems {{{
 " ----------------------------------------------------------------------------
 if !exists('g:vscode')
-  Plug 'junegunn/vader.vim'
-
-  Plug 'mbbill/undotree'                  " See undo history
+  Plug 'mbbill/undotree'                        " See undo history
     nnoremap <C-w>u :UndotreeToggle<cr>:UndotreeFocus<cr>
 
-  Plug 'junegunn/fzf.vim'                 " Fuzzy finder
+  Plug 'junegunn/fzf.vim'                       " Fuzzy finder
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
     let g:fzf_preview_window = 'right:60%'
     nnoremap <C-g>f   :Files  <space>
@@ -329,20 +327,23 @@ if !exists('g:vscode')
     nmap <silent> <C-l>c      <Plug>(ale_hover)
     nmap <silent> <C-l>x      <Plug>(ale_fix)
 
-  Plug 'francoiscabrol/ranger.vim'
-    if has('nvim') " nvim dependency
-      Plug 'rbgrouleff/bclose.vim'
-    endif
-    let g:ranger_replace_netrw = 1
-    let g:ranger_map_keys = 0
-    let g:ranger_command_override = 'ranger --cmd "set show_hidden=true"'
+  " Plug 'francoiscabrol/ranger.vim'
+  "   if has('nvim') " nvim dependency
+  "     Plug 'rbgrouleff/bclose.vim'
+  "   endif
+  "   let g:ranger_replace_netrw = 1
+  "   let g:ranger_map_keys = 0
+  "   let g:ranger_command_override = 'ranger --cmd "set show_hidden=true"'
 
-    map <C-w><space> :Ranger<cr>
-    map <C-w>r :RangerCurrentDirectory<cr>
-    map <C-w>R :RangerWorkingDirectory<cr>
+  "   map <C-w><space> :Ranger<cr>
+  "   map <C-w>r :RangerCurrentDirectory<cr>
+  "   map <C-w>R :RangerWorkingDirectory<cr>
 
   if has('nvim')
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    Plug 'fszymanski/deoplete-emoji'              " Auto-complete emojus
+    Plug 'deoplete-plugins/deoplete-dictionary'   " Auto-complete dictionary word
+    Plug 'thalesmello/webcomplete.vim'            " Auto-complete from open browser
   " else
     " Plug 'Shougo/deoplete.nvim'
     " Plug 'roxma/nvim-yarp'
@@ -350,9 +351,11 @@ if !exists('g:vscode')
   endif
   let g:deoplete#enable_at_startup = 1
 
-  Plug 'fszymanski/deoplete-emoji'            " Auto-complete emojus
-  Plug 'deoplete-plugins/deoplete-dictionary' " Auto-complete dictionary word
-  Plug 'thalesmello/webcomplete.vim'          " Auto-complete from open browser
+  Plug 'pelodelfuego/vim-swoop'                 " Fast find and replace
+    let g:swoopUseDefaultKeyMap = 0             " Just invoke :Swoop
+
+  Plug 'cosminadrianpopescu/vim-tail'           " Make vim behave like tail -f
+  Plug 'itchyny/calendar.vim'                   " Calendar app in Vim
 
   if !has("gui_running")
     Plug 'SirVer/ultisnips'                     " Snippet management
@@ -387,7 +390,7 @@ if !exists('g:vscode')
 endif
 " }}}
 
-" Drawing {{{
+" Writing {{{
 " ----------------------------------------------------------------------------
 Plug 'gyim/vim-boxdraw'                 " Draw ASCII text boxes
 Plug 'joom/latex-unicoder.vim'          " Useful for 'pretty' Coq/Lean files
@@ -395,7 +398,8 @@ Plug 'joom/latex-unicoder.vim'          " Useful for 'pretty' Coq/Lean files
   let g:unicoder_cancel_insert = 1
   let g:unicoder_cancel_visual = 1
   inoremap <C-g>u <Esc>:call unicoder#start(1)<CR>
-Plug 'tpope/vim-characterize'           " use ga to see metadata about unicode
+Plug 'tpope/vim-characterize'           " Use ga to see metadata about unicode
+Plug 'godlygeek/tabular'                " Align text
 " }}}
 
 " Simple Utilities {{{
@@ -452,12 +456,16 @@ Plug 'nixon/vim-vmath'                    " Basic stats on visual selection
 if !exists('g:vscode')
   Plug 'tpope/vim-endwise'                " Write endings
   Plug 'jiangmiao/auto-pairs'             " Auto-insert brackets/parens/quotes
+  " Plug 'LunarWatcher/auto-pairs'          " Auto-insert brackets/parens/quotes
     let g:AutoPairsCenterLine = 0         " Preserve buffer view
     let g:AutoPairsShortcutToggle = ''    " No need to toggle in insert mode
     command! AutoPair call AutoPairsToggle()
-    let g:AutoPairsMapBS = 0              " Rely on <C-h> to delete pairs
+    let g:AutoPairsMapCh = 0              " Use <C-h> to only backspace
     let g:AutoPairsShortcutFastWrap = '<c-g>s'
     let g:AutoPairsShortcutJump = '<c-g>%'
+    " Don't auto-pair ' --- used as apostrophe in prose and prime for OCaml
+    " let g:AutoPairs = {'(':')', '[':']', '{':'}','"':'"', '`':'`'}
+
     augroup auto_filetypes
       autocmd!
       autocmd Filetype html let b:AutoPairs = AutoPairsDefine({'<!--' : '-->'}, ['{'])
@@ -517,41 +525,41 @@ if !exists('g:vscode')
     omap t <Plug>Sneak_t
     omap T <Plug>Sneak_T
 
-  Plug 'junegunn/vim-easy-align'      " Vertically align text by character
-    xmap ga <Plug>(EasyAlign)
-    nmap ga <Plug>(EasyAlign)
-    let g:easy_align_bypass_fold = 1
-    let g:easy_align_delimiters = {
-      \ '>': { 'pattern': '>>\|=>\|>' },
-      \ '\': { 'pattern': '\\' },
-      \ '/': {
-      \   'pattern': '//\+\|/\*\|\*/',
-      \   'delimiter_align': 'l',
-      \   'ignore_groups': ['!Comment']
-      \   },
-      \ ']': {
-      \   'pattern':     '\]\zs',
-      \   'left_margin':   0,
-      \   'right_margin':  1,
-      \   'stick_to_left': 0
-      \   },
-      \ ')': {
-      \   'pattern':     ')\zs',
-      \   'left_margin':   0,
-      \   'right_margin':  1,
-      \   'stick_to_left': 0
-      \   },
-      \ 'f': {
-      \   'pattern': ' \(\S\+(\)\@=',
-      \   'left_margin': 0,
-      \   'right_margin': 0
-      \   },
-      \ 'd': {
-      \   'pattern': ' \ze\S\+\s*[;=]',
-      \   'left_margin': 0,
-      \   'right_margin': 0
-      \   }
-      \ }
+  " Plug 'junegunn/vim-easy-align'      " Vertically align text by character
+  "   xmap ga <Plug>(EasyAlign)
+  "   nmap ga <Plug>(EasyAlign)
+  "   let g:easy_align_bypass_fold = 1
+  "   let g:easy_align_delimiters = {
+  "     \ '>': { 'pattern': '>>\|=>\|>' },
+  "     \ '\': { 'pattern': '\\' },
+  "     \ '/': {
+  "     \   'pattern': '//\+\|/\*\|\*/',
+  "     \   'delimiter_align': 'l',
+  "     \   'ignore_groups': ['!Comment']
+  "     \   },
+  "     \ ']': {
+  "     \   'pattern':     '\]\zs',
+  "     \   'left_margin':   0,
+  "     \   'right_margin':  1,
+  "     \   'stick_to_left': 0
+  "     \   },
+  "     \ ')': {
+  "     \   'pattern':     ')\zs',
+  "     \   'left_margin':   0,
+  "     \   'right_margin':  1,
+  "     \   'stick_to_left': 0
+  "     \   },
+  "     \ 'f': {
+  "     \   'pattern': ' \(\S\+(\)\@=',
+  "     \   'left_margin': 0,
+  "     \   'right_margin': 0
+  "     \   },
+  "     \ 'd': {
+  "     \   'pattern': ' \ze\S\+\s*[;=]',
+  "     \   'left_margin': 0,
+  "     \   'right_margin': 0
+  "     \   }
+  "     \ }
 
   Plug 'svermeulen/vim-yoink'       " Yoink (yank) ring
     " nmap p <plug>(YoinkPaste_p)
@@ -657,7 +665,7 @@ if !exists('g:vscode')
     endfunction
     let g:coqtail_match_shift = 1
     let g:coqtail_indent_on_dot = 1
-    let g:coqtail_auto_enable_proof_diffs = "on"
+    let g:coqtail_auto_set_proof_diffs = "on"
     " let g:coqtail_proof_diffs = 1
 
     let g:coqtail_update_tagstack = 1
@@ -714,17 +722,21 @@ if !exists('g:vscode')
 " }}}
 
 " Markdown {{{
-  Plug 'tpope/vim-markdown',                { 'for': 'markdown' }
-    let g:markdown_fenced_languages = [
-          \ 'html',
-          \ 'python',
-          \ 'bash=sh',
-          \ 'c',
-          \ 'cpp',
-          \ 'ocaml',
-          \ 'haskell'
-          \ ]
-  Plug 'jtratner/vim-flavored-markdown',    { 'for': 'markdown' }
+  Plug 'plasticboy/vim-markdown',           { 'for': 'markdown' }
+    let g:vim_markdown_math = 1
+    let g:vim_markdown_auto_insert_bullets = 0
+    inoremap <C--> <CR>-woeiu
+  " Plug 'tpope/vim-markdown',                { 'for': 'markdown' }
+    " let g:markdown_fenced_languages = [
+    "       \ 'html',
+    "       \ 'python',
+    "       \ 'bash=sh',
+    "       \ 'c',
+    "       \ 'cpp',
+    "       \ 'ocaml',
+    "       \ 'haskell'
+    "       \ ]
+  " Plug 'jtratner/vim-flavored-markdown',    { 'for': 'markdown' }
 " }}}
 
 " Other filetypes {{{
@@ -1321,12 +1333,11 @@ augroup END " }}}
 
 augroup markdown_settings " {{{
   autocmd!
-  autocmd BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
-  autocmd Filetype ghmarkdown setlocal
-        \ tabstop=2
+  autocmd Filetype markdown setlocal
+        \ tabstop=4
         \ expandtab
-        \ shiftwidth=2
-        \ softtabstop=2
+        \ shiftwidth=4
+        \ softtabstop=4
         \ spell
 augroup END " }}}
 
