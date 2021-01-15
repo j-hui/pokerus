@@ -295,76 +295,64 @@ if !exists('g:vscode')
 
   Plug 'tpope/vim-fugitive'                     " Git interaction
 
-  Plug 'dense-analysis/ale'                     " Asynchronous linting using LSP
-    let g:ale_sign_column_always = 1
-    let g:ale_lint_delay = 500
-    let g:ale_echo_msg_error_str = 'Err'
-    let g:ale_echo_msg_warning_str = 'Warn'
-    let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-    let g:ale_linters = {
-          \ 'rust': ['analyzer', 'cargo', 'rustc'],
-          \}
-    let g:ale_fixers = {
-          \ 'rust': ['rustfmt'],
-          \ 'bib': ['bibclean'],
-          \ '*': ['trim_whitespace', 'remove_trailing_lines'],
-          \}
-
-    nmap <silent> [a <Plug>(ale_previous_wrap)
-    nmap <silent> ]a <Plug>(ale_next_wrap)
-
-    nmap <silent> <C-l>q      <Plug>(ale_toggle)
-    nmap <silent> <C-l><C-]>  <Plug>(ale_go_to_definition)
-    nmap <silent> <C-l>gg     <Plug>(ale_go_to_definition)
-    nmap <silent> <C-l>gs     <Plug>(ale_go_to_definition_in_split)
-    nmap <silent> <C-l>gv     <Plug>(ale_go_to_definition_in_vsplit)
-
-    nmap <silent> <C-l>ff     <Plug>(ale_find_references)
-    nmap <silent> <C-l>fr     :ALERepeatSelection<CR>
-    nmap <silent> <C-l>fs     :ALEFindReferences -split<CR>
-    nmap <silent> <C-l>fv     :ALEFindReferences -vsplit<CR>
-
-    nmap <silent> <C-l>c      <Plug>(ale_hover)
-    nmap <silent> <C-l>x      <Plug>(ale_fix)
-
-  " Plug 'francoiscabrol/ranger.vim'
-  "   if has('nvim') " nvim dependency
-  "     Plug 'rbgrouleff/bclose.vim'
-  "   endif
-  "   let g:ranger_replace_netrw = 1
-  "   let g:ranger_map_keys = 0
-  "   let g:ranger_command_override = 'ranger --cmd "set show_hidden=true"'
-
-  "   map <C-w><space> :Ranger<cr>
-  "   map <C-w>r :RangerCurrentDirectory<cr>
-  "   map <C-w>R :RangerWorkingDirectory<cr>
-
-  if has('nvim')
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    Plug 'fszymanski/deoplete-emoji'              " Auto-complete emojus
-    Plug 'deoplete-plugins/deoplete-dictionary'   " Auto-complete dictionary word
-    Plug 'thalesmello/webcomplete.vim'            " Auto-complete from open browser
-  " else
-    " Plug 'Shougo/deoplete.nvim'
-    " Plug 'roxma/nvim-yarp'
-    " Plug 'roxma/vim-hug-neovim-rpc'
-  endif
-  let g:deoplete#enable_at_startup = 1
-
   Plug 'pelodelfuego/vim-swoop'                 " Fast find and replace
     let g:swoopUseDefaultKeyMap = 0             " Just invoke :Swoop
 
   Plug 'cosminadrianpopescu/vim-tail'           " Make vim behave like tail -f
   Plug 'itchyny/calendar.vim'                   " Calendar app in Vim
 
-  if !has("gui_running")
+  if has('nvim')
+    " Only load heavier, asynchronous plugins in nvim. Keep vim light.
+
+    Plug 'dense-analysis/ale'                   " Asynchronous linting using LSP
+      let g:ale_sign_column_always = 1
+      let g:ale_lint_delay = 500
+      let g:ale_echo_msg_error_str = 'Err'
+      let g:ale_echo_msg_warning_str = 'Warn'
+      let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+      let g:ale_linters = {
+            \ 'rust': ['analyzer', 'cargo', 'rustc'],
+            \}
+      let g:ale_fixers = {
+            \ 'rust': ['rustfmt'],
+            \ 'bib': ['bibclean'],
+            \ '*': ['trim_whitespace', 'remove_trailing_lines'],
+            \}
+
+      nmap <silent> [a <Plug>(ale_previous_wrap)
+      nmap <silent> ]a <Plug>(ale_next_wrap)
+
+      nmap <silent> <C-l>q      <Plug>(ale_toggle)
+      nmap <silent> <C-l><C-]>  <Plug>(ale_go_to_definition)
+      nmap <silent> <C-l>gg     <Plug>(ale_go_to_definition)
+      nmap <silent> <C-l>gs     <Plug>(ale_go_to_definition_in_split)
+      nmap <silent> <C-l>gv     <Plug>(ale_go_to_definition_in_vsplit)
+
+      nmap <silent> <C-l>ff     <Plug>(ale_find_references)
+      nmap <silent> <C-l>fr     :ALERepeatSelection<CR>
+      nmap <silent> <C-l>fs     :ALEFindReferences -split<CR>
+      nmap <silent> <C-l>fv     :ALEFindReferences -vsplit<CR>
+
+      nmap <silent> <C-l>c      <Plug>(ale_hover)
+      nmap <silent> <C-l>x      <Plug>(ale_fix)
+
+    " Asynchronous completion
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    Plug 'fszymanski/deoplete-emoji'              " Auto-complete emojus
+    Plug 'deoplete-plugins/deoplete-dictionary'   " Auto-complete dictionary word
+    Plug 'thalesmello/webcomplete.vim'            " Auto-complete from open browser
+    let g:deoplete#enable_at_startup = 1
+
+
     Plug 'SirVer/ultisnips'                     " Snippet management
       let g:UltiSnipsExpandTrigger='<C-s>'
       let g:UltiSnipsJumpForwardTrigger='<C-s>'
       let g:UltiSnipsJumpBackwardTrigger='<C-x>'
     Plug 'honza/vim-snippets'                   " Std lib for snippets
     Plug 'rbonvall/snipmate-snippets-bib'       " Snippets for .bib files
-  endif
+
+  endif " has('nvim')
+
 endif " vscode
 " }}}
 
@@ -486,6 +474,7 @@ if !exists('g:vscode')
     let g:wildfire_objects = {
         \ "*" : ["i'", 'i"', "i)", "i]", "i}"],
         \ "html,xml" : ["at", "it"],
+        \ "vim" : ["i<"],
     \ }
 
   Plug 'AndrewRadev/splitjoin.vim'            " Toggle between single-/multi-line syntax
@@ -525,42 +514,6 @@ if !exists('g:vscode')
     omap t <Plug>Sneak_t
     omap T <Plug>Sneak_T
 
-  " Plug 'junegunn/vim-easy-align'      " Vertically align text by character
-  "   xmap ga <Plug>(EasyAlign)
-  "   nmap ga <Plug>(EasyAlign)
-  "   let g:easy_align_bypass_fold = 1
-  "   let g:easy_align_delimiters = {
-  "     \ '>': { 'pattern': '>>\|=>\|>' },
-  "     \ '\': { 'pattern': '\\' },
-  "     \ '/': {
-  "     \   'pattern': '//\+\|/\*\|\*/',
-  "     \   'delimiter_align': 'l',
-  "     \   'ignore_groups': ['!Comment']
-  "     \   },
-  "     \ ']': {
-  "     \   'pattern':     '\]\zs',
-  "     \   'left_margin':   0,
-  "     \   'right_margin':  1,
-  "     \   'stick_to_left': 0
-  "     \   },
-  "     \ ')': {
-  "     \   'pattern':     ')\zs',
-  "     \   'left_margin':   0,
-  "     \   'right_margin':  1,
-  "     \   'stick_to_left': 0
-  "     \   },
-  "     \ 'f': {
-  "     \   'pattern': ' \(\S\+(\)\@=',
-  "     \   'left_margin': 0,
-  "     \   'right_margin': 0
-  "     \   },
-  "     \ 'd': {
-  "     \   'pattern': ' \ze\S\+\s*[;=]',
-  "     \   'left_margin': 0,
-  "     \   'right_margin': 0
-  "     \   }
-  "     \ }
-
   Plug 'svermeulen/vim-yoink'       " Yoink (yank) ring
     " nmap p <plug>(YoinkPaste_p)
     " nmap P <plug>(YoinkPaste_P)
@@ -596,8 +549,8 @@ if !exists('g:vscode')
     vnoremap <silent> gm :call InterestingWords('v')<cr>
     nnoremap <silent> gM :call UncolorAllWords()<cr>
 
-    nnoremap <silent> ]g :call WordNavigation(1)<cr>
-    nnoremap <silent> [g :call WordNavigation(0)<cr>
+    nnoremap <silent> m] :call WordNavigation(1)<cr>
+    nnoremap <silent> m[ :call WordNavigation(0)<cr>
 
     command! Noh noh | call UncolorAllWords()
 
