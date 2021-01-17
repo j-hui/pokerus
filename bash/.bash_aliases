@@ -86,7 +86,7 @@ stty -ixon # enable XON/XOFF flow control (whatever that means)
 
 if which exa &> /dev/null; then
     alias ll='exa -lagF'
-    alias la='exa -A'
+    alias la='exa -a'
     alias l='exa -F'
 else
     alias ll='ls -lagF'
