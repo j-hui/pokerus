@@ -9,6 +9,7 @@
     br = branch
     ci = commit
     st = status
+    rem = remote -v
     unstage = reset HEAD --
     last = log -l HEAD
     visual = !gitk

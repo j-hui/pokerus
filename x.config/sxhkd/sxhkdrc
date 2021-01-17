@@ -52,6 +52,7 @@ super + b
 
 ## scrot full-screen:
 Print
+    mkdir -p ~/Pictures/screenshots && \
     scrot --focused \
         ~/Pictures/screenshots/screenshot-%Y-%m-%d-%H-%M-%S.png \
         -e 'notify-send "Captured screenshot: $f"'
@@ -60,6 +61,7 @@ Print
 #   giblib error: couldn't grab keyboard:Resource temporarily unavailable
 ## scrot select:
 shift + Print
+    mkdir -p ~/Pictures/screenshots && \
     sleep 0.3 && \
     scrot --select --freeze \
         ~/Pictures/screenshots/screenshot-%Y-%m-%d-%H-%M-%S.png \
@@ -67,6 +69,7 @@ shift + Print
 
 ## copy + delete most recent screenshot:
 super + Print
+    mkdir -p ~/Pictures/screenshots && \
     cd ~/Pictures/screenshots && \
     ls -1t | head -n 1 | xargs -r xclip -selection clipboard -t image/png && \
     ls -1t | head -n 1 | xargs -r notify-send "Copied + deleted screenshot" && \
@@ -74,12 +77,14 @@ super + Print
 
 ## copy most recent screenshot:
 super + shift + Print
+    mkdir -p ~/Pictures/screenshots && \
     cd ~/Pictures/screenshots && \
     ls -1t | head -n 1 | xargs -r xclip -selection clipboard -t image/png && \
     ls -1t | head -n 1 | xargs -r notify-send "Copied screenshot"
 
 ## delete most recent screenshot:
 ctrl + super + Print
+    mkdir -p ~/Pictures/screenshots && \
     cd ~/Pictures/screenshots && \
     ls -1t | head -n 1 | xargs -r notify-send "Deleted screenshot" && \
     ls -1t | head -n 1 | xargs rm -fv
