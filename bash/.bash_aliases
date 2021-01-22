@@ -44,7 +44,8 @@ if which rg &> /dev/null; then
     alias rgv='rg --smart-case --type coq'
 fi
 
-### Vim
+### vim/nvim
+
 if which nvim &> /dev/null; then
     export EDITOR=nvim
 
@@ -60,6 +61,34 @@ elif which vim &> /dev/null; then
 fi
 
 mkdir -p ~/.tmp/backup ~/.tmp/swp ~/.tmp/undo
+
+
+### gcalcli
+if which gcalcli &> /dev/null; then
+    gcal () {
+        if [ "$#" -lt 1 ]; then
+            echo "Today's agenda:"
+            gcalcli agenda now 23:59:59
+            return
+        fi
+        case "$1" in
+
+        today)
+            echo "Today's agenda:"
+            gcalcli agenda 00:00:00 23:59:59
+            ;;
+
+        tmrw|tomorrow)
+            echo "Tomorrow's agenda:"
+            gcalcli agenda "tomorrow 00:00:00" "tomorrow 23:59:59"
+            ;;
+
+        *)
+            gcalcli "$@"
+                ;;
+        esac
+    }
+fi
 
 
 ### OS-specific configuration
