@@ -108,7 +108,7 @@ in
 
         # hardware management
         smartmontools lsof pciutils glxinfo acpi
-        radeontop lshw mcelog fwts
+        radeontop lshw mcelog fwts lm_sensors
 
       ];
 
