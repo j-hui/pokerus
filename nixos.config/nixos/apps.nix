@@ -99,6 +99,8 @@ in
         bitwig-studio
         carla
 
+        # surge
+
         audacity
         supercollider
         haskellPackages.tidal
