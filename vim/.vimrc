@@ -132,6 +132,14 @@ map <F8>
 set shell=bash
 " }}}
 
+" Avoid E173 (vim refuses to close with unvisited buffers) {{{
+" ----------------------------------------------------------------------------
+if argc() > 1
+  silent blast " load last buffer
+  silent bfirst " switch back to the first
+endif
+" }}}
+
 " }}}
 
 " ============================================================================
