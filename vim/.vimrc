@@ -320,6 +320,7 @@ if !exists('g:vscode')
       let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
       let g:ale_linters = {
             \ 'rust': ['analyzer', 'cargo', 'rustc'],
+            \ 'tex': ['proselint', 'chktex'],
             \}
       let g:ale_fixers = {
             \ 'rust': ['rustfmt'],
@@ -1000,6 +1001,8 @@ set formatoptions-=c  " Don't auto-wrap comments either
 " Wrangle folds from jumping
 nnoremap za zazz
 nnoremap zi zizz
+
+nnoremap Q zazz
 " }}}
 
 " Navigation {{{
