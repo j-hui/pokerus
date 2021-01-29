@@ -22,12 +22,23 @@
 " Core/plumbing/hacks {{{
 " ============================================================================
 
+if 0
+ " Change to 1 if doing a minimal .vimrc test
+ set nocompatible
+ filetype plugin indent on
+ syntax enable
+ call plug#begin('~/.vimplugins/plugged')
+  " Add specific plugins here
+ call plug#end()
+ finish
+endif
+
 " Note: these are already turned on by vim-plug
 set nocompatible
 filetype plugin on
 syntax on
 
-" Input {{{
+" Input {{
 " ----------------------------------------------------------------------------
 set mouse=a       " Mouse interaction
 
@@ -52,6 +63,9 @@ let &t_Ce = "\e[4:0m"
 let &t_ut=''
 
 set lazyredraw
+
+" F option supresses output when plugins call :echo{,m}
+" set shortmess-=F
 " }}}
 
 " Clipboard {{{
@@ -370,6 +384,9 @@ endif " vscode
 if !exists('g:vscode')
   Plug 'moll/vim-bbye'
   Plug 'zhaocai/GoldenView.Vim'       " Split buffer size management
+    let g:goldenview__enable_default_mapping = 0
+    command! GoldenViewToggle ToggleGoldenViewAutoResize
+    " nmap <silent> <S-F8> <Plug>GoldenViewSwitchToggle
   Plug 'AndrewRadev/bufferize.vim'    " Command contents in buffer
   Plug 'AndrewRadev/linediff.vim'     " Vimdiff line ranges
 endif
@@ -466,6 +483,7 @@ if !exists('g:vscode')
     augroup auto_filetypes
       autocmd!
       autocmd Filetype html let b:AutoPairs = AutoPairsDefine({'<!--' : '-->'}, ['{'])
+      autocmd Filetype tex let b:AutoPairs = AutoPairsDefine({}, ["'", "`"])
     augroup END
 endif
 
@@ -573,7 +591,7 @@ if !exists('g:vscode')
 
 " TeX/LaTeX {{{
   Plug 'lervag/vimtex',   { 'for': 'tex' }    " TeX/LaTeX
-    let g:tex_flavor='latex'
+    let g:tex_flavor = 'latex'
     let g:vimtex_compiler_latexmk = {
       \ 'continuous' : 0,
       \}
@@ -588,11 +606,12 @@ if !exists('g:vscode')
       \ 'Overfull',
       \]
 
-    let g:tex_conceal='abdmg'
-    let g:vimtex_mappings_enabled=0
-    let g:vimtex_imaps_enabled=0
-    let g:vimtex_view_method='zathura'
-    let g:vimtex_complete_enabled=1
+    let g:tex_conceal = 'abdmg'
+    let g:vimtex_mappings_enabled = 0
+    let g:vimtex_imaps_enabled = 0
+    let g:vimtex_view_method = 'zathura'
+    let g:vimtex_complete_enabled = 1
+    " let g:vimtex_disable_recursive_main_file_detection = 1
 
     function! DefineVimtexMappings()
       imap <buffer> <C-]>             <plug>(vimtex-delim-close)
@@ -628,7 +647,6 @@ if !exists('g:vscode')
     let g:coqtail_match_shift = 1
     let g:coqtail_indent_on_dot = 1
     let g:coqtail_auto_set_proof_diffs = "on"
-    " let g:coqtail_proof_diffs = 1
 
     let g:coqtail_update_tagstack = 1
 
@@ -749,65 +767,11 @@ if has('nvim')
                 \ 'rst',
                 \ 'vimwiki',
                 \])
-
-" lua <<EOF
-
-" -- nvim_lsp object
-" -- vim.cmd('packadd nvim-lspconfig')  -- installed as a Vim "package".
-" -- vim.cmd('packadd lsp-status.nvim')  -- installed as a Vim "package".
-
-" local nvim_lsp = require'lspconfig'
-" local lsp_status = require'lsp-status'
-
-
-" -- use LSP SymbolKinds themselves as the kind labels
-" local kind_labels_mt = {__index = function(_, k) return k end}
-" local kind_labels = {}
-" setmetatable(kind_labels, kind_labels_mt)
-
-" -- Register the progress callback
-" lsp_status.register_progress()
-" lsp_status.config({
-"     kind_labels = kind_labels,
-"     indicator_errors = "×",
-"     indicator_warnings = "!",
-"     indicator_info = "i",
-"     indicator_hint = "›",
-"     -- the default is a wide codepoint which breaks absolute and relative
-"     -- line counts if placed before airline's Z section
-"     status_symbol = "",
-" })
-
-" -- Set default client capabilities plus window/workDoneProgress
-" -- config.capabilities = vim.tbl_extend('keep', config.capabilities or {}, lsp_status.capabilities)
-
-" -- function to attach completion and diagnostics
-" -- when setting up lsp
-" local on_attach = function(client, bufnr)
-"     require'completion'.on_attach(client, bufnr)
-"     lsp_status.on_attach(client, bufnr)
-" end
-
-" -- Enable rust_analyzer
-" nvim_lsp.rust_analyzer.setup({
-"     on_attach=on_attach,
-"     capabilities = lsp_status.capabilities
-" })
-
-" -- Enable gopls
-" nvim_lsp.gopls.setup({
-"     on_attach=on_attach,
-"     capabilities = lsp_status.capabilities
-" })
-
-" EOF
-
-"   call sign_define("LspDiagnosticsSignError", {"text" : "×", "texthl" : "LspDiagnosticsSignError"})
-"   call sign_define("LspDiagnosticsSignWarning", {"text" : "•", "texthl" : "LspDiagnosticsSignWarning"})
-
-
-catch /^Vim\%((\a\+)\)\=:E117/
-    " deal with it
+  catch /^Vim\%((\a\+)\)\=:E117/
+    echom 'deoplete not installed, run :PlugInstall'
+  catch /^Vim\%((\a\+)\)\=:E121/
+    echom 'deoplete not installed, run :PlugInstall'
+  catch /^Vim\%((\a\+)\)\=:E116/
     echom 'deoplete not installed, run :PlugInstall'
   endtry
 endif
