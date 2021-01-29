@@ -70,26 +70,28 @@ set lazyredraw
 
 " Clipboard {{{
 " ----------------------------------------------------------------------------
-if system('uname -s') == "Darwin\n"
-  "OSX
+let os = substitute(system('uname'), "\n", "", "")
+if os == "Darwin"
   set clipboard=unnamed
-else
-  "Linux
+elseif os == "Linux"
   set clipboard=unnamedplus
 endif
-" xclip doesn't seep to work as reliably as xsel
-let g:clipboard = {
-    \   'name': 'xsel_override',
-    \   'copy': {
-    \    '+': 'xsel --input --clipboard',
-    \    '*': 'xsel --input --primary',
-    \  },
-    \   'paste': {
-    \    '+': 'xsel --output --clipboard',
-    \    '*': 'xsel --output --primary',
-    \   },
-    \   'cache_enabled': 1,
-    \ }
+
+if $DISPLAY != ""
+  " xclip doesn't seep to work as reliably as xsel
+  let g:clipboard = {
+      \   'name': 'xsel_override',
+      \   'copy': {
+      \    '+': 'xsel --input --clipboard',
+      \    '*': 'xsel --input --primary',
+      \  },
+      \   'paste': {
+      \    '+': 'xsel --output --clipboard',
+      \    '*': 'xsel --output --primary',
+      \   },
+      \   'cache_enabled': 1,
+      \ }
+endif
 " }}}
 
 " Backup {{{
