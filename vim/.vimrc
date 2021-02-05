@@ -343,6 +343,7 @@ if !exists('g:vscode')
             \ 'bib': ['bibclean'],
             \ '*': ['trim_whitespace', 'remove_trailing_lines'],
             \}
+      let g:ale_tex_chktex_options = '-n1 -n36 -n26'
 
       nmap <silent> [a <Plug>(ale_previous_wrap)
       nmap <silent> ]a <Plug>(ale_next_wrap)
@@ -737,7 +738,7 @@ if !exists('g:vscode')
     " let g:rust_conceal_pub = 1
   Plug 'LucHermitte/valgrind.vim',          { 'for': 'c' }
     let g:valgrind_arguments='--leak-check=yes '
-
+  Plug 'dag/vim-fish',                      { 'for': 'fish' }
 " }}}
 endif " vscode
 " }}}
