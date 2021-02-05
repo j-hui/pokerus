@@ -15,6 +15,22 @@ in
       machine-id.source = "/persist/etc/machine-id";
     };
 
+    # systemd.tmpfiles.rules = [
+      # "d /var/lib/libvirt 644 root root - -"
+      # "L /var/lib/libvirt/storage - - - - /persist/var/lib/libvirt/storage"
+      # "L /var/lib/libvirt/images - - - - /persist/var/lib/libvirt/images"
+      # "L /var/lib/libvirt/qemu - - - - /persist/var/lib/libvirt/qemu"
+      # "L /var/lib/libvirt/secrets - - - - /persist/var/lib/libvirt/secrets"
+      # "L /var/lib/libvirt/nwfilter - - - - /persist/var/lib/libvirt/nwfilter"
+      # "L /var/lib/libvirt/dnsmasq - - - - /persist/var/lib/libvirt/dnsmasq"
+      # "L /var/lib/libvirt/qemu.conf - - - - /persist/var/lib/libvirt/qemu.conf"
+    # ];
+
+    security.sudo.extraConfig = ''
+      # rollback results in sudo lectures after each reboot
+      Defaults lecture = never
+    '';
+
     boot.initrd.postDeviceCommands = pkgs.lib.mkBefore ''
       mkdir -p /mnt
 

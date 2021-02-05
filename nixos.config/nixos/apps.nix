@@ -72,6 +72,7 @@ in
         inkscape gimp tuxpaint drawing gthumb
         zathura mupdf
         pdftk
+        libreoffice
       ];
     })
 
@@ -105,6 +106,20 @@ in
         supercollider
         haskellPackages.tidal
         # unstable.jack2 unstable.libjack2 unstable.qjackctl
+      ];
+
+      environment.variables = {
+        VST_PATH = "/nix/var/nix/profiles/default/lib/vst:/var/run/current-system/sw/lib/vst:~/.vst";
+        LXVST_PATH = "/nix/var/nix/profiles/default/lib/lxvst:/var/run/current-system/sw/lib/lxvst:~/.lxvst";
+        LADSPA_PATH = "/nix/var/nix/profiles/default/lib/ladspa:/var/run/current-system/sw/lib/ladspa:~/.ladspa";
+        LV2_PATH = "/nix/var/nix/profiles/default/lib/lv2:/var/run/current-system/sw/lib/lv2:~/.lv2";
+        DSSI_PATH = "/nix/var/nix/profiles/default/lib/dssi:/var/run/current-system/sw/lib/dssi:~/.dssi";
+      };
+      security.pam.loginLimits = [
+        { domain = "@audio"; item = "memlock"; type = "-"; value = "unlimited"; }
+        { domain = "@audio"; item = "rtprio"; type = "-"; value = "99"; }
+        { domain = "@audio"; item = "nofile"; type = "soft"; value = "99999"; }
+        { domain = "@audio"; item = "nofile"; type = "hard"; value = "99999"; }
       ];
     })
 
@@ -164,3 +179,4 @@ in
     #   configFile = "/home/j-hui/.config/matterbridge/matterbridge.toml";
     # };
 }
+#  vim: set ts=4 sw=2 tw=80 et ft=nix:
