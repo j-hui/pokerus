@@ -55,6 +55,9 @@ fi
 
 mkdir -p ~/.tmp/backup ~/.tmp/swp ~/.tmp/undo
 
+### nnn
+export NNN_FIFO='/tmp/nnn.fifo'
+export NNN_PLUG='o:fzopen;f:fzfcd;m:mimelist;p:preview-tabbed;d:dragdrop'
 
 ### gcalcli
 if which gcalcli &> /dev/null; then
@@ -87,9 +90,22 @@ fi
 export RIPGREP_CONFIG_PATH=~/.config/ripgrep/ripgreprc
 
 ### thefuck
-
 if which thefuck &> /dev/null; then
     eval "$(thefuck --alias)"
+fi
+
+### kitty
+if which kitty &> /dev/null; then
+    alias ssh='kitty +kitten ssh'
+    alias kssh='kitty +kitten ssh'
+    alias kdiff='kitty +kitten diff'
+    alias icat='kitty +kitten icat --align left'
+fi
+
+### mimeo
+if which mimeo &> /dev/null; then
+    alias open=mimeo
+    alias o=mimeo
 fi
 
 ### OS-specific configuration
@@ -128,10 +144,6 @@ alias cd..='cd ..'
 alias ..='cd ..'
 alias ...='cd ../../'
 
-cs() {
-    cd "$@" && ls
-}
-
 # Correct spelling errors in arguments supplied to cd
 shopt -s cdspell 2> /dev/null
 
@@ -155,45 +167,33 @@ alias sl='echo "
 alias grep="grep --color=auto"
 alias egrep="egrep --color=auto"
 alias fgrep="fgrep --color=auto"
-rgrep() {
-    grep -r "$@" .
-}
-alias f="find . -name"
 
 ### Utilities
 alias mrproper="rm -rvf .*.swp *~"
 alias dfob="perl -pi -e 's/[^[:ascii:]]//g'"
-alias json="python -m json.tool"
 
 ## Misc
 alias sudo='sudo ' # helps with scripting?
 alias :w="echo You\'re not in vim, dingus."
 
-### Pokeconfig aliases
-modbash() {
-    local rc_file
-    if [ $# -eq 1 ]; then
-        if [ "$1" == a ];           then rc_file=~/.bash_aliases
-        elif [ "$1" == l ];         then rc_file=~/.bash_local
-        else rc_file=~/.bash_$1
-        fi
-    elif [ $# -gt 1 ]; then errecho "Too many arguments: $@"; return 1
-    elif [ -w ~/.bash_local ];      then rc_file=~/.bash_local
-    elif [ -w ~/.bash_aliases ];    then rc_file=~/.bash_aliases
-    elif [ -w ~/.bashrc ];          then rc_file=~/.bashrc
-    elif [ -w ~/.bash_profile ];    then rc_file=~/.bash_profile
-    else errecho 'No ~/.bashrc{_aliases,rc,_profile} found.'; return 1
+config() {
+    if [ "$1" = "ssh" ]; then
+        mkdir -p "$HOME/.ssh"
+        $EDITOR "$HOME/.ssh/config"
+    elif [ "$1" = "bash" ]; then
+        $EDITOR "$HOME/.bash_local" "$HOME/.bash_aliases" "$HOME/.bashrc" "$HOME/.bash_profile"
+    elif [ -e "$HOME/.config/$1" ]; then
+        $EDITOR "$HOME/.config/$1/"*
+    else
+        echo "Usage:"
+        echo "    config <config>"
+        echo
+        ls "$HOME/.config/"
     fi
-
-    if ! [ -f "$rc_file" ]; then
-        echo "# vim:fileencoding=utf-8:ft=bash" > "$rc_file"
-    fi
-
-    "$EDITOR" "${EDIT_BASH[@]}" "$rc_file"
 }
 
 srcbash() {
-    if [ -e ~/.bashrc ]; then 
+    if [ -e ~/.bashrc ]; then
         source ~/.bashrc
         echo "sourced ~/.bash_profile"
     elif [ -e ~/.bash_profile ]; then
@@ -202,30 +202,6 @@ srcbash() {
     else
         errecho 'No ~/.bashrc or ~/.bash_profile found.'
         return 1
-    fi
-}
-
-pokepull() {(
-    cd ~/pokerus && git pull
-)}
-
-ssh-conf() {
-    if [ -w "$HOME/.ssh/config" ]; then
-        $EDITOR "$HOME/.ssh/config"
-    else
-        errecho "No ~/.ssh/config found."
-        errecho "Trying to touch ~/.ssh/config, try running $0 again."
-        touch ~/.ssh/config
-        return 1
-    fi
-}
-
-config() {
-    if [ -e "$HOME/.config/$1" ]; then
-        $EDITOR "$HOME/.config/$1/"*
-    else
-        echo "Usage:"
-        echo "    config <config>"
     fi
 }
 
@@ -239,42 +215,35 @@ fi
 if [ "${0#*bash}" != "$0" ]; then
 
     # Colors
-    GREEN="\[\033[40;0;32m\]"
     RED="\[\033[40;0;31m\]"
+    GREEN="\[\033[40;0;32m\]"
     YELLOW="\[\033[40;0;33m\]"
-    CYAN="\[\033[40;1;36m\]"
     BLUE="\[\033[40;0;34m\]"
+    PURPLE="\[\033[40;0;35m\]"
+    CYAN="\[\033[40;1;36m\]"
     GRAY="\[\033[40;0;37m\]"
     CLEAR="\[\033[0m\]"
 
     # Prompt formatting
-    BASE="$GRAY[$RED\u$YELLOW@$BLUE\h:$YELLOW\W$GRAY]"
-    NERR="\[\033[40;0;33m\]8==D\[\033[40;0;36m\]~"
-    ERR="\[\033[40;0;31m\]D==\[\033[40;0;36m\]8\[\033[40;0;31m\]<"
-    SFW_NERR='\[\033[40;0;33m\]$'
-    SFW_ERR='\[\033[40;0;31m\]D:'
-    BR='############################'
+    BASE="$GRAY[\A] $YELLOW\u$GRAY@$PURPLE\h$GRAY:$BLUE\w$CLEAR"
 
-    basic() {
+    prompt-basic() {
         PS1='\u@\h:\w\$ '
         PS2='> '
     }
 
-    sfw() {
-        PS1="$BASE \$(if [ \$? != 0 ]; then echo '$SFW_ERR'; else echo '$SFW_NERR'; fi) $CLEAR"
-        PS2="\[\033[40;0;34m\]> \[\033[0m\]"
-    }
-
-    nsfw() {
-        PS1="$BASE \$(if [ \$? != 0 ]; then echo '$ERR'; else echo '$NERR'; fi) $CLEAR"
-        PS2="\[\033[40;0;34m\]8==D \[\033[0m\]"
+    prompt-fancier() {
+        PS1="\n$BASE \$(if [ \$? != 0 ]; then echo '$RED[ERR]'; else echo '$YELLOW'; fi)\n\$ $CLEAR"
+        PS2="$BLUE> $CLEAR"
     }
 
     # Automatically trim long paths in the prompt (requires Bash 4.x)
     PROMPT_DIRTRIM=2
+    prompt-fancier
 
-    sfw
-
+else # ["${0#*bash}" != "$0"]
+    PS1='$ '
+    PS2='> '
 fi # ["${0#*bash}" != "$0"]
 
 # colored man pages
@@ -311,8 +280,6 @@ else
     esac
 fi
 unset show_what_in_title_bar
-
-sfw
 
 ### Readline
 
