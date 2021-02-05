@@ -37,27 +37,20 @@ git-ignore() {
     curl -sL "https://www.toptal.com/developers/gitignore/api/$1"
 }
 
-### rg
-
-if which rg &> /dev/null; then
-    alias rg='rg --smart-case'
-    alias rgv='rg --smart-case --type coq'
-fi
-
 ### vim/nvim
 
 if which nvim &> /dev/null; then
     export EDITOR=nvim
 
-    alias vim='nvim -O'
-    alias nvim='nvim -O'            # open multiple files with vertical splits
+    alias vim='nvim'
+    alias nvim='nvim'               # open multiple files with vertical splits
 
     export MANPAGER='nvim +Man!'    # use nvim as pager
     export MANWIDTH=999             # let nvim handle wraparound
 
 elif which vim &> /dev/null; then
     export EDITOR=vim
-    alias vim='vim -O'
+    alias vim='vim'
 fi
 
 mkdir -p ~/.tmp/backup ~/.tmp/swp ~/.tmp/undo
@@ -90,6 +83,14 @@ if which gcalcli &> /dev/null; then
     }
 fi
 
+### ripgrep
+export RIPGREP_CONFIG_PATH=~/.config/ripgrep/ripgreprc
+
+### thefuck
+
+if which thefuck &> /dev/null; then
+    eval "$(thefuck --alias)"
+fi
 
 ### OS-specific configuration
 case "$OSTYPE" in
@@ -160,14 +161,12 @@ rgrep() {
 alias f="find . -name"
 
 ### Utilities
-alias usage='du -h -d1'
 alias mrproper="rm -rvf .*.swp *~"
 alias dfob="perl -pi -e 's/[^[:ascii:]]//g'"
 alias json="python -m json.tool"
 
 ## Misc
 alias sudo='sudo ' # helps with scripting?
-alias stonks='stack'
 alias :w="echo You\'re not in vim, dingus."
 
 ### Pokeconfig aliases
