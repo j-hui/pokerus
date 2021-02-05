@@ -5,27 +5,29 @@ let
 in
 {
   options.pokerus.users = {
+    fish.enable = mkEnableOption "Use fish shell";
     "j-hui".hashedPassword = mkOption { type = types.str; };
     root.hashedPassword = mkOption { type = types.str; };
   };
 
-  config = {
-    users = {
-      mutableUsers = false;
+  config = mkMerge [
+    {
+      users = {
+        mutableUsers = false;
 
-      users.root.hashedPassword = cfg.root.hashedPassword;
+        users.root.hashedPassword = cfg.root.hashedPassword;
 
-      users."j-hui" = {
-        isNormalUser = true;
-        extraGroups = [ "wheel" "audio" "jackaudio" "networkmanager" ];
-        hashedPassword = cfg."j-hui".hashedPassword;
+        users."j-hui" = {
+          isNormalUser = true;
+          hashedPassword = cfg."j-hui".hashedPassword;
+          extraGroups = [ "wheel" "audio" "jackaudio" "networkmanager" "libvirtd" ];
+        };
       };
-    };
+    }
 
-    # environment.systemPackages = with pkgs; [
-    #   mkpasswd
-    # ];
-
-    # services.xserver.displayManager.lightdm.greeters.mini.user = "j-hui";
-  };
+    (mkIf cfg.fish.enable {
+      users.users."j-hui".shell = pkgs.fish;
+      programs.fish.enable = true;
+    })
+  ];
 }

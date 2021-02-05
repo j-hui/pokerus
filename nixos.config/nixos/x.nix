@@ -55,6 +55,7 @@ in
       paper-gtk-theme
       paper-icon-theme
       mimeo
+      dragon-drop
     ];
 
     fonts = {

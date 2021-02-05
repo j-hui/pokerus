@@ -78,6 +78,8 @@ in
         diskus
         du-dust
         exa
+        broot
+        nnn
 
         # utilities
         binutils-unwrapped
@@ -86,9 +88,11 @@ in
         bc
         man-pages
         miller
+        jq
 
         # process management
         htop
+        iotop
         tree
         killall
         gotop
@@ -100,6 +104,7 @@ in
         wireguard-tools
         python38Packages.speedtest-cli
         dhcp rustscan
+        prettyping
 
         # disk
         parted cryptsetup gptfdisk
@@ -108,8 +113,10 @@ in
 
         # hardware management
         smartmontools lsof pciutils glxinfo acpi
-        radeontop lshw mcelog fwts lm_sensors
+        radeontop lshw mcelog fwts lm_sensors inxi
 
+        # testing
+        stress mesa-demos
       ];
 
       services = {
