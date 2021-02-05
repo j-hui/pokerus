@@ -89,6 +89,7 @@ in
         man-pages
         miller
         jq
+        w3m
 
         # process management
         htop
