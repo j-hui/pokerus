@@ -1,0 +1,1 @@
+/home/j-hui/.fzf/shell/key-bindings.fish
