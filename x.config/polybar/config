@@ -80,7 +80,7 @@ font-0 = ${fonts.font-0}
 font-1 = ${fonts.font-1}
 font-2 = ${fonts.font-2}
 
-modules-left =
+modules-left = temperature
 modules-center = xwindow
 modules-right = eth memory cpu
 
@@ -106,7 +106,7 @@ font-0 = ${bar/bottom.font-0}
 font-1 = ${bar/bottom.font-1}
 font-2 = ${bar/bottom.font-2}
 
-modules-left = temperature avg-battery wlan
+modules-left = temperature-zone avg-battery wlan
 modules-center = xwindow
 modules-right = eth memory cpu
 
