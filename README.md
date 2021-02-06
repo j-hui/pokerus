@@ -19,13 +19,13 @@ Optionally, disinfect your system (warning: not well-tested):
 
 Install Bash hook, and setup Git and Bash:
 
-    ./alias.sh && ./infect.sh bash git
+    ./homemaker.sh && ./infect.sh bash git
 
 ### Common setups
 
 Full terminal rig:
 
-    ./infect.sh vim nvim.config tmux ranger.config bat.config ghc extern
+    ./infect.sh vim nvim.config fish.config tmux clitools.config ghc extern
 
 Darwin/Aqua rig:
 
@@ -33,7 +33,7 @@ Darwin/Aqua rig:
 
 Linux/X11 rig:
 
-    ./infect.sh x.config qutebrowser.config qutebrowser zathura.config
+    ./infect.sh x.config x qutebrowser.config qutebrowser kitty.config media.config
 
 Doom Emacs rig:
 
