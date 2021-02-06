@@ -64,6 +64,10 @@ set fish_mode_prompt
 set -gx NAME "j-hui"
 set -gx EMAIL "j-hui@cs.columbia.edu"
 abbr --add o open
+
+# Note: Unlike other shells, $PATH is a list, not a colon-delimited string.
+set PATH ~/bin $PATH
+
 ## Export variables }}}
 
 ## FZF, bat, and fd {{{
