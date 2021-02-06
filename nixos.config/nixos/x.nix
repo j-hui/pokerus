@@ -37,9 +37,8 @@ in
       ibus.engines = with pkgs.ibus-engines; [ libpinyin ];
     };
 
-
     environment.systemPackages = with pkgs; [
-      gtk3 glib unstable.dracula-theme
+      gtk3 glib
       bspwm sxhkd
       xdo xdotool wmctrl xorg.xev
       xss-lock xsecurelock
@@ -51,10 +50,11 @@ in
       xclip
       scrot
       pavucontrol
-      simplescreenrecorder
-      paper-gtk-theme
-      paper-icon-theme
       mimeo
+      simplescreenrecorder
+      paper-gtk-theme paper-icon-theme
+      unstable.dracula-theme
+      xfce.thunar
       dragon-drop
     ];
 
@@ -83,7 +83,19 @@ in
       ];
     };
 
+    environment.sessionVariables = {
+        XCURSOR_PATH = [
+          "${config.system.path}/share/icons"
+          "$HOME/.icons"
+          "$HOME/.nix-profile/share/icons/"
+        ];
+        GTK_DATA_PREFIX = [
+          "${config.system.path}"
+        ];
+    };
+
     programs = {
+      dconf.enable = true;
       xss-lock = {
         enable = true;
         lockerCommand = ''${pkgs.xsecurelock}/bin/xsecurelock'';
