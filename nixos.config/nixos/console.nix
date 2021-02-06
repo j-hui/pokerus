@@ -90,6 +90,7 @@ in
         miller
         jq
         w3m
+        file
 
         # process management
         htop

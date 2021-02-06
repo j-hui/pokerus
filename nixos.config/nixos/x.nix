@@ -56,6 +56,8 @@ in
       unstable.dracula-theme
       xfce.thunar
       dragon-drop
+      tabbed
+      xterm st
     ];
 
     fonts = {

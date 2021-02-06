@@ -64,6 +64,7 @@ in
         feh
         mpv
         vlc
+        android-file-transfer
       ];
     })
 
