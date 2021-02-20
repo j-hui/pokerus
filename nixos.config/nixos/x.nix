@@ -22,7 +22,6 @@ in
 
     xkbOptions = mkOption {
       type = types.str;
-      # "ctrl:nocaps,altwin:swap_alt_win";
       default = "ctrl:nocaps";
     };
   };
@@ -39,12 +38,15 @@ in
 
     environment.systemPackages = with pkgs; [
       gtk3 glib
+      lxappearance
       bspwm sxhkd
       xdo xdotool wmctrl xorg.xev
       xss-lock xsecurelock
       polybarFull
-      rofi-pass
       (rofi.override { plugins = [ rofi-file-browser rofi-emoji rofi-systemd rofi-calc ]; })
+      rofi-pass
+      rofi-mpd
+      conky
       dunst libnotify
       pinentry pinentry-gtk2
       xclip
@@ -54,10 +56,12 @@ in
       simplescreenrecorder
       paper-gtk-theme paper-icon-theme
       unstable.dracula-theme
-      xfce.thunar
+      xfce.thunar xfce.xfconf xfce.tumbler xfce.exo
       dragon-drop
+      unstable.devour # only added to nixpkgs in nov 2020
       tabbed
       xterm st
+      gnome3.gucharmap # for selecting fonts
     ];
 
     fonts = {
@@ -194,6 +198,14 @@ in
         fade = true;
         fadeSteps = [ 0.05 0.2 ];
 
+        # blur-background-exclude = [
+        #   "window_type = 'dock'"
+        #   "window_type = 'desktop'"
+        #   "class_g = 'Rofi'"
+        #   "_GTK_FRAME_EXTENTS@:c"
+        # ];
+
+        # For picom only:
         # # Unredirect all windows if a full-screen opaque window is detected, to
         # # maximize performance for full-screen windows. Known to cause
         # # flickering when redirecting/unredirecting windows.
@@ -210,17 +222,21 @@ in
         # # nvidia-drivers with GLX backend for some users.
         # xrender-sync-fence = true;
 
-        # opacityRules = [
-        #   "100:class_g = 'Gimp'"
-        #   "100:class_g = 'Inkscape'"
-        #   "100:class_g = 'aseprite'"
-        #   "100:class_g = 'krita'"
-        #   "100:class_g = 'feh'"
-        #   "100:class_g = 'mpv'"
-        #   "100:class_g = 'Rofi'"
-        #   "100:class_g = 'Peek'"
-        #   "99:_NET_WM_STATE@:32a = '_NET_WM_STATE_FULLSCREEN'"
-        # ];       fadeDelta = 5;
+        opacityRules = [
+          # "100:class_g = 'Firefox'"
+          "100:class_g = 'qutebrowser'"
+          # "100:class_g = 'VirtualBox Machine'"
+          # Art/image programs where we need fidelity
+          "100:class_g = 'Gimp'"
+          "100:class_g = 'Inkscape'"
+          "100:class_g = 'aseprite'"
+          "100:class_g = 'krita'"
+          "100:class_g = 'feh'"
+          "100:class_g = 'mpv'"
+          "100:class_g = 'Rofi'"
+          "100:class_g = 'Peek'"
+          "99:_NET_WM_STATE@:32a = '_NET_WM_STATE_FULLSCREEN'"
+        ];
       };
 
       greenclip.enable = true;

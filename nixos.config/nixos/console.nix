@@ -80,6 +80,8 @@ in
         exa
         broot
         nnn
+        borgbackup
+        rclone
 
         # utilities
         binutils-unwrapped
@@ -88,7 +90,7 @@ in
         bc
         man-pages
         miller
-        jq
+        jq go-pup
         w3m
         file
 
@@ -151,7 +153,13 @@ in
     (mkIf cfg.print.enable {
       services = {
         printing.enable = true;
+        printing.drivers = with pkgs; [
+          hplipWithPlugin
+          # To add printers:
+          # nix run nixpkgs.hplipWithPlugin -c sudo hp-setup
+        ];
         avahi.enable = true;
+        avahi.nssmdns = true;
       };
     })
 
@@ -166,7 +174,7 @@ in
       environment.systemPackages = with pkgs; [
         aerc
         gcalcli
-        astroid notmuch offlineimap msmtp
+        astroid notmuch offlineimap msmtp lieer
       ];
     })
   ];

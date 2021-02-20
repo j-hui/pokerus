@@ -3,6 +3,13 @@ with lib;
 let
   unstable = import <nixpkgs-unstable> { config.allowUnfree = true; };
   cfg = config.pokerus.apps;
+  spotifydConf = pkgs.writeText "spotifyd.conf" ''
+      [global]
+      device_name = ${cfg.media.spotify.device-name}
+      username = ${cfg.media.spotify.username}
+      password = ${cfg.media.spotify.password}
+      backend = pulseaudio
+      '';
 in
 {
 
@@ -10,6 +17,10 @@ in
     web.enable = mkEnableOption "Web browsing";
     messaging.enable = mkEnableOption "Messaging applications";
     media.enable = mkEnableOption "Multimedia applications";
+    media.spotify.enable = mkEnableOption "spotifyd + spotify-tui";
+    media.spotify.device-name = mkOption { type = types.str; default = "spotifyd"; };
+    media.spotify.username = mkOption { type = types.str; };
+    media.spotify.password = mkOption { type = types.str; };
     office.enable = mkEnableOption "Office applications";
     util.enable = mkEnableOption "Utilities";
     gaming.enable = mkEnableOption "Games";
@@ -60,12 +71,32 @@ in
     (mkIf cfg.media.enable {
       environment.systemPackages = with pkgs; [
         playerctl
-        spotify spotifywm spotify-tui spotifyd spotify-tui
+        spotify spotifywm
         feh
         mpv
         vlc
         android-file-transfer
+        cava
+        # ncmpcpp vimpc mpc_cli
       ];
+    })
+
+    (mkIf cfg.media.spotify.enable {
+      environment.systemPackages = with pkgs; [ unstable.spotify-tui spotifyd ];
+
+      # Upstream, spotifyd is declared a system service, which does not have
+      # permissions for pulseaudio. Here we take from this PR:
+      #   https://github.com/NixOS/nixpkgs/pull/77853/files#diff-45637768f3e660b4706792163812c61832c39dcbb5fce21e21e3b42e64f4fe43
+      systemd.user.services.spotifyd = {
+        wantedBy = [ "multi-user.target" "default.target" ];
+        after = [ "network-online.target" "sound.target" ];
+        description = "spotifyd, a Spotify playing daemon";
+        serviceConfig = {
+          ExecStart = "${pkgs.spotifyd}/bin/spotifyd --no-daemon --config-path ${spotifydConf}";
+          Restart = "always";
+          RestartSec = 12;
+        };
+      };
     })
 
     (mkIf cfg.office.enable {
@@ -83,6 +114,7 @@ in
         systemPackages = with pkgs; [
           unstable.kitty
           gparted
+          termpdfpy
         ];
       };
     })
@@ -158,18 +190,6 @@ in
     })
   ];
 
-    # services.spotifyd = {
-      #   enable = true;
-      #   config = ''
-      #     [global]
-      #     username = j-hui
-      #     password = pliable-pucker-apply6
-
-      #     backend = pulseaudio
-
-      #     device_name = charizard-x
-      #     '';
-      # };
 
     # services.mattermost = {
     #   enable = true;
@@ -179,5 +199,38 @@ in
     #   enable = true;
     #   configFile = "/home/j-hui/.config/matterbridge/matterbridge.toml";
     # };
+
+    # Mopidy + mpd is a cool idea but has too many moving parts for me to want to
+    # invest more time in. It doesn't seem to work well with Spotify without
+    # a lot of extra effort, and the clients aren't much better than Spotify's
+    # own official desktop app. Maybe I'll revisit this some other day/year.
+    # hardware.pulseaudio.tcp = { # Enable TCP for mopidy to connect to
+    #   enable = true;
+    #   anonymousClients.allowedIpRanges = ["127.0.0.1"];
+    # };
+    #
+    # services.mopidy = {
+    #   enable = true;
+    #   extensionPackages = with pkgs; [ mopidy-spotify mopidy-mpd mopidy-iris ];
+    #   configuration = ''
+    #       [spotify]
+    #       enabled = true
+    #       client_id =
+    #       client_secret =
+    #       username =
+    #       password =
+    #       bitrate=320
+    #       [mpd]
+    #       enabled = true
+    #       hostname = ::
+    #       [http]
+    #       enabled = true
+    #       hostname = 127.0.0.1
+    #       port = 6680
+    #       default_app = iris
+    #       [audio]
+    #       output = pulsesink server=127.0.0.1
+    #   '';
+    # };
 }
-#  vim: set ts=4 sw=2 tw=80 et ft=nix:
+# vim: set ts=4 sw=2 tw=80 et ft=nix:
