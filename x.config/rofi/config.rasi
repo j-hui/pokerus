@@ -3,7 +3,8 @@ configuration {
     /* width: 169; */
     /* lines: 32; */
     /* columns: 1; */
-    theme: "/home/j-hui/.config/rofi/themes/sidetab.rasi";
+    /* theme: "/home/j-hui/.config/rofi/themes/sidetab.rasi"; */
+    theme: "android_notification";
     terminal: "kitty";
     show-icons: true;
     matching: "fuzzy";

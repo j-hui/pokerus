@@ -1,14 +1,14 @@
 [global]
-    font = "monospace 9"
- #   #font = "Roboto Mono for Powerline, 10"
- #   font = "Fira Mono, 9"
+    font = Fira Sans 11
+    # font = "monospace 9"
 
     markup = full
 
     # %a  appname #   %s  summary #   %b  body
     # %i  iconname (including its path) #   %I  iconname (without its path)
     # %p  progress value if set ([  0%] to [100%]) or nothing
-    format = "<b>%s</b> %p\n%b"
+    # format = "<b>%s</b> %p\n%b"
+    format = "<b>%s</b>\n%b"
 
     sort = yes
     indicate_hidden = yes
@@ -17,61 +17,75 @@
     ignore_newline = no
     idle_threshold = 120
     monitor = 0
-    follow = keyboard
-    sticky_history = no
-    history_length = 0
+    follow = none
+    sticky_history = yes # ?
+    history_length = 20
     show_age_threshold = 60
 
-    dmenu = rofi -dmenu -p dunst
+    dmenu = rofi -dmenu -p dunst:
     browser = qutebrowser
 
-    geometry = "300x5-30+60"
+    # geometry [{width}]x{height}][+/-{x}+/-{y}]
+    geometry = "440x15-26+26"
     line_height = 0
     separator_height = 4
-    padding = 8
-    padding = 16
+    padding = 20
     horizontal_padding = 16
-    alignment = center
-    transparency = 10
-    # left?
+    alignment = left
+    transparency = 5
     separator_color = auto
 
-    # startup_notification = false
+    startup_notification = false
 
     mouse_left_click = do_action
     mouse_right_click = close_current
     # mouse_middle_click = close_all
     # mouse_right_click = do_action, close_current
 
-[frame]
-    width = 0
-    color = "#282828"
+# [frame]
+#     width = 0
+#     color = "#282828"
 
-[shortcuts]
+# [shortcuts]
     # close = ctrl+space
     # close_all = ctrl+shift+space
     # history = ctrl+grave
     # context = ctrl+shift+period
 
+# [urgency_low]
+#     background = "#fba922"
+#     foreground = "#000000"
+#     timeout = 1
+
+# [urgency_normal]
+#     background = "#0D4892"
+#     foreground = "#F7F3F4"
+#     timeout = 10
+
+# [urgency_critical]
+#     background = "#ff2233"
+#     foreground = "#000000"
+#     timeout = 0
+
+# [sxhkd]
+#     appname = "sxhkd"
+#     background = "#000000"
+#     foreground = "#f5f5f5"
+#     timeout = 0
+
 [urgency_low]
-    background = "#fba922"
-    foreground = "#000000"
-    timeout = 1
+    background = "#1E2029"
+    foreground = "#bbc2cf"
+    timeout = 2
 
 [urgency_normal]
-    background = "#0D4892"
-    foreground = "#F7F3F4"
+    background = "#2a2d39"
+    foreground = "#bbc2cf"
     timeout = 10
 
 [urgency_critical]
-    background = "#ff2233"
-    foreground = "#000000"
-    timeout = 0
-
-[sxhkd]
-    appname = "sxhkd"
-    background = "#000000"
-    foreground = "#f5f5f5"
+    background = "#cc6666"
+    foreground = "#1E2029"
     timeout = 0
 
 # vim: ft=cfg

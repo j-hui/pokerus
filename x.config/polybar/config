@@ -18,8 +18,10 @@ throttle-limit = 5
 ; compositing-border = over
 
 [global/wm]
-margin-top = 8
-margin-bottom = 8
+; NOTE: these hints don't actually work so well or consistently,
+; so instead we'll just manually coordinate with bspwmrc.
+; margin-top = 27
+; margin-bottom = 27
 
 include-file = ~/.config/polybar/colors.ini
 include-file = ~/.config/polybar/symbols.ini
@@ -28,23 +30,23 @@ include-file = ~/.config/polybar/fonts.ini
 include-file = ~/.config/polybar/hardware-modules.ini
 include-file = ~/.config/polybar/desktop-modules.ini
 
-[bar/top]
+[bar/base]
 enable-ipc = true
 
-; monitor = eDP-1
 width = 100%
 height = 27
 
 background = ${color.background}
 foreground = ${color.foreground}
-
 line-color = ${color.accent}
-line-size = 3
+
+line-size = 2
+lineheight = 2
 
 spacing = 3
-lineheight = 2
 padding-left = 4
 padding-right = 4
+
 module-margin-left = 4
 module-margin-right = 4
 
@@ -52,61 +54,20 @@ font-0 = ${fonts.font-0}
 font-1 = ${fonts.font-1}
 font-2 = ${fonts.font-2}
 
+; monitor = eDP-1
+
+[bar/top]
+inherit = bar/base
+bottom = false
 modules-left = powermenu bspwm
 modules-right = xkeyboard volume clock
-
 tray-position = right
 tray-padding = 4
 
 [bar/bottom]
-enable-ipc = true
-
-; monitor = HDMI-1
+inherit = bar/base
 bottom = true
-width = 100%
-height = ${bar/top.height}
-
-background = ${bar/top.background}
-foreground = ${bar/top.foreground}
-line-color = ${bar/top.line-color}
-spacing = ${bar/top.spacing}
-lineheight = ${bar/top.lineheight}
-padding-left = ${bar/top.padding-left}
-padding-right = ${bar/top.padding-right}
-module-margin-left = ${bar/top.module-margin-left}
-module-margin-right = ${bar/top.module-margin-right}
-
-font-0 = ${fonts.font-0}
-font-1 = ${fonts.font-1}
-font-2 = ${fonts.font-2}
-
-modules-left = temperature
-modules-center = xwindow
-modules-right = eth memory cpu
-
-[bar/bottom-laptop]
-enable-ipc = ${bar/bottom.enable-ipc}
-
-; monitor = HDMI-1
-bottom = ${bar/bottom.bottom}
-width = ${bar/bottom.width}
-height = ${bar/bottom.height}
-
-background = ${bar/bottom.background}
-foreground = ${bar/bottom.foreground}
-line-color = ${bar/bottom.line-color}
-spacing = ${bar/bottom.spacing}
-lineheight = ${bar/bottom.lineheight}
-padding-left = ${bar/bottom.padding-left}
-padding-right = ${bar/bottom.padding-right}
-module-margin-left = ${bar/bottom.module-margin-left}
-module-margin-right = ${bar/bottom.module-margin-right}
-
-font-0 = ${bar/bottom.font-0}
-font-1 = ${bar/bottom.font-1}
-font-2 = ${bar/bottom.font-2}
-
-modules-left = temperature-zone avg-battery wlan
+modules-left = temperature-hwmon temperature-zone avg-battery wlan spotify-tui
 modules-center = xwindow
 modules-right = eth memory cpu
 
