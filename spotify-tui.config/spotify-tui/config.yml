@@ -1,0 +1,66 @@
+# The theme colours can be an rgb string of the form "255, 255, 255" or
+# a string that references the colours from your terminal theme:
+# Reset, Black, Red, Green, Yellow, Blue, Magenta, Cyan, Gray, DarkGray,
+# LightRed, LightGreen, LightYellow, LightBlue, LightMagenta, LightCyan, White.
+theme:
+  text: White                     # text in panes
+  header: White                   # header text in panes (e.g. 'Title', 'Artist', etc.)
+  banner: LightGreen              # the "spotify-tui" banner on launch
+  error_border: Red               # error dialog border
+  error_text: LightRed            # error message text (e.g. "Spotify API reported error 404")
+  hint: Yellow                    # hint text in errors
+
+  active: LightBlue               # current playing song in list
+  hovered: LightMagenta           # hovered pane border
+  inactive: Magenta               # borders of inactive panes
+  selected: Yellow                # a) selected pane border, b) hovered item in list, & c) track title in player
+
+  playbar_background: Black       # background of progress bar
+  playbar_progress: DarkGray      # filled-in part of the progress bar
+  playbar_progress_text: Yellow   # song length and time played/left indicator in the progress bar
+  playbar_text: Blue              # artist name in player pane
+
+behavior:
+  seek_milliseconds: 5000
+  volume_increment: 10
+  tick_rate_milliseconds: 250 # The lower the number the higher the fps
+  enable_text_emphasis: true
+  show_loading_indicator: true # Indicate in top right whenever communicating with Spotify API
+
+  liked_icon: ★
+  playing_icon: ▶
+  paused_icon: ⏸
+  shuffle_icon: ↯
+  repeat_track_icon: ⇅
+  repeat_context_icon: ⇄
+  # liked_icon: ♥
+  # shuffle_icon: 🔀
+  # repeat_track_icon: 🔂
+  # repeat_context_icon: 🔁
+
+keybindings:
+  # Key stroke can be used if it only uses two keys:
+  # ctrl-q works, ctrl-alt-q doesn't.
+  # Shift modifiers use a capital letter: A and ctrl-A
+
+  back: "q"
+  manage_devices: "d"
+  decrease_volume: "-"
+  increase_volume: "+"
+  toggle_playback: " "
+  seek_backwards: "<"
+  seek_forwards: ">"
+  next_track: "n"
+  previous_track: "p"
+  copy_song_url: "y"
+  copy_album_url: "Y"
+  help: "?"
+  shuffle: "s"
+  repeat: "r"
+  search: "/"
+  jump_to_context: "o"
+  jump_to_album: "a"
+  jump_to_artist_album: "A"
+  basic_view: "V"
+  audio_analysis: "v"
+  add_item_to_queue: "m"
