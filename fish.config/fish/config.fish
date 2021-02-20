@@ -71,13 +71,15 @@ set PATH ~/bin $PATH
 ## Export variables }}}
 
 ## FZF, bat, and fd {{{
+
+set -gx FZF_DEFAULT_OPTS '--bind=ctrl-k:kill-line'
 if command -v bat >/dev/null
     set -gx FZF_CTRL_T_OPTS "--preview 'bat --style=numbers --color=always {} | head -500'"
     set -gx MANPAGER "sh -c 'col -bx | bat -l man -p --paging always'"
     # NOTE: MANPAGER will be later overridden if we have nvim installed
     abbr --add b bat
 else
-    export FZF_CTRL_T_OPTS="--preview 'cat {}'"
+    set -gx FZF_CTRL_T_OPTS "--preview 'cat {}'"
 end
 
 if command -v fd > /dev/null
