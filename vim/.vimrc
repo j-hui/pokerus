@@ -962,106 +962,7 @@ set formatoptions-=c  " Don't auto-wrap comments either
 " Key bindings {{{
 " ============================================================================
 
-" Appearance {{{
-" ----------------------------------------------------------------------------
-
-" Wrangle folds from jumping
-nnoremap za zazz
-nnoremap zi zizz
-
-nnoremap Q zazz
-" }}}
-
-" Navigation {{{
-" ----------------------------------------------------------------------------
-
-" Block-oriented (non-linewise) navigation
-nnoremap j gj
-nnoremap k gk
-
-" Get out insert mode easily
-inoremap <C-c>  <Esc>
-" inoremap kj   <Esc>
-
-" Normal mode readline style navigation
-nnoremap <C-n>    <C-e>j
-nnoremap <C-p>    <C-y>k
-nnoremap <C-e>    $
-nnoremap <C-a>    ^
-nnoremap <C-f>    l
-nnoremap <C-b>    h
-
-" Virual mode readline style navigation
-vnoremap <C-n>    <C-e>j
-vnoremap <C-p>    <C-y>k
-vnoremap <C-e>    $
-vnoremap <C-a>    ^
-vnoremap <C-f>    l
-vnoremap <C-b>    h
-
-" Window navigation
-noremap <C-w>n <Esc>:bn<CR>
-noremap <C-w>p <Esc>:bp<CR>
-noremap <C-w>q <Esc>:bd<CR>
-
-" }}}
-
-" Editing {{{
-" ----------------------------------------------------------------------------
-
-" Don't leave visual mode when indending
-xnoremap < <gv
-xnoremap > >gv
-
-" " No clue what the hell this was supposed to do
-" inoremap # X#
-
-" Correct spelling
-inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
-
-" Insert date
-nnoremap <space>id :put =strftime(\"%Y-%m-%d\")<CR>
-inoremap <C-g>d <C-R>=strftime("%Y-%m-%d")<CR>
-
-" Auto indentation
-inoremap <C-g><C-g> <C-F>
-
-" Readline-style keybinds adapted from tpope/vim-rsi {{{
-
-inoremap    <C-A> <C-O>^
-inoremap   <C-X><C-A> <C-A>
-cnoremap    <C-A> <Home>
-cnoremap   <C-X><C-A> <C-A>
-
-inoremap <expr> <C-B> getline('.')=~'^\s*$'&&col('.')>strlen(getline('.'))?"0\<Lt>C-D>\<Lt>Esc>kJs":"\<Lt>Left>"
-cnoremap    <C-B> <Left>
-
-" inoremap <expr> <C-D> col('.')>strlen(getline('.'))?"\<Lt>C-D>":"\<Lt>Del>"
-cnoremap <expr> <C-D> getcmdpos()>strlen(getcmdline())?"\<Lt>C-D>":"\<Lt>Del>"
-
-" inoremap <expr> <C-E> col('.')>strlen(getline('.'))<bar><bar>pumvisible()?"\<Lt>C-E>":"\<Lt>End>"
-inoremap <expr> <C-E> col('.')>strlen(getline('.'))?"\<Lt>C-E>":"\<Lt>End>"
-
-" inoremap <expr> <C-F> col('.')>strlen(getline('.'))?"\<Lt>C-F>":"\<Lt>Right>"
-" cnoremap <expr> <C-F> getcmdpos()>strlen(getcmdline())?&cedit:"\<Lt>Right>"
-
-inoremap <C-F> <Right>
-cnoremap <C-F> <Right>
-
-function! s:ctrl_u()
-  if getcmdpos() > 1
-  let @- = getcmdline()[:getcmdpos()-2]
-  endif
-  return "\<C-U>"
-endfunction
-
-cnoremap <expr> <C-U> <SID>ctrl_u()
-cnoremap    <C-Y> <C-R>-
-
-inoremap    <C-n> <down>
-inoremap    <C-p> <up>
-inoremap    <C-k> <C-o>D
-nnoremap    <C-k> D
+" NOTE: some readline-style bindings cherrypicked/simplified from tpope/vim-rsi,
 
 if &encoding ==# 'latin1' && has('gui_running') && !empty(findfile('plugin/sensible.vim', escape(&rtp, ' ')))
   set encoding=utf-8
@@ -1101,8 +1002,93 @@ else
   augroup END
 endif
 
+" Appearance {{{
+" ----------------------------------------------------------------------------
+
+" Wrangle folds from jumping
+nnoremap za zazz
+nnoremap zi zizz
+
+nnoremap Q zazz
 " }}}
 
+
+" Navigation {{{
+" ----------------------------------------------------------------------------
+
+" Block-oriented (non-linewise) navigation
+nnoremap j gj
+nnoremap k gk
+
+" Get out insert mode easily
+inoremap <C-c>  <Esc>
+" inoremap kj   <Esc>
+
+" Normal mode readline style navigation
+nnoremap <C-n>    <C-e>j
+nnoremap <C-p>    <C-y>k
+nnoremap <C-e>    $
+nnoremap <C-a>    ^
+nnoremap <C-f>    l
+nnoremap <C-b>    h
+
+" Virual mode readline style navigation
+vnoremap <C-n>    <C-e>j
+vnoremap <C-p>    <C-y>k
+vnoremap <C-e>    $
+vnoremap <C-a>    ^
+vnoremap <C-f>    l
+vnoremap <C-b>    h
+
+" Window navigation
+noremap <C-w>n <Esc>:bn<CR>
+noremap <C-w>p <Esc>:bp<CR>
+noremap <C-w>q <Esc>:bd<CR>
+
+inoremap <C-F> <Right>
+inoremap <C-B> <Left>
+" inoremap   <C-X><C-A> <C-A>
+inoremap <C-A> <C-O>^
+
+inoremap    <C-n> <down>
+inoremap    <C-p> <up>
+
+" If we are already at the end of the line, fall back to default <C-e> behavior (insert character from next line)
+inoremap <expr> <C-E> col('.')>strlen(getline('.'))<bar><bar>pumvisible()?"\<Lt>C-E>":"\<Lt>End>"
+
+" I don't really use default bindings for <C-f> or <C-b>
+" inoremap <expr> <C-F> col('.')>strlen(getline('.'))?"\<Lt>C-F>":"\<Lt>Right>"
+" inoremap <expr> <C-B> getline('.')=~'^\s*$'&&col('.')>strlen(getline('.'))?"0\<Lt>C-D>\<Lt>Esc>kJs":"\<Lt>Left>"
+
+" }}}
+
+" Editing {{{
+" ----------------------------------------------------------------------------
+
+" Don't leave visual mode when indending
+xnoremap < <gv
+xnoremap > >gv
+
+" " No clue what the hell this was supposed to do
+" inoremap # X#
+
+" Correct spelling
+inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
+
+" Insert date
+nnoremap <space>id :put =strftime(\"%Y-%m-%d\")<CR>
+inoremap <C-g>d <C-R>=strftime("%Y-%m-%d")<CR>
+
+" Auto indentation
+inoremap <C-g><C-g> <C-F>
+
+" For readline-style line deletion, we use the delete register "-
+nnoremap <C-k> "-D
+inoremap <C-k> <C-o>"-D
+nnoremap <C-y> "-p
+inoremap <C-y> <C-o>"-p
+
+" inoremap <expr> <C-D> col('.')>strlen(getline('.'))?"\<Lt>C-D>":"\<Lt>Del>"
 
 " }}}
 
@@ -1117,13 +1103,53 @@ vnoremap ; :
 cnoremap <Left> <Space><BS><Left>
 cnoremap <Right> <Space><BS><Right>
 
-" Fake page up and page down
-cnoremap <c-d> <c-n><c-n><c-n><c-n><c-n><c-n><c-n><c-n><c-n><c-n>
-cnoremap <c-u> <c-p><c-p><c-p><c-p><c-p><c-p><c-p><c-p><c-p><c-p>
+cnoremap <C-F> <Right>
+cnoremap <C-B> <Left>
 
-" 'Step into' wild menu selection
-" The backspace apparently necessary to remove ^I artifact
-cnoremap <c-g> <Down><BS>
+" cnoremap   <C-X><C-A> <C-A>
+cnoremap   <C-A> <Home>
+cnoremap <expr> <C-E> col('.')>strlen(getline('.'))?"\<Lt>C-E>":"\<Lt>End>"
+" Note that <C-e> also "steps into" wild menu
+
+" cnoremap <expr> <C-D> getcmdpos()>strlen(getcmdline())?"\<Lt>C-D>":"\<Lt>Del>"
+" cnoremap <expr> <C-F> getcmdpos()>strlen(getcmdline())?&cedit:"\<Lt>Right>"
+
+function! s:c_ctrl_u()
+  " If in context menu, simulate page up-ish behavior
+  if pumvisible()
+    return repeat("\<c-p>", 10)
+  endif
+
+  " Otherwise, delete to beginning of line, stash contents in small delete register
+  if getcmdpos() > 1
+    let @- = getcmdline()[:getcmdpos()-2]
+  endif
+  return "\<C-U>"
+endfunction
+
+function! s:c_ctrl_d()
+  " If in context menu, simulate page down-ish behavior
+  if pumvisible()
+    return repeat("\<c-n>", 10)
+  endif
+  " Otherwise, simulate delete
+  return "\<Del>"
+endfunction
+
+function! s:c_ctrl_k()
+  " Simulate kill line, stash contents in small delete register
+  if getcmdpos() > 0
+    let @- = getcmdline()[getcmdpos()-1:]
+  endif
+  return "\<C-\>e(strpart(getcmdline(), 0, getcmdpos() - 1))\<CR>"
+endfunction
+
+cnoremap <expr> <C-u> <SID>c_ctrl_u()
+cnoremap <expr> <C-d> <SID>c_ctrl_d()
+cnoremap <expr> <C-k> <SID>c_ctrl_k()
+
+" Yank from delete register
+cnoremap <C-Y> <C-R>-
 
 " }}}
 " }}}
