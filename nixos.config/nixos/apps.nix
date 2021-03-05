@@ -23,6 +23,9 @@ in
     media.spotify.password = mkOption { type = types.str; };
     office.enable = mkEnableOption "Office applications";
     util.enable = mkEnableOption "Utilities";
+    mail.enable = mkEnableOption "Mail services";
+    emacs.enable = mkEnableOption "Make (gcc)Emacs available as a service";
+    emacs.gcc.enable = mkEnableOption "Use gccEmacs";
     gaming.enable = mkEnableOption "Games";
     music.enable = mkEnableOption "Music production";
     dev.enable = mkEnableOption "Software development";
@@ -119,6 +122,39 @@ in
       };
     })
 
+    (mkIf cfg.mail.enable {
+      environment.systemPackages = with pkgs; [
+        aerc
+        gcalcli
+        astroid
+        alot
+        notmuch
+        lieer
+        afew
+        msmtp
+        offlineimap
+        thunderbird
+        neomutt notmuch-bower unstable.meli
+        cmark w3m
+      ];
+    })
+
+    (mkIf cfg.emacs.enable  {
+      environment.systemPackages = with pkgs; [
+        pinentry_emacs
+      ];
+      services.emacs.enable = true;
+    })
+
+    (mkIf cfg.emacs.gcc.enable {
+      nixpkgs.overlays = [
+        (import (builtins.fetchTarball {
+          url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
+        }))
+      ];
+      services.emacs.package = pkgs.emacsGcc;
+    })
+
     (mkIf cfg.gaming.enable {
       environment.systemPackages = with pkgs; [
         steam
@@ -157,34 +193,67 @@ in
     })
 
     (mkIf cfg.dev.enable {
+
+      systemd.tmpfiles.rules = [
+        "L /usr/share/dict/words - - - - ${config.system.path}/lib/aspell/en-common.wl"
+      ];
       environment.systemPackages = with pkgs; [
+        vscode # I don't actually user this but handy to keep around
+        editorconfig-core-c
+        pre-commit
+
+        # Writing
+        libqalculate wordnet scowl
+        (aspellWithDicts (ds: with ds; [
+          en en-computers en-science
+        ]))
+        languagetool
+        proselint
+
+        # Markup
+        hugo
+        ghp-import
+        highlight
+        mdl
+
+        libxml2 # not sure why this was needed?
+
+        # C
         gcc gnumake automake cmake autoconf pkg-config m4 libtool dpkg
         valgrind
         ctags
-        libqalculate wordnet aspell aspellDicts.en scowl
+        ccls
 
+        # Python
         (python3.withPackages(ps: with ps; [
-          pynvim ueberzug
+          pynvim
           virtualenvwrapper
           mypy pylint
           tox
         ]))
-        ghp-import
-        libxml2
 
-        vscode
+        # Javascript
+        nodePackages.javascript-typescript-langserver
 
-        highlight
+        # OCaml
         opam
-        pre-commit
-        nodePackages.write-good proselint
+
+        # Haskell
         stack ghc haskellPackages.haskell-language-server
-        go hugo
-        # cargo rustfmt
-        rustup rust-analyzer
-        # rustracer
+
+        # Go
+        go
+
+        # Rust
+        rustup rustfmt rust-analyzer
+
+        # Latex
         tectonic texlive.combined.scheme-full bibclean
+
+        # Pandoc
         pandoc haskellPackages.pandoc-citeproc
+
+        # Lean
         elan
       ];
     })

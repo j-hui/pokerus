@@ -86,6 +86,7 @@ in
         material-icons
         noto-fonts noto-fonts-emoji noto-fonts-extra
         siji
+        emacs-all-the-icons-fonts
       ];
     };
 

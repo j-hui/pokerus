@@ -67,12 +67,13 @@ abbr --add o open
 
 # Note: Unlike other shells, $PATH is a list, not a colon-delimited string.
 set PATH ~/bin $PATH
+set PATH ~/.cargo/bin $PATH
 
 ## Export variables }}}
 
 ## FZF, bat, and fd {{{
 
-set -gx FZF_DEFAULT_OPTS '--bind=ctrl-k:kill-line'
+set -gx FZF_DEFAULT_OPTS '--bind=ctrl-k:kill-line,alt-a:select-all,alt-e:deselect-all'
 if command -v bat >/dev/null
     set -gx FZF_CTRL_T_OPTS "--preview 'bat --style=numbers --color=always {} | head -500'"
     set -gx MANPAGER "sh -c 'col -bx | bat -l man -p --paging always'"
@@ -82,7 +83,7 @@ else
     set -gx FZF_CTRL_T_OPTS "--preview 'cat {}'"
 end
 
-if command -v fd > /dev/null
+if command -v fd >/dev/null
     set -gx FZF_DEFAULT_COMMAND 'fd --type f --hidden --follow --exclude .git'
     set -gx FZF_CTRL_T_COMMAND "$FZF_DEFAULT_COMMAND"
     set -gx FZF_ALT_C_COMMAND "$FZF_DEFAULT_COMMAND"

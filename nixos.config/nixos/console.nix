@@ -17,7 +17,6 @@ in
 {
   options.pokerus.console = {
     enable = mkEnableOption "Console configuration";
-    mail.enable = mkEnableOption "Mail services";
     virt.enable = mkEnableOption "Virtualization services";
     print.enable = mkEnableOption "Printing services";
     laptop.enable = mkEnableOption "Laptop settings";
@@ -25,6 +24,7 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
+
       console.font = "Lat2-Terminus16";
       time.timeZone = "America/New_York";
       i18n.defaultLocale = "en_US.UTF-8";
@@ -45,7 +45,7 @@ in
         ed nano
         vimHugeX
         neovim neovim-remote
-        emacs
+        # emacs
         # It was fun while it lasted
         # (wrapNeovim (neovim-unwrapped.overrideAttrs(old: {
         #   version = "0.5.0-${metadata.rev}";
@@ -82,17 +82,26 @@ in
         nnn
         borgbackup
         rclone
+        sqlite
+        zoxide
+        tokei
 
         # utilities
-        binutils-unwrapped
+        binutils
         unzip
         pv
         bc
         man-pages
         miller
         jq go-pup
-        w3m
+        w3m lynx
         file
+        imagemagick
+        zstd
+        cmark
+        sd
+        xsv
+        hexyl
 
         # process management
         htop
@@ -109,6 +118,8 @@ in
         python38Packages.speedtest-cli
         dhcp rustscan
         prettyping
+        gnutls
+        bandwhich
 
         # disk
         parted cryptsetup gptfdisk
@@ -168,14 +179,7 @@ in
         libvirt virt-manager qemu
       ];
       virtualisation.libvirtd.enable = true;
-    })
-
-    (mkIf cfg.mail.enable {
-      environment.systemPackages = with pkgs; [
-        aerc
-        gcalcli
-        astroid notmuch offlineimap msmtp lieer
-      ];
+      # Also remember to add user to libvirtd group
     })
   ];
 }

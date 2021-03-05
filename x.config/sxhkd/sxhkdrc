@@ -38,6 +38,10 @@ super + i
 super + shift + i
     ~/bin/rofi-define
 
+## define selected text:
+super + d
+    ~/bin/word-lookup.sh
+
 ## rofi run:
 {super, super + ctrl} + space
     rofi -show {drun,run}
@@ -90,7 +94,7 @@ ctrl + super + Print
     ls -1t | head -n 1 | xargs rm -fv
 
 ## volume +/-:
-super {+ equal,+ minus}
+super {+equal, +minus}
     amixer sset Master 10%{+,-}
 
 ## XF86 volume control:
@@ -101,9 +105,9 @@ super {+ equal,+ minus}
 {XF86MonBrightnessUp,XF86MonBrightnessDown}
     brightnessctl set {+10%,10%-}
 
-## spt play/prev/next:
-super {+ backslash, + bracketleft, + bracketright, + shift + backslash}
-    spt playback {--toggle,--previous,--next,--like}
+## spt play/prev/next/like:
+super {+backslash, +bracketleft, +bracketright, +shift+backslash}
+    spt playback {--toggle, --previous, --next, --like}
 
 # ## playerctl play/prev/next:
 # super {+ backslash, + bracketleft, + bracketright}

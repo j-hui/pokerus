@@ -38,6 +38,12 @@ set nocompatible
 filetype plugin on
 syntax on
 
+" I want a unified .vimrc for multiple environments, but also don't want to
+" load more plugins than an environment can handle. So we conditionally load
+" some plugins if there is anything to suggest we are running within some
+" non-terminal application:
+let s:env_embedded = exists('g:vscode')
+
 " Input {{
 " ----------------------------------------------------------------------------
 set mouse=a       " Mouse interaction
@@ -96,7 +102,7 @@ endif
 
 " Backup {{{
 " ----------------------------------------------------------------------------
-if !exists('g:vscode')
+if !s:env_embedded
   " Deliberately avoid using /tmp/ to avoid leaking data on shared computer
   "
   " To allow backup files to be stored locally, run:
@@ -161,13 +167,24 @@ endif
 " ============================================================================
 " Plugins {{{
 " ============================================================================
+let g:plug_callbacks = []
 call plug#begin('~/.vimplugins/plugged')
 
 " Text highlighting {{{
 " ----------------------------------------------------------------------------
-if !exists('g:vscode')
+if !s:env_embedded
 
   Plug 'NLKNguyen/papercolor-theme'
+    function s:PaperColorCb()
+      try
+        " This colorscheme is only available after the plugin is loaded
+        colorscheme PaperColor
+      catch /^Vim\%((\a\+)\)\=:E185/
+        echom "PaperColor theme not yet installed, cannot use as colorscheme."
+      endtry
+    endfunction
+    let g:plug_callbacks += [function("s:PaperColorCb")]
+
     let s:paper_color_default = {
       \   'theme': {
       \   'default.dark': {
@@ -217,7 +234,7 @@ if !exists('g:vscode')
 
   Plug 'guns/xterm-color-table.vim'
 
-  Plug 'itchyny/vim-cursorword'       " Unintrusive * preview
+  Plug 'itchyny/vim-cursorword'           " Unintrusive * preview
     let g:cursorword_delay = 369
     let b:cursorword = 1
     function! CursorWordToggleFn()
@@ -228,12 +245,22 @@ if !exists('g:vscode')
       endif
     endfunction
     command! ToggleCursorWord call CursorWordToggleFn()
-endif " vscode
+
+  Plug 'machakann/vim-highlightedyank'    " Briefly highlight yanked item
+    let g:highlightedyank_highlight_duration = 500
+
+    augroup Highlightedyank
+      autocmd!
+      autocmd ColorScheme *
+            \ highlight HighlightedyankRegion ctermbg=236 gui=reverse
+      " That needs to be set after the colorscheme is set
+    augroup END
+endif " !s:env_embedded
 " }}}
 
 " Window appearance {{{
 " ----------------------------------------------------------------------------
-if !exists('g:vscode')
+if !s:env_embedded
 
   Plug 'itchyny/lightline.vim'    " Lightweight status line at bottom
     let g:lightline = {
@@ -283,35 +310,46 @@ if !exists('g:vscode')
     vnoremap <silent><C-w>m :MaximizerToggle<CR>gv
 
   Plug 'psliwka/vim-smoothie'     " Scroll acceleration animation
-    let g:smoothie_base_speed = 42
+    " Note that <C-d> and <C-u> are remapped (among others)
+    let g:smoothie_no_default_mappings = 0
+    " Refresh rate (default 20, lower is smoother):
+    " let g:smoothie_update_interval = 20
+    " Beginning of animation (default 10, higher is faster):
+    let g:smoothie_speed_linear_factor = 30
+    " End of animation (default 10, higher is faster):
+    let g:smoothie_speed_constant_factor = 30
 
-endif " vscode
+endif " !s:env_embedded
 " }}}
 
 " Interactive subsystems {{{
 " ----------------------------------------------------------------------------
-if !exists('g:vscode')
+if !s:env_embedded
   Plug 'mbbill/undotree'                        " See undo history
     nnoremap <C-w>u :UndotreeToggle<cr>:UndotreeFocus<cr>
 
   Plug 'junegunn/fzf.vim'                       " Fuzzy finder
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
     let g:fzf_preview_window = 'right:60%'
-    nnoremap <C-g>f   :Files  <space>
-    nnoremap <C-g>e   :Files  <CR>
-    nnoremap <C-g>g   :GFiles   <CR>
-    nnoremap <C-g>l   :Lines  <CR>
-    nnoremap <C-g>r   :Rg
-    nnoremap <C-g>b   :Buffers  <CR>
-    nnoremap <C-g>;   :History: <CR>
-    nnoremap <C-g>/   :History/ <CR>
+
+    " Insert mode completion
+    imap <c-x><c-k> <plug>(fzf-complete-word)
+    imap <c-x><c-f> <plug>(fzf-complete-path)
+    imap <c-x><c-l> <plug>(fzf-complete-line)
+
+    " function! s:build_quickfix_list(lines)
+    "   call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+    "   copen
+    "   cc
+    " endfunction
+    " let g:fzf_action = {
+    "   \ 'ctrl-q': function('s:build_quickfix_list'),
+    "   \ 'ctrl-t': 'tab split',
+    "   \ 'ctrl-x': 'split',
+    "   \ 'ctrl-v': 'vsplit'
+    "   \ }
 
   Plug 'https://gitlab.com/mcepl/vim-fzfspell.git'    " FZF for z=
-
-  " Insert mode completion
-  imap <c-x><c-k> <plug>(fzf-complete-word)
-  imap <c-x><c-f> <plug>(fzf-complete-path)
-  imap <c-x><c-l> <plug>(fzf-complete-line)
 
   Plug 'junegunn/vim-peekaboo'                  " See yank registers
 
@@ -337,6 +375,7 @@ if !exists('g:vscode')
       let g:ale_linters = {
             \ 'rust': ['analyzer', 'cargo', 'rustc'],
             \ 'tex': ['proselint', 'chktex'],
+            \ 'markdown': ['proselint', 'mdl'],
             \}
       let g:ale_fixers = {
             \ 'rust': ['rustfmt'],
@@ -345,6 +384,12 @@ if !exists('g:vscode')
             \}
       let g:ale_tex_chktex_options = '-n1 -n36 -n26'
 
+      " This way I can do Al<tab> for autocompletion without remembering to capitalize the 'L'
+      command! AleInfo ALEInfo
+      command! Aleinfo ALEInfo
+      " Funnily enough, this makes something like :Ale work too
+
+      " Note that [a clashes with vim-unimpaired, but it knows to stay out of my way (:
       nmap <silent> [a <Plug>(ale_previous_wrap)
       nmap <silent> ]a <Plug>(ale_next_wrap)
 
@@ -367,8 +412,28 @@ if !exists('g:vscode')
     Plug 'fszymanski/deoplete-emoji'              " Auto-complete emojus
     Plug 'deoplete-plugins/deoplete-dictionary'   " Auto-complete dictionary word
     Plug 'thalesmello/webcomplete.vim'            " Auto-complete from open browser
-    let g:deoplete#enable_at_startup = 1
+      let g:deoplete#enable_at_startup = 1
 
+      function s:DeopleteHooks()
+        " These might fail if deoplete is not yet installed
+        call deoplete#custom#option({
+              \ 'auto_complete_delay': 500,
+              \ 'smart_case': v:true,
+              \ })
+
+        call deoplete#custom#option('sources', {
+              \ 'rust': ['ale', 'around', 'buffer'],
+              \})
+
+        call deoplete#custom#source('emoji', 'filetypes', [
+              \ 'gitcommit',
+              \ 'markdown',
+              \ 'txt',
+              \ 'rst',
+              \ 'vimwiki',
+              \])
+      endfunction
+      let g:plug_callbacks += [function('s:DeopleteHooks')]
 
     Plug 'SirVer/ultisnips'                     " Snippet management
       let g:UltiSnipsExpandTrigger='<C-s>'
@@ -379,17 +444,17 @@ if !exists('g:vscode')
 
   endif " has('nvim')
 
-endif " vscode
+endif " !s:env_embedded
 " }}}
 
 " Window/buffer management {{{
 " ----------------------------------------------------------------------------
-if !exists('g:vscode')
+if !s:env_embedded
   Plug 'moll/vim-bbye'
   Plug 'zhaocai/GoldenView.Vim'       " Split buffer size management
     let g:goldenview__enable_default_mapping = 0
-    command! GoldenViewToggle ToggleGoldenViewAutoResize
     " nmap <silent> <S-F8> <Plug>GoldenViewSwitchToggle
+    command! GoldenViewToggle ToggleGoldenViewAutoResize
   Plug 'AndrewRadev/bufferize.vim'    " Command contents in buffer
   Plug 'AndrewRadev/linediff.vim'     " Vimdiff line ranges
 endif
@@ -398,7 +463,7 @@ endif
 
 " File system {{{
 " ----------------------------------------------------------------------------
-if !exists('g:vscode')
+if !s:env_embedded
   Plug 'tpope/vim-eunuch'             " UNIX-like functionality in Vim
   Plug 'ojroques/vim-oscyank'         " Yank across the terminal
   Plug 'farmergreg/vim-lastplace'     " Open where last opened
@@ -427,7 +492,7 @@ Plug 'godlygeek/tabular'                " Align text
 " Normal mode {{{
 Plug 'tpope/vim-repeat'                   " User-defined dot-repeatable actions
 Plug 'tpope/vim-commentary'               " use gcc to comment things out
-Plug 'tpope/vim-surround'                 " ds, cs, ys to change text surroundings
+Plug 'tpope/vim-unimpaired'               " ]* and [* mappings
 Plug 'tpope/vim-speeddating'              " increment/decrement dates
   let g:speeddating_no_mappings = 1       " <C-S> to increment
   " force a non-recursive map to the fallback functions
@@ -439,6 +504,7 @@ Plug 'tpope/vim-speeddating'              " increment/decrement dates
   nmap  <C-X>   <Plug>SpeedDatingDown
   xmap  <C-S>   <Plug>SpeedDatingUp
   xmap  <C-X>   <Plug>SpeedDatingDown
+
 Plug 'svermeulen/vim-cutlass'               " x and D only delete, no yank/cut
                                             " but retain cut behavior for d
   nnoremap d  d
@@ -447,7 +513,6 @@ Plug 'svermeulen/vim-cutlass'               " x and D only delete, no yank/cut
   nnoremap dd dd
 
 Plug 'andymass/vim-matchup'               " %-navigate user-defined pairs
-Plug 'AndrewRadev/dsf.vim'                " Delete/change surrounding function
 
 Plug 'tommcdo/vim-exchange'               " Exchange text with repeated cx{motion}
 Plug 'AndrewRadev/sideways.vim'           " Move things sideways in lists
@@ -464,25 +529,33 @@ Plug 'matze/vim-move'                     " Move blocks in visual mode
   vmap <C-h> <Plug>MoveBlockLeft
   vmap <C-k> <Plug>MoveBlockUp
 Plug 'nixon/vim-vmath'                    " Basic stats on visual selection
-    vmap <expr>  ++  VMATH_YankAndAnalyse()
-    nmap         ++  vip++
+  vmap <expr>  ++  VMATH_YankAndAnalyse()
+  nmap         ++  vip++
 
 " }}}
 
+if s:env_embedded
+  " These are deprecated in favor of vim-sandwich, which does both and more.
+  " However, it's a pretty utility we don't want to use/watch break in
+  " complicated environments, so in these cases we stick with the classics:
+  Plug 'tpope/vim-surround'                 " ds, cs, ys to change text surroundings
+  Plug 'AndrewRadev/dsf.vim'                " Delete/change surrounding function
+endif
+
 " Insert mode {{{
-if !exists('g:vscode')
+if !s:env_embedded
   Plug 'tpope/vim-endwise'                " Write endings
   Plug 'jiangmiao/auto-pairs'             " Auto-insert brackets/parens/quotes
   " Plug 'LunarWatcher/auto-pairs'          " Auto-insert brackets/parens/quotes
     let g:AutoPairsCenterLine = 0         " Preserve buffer view
     let g:AutoPairsShortcutToggle = ''    " No need to toggle in insert mode
-    command! AutoPair call AutoPairsToggle()
     let g:AutoPairsMapCh = 0              " Use <C-h> to only backspace
+    let g:AutoPairsMapSpace = 0           " Don't go too crazy xD
     let g:AutoPairsShortcutFastWrap = '<c-g>s'
     let g:AutoPairsShortcutJump = '<c-g>%'
     " Don't auto-pair ' --- used as apostrophe in prose and prime for OCaml
     " let g:AutoPairs = {'(':')', '[':']', '{':'}','"':'"', '`':'`'}
-
+    command! AutoPair call AutoPairsToggle()
     augroup auto_filetypes
       autocmd!
       autocmd Filetype html let b:AutoPairs = AutoPairsDefine({'<!--' : '-->'}, ['{'])
@@ -499,7 +572,7 @@ endif
 " Utilities that have a steeper learning curve than Simple Utilities,
 " and are probably not as portable, but are not as involved as Interactive Subsystems.
 
-if !exists('g:vscode')
+if !s:env_embedded
   Plug 'gcmt/wildfire.vim'                    " Smart text object selection
     let g:wildfire_objects = {
         \ "*" : ["i'", 'i"', "i)", "i]", "i}"],
@@ -508,8 +581,8 @@ if !exists('g:vscode')
     \ }
 
   Plug 'AndrewRadev/splitjoin.vim'            " Toggle between single-/multi-line syntax
-      let g:splitjoin_split_mapping = 'gK'
-      let g:splitjoin_join_mapping = 'gJ'
+    let g:splitjoin_split_mapping = 'gK'
+    let g:splitjoin_join_mapping = 'gJ'
 
   Plug 'justinmk/vim-sneak'                   " s works like f/t but with two chars
     let g:sneak#label = 1                     " Easy-motion-like labels
@@ -543,24 +616,27 @@ if !exists('g:vscode')
     xmap T <Plug>Sneak_T
     omap t <Plug>Sneak_t
     omap T <Plug>Sneak_T
+    omap T <Plug>Sneak_T
 
-  Plug 'svermeulen/vim-yoink'       " Yoink (yank) ring
-    " nmap p <plug>(YoinkPaste_p)
-    " nmap P <plug>(YoinkPaste_P)
+  " Plug 'svermeulen/vim-yoink'       " Yoink (yank) ring
+  "   " nmap p <plug>(YoinkPaste_p)
+  "   " nmap P <plug>(YoinkPaste_P)
 
-    " First time we hit p, paste; subsequent times cycles through yoink ring
-    nmap <expr> p yoink#canSwap() ? '<plug>(YoinkPostPasteSwapBack)' : '<plug>(YoinkPaste_p)'
-    nmap <expr> P yoink#canSwap() ? '<plug>(YoinkPostPasteSwapForward)' : '<plug>(YoinkPaste_P)'
+  "   " First time we hit p, paste; subsequent times cycles through yoink ring
+  "   nmap <expr> p yoink#canSwap() ? '<plug>(YoinkPostPasteSwapBack)' : '<plug>(YoinkPaste_p)'
+  "   nmap <expr> P yoink#canSwap() ? '<plug>(YoinkPostPasteSwapForward)' : '<plug>(YoinkPaste_P)'
 
-    nmap [p <plug>(YoinkRotateBack)
-    nmap ]p <plug>(YoinkRotateForward)
-    nmap <c-=> <plug>(YoinkPostPasteToggleFormat)
-    let g:yoinkSwapClampAtEnds = 0              " allow cycling through yank ring
-    let g:yoinkIncludeDeleteOperations = 1
-    let g:yoinkMoveCursorToEndOfPaste = 1
-    let g:yoinkSyncSystemClipboardOnFocus = 0
+  "   nmap [p <plug>(YoinkRotateBack)
+  "   nmap ]p <plug>(YoinkRotateForward)
+  "   nmap <c-=> <plug>(YoinkPostPasteToggleFormat)
+  "   let g:yoinkSwapClampAtEnds = 0              " allow cycling through yank ring
+  "   let g:yoinkIncludeDeleteOperations = 1
+  "   let g:yoinkMoveCursorToEndOfPaste = 1
+  "   let g:yoinkSyncSystemClipboardOnFocus = 0
 
   Plug 'svermeulen/vim-subversive'    " Substitute from yank
+    let g:subversivePreserveCursorPosition = 1
+    let g:subversivePromptWithActualCommand = 1
     nmap s <plug>(SubversiveSubstitute)
     nmap ss <plug>(SubversiveSubstituteLine)
     nmap S <plug>(SubversiveSubstituteToEndOfLine)
@@ -570,8 +646,6 @@ if !exists('g:vscode')
     " Paste in visual mode
     xmap p <plug>(SubversiveSubstitute)
     xmap P <plug>(SubversiveSubstitute)
-    let g:subversivePreserveCursorPosition = 1
-    let g:subversivePromptWithActualCommand = 1
 
   Plug 'lfv89/vim-interestingwords'   " * but better and still lightweight
     let g:interestingWordsDefaultMappings = 0
@@ -584,13 +658,58 @@ if !exists('g:vscode')
 
     command! Noh noh | call UncolorAllWords()
 
-endif " vscode
+  " Fancier vim-surround + d
+  Plug 'machakann/vim-sandwich'
+    function s:SandwichCallback()
+      " Use vim-surround bindings
+      runtime macros/sandwich/keymap/surround.vim
+
+      if !exists('g:sandwich#recipes')
+        echom 'Sandwich does not appear to be installed, skipping hook.'
+        return
+      endif
+
+      " Add spaces after
+      let g:sandwich#recipes += [
+            \   {'buns': ['{ ', ' }'], 'nesting': 1, 'match_syntax': 1, 'kind': ['add', 'replace'], 'action': ['add'], 'input': ['{']},
+            \   {'buns': ['[ ', ' ]'], 'nesting': 1, 'match_syntax': 1, 'kind': ['add', 'replace'], 'action': ['add'], 'input': ['[']},
+            \   {'buns': ['( ', ' )'], 'nesting': 1, 'match_syntax': 1, 'kind': ['add', 'replace'], 'action': ['add'], 'input': ['(']},
+            \   {'buns': ['{\s*', '\s*}'],   'nesting': 1, 'regex': 1, 'match_syntax': 1, 'kind': ['delete', 'replace', 'textobj'], 'action': ['delete'], 'input': ['{']},
+            \   {'buns': ['\[\s*', '\s*\]'], 'nesting': 1, 'regex': 1, 'match_syntax': 1, 'kind': ['delete', 'replace', 'textobj'], 'action': ['delete'], 'input': ['[']},
+            \   {'buns': ['(\s*', '\s*)'],   'nesting': 1, 'regex': 1, 'match_syntax': 1, 'kind': ['delete', 'replace', 'textobj'], 'action': ['delete'], 'input': ['(']},
+            \ ]
+
+      " We also add text object targets for interacting with inner surroundings:
+      xmap is <Plug>(textobj-sandwich-query-i)
+      xmap as <Plug>(textobj-sandwich-query-a)
+      omap is <Plug>(textobj-sandwich-query-i)
+      omap as <Plug>(textobj-sandwich-query-a)
+      xmap iss <Plug>(textobj-sandwich-auto-i)
+      xmap ass <Plug>(textobj-sandwich-auto-a)
+      omap iss <Plug>(textobj-sandwich-auto-i)
+      omap ass <Plug>(textobj-sandwich-auto-a)
+      xmap im <Plug>(textobj-sandwich-literal-query-i)
+      xmap am <Plug>(textobj-sandwich-literal-query-a)
+      omap im <Plug>(textobj-sandwich-literal-query-i)
+      omap am <Plug>(textobj-sandwich-literal-query-a)
+
+      augroup SandwichFiletypes
+        autocmd!
+        autocmd FileType python call sandwich#util#addlocal([
+          \   {'buns': ['"""', '"""'], 'nesting': 0, 'input': ['3"']},
+          \ ])
+
+      augroup END
+    endfunction
+    let g:plug_callbacks += [function('s:SandwichCallback')]
+
+endif " !s:env_embedded
 
 " }}}
 
 " File types {{{
 " ----------------------------------------------------------------------------
-if !exists('g:vscode')
+if !s:env_embedded
 
 " TeX/LaTeX {{{
   Plug 'lervag/vimtex',   { 'for': 'tex' }    " TeX/LaTeX
@@ -616,7 +735,7 @@ if !exists('g:vscode')
     let g:vimtex_complete_enabled = 1
     " let g:vimtex_disable_recursive_main_file_detection = 1
 
-    function! DefineVimtexMappings()
+    function! VimtexConfig()
       imap <buffer> <C-]>             <plug>(vimtex-delim-close)
 
       nmap <buffer> <C-c><CR>         <plug>(vimtex-compile-ss)
@@ -633,20 +752,32 @@ if !exists('g:vscode')
       nmap <buffer> <C-c>c            <plug>(vimtex-errors)
       vmap <buffer> <C-c>c       <ESC><plug>(vimtex-errors)
       imap <buffer> <C-c>c       <ESC><plug>(vimtex-errors)
+
+      imap <buffer> <C-g>e      \emph{}<left>
+      imap <buffer> <C-g>t      \texttt{}<left>
+      imap <buffer> <C-g>b      \textbf{}<left>
+      imap <buffer> <C-g>i      \textit{}<left>
+
+      " This might fail if deoplete or vimtex are not installed
+      call deoplete#custom#var('omni', 'input_patterns', {
+            \ 'tex': g:vimtex#re#deoplete,
+            \})
     endfunction
 
     augroup vimtex_settings
       autocmd!
-      autocmd Filetype tex call DefineVimtexMappings()
+      autocmd Filetype tex call VimtexConfig()
     augroup END
 " }}}
 
 " Coq {{{
   Plug 'whonore/coqtail', { 'for': 'coq' }
-    function! g:CoqtailHighlight()
-      hi def CoqtailChecked ctermbg=236
-      hi def CoqtailSent  ctermbg=237
-    endfunction
+    augroup CoqtailHighlights
+      autocmd!
+      autocmd ColorScheme *
+            \   highlight def CoqtailChecked ctermbg=236
+            \|  highlight def CoqtailSent  ctermbg=237
+    augroup END
     let g:coqtail_match_shift = 1
     let g:coqtail_indent_on_dot = 1
     let g:coqtail_auto_set_proof_diffs = "on"
@@ -656,7 +787,7 @@ if !exists('g:vscode')
     " let g:coqtail_map_prefix = '<C-c>'
     let g:coqtail_nomap = 1
 
-    function! DefineCoqtailMappings()
+    function DefineCoqtailMappings()
         " Coqtail control
         nmap <buffer> <c-c>Q        <Plug>CoqStart
         nmap <buffer> <c-c>q        <Plug>CoqStop
@@ -708,7 +839,16 @@ if !exists('g:vscode')
   Plug 'plasticboy/vim-markdown',           { 'for': 'markdown' }
     let g:vim_markdown_math = 1
     let g:vim_markdown_auto_insert_bullets = 0
-    inoremap <C--> <CR>-woeiu
+    let g:vim_markdown_folding_style_pythonic = 1
+    function MarkdownHook()
+      nmap g] <Plug>Markdown_MoveToCurHeader
+      nmap g[ <Plug>Markdown_MoveToParentHeader
+    endfunction
+
+    augroup markdown_mappings
+      autocmd!
+      autocmd Filetype markdown call MarkdownHook()
+    augroup END
   " Plug 'tpope/vim-markdown',                { 'for': 'markdown' }
     " let g:markdown_fenced_languages = [
     "       \ 'html',
@@ -739,8 +879,9 @@ if !exists('g:vscode')
   Plug 'LucHermitte/valgrind.vim',          { 'for': 'c' }
     let g:valgrind_arguments='--leak-check=yes '
   Plug 'dag/vim-fish',                      { 'for': 'fish' }
+  Plug 'adborden/vim-notmuch-address',      { 'for': 'mail' }
 " }}}
-endif " vscode
+endif " !s:env_embedded
 " }}}
 
 
@@ -754,31 +895,13 @@ endif
 
 call plug#end()
 
-" Deoplete hooks {{{
-if has('nvim')
-  try
-    call deoplete#custom#var('omni', 'input_patterns', {
-        \ 'tex': g:vimtex#re#deoplete,
-        \})
-    call deoplete#custom#option('sources', {
-        \ 'rust': ['ale', 'around', 'buffer'],
-        \})
-    call deoplete#custom#source('emoji', 'filetypes', [
-                \ 'gitcommit',
-                \ 'markdown',
-                \ 'txt',
-                \ 'rst',
-                \ 'vimwiki',
-                \])
-  catch /^Vim\%((\a\+)\)\=:E117/
-    echom 'deoplete not installed, run :PlugInstall'
-  catch /^Vim\%((\a\+)\)\=:E121/
-    echom 'deoplete not installed, run :PlugInstall'
-  catch /^Vim\%((\a\+)\)\=:E116/
-    echom 'deoplete not installed, run :PlugInstall'
-  endtry
-endif
-" }}}
+" try
+  for Cb in g:plug_callbacks
+    call Cb()
+  endfor
+" catch
+"     echom 'Encountered errors when executing plug callbacks, run :PlugInstall'
+" endtry
 
 " }}}
 
@@ -790,13 +913,6 @@ endif
 " ----------------------------------------------------------------------------
 
 set background=dark
-try
-  colorscheme PaperColor
-catch /^Vim\%((\a\+)\)\=:E185/
-  " deal with it
-  echom 'colorscheme PaperColor not installed, run :PlugInstall'
-endtry
-
 set nu rnu                " Line numbers and relative line numbers
 set display+=lastline     " Show as much as possible of the last line
 set scrolloff=5           " Keep a few lines under the cursor
@@ -825,6 +941,7 @@ set listchars=tab:\┆\ ,trail:·,extends:‥,precedes:‥
 
 set conceallevel=2                      " Concealed text is completely hidden unless
                                         " custom replacement character is defined
+set concealcursor=                      " Show concealed text when running cursor over
 
 set foldlevelstart=10
 set foldnestmax=10
@@ -954,6 +1071,7 @@ set formatoptions+=l  " Don't break up my text when in insert mode
 set formatoptions+=1  " Don't break up a line after a one-letter word
 set formatoptions-=t  " Don't auto-wrap text (code)
 set formatoptions-=c  " Don't auto-wrap comments either
+
 " }}}
 
 " }}}
@@ -1053,8 +1171,22 @@ inoremap <C-A> <C-O>^
 inoremap    <C-n> <down>
 inoremap    <C-p> <up>
 
+function! s:i_ctrl_e()
+  " If in context menu, accept selection
+  if pumvisible()
+    return "\<C-y>"
+  endif
+  if col('.') > strlen(getline('.'))
+    return "\<C-e>" " if at line end, fallback to default <C-e> behavior
+  endif
+  " Otherwise, go to <End> of line
+  return "\<End>"
+endfunction
+
+inoremap <expr> <C-e> <SID>i_ctrl_e()
+
 " If we are already at the end of the line, fall back to default <C-e> behavior (insert character from next line)
-inoremap <expr> <C-E> col('.')>strlen(getline('.'))<bar><bar>pumvisible()?"\<Lt>C-E>":"\<Lt>End>"
+" inoremap <expr> <C-e> col('.')>strlen(getline('.'))<bar><bar>pumvisible()?"\<Lt>C-y>":"\<Lt>End>"
 
 " I don't really use default bindings for <C-f> or <C-b>
 " inoremap <expr> <C-F> col('.')>strlen(getline('.'))?"\<Lt>C-F>":"\<Lt>Right>"
@@ -1075,9 +1207,11 @@ xnoremap > >gv
 " Correct spelling
 inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
 
-" Insert date
+" Insert date/time
 nnoremap <space>id :put =strftime(\"%Y-%m-%d\")<CR>
 inoremap <C-g>d <C-R>=strftime("%Y-%m-%d")<CR>
+nnoremap <space>it :put =strftime(\"%Y-%m-%d %H:%M:%S\")<CR>
+inoremap <C-g>t <C-R>=strftime("%Y-%m-%d %H:%M:%S")<CR>
 
 " Auto indentation
 inoremap <C-g><C-g> <C-F>
@@ -1185,6 +1319,10 @@ command! -range Trim <line1>,<line2> substitute/\s\+$//g | normal! ``
 command! Here cd %:h
 " }}}
 
+" Source .vimrc {{{
+command! Vimrc source ~/.vimrc
+" }}}
+
 " "Basic" mode: no mouse interaction, line numbers, or sign column {{{
 " Useful for copying and pasting from buffers as text
 let s:basicmode = 0
@@ -1197,8 +1335,20 @@ function! s:basicToggle()
     let s:basicmode = 1
   endif
 endfunction
-command! BasicToggle call s:basicToggle()
+command! Basic call s:basicToggle()
 " }}}
+
+let s:sharemode = 0
+function! s:shareToggle()
+  if s:sharemode
+    set rnu nocursorline
+    let s:sharemode = 0
+  else
+    set nornu cursorline
+    let s:sharemode = 1
+  endif
+endfunction
+command! Share call s:shareToggle()
 
 " Modeline {{{
 function! AppendModeline()
@@ -1254,6 +1404,7 @@ set modeline
 set modelines=5
 
 augroup help_settings " {{{
+  autocmd!
   autocmd FileType help
     \ noremap <buffer><nowait> q :q<CR>
 augroup END " }}}

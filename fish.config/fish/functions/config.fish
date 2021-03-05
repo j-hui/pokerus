@@ -8,6 +8,8 @@ function config --description "Edit files in ~/.config"
         $EDITOR ~/.ssh/config
     else if test $argv[1] = "bash"
         $EDITOR ~/.bash_aliases ~/.bash_local ~/.bashrc ~/.bash_profile
+    else if test $argv[1] = "vim"
+        $EDITOR ~/.vimrc
     else if test -d ~/.config/$argv[1]
         $EDITOR ~/.config/$argv[1]/*
     else if test -e ~/.config/$argv[1]

@@ -8,6 +8,8 @@ set page-cache-size 45
 set window-title-basename "true"
 set selection-clipboard "clipboard"
 
+set guioptions "sc"
+
 map <C-g> recolor
 
 #
