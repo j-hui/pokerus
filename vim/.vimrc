@@ -44,7 +44,7 @@ syntax on
 " non-terminal application:
 let s:env_embedded = exists('g:vscode')
 
-" Input {{
+" Input {{{
 " ----------------------------------------------------------------------------
 set mouse=a       " Mouse interaction
 
@@ -154,14 +154,6 @@ map <F8>
 set shell=bash
 " }}}
 
-" Avoid E173 (vim refuses to close with unvisited buffers) {{{
-" ----------------------------------------------------------------------------
-if argc() > 1
-  silent blast " load last buffer
-  silent bfirst " switch back to the first
-endif
-" }}}
-
 " }}}
 
 " ============================================================================
@@ -256,7 +248,7 @@ if !s:env_embedded
       " That needs to be set after the colorscheme is set
     augroup END
 endif " !s:env_embedded
-" }}}
+" }}} Text highlighting
 
 " Window appearance {{{
 " ----------------------------------------------------------------------------
@@ -320,7 +312,7 @@ if !s:env_embedded
     let g:smoothie_speed_constant_factor = 30
 
 endif " !s:env_embedded
-" }}}
+" }}} Window appearance
 
 " Interactive subsystems {{{
 " ----------------------------------------------------------------------------
@@ -445,7 +437,7 @@ if !s:env_embedded
   endif " has('nvim')
 
 endif " !s:env_embedded
-" }}}
+" }}} Interactive subsystems
 
 " Window/buffer management {{{
 " ----------------------------------------------------------------------------
@@ -519,6 +511,8 @@ Plug 'AndrewRadev/sideways.vim'           " Move things sideways in lists
   nnoremap cl :SidewaysRight<cr>
   nnoremap ch :SidewaysLeft<cr>
 
+Plug 'christoomey/vim-titlecase'          " Title case w/ gt<motion>
+
 " }}}
 
 " Visual mode {{{
@@ -581,8 +575,10 @@ if !s:env_embedded
     \ }
 
   Plug 'AndrewRadev/splitjoin.vim'            " Toggle between single-/multi-line syntax
-    let g:splitjoin_split_mapping = 'gK'
-    let g:splitjoin_join_mapping = 'gJ'
+    let g:splitjoin_split_mapping = ''
+    let g:splitjoin_join_mapping = ''
+    nmap gJ :SplitjoinJoin<cr>
+    nmap gK :SplitjoinSplit<cr>
 
   Plug 'justinmk/vim-sneak'                   " s works like f/t but with two chars
     let g:sneak#label = 1                     " Easy-motion-like labels
@@ -836,62 +832,92 @@ if !s:env_embedded
 " }}}
 
 " Markdown {{{
-  Plug 'plasticboy/vim-markdown',           { 'for': 'markdown' }
-    let g:vim_markdown_math = 1
-    let g:vim_markdown_auto_insert_bullets = 0
-    let g:vim_markdown_folding_style_pythonic = 1
-    function MarkdownHook()
-      nmap g] <Plug>Markdown_MoveToCurHeader
-      nmap g[ <Plug>Markdown_MoveToParentHeader
-    endfunction
 
-    augroup markdown_mappings
-      autocmd!
-      autocmd Filetype markdown call MarkdownHook()
-    augroup END
+  " tpope:
+    let g:markdown_folding = 1
+    let g:markdown_syntax_conceal = 1
+    " let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'coq']
+
+" Plug 'vim-pandoc/vim-pandoc'
+  " Plug 'vim-pandoc/vim-pandoc-syntax'
+  " let g:pandoc#syntax#codeblocks#embeds#langs = [
+  "       \ "python",
+  "       \ "bash=sh",
+  "       \ "sh",
+  "       \ "coq",
+  "       \ "cpp",
+  "       \ "c",
+  "       \ "vim",
+  "       \]
+  "   augroup pandoc_syntax
+  "       au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
+  "   augroup END
+
+
+  " Plug 'j-hui/vim-markdown'
+
+  " Plug 'gabrielelana/vim-markdown',         { 'for': 'markdown' , 'as': 'gabrielvim-markdown'}
+    " let g:markdown_enable_mappings = 0
+    " let g:markdown_enable_folding = 1
+    " let g:markdown_enable_input_abbreviations = 0
+
+Plug 'j-hui/vim-markdown',           { 'for': 'markdown' }
+    " let g:vim_markdown_math = 1
+    " let g:vim_markdown_auto_insert_bullets = 0
+    " let g:vim_markdown_folding_style_pythonic = 1
+    " function MarkdownHook()
+    "   nmap g] <Plug>Markdown_MoveToCurHeader
+    "   nmap g[ <Plug>Markdown_MoveToParentHeader
+    " endfunction
+
+    " augroup markdown_mappings
+    "   autocmd!
+    "   autocmd Filetype markdown call MarkdownHook()
+    " augroup END
   " Plug 'tpope/vim-markdown',                { 'for': 'markdown' }
-    " let g:markdown_fenced_languages = [
-    "       \ 'html',
-    "       \ 'python',
-    "       \ 'bash=sh',
-    "       \ 'c',
-    "       \ 'cpp',
-    "       \ 'ocaml',
-    "       \ 'haskell'
-    "       \ ]
+    let g:markdown_fenced_languages = [
+          \ 'html',
+          \ 'python',
+          \ 'bash=sh',
+          \ 'c',
+          \ 'cpp',
+          \ 'ocaml',
+          \ 'haskell'
+          \ ]
   " Plug 'jtratner/vim-flavored-markdown',    { 'for': 'markdown' }
 " }}}
 
 " Other filetypes {{{
-  Plug 'z0mbix/vim-shfmt',                  { 'for': 'sh' }
+  Plug 'z0mbix/vim-shfmt'
     let g:shfmt_extra_args = '-i 2 -ci -sr'
-  Plug 'fatih/vim-go',                      { 'for': 'go' }
-  Plug 'leanprover/lean.vim',               { 'for': 'lean' }
-  Plug 'idris-hackers/idris-vim',           { 'for': 'idris' }
-  Plug 'LnL7/vim-nix',                      { 'for': 'nix' }
-  Plug 'vim-scripts/promela.vim',           { 'for': 'promela' }
-  Plug 'chrisbra/csv.vim',                  { 'for': 'csv' }
-  Plug 'rust-lang/rust.vim',                { 'for': 'rust' }
+  Plug 'fatih/vim-go'
+  Plug 'leanprover/lean.vim'
+  Plug 'idris-hackers/idris-vim'
+  Plug 'LnL7/vim-nix'
+  Plug 'vim-scripts/promela.vim'
+  Plug 'chrisbra/csv.vim'
+  Plug 'rust-lang/rust.vim'
     " let g:rust_conceal = 1
     let g:rust_recommended_style = 0
     " let g:rust_conceal_mod_path = 1
     " let g:rust_conceal_pub = 1
-  Plug 'LucHermitte/valgrind.vim',          { 'for': 'c' }
+  Plug 'LucHermitte/valgrind.vim'
     let g:valgrind_arguments='--leak-check=yes '
-  Plug 'dag/vim-fish',                      { 'for': 'fish' }
+  Plug 'dag/vim-fish'
+  Plug 'cespare/vim-toml'
   Plug 'adborden/vim-notmuch-address',      { 'for': 'mail' }
 " }}}
 endif " !s:env_embedded
 " }}}
 
-
-" Local settings
+" Local settings {{{
 " ----------------------------------------------------------------------------
 "  Note: This has to be here, in the Plugins block, because otherwise I can't
 "    use Plug
 if filereadable(expand("~/.vim_local"))
   source ~/.vim_local
 endif
+" }}} Local settings
 
 call plug#end()
 
@@ -903,7 +929,7 @@ call plug#end()
 "     echom 'Encountered errors when executing plug callbacks, run :PlugInstall'
 " endtry
 
-" }}}
+" }}} Plugins
 
 " ============================================================================
 " Settings {{{
@@ -1080,7 +1106,9 @@ set formatoptions-=c  " Don't auto-wrap comments either
 " Key bindings {{{
 " ============================================================================
 
-" NOTE: some readline-style bindings cherrypicked/simplified from tpope/vim-rsi,
+" Readline bindings {{{
+" ----------------------------------------------------------------------------
+" NOTE: some readline-style bindings cherrypicked/simplified from tpope/vim-rsi
 
 if &encoding ==# 'latin1' && has('gui_running') && !empty(findfile('plugin/sensible.vim', escape(&rtp, ' ')))
   set encoding=utf-8
@@ -1119,6 +1147,7 @@ else
   autocmd GUIEnter * call s:MapMeta()
   augroup END
 endif
+" }}}
 
 " Appearance {{{
 " ----------------------------------------------------------------------------
@@ -1129,7 +1158,6 @@ nnoremap zi zizz
 
 nnoremap Q zazz
 " }}}
-
 
 " Navigation {{{
 " ----------------------------------------------------------------------------
@@ -1439,16 +1467,6 @@ augroup bib_settings " {{{
         \ spell
 augroup END " }}}
 
-augroup markdown_settings " {{{
-  autocmd!
-  autocmd Filetype markdown setlocal
-        \ tabstop=4
-        \ expandtab
-        \ shiftwidth=4
-        \ softtabstop=4
-        \ spell
-augroup END " }}}
-
 augroup c_settings " {{{
   autocmd!
   autocmd BufNewFile,BufReadPost *.c set filetype=c
@@ -1563,6 +1581,75 @@ augroup csv_settings " {{{
   autocmd BufNewFile,BufReadPost *.csv set filetype=csv
 augroup END " }}}
 
+" Markdown {{{
+  " function! s:NotCodeBlock(lnum) abort
+  "   return synIDattr(synID(v:lnum, 1, 1), 'name') !=# 'markdownCode'
+  " endfunction
+
+  " function! MarkdownFold() abort
+  "   let line = getline(v:lnum)
+
+  "   if line =~# '^#\+ ' && s:NotCodeBlock(v:lnum)
+  "     return ">" . match(line, ' ')
+  "   endif
+
+  "   let nextline = getline(v:lnum + 1)
+  "   if (line =~ '^.\+$') && (nextline =~ '^=\+$') && s:NotCodeBlock(v:lnum + 1)
+  "     return ">1"
+  "   endif
+
+  "   if (line =~ '^.\+$') && (nextline =~ '^-\+$') && s:NotCodeBlock(v:lnum + 1)
+  "     return ">2"
+  "   endif
+
+  "   return "="
+  " endfunction
+
+  " function! s:HashIndent(lnum) abort
+  "   let hash_header = matchstr(getline(a:lnum), '^#\{1,6}')
+  "   if len(hash_header)
+  "     return hash_header
+  "   else
+  "     let nextline = getline(a:lnum + 1)
+  "     if nextline =~# '^=\+\s*$'
+  "       return '#'
+  "     elseif nextline =~# '^-\+\s*$'
+  "       return '##'
+  "     endif
+  "   endif
+  " endfunction
+
+  " function! MarkdownFoldText() abort
+  "   let hash_indent = s:HashIndent(v:foldstart)
+  "   let title = substitute(getline(v:foldstart), '^#\+\s*', '', '')
+  "   let foldsize = (v:foldend - v:foldstart + 1)
+  "   let linecount = '['.foldsize.' lines]'
+  "   return hash_indent.' '.title.' '.linecount
+  " endfunction
+  
+  " augroup markdown_settings
+  "   autocmd!
+  "   autocmd Filetype markdown setlocal
+  "         \ tabstop=4
+  "         \ expandtab
+  "         \ shiftwidth=4
+  "         \ softtabstop=4
+  "         \ spell
+  "         \ foldexpr=MarkdownFold()
+  "         \ foldmethod=expr
+  "         \ foldtext=MarkdownFoldText()
+  " augroup END
 " }}}
 
-" vim: set ts=2 sw=2 tw=120 et foldmethod=marker:
+" }}}
+
+" ============================================================================
+" Avoid E173 (vim refuses to close with unvisited buffers) {{{
+" ----------------------------------------------------------------------------
+if argc() > 1
+  silent blast " load last buffer
+  silent bfirst " switch back to the first
+endif
+" }}}
+
+" vim: set ts=2 sw=2 tw=120 et foldmethod=marker foldlevel=1:

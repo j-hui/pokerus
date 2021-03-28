@@ -107,8 +107,8 @@ c.aliases['o'] = 'open'
 c.aliases['O'] = 'open --tab'
 c.aliases['t'] = 'open --background'
 
-c.aliases['pt'] = 'enter-mode passthrough'
-c.aliases['passthrough'] = 'enter-mode passthrough'
+c.aliases['pt'] = 'mode-enter passthrough'
+c.aliases['passthrough'] = 'mode-enter passthrough'
 
 c.aliases['pin'] = 'tab-pin'
 
@@ -132,6 +132,7 @@ c.aliases['pass'] = 'spawn --userscript qute-pass'
 c.aliases['readability'] = 'spawn --userscript readability'
 c.aliases['reader'] = 'spawn --userscript readability'
 c.aliases['bib'] = 'spawn --userscript getbib'
+c.aliases['pocket'] = 'spawn --userscript qutepocket'
 
 ### Aliases }}}
 
@@ -193,9 +194,9 @@ nmap(']]', 'navigate next')
 nmap('f', 'hint')
 nmap('F', 'hint all tab')
 
-nmap('i', 'enter-mode insert')
-nmap('v', 'enter-mode caret')
-nmap('V', 'enter-mode caret ;; toggle-selection --line')
+nmap('i', 'mode-enter insert')
+nmap('v', 'mode-enter caret')
+nmap('V', 'mode-enter caret ;; toggle-selection --line')
 
 nmap('yy', 'yank') # url
 nmap('yt', 'yank title')
@@ -237,11 +238,11 @@ vmap('{', 'move-to-end-of-prev-block')
 vmap('}', 'move-to-end-of-next-block')
 
 for mode in ['prompt', 'register', 'hint', 'yesno', 'caret', 'insert', 'command']:
-    config.bind('<Escape>', 'leave-mode', mode=mode)
+    config.bind('<Escape>', 'mode-leave', mode=mode)
 
 config.bind('<Return>', 'command-accept', mode='command')
 
-config.bind('<Shift+Escape>', 'leave-mode', mode='passthrough')
+config.bind('<Shift+Escape>', 'mode-leave', mode='passthrough')
 
 config.bind('<Return>', 'follow-hint', mode='hint')
 
