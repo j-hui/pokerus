@@ -44,13 +44,16 @@ in
         variables.QUTE_BIB_FILEPATH = "/home/j-hui/Documents/qute.bib";
 
         systemPackages = with pkgs; [
+
           (unstable.qutebrowser.overrideAttrs (old: {
             propagatedBuildInputs =
               old.propagatedBuildInputs ++ [
-                pkgs.python3Packages.setuptools # TODO: remove after upstream fix
+                pkgs.python3Packages.pocket
+                # pkgs.python3Packages.setuptools # TODO: remove after upstream fix
               ];
           }))
 
+          unstable.luakit surf
           firefox google-chrome chromium
 
           youtube-dl
@@ -105,7 +108,7 @@ in
     (mkIf cfg.office.enable {
       environment.systemPackages = with pkgs; [
         inkscape gimp tuxpaint drawing gthumb
-        zathura mupdf
+        zathura mupdf evince
         pdftk
         libreoffice
       ];
@@ -136,6 +139,7 @@ in
         thunderbird
         neomutt notmuch-bower unstable.meli
         cmark w3m
+        newsboat
       ];
     })
 
@@ -255,6 +259,12 @@ in
 
         # Lean
         elan
+
+        # Lua
+        lua
+
+        # TLA
+        tlaps
       ];
     })
   ];

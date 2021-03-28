@@ -67,12 +67,15 @@ in
         pass
         mkpasswd
         gopass
+        ripasso-cursive
+        xkcdpass
 
         # files
         ranger
         fzf
         ag
         ripgrep
+        vgrep
         fd
         bat
         diskus
@@ -99,6 +102,7 @@ in
         imagemagick
         zstd
         cmark
+        mdcat
         sd
         xsv
         hexyl
