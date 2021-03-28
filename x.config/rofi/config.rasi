@@ -8,6 +8,7 @@ configuration {
     terminal: "kitty";
     show-icons: true;
     matching: "fuzzy";
+    sort: true;
     sorting-method: "fzf";
     scroll-method: 1;
     sidebar-mode: true;
