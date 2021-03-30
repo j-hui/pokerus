@@ -368,10 +368,12 @@ if !s:env_embedded
             \ 'rust': ['analyzer', 'cargo', 'rustc'],
             \ 'tex': ['proselint', 'chktex'],
             \ 'markdown': ['proselint', 'mdl'],
+            \ 'haskell': ['hls'],
             \}
       let g:ale_fixers = {
             \ 'rust': ['rustfmt'],
             \ 'bib': ['bibclean'],
+            \ 'haskell': ['stylish-haskell'],
             \ '*': ['trim_whitespace', 'remove_trailing_lines'],
             \}
       let g:ale_tex_chktex_options = '-n1 -n36 -n26'
@@ -888,6 +890,16 @@ Plug 'j-hui/vim-markdown',           { 'for': 'markdown' }
 " }}}
 
 " Other filetypes {{{
+  Plug 'neovimhaskell/haskell-vim'
+    let g:haskell_enable_quantification = 1   " to enable highlighting of `forall`
+    let g:haskell_enable_recursivedo = 1      " to enable highlighting of `mdo` and `rec`
+    let g:haskell_enable_arrowsyntax = 1      " to enable highlighting of `proc`
+    let g:haskell_enable_pattern_synonyms = 1 " to enable highlighting of `pattern`
+    let g:haskell_enable_typeroles = 1        " to enable highlighting of type roles
+    let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
+    let g:haskell_backpack = 1                " to enable highlighting of backpack keywords
+  Plug 'andy-morris/happy.vim'
+  Plug 'andy-morris/alex.vim'
   Plug 'z0mbix/vim-shfmt'
     let g:shfmt_extra_args = '-i 2 -ci -sr'
   Plug 'fatih/vim-go'
@@ -918,6 +930,8 @@ if filereadable(expand("~/.vim_local"))
   source ~/.vim_local
 endif
 " }}} Local settings
+
+Plug 'felipec/notmuch-vim'
 
 call plug#end()
 
