@@ -224,6 +224,7 @@ in
 
         # C
         gcc gnumake automake cmake autoconf pkg-config m4 libtool dpkg
+        clang clang-tools
         valgrind
         ctags
         ccls
@@ -243,7 +244,7 @@ in
         opam
 
         # Haskell
-        stack ghc haskellPackages.haskell-language-server
+        stack ghc haskellPackages.haskell-language-server stylish-haskell stylish-cabal
 
         # Go
         go
