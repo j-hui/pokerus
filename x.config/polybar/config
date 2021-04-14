@@ -53,6 +53,7 @@ module-margin-right = 4
 font-0 = ${fonts.font-0}
 font-1 = ${fonts.font-1}
 font-2 = ${fonts.font-2}
+font-3 = ${fonts.font-3}
 
 ; monitor = eDP-1
 
@@ -67,7 +68,7 @@ tray-padding = 4
 [bar/bottom]
 inherit = bar/base
 bottom = true
-modules-left = temperature-hwmon temperature-zone avg-battery wlan spotify-tui
+modules-left = temperature-hwmon temperature-zone avg-battery wlan spotify
 modules-center = xwindow
 modules-right = eth memory cpu
 

@@ -42,50 +42,36 @@
     # mouse_middle_click = close_all
     # mouse_right_click = do_action, close_current
 
-# [frame]
-#     width = 0
-#     color = "#282828"
-
-# [shortcuts]
-    # close = ctrl+space
-    # close_all = ctrl+shift+space
-    # history = ctrl+grave
-    # context = ctrl+shift+period
-
+# Dracula
 # [urgency_low]
-#     background = "#fba922"
-#     foreground = "#000000"
-#     timeout = 1
+#     background = "#1E2029"
+#     foreground = "#bbc2cf"
+#     timeout = 2
 
 # [urgency_normal]
-#     background = "#0D4892"
-#     foreground = "#F7F3F4"
+#     background = "#2a2d39"
+#     foreground = "#bbc2cf"
 #     timeout = 10
 
 # [urgency_critical]
-#     background = "#ff2233"
-#     foreground = "#000000"
+#     background = "#cc6666"
+#     foreground = "#1E2029"
 #     timeout = 0
 
-# [sxhkd]
-#     appname = "sxhkd"
-#     background = "#000000"
-#     foreground = "#f5f5f5"
-#     timeout = 0
-
+# Material darker
 [urgency_low]
-    background = "#1E2029"
-    foreground = "#bbc2cf"
+    background = "#303030"
+    foreground = "#c3e88d"
     timeout = 2
 
 [urgency_normal]
-    background = "#2a2d39"
-    foreground = "#bbc2cf"
+    background = "#353535"
+    foreground = "#89ddff"
     timeout = 10
 
 [urgency_critical]
-    background = "#cc6666"
-    foreground = "#1E2029"
+    background = "#353535"
+    foreground = "#f07178"
     timeout = 0
 
 # vim: ft=cfg

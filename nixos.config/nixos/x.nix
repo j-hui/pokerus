@@ -54,14 +54,37 @@ in
       pavucontrol
       mimeo
       simplescreenrecorder
-      paper-gtk-theme paper-icon-theme
-      unstable.dracula-theme
       xfce.thunar xfce.xfconf xfce.tumbler xfce.exo
       dragon-drop
       unstable.devour # only added to nixpkgs in nov 2020
       tabbed
       xterm st
       gnome3.gucharmap # for selecting fonts
+
+      xmonad-with-packages xmobar
+      # xmonad-contrib xmonad-extras
+      xmonad-log
+      trayer stalonetray
+
+      paper-gtk-theme
+      paper-icon-theme
+      unstable.dracula-theme
+      adapta-gtk-theme
+      pantheon.elementary-gtk-theme
+      pantheon.elementary-sound-theme
+      pantheon.elementary-icon-theme
+      materia-theme
+      vimix-gtk-themes
+      xorg.xcursorthemes
+      pop-gtk-theme
+      pop-icon-theme
+      sweet
+      qogir-icon-theme
+      moka-icon-theme
+      tango-icon-theme
+      numix-icon-theme
+      gnome-icon-theme
+      humanity-icon-theme
     ];
 
     fonts = {
@@ -111,6 +134,11 @@ in
     };
 
     services = {
+      greenclip.enable = true;
+      dbus = {
+        enable = true;
+        socketActivated = true;
+      };
       xserver = {
         enable = true;
         exportConfiguration = true;
@@ -150,6 +178,17 @@ in
           # };
         };
 
+        windowManager.xmonad = {
+          enable = true;
+          enableContribAndExtras = true;
+          extraPackages = haskellPackages: [
+            haskellPackages.xmobar
+            haskellPackages.taffybar
+            haskellPackages.xmonad-volume
+            haskellPackages.xmonad-spotify
+            haskellPackages.xmonad-screenshot
+          ];
+        };
         windowManager.bspwm.enable = true;
         displayManager.defaultSession = "none+bspwm";
         displayManager.lightdm = {
@@ -239,8 +278,6 @@ in
           "99:_NET_WM_STATE@:32a = '_NET_WM_STATE_FULLSCREEN'"
         ];
       };
-
-      greenclip.enable = true;
     };
   };
 }

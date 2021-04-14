@@ -143,7 +143,8 @@ in
         openssh.forwardX11 = true;
       };
 
-      networking.wireguard.enable = true;
+      # networking.wireguard.enable = true;
+      environment.etc.wireguard.source = "/persist/etc/wireguard";
 
       programs.ssh.askPassword = "";
       programs.ssh.startAgent = true;

@@ -165,64 +165,33 @@ call plug#begin('~/.vimplugins/plugged')
 " Text highlighting {{{
 " ----------------------------------------------------------------------------
 if !s:env_embedded
+  function s:ColorSchemeCb()
+    try
+      exec 'colorscheme ' . g:colorscheme
+    catch /^Vim\%((\a\+)\)\=:E185/
+      echom g:colorscheme . ' theme not yet installed, cannot use as colorscheme.'
+    endtry
+  endfunction
+  let g:plug_callbacks += [function("s:ColorSchemeCb")]
 
-  Plug 'NLKNguyen/papercolor-theme'
-    function s:PaperColorCb()
-      try
-        " This colorscheme is only available after the plugin is loaded
-        colorscheme PaperColor
-      catch /^Vim\%((\a\+)\)\=:E185/
-        echom "PaperColor theme not yet installed, cannot use as colorscheme."
-      endtry
+  let g:colorscheme = 'gruvbox-material'
+
+  Plug 'sainnhe/gruvbox-material'
+  Plug 'sainnhe/everforest'       " Gruvbox-like
+  Plug 'sainnhe/edge'             " Onedark-like
+  Plug 'sainnhe/sonokai'          " Monokai-like
+
+    function! s:add_undercurl() abort
+      highlight Error    cterm=undercurl gui=undercurl
+      highlight ErrorMsg cterm=undercurl gui=undercurl
+      highlight ALEError cterm=undercurl gui=undercurl
+      highlight SpellBad cterm=undercurl gui=undercurl
     endfunction
-    let g:plug_callbacks += [function("s:PaperColorCb")]
 
-    let s:paper_color_default = {
-      \   'theme': {
-      \   'default.dark': {
-      \     'override' : {
-      \     'folded_bg': ['#1c1c1c', '234'],
-      \     }
-      \   }
-      \   }
-      \ }
-    let s:paper_color_transparent = {
-      \   'theme': {
-      \   'default.dark': {
-      \     'override' : {
-      \     'color00'     : ['#000000', '0'],
-      \     'linenumber_bg' : ['#000000', '0'],
-      \     'diffadd_bg'  : ['#000000', '0'],
-      \     'diffdelete_bg' : ['#000000', '0'],
-      \     'difftext_bg'   : ['#000000', '0'],
-      \     'diffchange_bg' : ['#000000', '0'],
-      \     'folded_bg'   : ['#1c1c1c', '234'],
-      \     'folded_fg'   : ['#d7875f', '173'],
-      \     }
-      \   }
-      \   }
-      \ }
-    let g:PaperColor_Theme_Options = s:paper_color_default
-    let s:paper_color_transparent_background = 0
-    function! PaperColorToggleBackground()
-      if s:paper_color_transparent_background
-        let g:PaperColor_Theme_Options = s:paper_color_default
-        let s:paper_color_transparent_background = 0
-      else
-        let g:PaperColor_Theme_Options = s:paper_color_transparent
-        let s:paper_color_transparent_background = 1
-      endif
-    endfunction
-    " Some terminals have trouble rendering the full background,
-    " and PaperColor's 'transparent_background' option doesn't handle
-    " removing background colors from other elements.
-    command! Bg call PaperColorToggleBackground() | colo PaperColor
-
-  Plug 'ajmwagar/vim-deus'
-  Plug 'danilo-augusto/vim-afterglow'
-  Plug 'kristijanhusak/vim-hybrid-material'
-    let g:enable_bold_font = 1
-    let g:hybrid_transparent_background = 1
+    augroup AddUndercurl
+      autocmd!
+      autocmd ColorScheme everforest,edge,gruvbox-material,sonokai call s:add_undercurl()
+    augroup END
 
   Plug 'guns/xterm-color-table.vim'
 
@@ -243,9 +212,8 @@ if !s:env_embedded
 
     augroup Highlightedyank
       autocmd!
-      autocmd ColorScheme *
-            \ highlight HighlightedyankRegion ctermbg=236 gui=reverse
-      " That needs to be set after the colorscheme is set
+      autocmd ColorScheme * highlight link HighlightedyankRegion CursorLine
+      " Needs to be set after the colorscheme is set
     augroup END
 endif " !s:env_embedded
 " }}} Text highlighting
@@ -256,7 +224,7 @@ if !s:env_embedded
 
   Plug 'itchyny/lightline.vim'    " Lightweight status line at bottom
     let g:lightline = {
-      \ 'colorscheme': 'PaperColor',
+      \ 'colorscheme': 'gruvbox_material',
       \ 'active': {
       \   'left': [
       \     [ 'mode', 'paste' ],
@@ -368,6 +336,8 @@ if !s:env_embedded
             \ 'rust': ['analyzer', 'cargo', 'rustc'],
             \ 'tex': ['proselint', 'chktex'],
             \ 'markdown': ['proselint', 'mdl'],
+            \ 'c': ['ccls'],
+            \ 'cpp': ['ccls'],
             \ 'haskell': ['hls'],
             \}
       let g:ale_fixers = {
@@ -518,7 +488,6 @@ Plug 'christoomey/vim-titlecase'          " Title case w/ gt<motion>
 " }}}
 
 " Visual mode {{{
-Plug 'vim-scripts/vis'                    " Use :B for block mode commands
 Plug 'matze/vim-move'                     " Move blocks in visual mode
   vmap <C-j> <Plug>MoveBlockDown
   vmap <C-l> <Plug>MoveBlockRight
@@ -576,11 +545,11 @@ if !s:env_embedded
         \ "vim" : ["i<"],
     \ }
 
-  Plug 'AndrewRadev/splitjoin.vim'            " Toggle between single-/multi-line syntax
-    let g:splitjoin_split_mapping = ''
-    let g:splitjoin_join_mapping = ''
-    nmap gJ :SplitjoinJoin<cr>
-    nmap gK :SplitjoinSplit<cr>
+  " Plug 'AndrewRadev/splitjoin.vim'            " Toggle between single-/multi-line syntax
+  "   let g:splitjoin_split_mapping = ''
+  "   let g:splitjoin_join_mapping = ''
+  "   nmap gJ :SplitjoinJoin<cr>
+  "   nmap gK :SplitjoinSplit<cr>
 
   Plug 'justinmk/vim-sneak'                   " s works like f/t but with two chars
     let g:sneak#label = 1                     " Easy-motion-like labels
@@ -774,7 +743,7 @@ if !s:env_embedded
       autocmd!
       autocmd ColorScheme *
             \   highlight def CoqtailChecked ctermbg=236
-            \|  highlight def CoqtailSent  ctermbg=237
+            \|  highlight def CoqtailSent    ctermbg=237
     augroup END
     let g:coqtail_match_shift = 1
     let g:coqtail_indent_on_dot = 1
@@ -835,12 +804,20 @@ if !s:env_embedded
 
 " Markdown {{{
 
-  " tpope:
+  " Plug 'tpope/vim-markdown',                { 'as': 'tpope-vim-markdown' }
+    let g:markdown_fenced_languages = [
+          \ 'html',
+          \ 'python',
+          \ 'bash=sh',
+          \ 'c',
+          \ 'cpp',
+          \ 'ocaml',
+          \ 'haskell'
+          \ ]
     let g:markdown_folding = 1
     let g:markdown_syntax_conceal = 1
-    " let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'coq']
 
-" Plug 'vim-pandoc/vim-pandoc'
+  " Plug 'vim-pandoc/vim-pandoc'
   " Plug 'vim-pandoc/vim-pandoc-syntax'
   " let g:pandoc#syntax#codeblocks#embeds#langs = [
   "       \ "python",
@@ -855,41 +832,29 @@ if !s:env_embedded
   "       au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
   "   augroup END
 
+  Plug 'plasticboy/vim-markdown', { 'as': 'plasticboy-vim-markdown' }
+    let g:vim_markdown_auto_insert_bullets = 0
+    let g:vim_markdown_folding_style_pythonic = 1
+    " let g:vim_markdown_math = 1
+    function MarkdownHook()
+      nmap g] <Plug>Markdown_MoveToCurHeader
+      nmap g[ <Plug>Markdown_MoveToParentHeader
+    endfunction
 
-  " Plug 'j-hui/vim-markdown'
+    augroup markdown_mappings
+      autocmd!
+      autocmd Filetype markdown call MarkdownHook()
+    augroup END
 
-  " Plug 'gabrielelana/vim-markdown',         { 'for': 'markdown' , 'as': 'gabrielvim-markdown'}
+  " Plug 'gabrielelana/vim-markdown',         { 'as': 'gabrielelana-vim-markdown'}
     " let g:markdown_enable_mappings = 0
     " let g:markdown_enable_folding = 1
     " let g:markdown_enable_input_abbreviations = 0
 
-Plug 'j-hui/vim-markdown',           { 'for': 'markdown' }
-    " let g:vim_markdown_math = 1
-    " let g:vim_markdown_auto_insert_bullets = 0
-    " let g:vim_markdown_folding_style_pythonic = 1
-    " function MarkdownHook()
-    "   nmap g] <Plug>Markdown_MoveToCurHeader
-    "   nmap g[ <Plug>Markdown_MoveToParentHeader
-    " endfunction
-
-    " augroup markdown_mappings
-    "   autocmd!
-    "   autocmd Filetype markdown call MarkdownHook()
-    " augroup END
-  " Plug 'tpope/vim-markdown',                { 'for': 'markdown' }
-    let g:markdown_fenced_languages = [
-          \ 'html',
-          \ 'python',
-          \ 'bash=sh',
-          \ 'c',
-          \ 'cpp',
-          \ 'ocaml',
-          \ 'haskell'
-          \ ]
   " Plug 'jtratner/vim-flavored-markdown',    { 'for': 'markdown' }
 " }}}
 
-" Other filetypes {{{
+" Haskell {{{
   Plug 'neovimhaskell/haskell-vim'
     let g:haskell_enable_quantification = 1   " to enable highlighting of `forall`
     let g:haskell_enable_recursivedo = 1      " to enable highlighting of `mdo` and `rec`
@@ -900,6 +865,18 @@ Plug 'j-hui/vim-markdown',           { 'for': 'markdown' }
     let g:haskell_backpack = 1                " to enable highlighting of backpack keywords
   Plug 'andy-morris/happy.vim'
   Plug 'andy-morris/alex.vim'
+" }}}
+
+" C/C++ {{{
+  Plug 'octol/vim-cpp-enhanced-highlight'
+    let g:cpp_posix_standard = 1
+    let g:cpp_class_scope_highlight = 1
+    let g:cpp_member_variable_highlight = 1
+    let g:cpp_class_decl_highlight = 1
+    let g:cpp_concepts_highlight = 1
+" }}}
+
+" Other filetypes {{{
   Plug 'z0mbix/vim-shfmt'
     let g:shfmt_extra_args = '-i 2 -ci -sr'
   Plug 'fatih/vim-go'
@@ -913,6 +890,7 @@ Plug 'j-hui/vim-markdown',           { 'for': 'markdown' }
     let g:rust_recommended_style = 0
     " let g:rust_conceal_mod_path = 1
     " let g:rust_conceal_pub = 1
+
   Plug 'LucHermitte/valgrind.vim'
     let g:valgrind_arguments='--leak-check=yes '
   Plug 'dag/vim-fish'
@@ -930,8 +908,6 @@ if filereadable(expand("~/.vim_local"))
   source ~/.vim_local
 endif
 " }}} Local settings
-
-Plug 'felipec/notmuch-vim'
 
 call plug#end()
 
@@ -966,13 +942,14 @@ augroup cursor_underline  " Underline cursor in insert mode
   autocmd InsertLeave * set nocul
 augroup END
 
-" set nowrap                            " Don't show wrapped lines
+" set nowrap                            " Soft wrap
 set linebreak                           " If we show wrap, break at a character
 set breakindent                         " ... and try to make it look nice
-set breakindentopt=sbr,min:48,shift:8   " ... with these options
-let &showbreak='  ⇒ '                   " ... and this nice symbol.
+set breakindentopt=sbr,min:48           " ... with these options
+let &showbreak=' ↪'                     " ... and this nice symbol
+set cpoptions+=n                        " ... shown in the line number column
 
-set colorcolumn=80,120,121,+1,+2        " Columns at 80, 120, and textwidth
+set colorcolumn=81,120,121,+1,+2        " Columns at 80, 120, and textwidth
 
 set list                                " That mysterious, poorly named option
                                         " that changes how things are displayed,
@@ -1098,19 +1075,23 @@ let g:netrw_preview = 1
 
 set pastetoggle=<F2>
 
-set textwidth=80    " Bound lines to 80 characters
-set expandtab       " Expand tabs to spaces
-set tabstop=4       " Expand tabs to 4 spaces
-set shiftwidth=0    " Use tabstop value for (auto)indent
-set smarttab      " Apply tabs in front of a line according to shiftwidth
-set autoindent      " Automatically indent when starting a new line
-set nojoinspaces    " Only insert single space after J
+set textwidth=120     " How wide text should be
+set expandtab         " Expand tabs to spaces
+set tabstop=4         " Expand tabs to 4 spaces
+set shiftwidth=0      " Use tabstop value for (auto)indent
+set smarttab          " Apply tabs in front of a line according to shiftwidth
+set autoindent        " Automatically indent when starting a new line
+set nojoinspaces      " Only insert single space after J
+
 set formatoptions+=j  " Strip comment leader when joining comment lines
 set formatoptions+=n  " Recognize numbered lists when formatting text
 set formatoptions+=l  " Don't break up my text when in insert mode
 set formatoptions+=1  " Don't break up a line after a one-letter word
-set formatoptions-=t  " Don't auto-wrap text (code)
+set formatoptions-=t  " Don't auto-wrap code text
 set formatoptions-=c  " Don't auto-wrap comments either
+
+" NOTE: plugins seem to be pretty inconsistent about respecting formatoptions.
+" Add to filetype-specific hooks below if misbehaving.
 
 " }}}
 
@@ -1380,6 +1361,8 @@ endfunction
 command! Basic call s:basicToggle()
 " }}}
 
+" "Share" mode: get of relative line numbers, always show cursor {{{
+" Useful for screensharing
 let s:sharemode = 0
 function! s:shareToggle()
   if s:sharemode
@@ -1391,6 +1374,7 @@ function! s:shareToggle()
   endif
 endfunction
 command! Share call s:shareToggle()
+" }}}
 
 " Modeline {{{
 function! AppendModeline()
@@ -1483,13 +1467,24 @@ augroup END " }}}
 
 augroup c_settings " {{{
   autocmd!
-  autocmd BufNewFile,BufReadPost *.c set filetype=c
-  autocmd BufNewFile,BufReadPost *.h set filetype=c
   autocmd FileType c setlocal
         \ tabstop=8
         \ noexpandtab
         \ shiftwidth=8
         \ softtabstop=8
+        \ foldmethod=syntax
+        \ foldlevel=5
+  autocmd FileType c syn sync fromstart
+  let c_syntax_for_h = 1
+augroup END " }}}
+
+augroup cpp_settings " {{{
+  autocmd!
+  autocmd FileType cpp setlocal
+        \ tabstop=8
+        \ expandtab
+        \ shiftwidth=4
+        \ softtabstop=-1
 augroup END " }}}
 
 augroup make_settings " {{{
@@ -1595,64 +1590,24 @@ augroup csv_settings " {{{
   autocmd BufNewFile,BufReadPost *.csv set filetype=csv
 augroup END " }}}
 
-" Markdown {{{
-  " function! s:NotCodeBlock(lnum) abort
-  "   return synIDattr(synID(v:lnum, 1, 1), 'name') !=# 'markdownCode'
-  " endfunction
+augroup mail_settings " {{{
+  autocmd!
+  autocmd Filetype mail setlocal
+        \ wrap
+augroup END " }}}
 
-  " function! MarkdownFold() abort
-  "   let line = getline(v:lnum)
+augroup markdown_settings " {{{
+  autocmd!
+  autocmd Filetype markdown setlocal
+        \ tabstop=4
+        \ expandtab
+        \ shiftwidth=4
+        \ softtabstop=4
+        \ spell
+        \ formatoptions-=tc
+  autocmd Filetype markdown syntax sync fromstart
+augroup END " }}}
 
-  "   if line =~# '^#\+ ' && s:NotCodeBlock(v:lnum)
-  "     return ">" . match(line, ' ')
-  "   endif
-
-  "   let nextline = getline(v:lnum + 1)
-  "   if (line =~ '^.\+$') && (nextline =~ '^=\+$') && s:NotCodeBlock(v:lnum + 1)
-  "     return ">1"
-  "   endif
-
-  "   if (line =~ '^.\+$') && (nextline =~ '^-\+$') && s:NotCodeBlock(v:lnum + 1)
-  "     return ">2"
-  "   endif
-
-  "   return "="
-  " endfunction
-
-  " function! s:HashIndent(lnum) abort
-  "   let hash_header = matchstr(getline(a:lnum), '^#\{1,6}')
-  "   if len(hash_header)
-  "     return hash_header
-  "   else
-  "     let nextline = getline(a:lnum + 1)
-  "     if nextline =~# '^=\+\s*$'
-  "       return '#'
-  "     elseif nextline =~# '^-\+\s*$'
-  "       return '##'
-  "     endif
-  "   endif
-  " endfunction
-
-  " function! MarkdownFoldText() abort
-  "   let hash_indent = s:HashIndent(v:foldstart)
-  "   let title = substitute(getline(v:foldstart), '^#\+\s*', '', '')
-  "   let foldsize = (v:foldend - v:foldstart + 1)
-  "   let linecount = '['.foldsize.' lines]'
-  "   return hash_indent.' '.title.' '.linecount
-  " endfunction
-  
-  " augroup markdown_settings
-  "   autocmd!
-  "   autocmd Filetype markdown setlocal
-  "         \ tabstop=4
-  "         \ expandtab
-  "         \ shiftwidth=4
-  "         \ softtabstop=4
-  "         \ spell
-  "         \ foldexpr=MarkdownFold()
-  "         \ foldmethod=expr
-  "         \ foldtext=MarkdownFoldText()
-  " augroup END
 " }}}
 
 " }}}

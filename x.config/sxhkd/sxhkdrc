@@ -55,7 +55,7 @@ super + b
     rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'
 
 ## scrot full-screen:
-Print
+shift + Print
     mkdir -p ~/Pictures/screenshots && \
     scrot --focused \
         ~/Pictures/screenshots/screenshot-%Y-%m-%d-%H-%M-%S.png \
@@ -64,7 +64,7 @@ Print
 # NOTE: without the sleep scrot crashes with:
 #   giblib error: couldn't grab keyboard:Resource temporarily unavailable
 ## scrot select:
-shift + Print
+Print
     mkdir -p ~/Pictures/screenshots && \
     sleep 0.3 && \
     scrot --select --freeze \
@@ -105,13 +105,9 @@ super {+equal, +minus}
 {XF86MonBrightnessUp,XF86MonBrightnessDown}
     brightnessctl set {+10%,10%-}
 
-## spt play/prev/next/like:
-super {+backslash, +bracketleft, +bracketright, +shift+backslash}
-    spt playback {--toggle, --previous, --next, --like}
-
-# ## playerctl play/prev/next:
-# super {+ backslash, + bracketleft, + bracketright}
-#     playerctl {play-pause,previous,next}
+## playerctl play/prev/next:
+super {+ backslash, + bracketleft, + bracketright}
+    playerctl --player=spotifyd,spotify,%any {play-pause,previous,next}
 
 ## toggle dvorak:
 super + grave

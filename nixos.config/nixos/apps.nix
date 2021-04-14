@@ -9,7 +9,14 @@ let
       username = ${cfg.media.spotify.username}
       password = ${cfg.media.spotify.password}
       backend = pulseaudio
+      use_mpris = true
       '';
+
+  spotifydFull = (pkgs.spotifyd.override ({
+          withMpris = true;
+          withALSA = true;
+          withPulseAudio = true;
+        }));
 in
 {
 
@@ -53,7 +60,9 @@ in
               ];
           }))
 
-          unstable.luakit surf
+          (unstable.luakit.overrideAttrs (old: {
+          }))
+          surf
           firefox google-chrome chromium
 
           youtube-dl
@@ -88,7 +97,10 @@ in
     })
 
     (mkIf cfg.media.spotify.enable {
-      environment.systemPackages = with pkgs; [ unstable.spotify-tui spotifyd ];
+      environment.systemPackages = with pkgs; [
+        unstable.spotify-tui
+        spotifydFull
+      ];
 
       # Upstream, spotifyd is declared a system service, which does not have
       # permissions for pulseaudio. Here we take from this PR:
@@ -98,7 +110,7 @@ in
         after = [ "network-online.target" "sound.target" ];
         description = "spotifyd, a Spotify playing daemon";
         serviceConfig = {
-          ExecStart = "${pkgs.spotifyd}/bin/spotifyd --no-daemon --config-path ${spotifydConf}";
+          ExecStart = "${spotifydFull}/bin/spotifyd --no-daemon --config-path ${spotifydConf}";
           Restart = "always";
           RestartSec = 12;
         };
@@ -127,7 +139,7 @@ in
 
     (mkIf cfg.mail.enable {
       environment.systemPackages = with pkgs; [
-        aerc
+        unstable.aerc
         gcalcli
         astroid
         alot
@@ -222,6 +234,11 @@ in
 
         libxml2 # not sure why this was needed?
 
+        # random system dependencies..?
+        openssl
+        # dbus
+        sqlite
+
         # C
         gcc gnumake automake cmake autoconf pkg-config m4 libtool dpkg
         clang clang-tools
@@ -247,7 +264,7 @@ in
         stack ghc haskellPackages.haskell-language-server stylish-haskell stylish-cabal
 
         # Go
-        go
+        go gopls
 
         # Rust
         rustup rustfmt rust-analyzer
