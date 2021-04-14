@@ -17,12 +17,15 @@ import dracula.draw
 # Load existing settings made via :set
 config.load_autoconfig()
 
-dracula.draw.blood(c, {
-    'spacing': {
-        'vertical': 6,
-        'horizontal': 8
-    }
-})
+config.source('themes/material-darker.py')
+
+# dracula.draw.blood(c, {
+#     'spacing': {
+#         'vertical': 6,
+#         'horizontal': 8
+#     }
+# })
+c.colors.webpage.bg = c.colors.completion.item.selected.bg
 
 # Put kitty, gvim, etc. in Qutebrowser's PATH, at least on macOS
 os.environ['PATH'] = '/usr/local/bin' + os.pathsep + os.environ['PATH']
@@ -72,18 +75,30 @@ c.tabs.mousewheel_switching = False
 
 c.zoom.mouse_divider = 0
 
+padding = {
+    'top': 6,
+    'bottom': 6,
+    'right': 8,
+    'left': 8,
+}
+c.statusbar.padding = padding
+c.tabs.padding = padding
+c.tabs.indicator.width = 1
+c.tabs.favicons.scale = 1
 
 # Open external applications
-for site in ['zoommtg://*.zoom.us'
-            ,'https://*.slack.com'
-            ]:
+for site in [
+            'zoommtg://*.zoom.us',
+            'https://*.slack.com',
+        ]:
     config.set('content.unknown_url_scheme_policy', 'allow-all', site)
 
 # Acess clipboard
-for site in ['https://github.com/*'
-            ,'https://stackoverflow.com/*'
-            ,'https://*.stackexchange.com/*'
-            ]:
+for site in [
+            'https://github.com/*',
+            'https://stackoverflow.com/*',
+            'https://*.stackexchange.com/*',
+        ]:
     config.set('content.javascript.can_access_clipboard', True, site)
 
 ### Assorted configs }}}
