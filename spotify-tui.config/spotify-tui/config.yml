@@ -33,10 +33,6 @@ behavior:
   shuffle_icon: ↯
   repeat_track_icon: ⇅
   repeat_context_icon: ⇄
-  # liked_icon: ♥
-  # shuffle_icon: 🔀
-  # repeat_track_icon: 🔂
-  # repeat_context_icon: 🔁
 
 keybindings:
   # Key stroke can be used if it only uses two keys:
