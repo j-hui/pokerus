@@ -12,6 +12,6 @@ Pygments==2.5.2
 requests==2.22.0
 six==1.13.0
 TBB==0.1
-urllib3==1.25.7
+urllib3==1.25.8
 virtualenv==16.4.3
 wcwidth==0.1.8
