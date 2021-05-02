@@ -61,10 +61,14 @@ in
       xterm st
       gnome3.gucharmap # for selecting fonts
 
-      xmonad-with-packages xmobar
-      # xmonad-contrib xmonad-extras
+      (xmonad-with-packages.override { packages = hp: [
+          hp.xmonad-contrib hp.xmonad-extras hp.dbus
+          hp.xmonad-volume
+          hp.xmonad-spotify
+          hp.xmonad-screenshot
+        ];
+      })
       xmonad-log
-      trayer stalonetray
 
       paper-gtk-theme
       paper-icon-theme
@@ -182,15 +186,14 @@ in
           enable = true;
           enableContribAndExtras = true;
           extraPackages = haskellPackages: [
-            haskellPackages.xmobar
-            haskellPackages.taffybar
             haskellPackages.xmonad-volume
             haskellPackages.xmonad-spotify
             haskellPackages.xmonad-screenshot
+            haskellPackages.dbus
           ];
         };
         windowManager.bspwm.enable = true;
-        displayManager.defaultSession = "none+bspwm";
+        displayManager.defaultSession = "none+xmonad";
         displayManager.lightdm = {
           enable = true;
           greeters.mini = {

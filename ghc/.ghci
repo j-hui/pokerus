@@ -5,6 +5,5 @@
 :set +t
 :set -fprint-explicit-foralls
 :set -Wall
-:set editor vim
 
 :def ls \p -> return $ ":! ls --color=auto " ++ p

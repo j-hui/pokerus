@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+set -euf
+
+filepath=~/Pictures/screenshots
+copy="y"
+delete="y"
+
+usage () {
+    echo "$0 [--no-copy|-c] [--no-delete|-d] [filename]"
+}
+
+mkdir -p "$filepath"
+
+filename="$(ls -1t "$filepath" | head -n 1)"
+
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+    --no-copy|-c)
+        copy="n"
+        shift
+        ;;
+    --no-delete|-d)
+        delete="n"
+        ;;
+    *)
+        break
+        ;;
+    esac
+done
+
+if [ "$#" -gt 0 ]; then
+    filename = "$1"
+    shift
+fi
+
+if [ "$#" -gt 0 ]; then
+    echo "Unrecognized arguments: $@"
+    usage
+    exit 1
+fi
+
+case "${copy},${delete}" in
+    y,y)
+        msg='Copied + deleted screenshot'
+        ;;
+    n,y)
+        msg='Deleted screenshot'
+        ;;
+    y,n)
+        msg='Copied screenshot'
+        ;;
+    *)
+        echo "Invalid mode: copy=${copy}, delete=${delete}"
+        usage
+        exit 1
+        ;;
+esac
+
+if ! [ -f "${filepath}/${filename}" ]; then
+    echo "File not found: ${filepath}/${filename}"
+    usage
+    exit 1
+fi
+
+if [ "${copy}" = "y" ]; then
+    xclip -selection clipboard -t image/png "${filepath}/${filename}"
+fi
+
+if [ "${delete}" = "y" ]; then
+    rm -fv "${filepath}/${filename}"
+fi
+
+notify-send "$msg" "${filename}"
