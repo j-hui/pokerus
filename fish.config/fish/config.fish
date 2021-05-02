@@ -73,7 +73,8 @@ set PATH ~/.cargo/bin $PATH
 
 ## FZF, bat, and fd {{{
 
-set -gx FZF_DEFAULT_OPTS '--bind=ctrl-k:kill-line,alt-a:select-all,alt-e:deselect-all'
+set -gx FZF_DEFAULT_OPTS '--bind=ctrl-k:kill-line,alt-a:select-all,alt-e:deselect-all,ctrl-space:toggle --marker=*'
+
 if command -v bat >/dev/null
     set -gx FZF_CTRL_T_OPTS "--preview 'bat --style=numbers --color=always {} | head -500'"
     set -gx MANPAGER "sh -c 'col -bx | bat -l man -p --paging always'"

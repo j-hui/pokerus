@@ -6,9 +6,7 @@
 " - <C-y>*: yank ring
 "
 " Normal mode mnemonics:
-" - <C-l>*: ALE bindings
-" - <C-c>*: Coqtail / Vimtex
-" - <C-g>*: FZF
+" - <C-c>*: Coqtail / Vimtex / Waikiki
 " - <C-w>{u,<space>}: Window Undotree / Ranger
 "
 " Insert mode mnemonics:
@@ -16,7 +14,7 @@
 " - <C-g>{w,u,d,s,%}: Get Word / Unicode / Date
 " - <C-g>{s,%}: Auto-pairs surround (Auto-Pairs) / jump to close
 " - <C-g><C-g>: Auto-indent
-" - <C-l>: correct speLling
+" - <C-g>l: fix spelling
 
 " ============================================================================
 " Core/plumbing/hacks {{{
@@ -50,6 +48,11 @@ set mouse=a       " Mouse interaction
 
 " Disable ex mode
 nnoremap Q <nop>
+nnoremap gQ <nop>
+
+for i in range(2, 12) " F2...F12 seem to cause Neovim to panic
+  exe "inoremap <F" . string(i) . "> F" . string(i)
+endfor
 " }}}
 
 " Output {{{
@@ -187,13 +190,35 @@ if !s:env_embedded
       highlight ALEError cterm=undercurl gui=undercurl
       highlight SpellBad cterm=undercurl gui=undercurl
     endfunction
+    function! s:darken_pmenu() abort
+      " Darken Pmenu background to avoid clash with Cursorline or ColorColumn
+      highlight Pmenu ctermbg=233
+    endfunction
 
     augroup AddUndercurl
       autocmd!
-      autocmd ColorScheme everforest,edge,gruvbox-material,sonokai call s:add_undercurl()
+      autocmd ColorScheme everforest,edge,gruvbox-material,sonokai
+            \   call s:add_undercurl()
+            \|  call s:darken_pmenu()
     augroup END
 
   Plug 'guns/xterm-color-table.vim'
+  Plug 'ap/vim-css-color'                 " Highlight hex colors
+    command! ColorToggle call css_color#toggle()
+
+    function s:CssColorInit(typ, keywords, groups)
+      try
+        call css_color#init(a:typ, a:keywords, a:groups)
+      catch /^Vim\%((\a\+)\)\=:E117/
+        " echom 'ap/vim-css-color not yet installed.'
+      endtry
+    endfunction
+
+    augroup CssColorCustomFiletypes
+      autocmd!
+      autocmd Filetype conf call s:CssColorInit('hex', 'none', 'confComment,confString')
+      autocmd Filetype haskell call s:CssColorInit('hex', 'none', 'haskellLineComment,haskellString,haskellBlockComment')
+    augroup END
 
   Plug 'itchyny/vim-cursorword'           " Unintrusive * preview
     let g:cursorword_delay = 369
@@ -229,22 +254,26 @@ if !s:env_embedded
       \   'left': [
       \     [ 'mode', 'paste' ],
       \     [ 'gitbranch', 'readonly', 'relativepath', 'modified' ],
+      \     [ 'textwidth', 'formatoptions' ],
       \   ],
       \   'right': [
       \     [ 'lineinfo' ],
       \     [ 'percent' ],
       \     [ 'scrollbar'],
-      \     [ 'fileformat', 'fileencoding', 'filetype' ],
+      \     [ 'spell', 'fileformat', 'fileencoding', 'filetype' ],
       \   ],
       \ },
       \ 'component': {
       \   'scrollbar': '%{ScrollStatus()}',
+      \   'formatoptions': '%{&formatoptions}',
+      \   'textwidth': '%{&textwidth}',
       \ },
       \ 'component_function': {
       \   'gitbranch': 'FugitiveHead',
       \ },
-    \ }
-    " NOTE: gitbranch componenet depends on tpope/vim-fugutive
+      \}
+    " format
+    " NOTE: gitbranch component depends on tpope/vim-fugutive
 
   Plug 'ojroques/vim-scrollstatus'  " Scroll bar on status line
     let g:scrollstatus_size = 20
@@ -263,11 +292,6 @@ if !s:env_embedded
     nmap <C-w>8 <Plug>BufTabLine.Go(8)
     nmap <C-w>9 <Plug>BufTabLine.Go(9)
     nmap <C-w>0 <Plug>BufTabLine.Go(-1)
-
-  Plug 'szw/vim-maximizer'      " Maximize window
-    let g:maximizer_set_default_mapping = 0
-    nnoremap <silent><C-w>m :MaximizerToggle<CR>
-    vnoremap <silent><C-w>m :MaximizerToggle<CR>gv
 
   Plug 'psliwka/vim-smoothie'     " Scroll acceleration animation
     " Note that <C-d> and <C-u> are remapped (among others)
@@ -317,6 +341,8 @@ if !s:env_embedded
 
   Plug 'tpope/vim-fugitive'                     " Git interaction
 
+  Plug 'preservim/tagbar'                       " Outline by tags
+
   Plug 'pelodelfuego/vim-swoop'                 " Fast find and replace
     let g:swoopUseDefaultKeyMap = 0             " Just invoke :Swoop
 
@@ -324,82 +350,126 @@ if !s:env_embedded
   Plug 'itchyny/calendar.vim'                   " Calendar app in Vim
 
   if has('nvim')
-    " Only load heavier, asynchronous plugins in nvim. Keep vim light.
+    " Only load heavier, asynchronous plugins in nvim. Keep vim light
+    Plug 'ncm2/ncm2'                            " Neovim completion manager
+      Plug 'roxma/nvim-yarp'                    " ^ dependency
+      Plug 'ncm2/ncm2-bufword'                  " Complete from buffer
+      Plug 'ncm2/ncm2-path'                     " Complete from path
+      Plug 'ncm2/ncm2-markdown-subscope'        " Language subscop
+      Plug 'ncm2/ncm2-github'                   " Complete via GitHub
+      Plug 'ncm2/ncm2-vim' | Plug 'Shougo/neco-vim' " Completion for Vim
 
-    Plug 'dense-analysis/ale'                   " Asynchronous linting using LSP
-      let g:ale_sign_column_always = 1
-      let g:ale_lint_delay = 500
-      let g:ale_echo_msg_error_str = 'Err'
-      let g:ale_echo_msg_warning_str = 'Warn'
-      let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-      let g:ale_linters = {
-            \ 'rust': ['analyzer', 'cargo', 'rustc'],
-            \ 'tex': ['proselint', 'chktex'],
-            \ 'markdown': ['proselint', 'mdl'],
+      function! NcmEnable() abort
+        try
+          call ncm2#enable_for_buffer()
+
+          inoremap <C-x>x     <c-r>=ncm2#force_trigger()<cr>
+          inoremap <C-x><C-x> <c-r>=ncm2#force_trigger()<cr>
+          let g:ncm2#popup_delay = 500
+
+          " NOTE: no need to check filetype here since this is handled by 'scope'
+          call ncm2#register_source({
+                  \ 'name': 'vimtex',
+                  \ 'priority': 8,
+                  \ 'scope': ['tex'],
+                  \ 'mark': 'tex',
+                  \ 'word_pattern': '\w+',
+                  \ 'complete_pattern': g:vimtex#re#ncm2,
+                  \ 'on_complete': ['ncm2#on_complete#omni', 'vimtex#complete#omnifunc'],
+                  \ })
+        catch /^Vim\%((\a\+)\)\=:E117/ " Undefined function
+          echom 'ncm2 not yet installed'
+        catch /^Vim\%((\a\+)\)\=:E121/ " Undefined variable
+          echom 'ncm2 source not yet installed'
+        endtry
+      endfunction
+
+      augroup Ncm2Hook
+        autocmd!
+        autocmd FileType * call NcmEnable()
+        autocmd User Ncm2PopupOpen set completeopt=noinsert,menuone,noselect
+        autocmd User Ncm2PopupClose set completeopt=menu,preview
+      augroup END
+
+    Plug 'autozimu/LanguageClient-neovim', {
+        \ 'branch': 'next',
+        \ 'do': 'bash install.sh',
+        \ }
+      let g:LanguageClient_preferredMarkupKind = ['plaintext', 'markdown']
+      let g:LanguageClient_virtualTextPrefix = "  » "
+
+      let g:LanguageClient_serverCommands = {
+            \ 'rust': {
+            \   'name': 'rust-analyzer',
+            \   'command': ['rust-analyzer'],
+            \   'initializationOptions' : {
+            \     'inlayHints': { 'enable': v:true, 'chainingHints': v:true }
+            \   },
+            \ },
+            \ 'go': {
+            \   'name': 'gopls',
+            \   'command': ['gopls'],
+            \   'initializationOptions': {
+            \     'usePlaceholders': v:true,
+            \     'codelens': {
+            \       'generate': v:true,
+            \       'test': v:true,
+            \     },
+            \   },
+            \ },
             \ 'c': ['ccls'],
             \ 'cpp': ['ccls'],
-            \ 'haskell': ['hls'],
+            \ 'tex': ['texlab'],
+            \ 'bib': ['texlab'],
+            \ 'haskell': ['haskell-language-server', '--lsp'],
+            \ 'nix': ['rnix-lsp'],
+            \ 'bash': ['bash-language-server', 'start'],
+            \ 'sh': ['bash-language-server', 'start'],
+            \ 'vim': ['vim-language-server', '--stdio'],
+            \ 'yaml': ['yaml-language-server', '--stdio'],
             \}
-      let g:ale_fixers = {
-            \ 'rust': ['rustfmt'],
-            \ 'bib': ['bibclean'],
-            \ 'haskell': ['stylish-haskell'],
-            \ '*': ['trim_whitespace', 'remove_trailing_lines'],
-            \}
-      let g:ale_tex_chktex_options = '-n1 -n36 -n26'
 
-      " This way I can do Al<tab> for autocompletion without remembering to capitalize the 'L'
-      command! AleInfo ALEInfo
-      command! Aleinfo ALEInfo
-      " Funnily enough, this makes something like :Ale work too
+      function LC_keybinds()
+        if has_key(g:LanguageClient_serverCommands, &filetype)
+          command! LC call LanguageClient_contextMenu()
+          command! LCFmt call LanguageClient_textDocument_formatting()
+          " set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
 
-      " Note that [a clashes with vim-unimpaired, but it knows to stay out of my way (:
-      nmap <silent> [a <Plug>(ale_previous_wrap)
-      nmap <silent> ]a <Plug>(ale_next_wrap)
-
-      nmap <silent> <C-l>q      <Plug>(ale_toggle)
-      nmap <silent> <C-l><C-]>  <Plug>(ale_go_to_definition)
-      nmap <silent> <C-l>gg     <Plug>(ale_go_to_definition)
-      nmap <silent> <C-l>gs     <Plug>(ale_go_to_definition_in_split)
-      nmap <silent> <C-l>gv     <Plug>(ale_go_to_definition_in_vsplit)
-
-      nmap <silent> <C-l>ff     <Plug>(ale_find_references)
-      nmap <silent> <C-l>fr     :ALERepeatSelection<CR>
-      nmap <silent> <C-l>fs     :ALEFindReferences -split<CR>
-      nmap <silent> <C-l>fv     :ALEFindReferences -vsplit<CR>
-
-      nmap <silent> <C-l>c      <Plug>(ale_hover)
-      nmap <silent> <C-l>x      <Plug>(ale_fix)
-
-    " Asynchronous completion
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    Plug 'fszymanski/deoplete-emoji'              " Auto-complete emojus
-    Plug 'deoplete-plugins/deoplete-dictionary'   " Auto-complete dictionary word
-    Plug 'thalesmello/webcomplete.vim'            " Auto-complete from open browser
-      let g:deoplete#enable_at_startup = 1
-
-      function s:DeopleteHooks()
-        " These might fail if deoplete is not yet installed
-        call deoplete#custom#option({
-              \ 'auto_complete_delay': 500,
-              \ 'smart_case': v:true,
-              \ })
-
-        call deoplete#custom#option('sources', {
-              \ 'rust': ['ale', 'around', 'buffer'],
-              \})
-
-        call deoplete#custom#source('emoji', 'filetypes', [
-              \ 'gitcommit',
-              \ 'markdown',
-              \ 'txt',
-              \ 'rst',
-              \ 'vimwiki',
-              \])
+          nnoremap <buffer> gK K
+          nmap <buffer> <silent>  K <Plug>(lcn-hover)
+          nmap <buffer> <silent>  <C-]> <Plug>(lcn-definition)
+          nmap <buffer> <silent>  <C-h> <Plug>(lcn-explain-error)
+          nmap <buffer> <silent>  ]a <Plug>(lcn-diagnostics-next)
+          nmap <buffer> <silent>  [a <Plug>(lcn-diagnostics-prev)
+          nmap <buffer> <silent>  g/ <Plug>(lcn-references)
+          nmap <buffer> <silent>  g? <Plug>(lcn-symbols)
+          nmap <buffer> <silent>  gr <Plug>(lcn-rename)
+          nmap <buffer> <silent>  gR <Plug>(lcn-code-action)
+          nmap <buffer> <silent>  gQ <Plug>(lcn-format)
+        endif
       endfunction
-      let g:plug_callbacks += [function('s:DeopleteHooks')]
+
+      augroup LanguageClient_config
+        autocmd!
+        autocmd User LanguageClientStarted setlocal signcolumn=yes
+        autocmd User LanguageClientStopped setlocal signcolumn=auto
+        autocmd FileType * call LC_keybinds()
+      augroup END
+
+    Plug 'sbdchd/neoformat'                     " Formatting
+      let g:neoformat_bib_bibclean = {
+            \ 'exe': 'bibclean',
+            \ 'args': ['-align-equals', '-no-check-values'],
+            \ 'stdin': 1,
+            \}
+      let g:neoformat_tex_latexindent = {
+            \ 'exe': 'latexindent',
+            \ 'args': ["-y=defaultIndent:\"  \""],
+            \ 'stdin': 1,
+            \}
 
     Plug 'SirVer/ultisnips'                     " Snippet management
+    Plug 'ncm2/ncm2-ultisnips'
       let g:UltiSnipsExpandTrigger='<C-s>'
       let g:UltiSnipsJumpForwardTrigger='<C-s>'
       let g:UltiSnipsJumpBackwardTrigger='<C-x>'
@@ -414,13 +484,10 @@ endif " !s:env_embedded
 " Window/buffer management {{{
 " ----------------------------------------------------------------------------
 if !s:env_embedded
-  Plug 'moll/vim-bbye'
-  Plug 'zhaocai/GoldenView.Vim'       " Split buffer size management
-    let g:goldenview__enable_default_mapping = 0
-    " nmap <silent> <S-F8> <Plug>GoldenViewSwitchToggle
-    command! GoldenViewToggle ToggleGoldenViewAutoResize
+  Plug 'moll/vim-bbye'                " Delete buffers without messing up buffer layout
   Plug 'AndrewRadev/bufferize.vim'    " Command contents in buffer
   Plug 'AndrewRadev/linediff.vim'     " Vimdiff line ranges
+  Plug 'Konfekt/FastFold'             " Lazy folding
 endif
 
 " }}}
@@ -446,6 +513,7 @@ Plug 'joom/latex-unicoder.vim'          " Useful for 'pretty' Coq/Lean files
   inoremap <C-g>u <Esc>:call unicoder#start(1)<CR>
 Plug 'tpope/vim-characterize'           " Use ga to see metadata about unicode
 Plug 'godlygeek/tabular'                " Align text
+
 " }}}
 
 " Simple Utilities {{{
@@ -510,22 +578,8 @@ endif
 " Insert mode {{{
 if !s:env_embedded
   Plug 'tpope/vim-endwise'                " Write endings
-  Plug 'jiangmiao/auto-pairs'             " Auto-insert brackets/parens/quotes
-  " Plug 'LunarWatcher/auto-pairs'          " Auto-insert brackets/parens/quotes
-    let g:AutoPairsCenterLine = 0         " Preserve buffer view
-    let g:AutoPairsShortcutToggle = ''    " No need to toggle in insert mode
-    let g:AutoPairsMapCh = 0              " Use <C-h> to only backspace
-    let g:AutoPairsMapSpace = 0           " Don't go too crazy xD
-    let g:AutoPairsShortcutFastWrap = '<c-g>s'
-    let g:AutoPairsShortcutJump = '<c-g>%'
-    " Don't auto-pair ' --- used as apostrophe in prose and prime for OCaml
-    " let g:AutoPairs = {'(':')', '[':']', '{':'}','"':'"', '`':'`'}
-    command! AutoPair call AutoPairsToggle()
-    augroup auto_filetypes
-      autocmd!
-      autocmd Filetype html let b:AutoPairs = AutoPairsDefine({'<!--' : '-->'}, ['{'])
-      autocmd Filetype tex let b:AutoPairs = AutoPairsDefine({}, ["'", "`"])
-    augroup END
+  Plug 'tranvansang/vim-close-pair'       " Manually close pairs
+    let g:close_pair_key = '<C-]>'
 endif
 
 " }}}
@@ -703,7 +757,7 @@ if !s:env_embedded
     " let g:vimtex_disable_recursive_main_file_detection = 1
 
     function! VimtexConfig()
-      imap <buffer> <C-]>             <plug>(vimtex-delim-close)
+      imap <buffer> <C-g>]            <plug>(vimtex-delim-close)
 
       nmap <buffer> <C-c><CR>         <plug>(vimtex-compile-ss)
       vmap <buffer> <C-c><CR>    <ESC><plug>(vimtex-compile-ss)
@@ -724,11 +778,6 @@ if !s:env_embedded
       imap <buffer> <C-g>t      \texttt{}<left>
       imap <buffer> <C-g>b      \textbf{}<left>
       imap <buffer> <C-g>i      \textit{}<left>
-
-      " This might fail if deoplete or vimtex are not installed
-      call deoplete#custom#var('omni', 'input_patterns', {
-            \ 'tex': g:vimtex#re#deoplete,
-            \})
     endfunction
 
     augroup vimtex_settings
@@ -804,7 +853,7 @@ if !s:env_embedded
 
 " Markdown {{{
 
-  " Plug 'tpope/vim-markdown',                { 'as': 'tpope-vim-markdown' }
+  Plug 'tpope/vim-markdown',                { 'as': 'tpope-vim-markdown' }
     let g:markdown_fenced_languages = [
           \ 'html',
           \ 'python',
@@ -812,46 +861,32 @@ if !s:env_embedded
           \ 'c',
           \ 'cpp',
           \ 'ocaml',
-          \ 'haskell'
+          \ 'haskell',
+          \ 'rust',
           \ ]
     let g:markdown_folding = 1
     let g:markdown_syntax_conceal = 1
 
-  " Plug 'vim-pandoc/vim-pandoc'
-  " Plug 'vim-pandoc/vim-pandoc-syntax'
-  " let g:pandoc#syntax#codeblocks#embeds#langs = [
-  "       \ "python",
-  "       \ "bash=sh",
-  "       \ "sh",
-  "       \ "coq",
-  "       \ "cpp",
-  "       \ "c",
-  "       \ "vim",
-  "       \]
-  "   augroup pandoc_syntax
-  "       au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
+  " Plug 'plasticboy/vim-markdown', { 'as': 'plasticboy-vim-markdown' }
+    let g:vim_markdown_fenced_languages = g:markdown_fenced_languages
+  "   let g:vim_markdown_auto_insert_bullets = 0
+  "   let g:vim_markdown_folding_style_pythonic = 1
+  "   " let g:vim_markdown_math = 1
+  "   function MarkdownHook()
+  "     nmap g] <Plug>Markdown_MoveToCurHeader
+  "     nmap g[ <Plug>Markdown_MoveToParentHeader
+  "   endfunction
+
+  "   augroup markdown_mappings
+  "     autocmd!
+  "     autocmd Filetype markdown call MarkdownHook()
   "   augroup END
-
-  Plug 'plasticboy/vim-markdown', { 'as': 'plasticboy-vim-markdown' }
-    let g:vim_markdown_auto_insert_bullets = 0
-    let g:vim_markdown_folding_style_pythonic = 1
-    " let g:vim_markdown_math = 1
-    function MarkdownHook()
-      nmap g] <Plug>Markdown_MoveToCurHeader
-      nmap g[ <Plug>Markdown_MoveToParentHeader
-    endfunction
-
-    augroup markdown_mappings
-      autocmd!
-      autocmd Filetype markdown call MarkdownHook()
-    augroup END
 
   " Plug 'gabrielelana/vim-markdown',         { 'as': 'gabrielelana-vim-markdown'}
     " let g:markdown_enable_mappings = 0
     " let g:markdown_enable_folding = 1
     " let g:markdown_enable_input_abbreviations = 0
 
-  " Plug 'jtratner/vim-flavored-markdown',    { 'for': 'markdown' }
 " }}}
 
 " Haskell {{{
@@ -891,11 +926,15 @@ if !s:env_embedded
     " let g:rust_conceal_mod_path = 1
     " let g:rust_conceal_pub = 1
 
+  Plug 'leafgarland/typescript-vim'
+  Plug 'keith/swift.vim'
   Plug 'LucHermitte/valgrind.vim'
     let g:valgrind_arguments='--leak-check=yes '
+  Plug 'ziglang/zig.vim'
   Plug 'dag/vim-fish'
   Plug 'cespare/vim-toml'
   Plug 'adborden/vim-notmuch-address',      { 'for': 'mail' }
+  Plug 'neomutt/neomutt.vim'
 " }}}
 endif " !s:env_embedded
 " }}}
@@ -933,8 +972,7 @@ set nu rnu                " Line numbers and relative line numbers
 set display+=lastline     " Show as much as possible of the last line
 set scrolloff=5           " Keep a few lines under the cursor
 set sidescrolloff=2       " Keep a few lines to the side of the cursor
-set cmdheight=2           " Extra space for ALE hover output
-set statusline=2          " TODO: Uhhh no idea what this does
+set cmdheight=2           " Extra space in command line at bottom
 
 augroup cursor_underline  " Underline cursor in insert mode
   autocmd!
@@ -963,72 +1001,6 @@ set concealcursor=                      " Show concealed text when running curso
 set foldlevelstart=10
 set foldnestmax=10
 set foldmethod=manual
-
-" Darken Pmenu background so that it doesn't merge with Cursorline or ColorColumn
-highlight Pmenu ctermbg=233
-
-augroup ron_color_tweaks " {{{
-  autocmd!
-  " autocmd ColorScheme ron
-  "   \   highlight clear Conceal
-  "   \|  highlight clear VertSplit
-  "   \|  highlight SignColumn  ctermbg=NONE cterm=NONE guibg=NONE gui=NONE
-  "   \|  highlight ColorColumn   ctermbg=234 guibg=#1c1c1c
-  "   \|  highlight Folded    ctermbg=234 guibg=#1c1c1c
-  "   \|  highlight FoldColumn  ctermbg=234 guibg=#1c1c1c
-  " autocmd ColorScheme ron
-  "   \   highlight Search  cterm=underline,bold ctermfg=blue ctermbg=234
-  "   \             gui=underline,bold   guifg=blue guibg=#1c1c1c
-  "   \|  highlight IncSearch cterm=underline,bold ctermfg=cyan ctermbg=239
-  "   \             gui=underline,bold   guifg=cyan guibg=#4e4e4e
-  " autocmd ColorScheme ron
-  "   \   highlight Pmenu     ctermbg=234 ctermfg=white
-  "   \               guibg=#1c1c1c guifg=white
-  "   \|  highlight PmenuSbar   ctermbg=240 ctermfg=white
-  "   \               guibg=#585858 guifg=white
-  "   \|  highlight PmenuThumb  ctermbg=240 ctermfg=white
-  "   \               guibg=#585858 guifg=white
-  "   \|  highlight PmenuSel    ctermbg=240 ctermfg=white cterm=bold
-  "   \               guibg=#585858 guifg=white gui=bold
-  "   \|  highlight TabLineSel  ctermbg=240 ctermfg=white
-  "   \               guibg=#1c1c1c guifg=white
-  "   \|  highlight TabLine     ctermbg=234 ctermfg=240
-  "   \               guibg=#1c1c1c guifg=#585858
-  "   \|  highlight TabLineFill   ctermfg=234
-  "   \               guibg=#1c1c1c
-  " autocmd ColorScheme ron
-  "   \   highlight htmlItalic        term=standout
-  "   \                     ctermfg=121
-  "   \                     guifg=Green
-  "   \|  highlight htmlBoldItalic      term=bold,standout
-  "   \                     cterm=bold ctermfg=121
-  "   \                     gui=bold guifg=Green
-  "   \|  highlight htmlUnderlineItalic     term=underline,standout
-  "   \                     cterm=underline ctermfg=121
-  "   \                     gui=underline guifg=Green
-  "   \|  highlight htmlBoldUnderlineItalic   term=underline,bold,standout
-  "   \                     cterm=underline,bold ctermfg=121
-  "   \                     gui=underline,bold guifg=Green
-  " autocmd ColorScheme ron
-  "   \   highlight SpellBad    ctermbg=NONE ctermfg=red
-  "   \               guibg=NONE   guifg=red    gui=undercurl
-  "   \|  highlight SpellRare   ctermbg=NONE ctermfg=yellow
-  "   \               guibg=NONE   guifg=yellow   gui=undercurl
-  "   \|  highlight SpellCap    ctermbg=NONE ctermfg=cyan
-  "   \               guibg=NONE   guifg=cyan   gui=undercurl
-  "   \|  highlight SpellLocal  ctermbg=NONE ctermfg=yellow
-  "   \               guibg=NONE   guifg=yellow   gui=undercurl
-  " autocmd ColorScheme
-  "   \   highlight DiffAdd     ctermbg=17    cterm=bold
-  "   \               guibg=#00005f   gui=bold
-  "   \|  highlight DiffDelete  ctermbg=234   ctermfg=242
-  "   \               guibg=#1c1c1c   guifg=#6c6c6c
-  "   \|  highlight DiffChange  ctermbg=234
-  "   \               guibg=#1c1c1c
-  "   \|  highlight DiffText    ctermbg=234   cterm=underline
-  "   \               guibg=#1c1c1c   gui=undercurl
-  "   autocmd ColorScheme ron highlight MatchParen guifg=red
-augroup END " }}}
 
 " }}}
 
@@ -1075,7 +1047,7 @@ let g:netrw_preview = 1
 
 set pastetoggle=<F2>
 
-set textwidth=120     " How wide text should be
+set textwidth=80      " How wide text should be
 set expandtab         " Expand tabs to spaces
 set tabstop=4         " Expand tabs to 4 spaces
 set shiftwidth=0      " Use tabstop value for (auto)indent
@@ -1083,12 +1055,15 @@ set smarttab          " Apply tabs in front of a line according to shiftwidth
 set autoindent        " Automatically indent when starting a new line
 set nojoinspaces      " Only insert single space after J
 
+set formatoptions+=q  " Allow formatting with gq
+set formatoptions+=r  " Automatically insert comment leader on <CR>
 set formatoptions+=j  " Strip comment leader when joining comment lines
 set formatoptions+=n  " Recognize numbered lists when formatting text
-set formatoptions+=l  " Don't break up my text when in insert mode
+set formatoptions+=l  " Don't break up text that is already beyond textwidth
 set formatoptions+=1  " Don't break up a line after a one-letter word
 set formatoptions-=t  " Don't auto-wrap code text
 set formatoptions-=c  " Don't auto-wrap comments either
+set formatoptions-=o  " Don't insert comment leader automatically
 
 " NOTE: plugins seem to be pretty inconsistent about respecting formatoptions.
 " Add to filetype-specific hooks below if misbehaving.
@@ -1148,10 +1123,7 @@ endif
 " ----------------------------------------------------------------------------
 
 " Wrangle folds from jumping
-nnoremap za zazz
-nnoremap zi zizz
-
-nnoremap Q zazz
+nnoremap Q za
 " }}}
 
 " Navigation {{{
@@ -1224,11 +1196,8 @@ inoremap <expr> <C-e> <SID>i_ctrl_e()
 xnoremap < <gv
 xnoremap > >gv
 
-" " No clue what the hell this was supposed to do
-" inoremap # X#
-
 " Correct spelling
-inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
+inoremap <C-g>l <c-g>u<Esc>[s1z=`]a<c-g>u
 
 " Insert date/time
 nnoremap <space>id :put =strftime(\"%Y-%m-%d\")<CR>
@@ -1351,7 +1320,7 @@ command! Vimrc source ~/.vimrc
 let s:basicmode = 0
 function! s:basicToggle()
   if s:basicmode
-    set mouse=a nu rnu signcolumn=auto
+    set mouse=a nu rnu signcolumn=yes
     let s:basicmode = 0
   else
     set mouse= nonu nornu signcolumn=no
@@ -1374,6 +1343,17 @@ function! s:shareToggle()
   endif
 endfunction
 command! Share call s:shareToggle()
+" }}}
+
+" AutoFormat: format paragraph on each keystroke {{{
+function! s:autoFormatToggle()
+  if stridx(&formatoptions, 'a') == -1
+    set formatoptions+=a
+  else
+    set formatoptions-=a
+  endif
+endfunction
+command! AutoFormat call s:autoFormatToggle()
 " }}}
 
 " Modeline {{{
@@ -1594,6 +1574,24 @@ augroup mail_settings " {{{
   autocmd!
   autocmd Filetype mail setlocal
         \ wrap
+        \ textwidth=78
+        \ spell
+        \ formatoptions+=a
+augroup END " }}}
+
+augroup conf_settings " {{{
+  autocmd!
+  autocmd Filetype conf setlocal
+        \ wrap
+augroup END " }}}
+
+augroup json_settings " {{{
+  autocmd!
+  autocmd Filetype json setlocal
+        \ tabstop=2
+        \ expandtab
+        \ shiftwidth=2
+        \ softtabstop=2
 augroup END " }}}
 
 augroup markdown_settings " {{{

@@ -86,7 +86,7 @@ in
     (mkIf cfg.media.enable {
       environment.systemPackages = with pkgs; [
         playerctl
-        spotify spotifywm
+        spotifywm
         feh
         mpv
         vlc
@@ -231,6 +231,7 @@ in
         ghp-import
         highlight
         mdl
+        scdoc
 
         libxml2 # not sure why this was needed?
 
@@ -242,8 +243,9 @@ in
         # C
         gcc gnumake automake cmake autoconf pkg-config m4 libtool dpkg
         clang clang-tools
+        cdecl
         valgrind
-        ctags
+        unstable.universal-ctags
         ccls
 
         # Python
@@ -270,7 +272,7 @@ in
         rustup rustfmt rust-analyzer
 
         # Latex
-        tectonic texlive.combined.scheme-full bibclean
+        tectonic texlive.combined.scheme-full bibclean texlab
 
         # Pandoc
         pandoc haskellPackages.pandoc-citeproc
@@ -283,6 +285,9 @@ in
 
         # TLA
         tlaps
+
+        # Zig
+        zig
       ];
     })
   ];
