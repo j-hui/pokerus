@@ -395,28 +395,13 @@ if !s:env_embedded
         \ 'branch': 'next',
         \ 'do': 'bash install.sh',
         \ }
-      let g:LanguageClient_preferredMarkupKind = ['plaintext', 'markdown']
+      " let g:LanguageClient_preferredMarkupKind = ['plaintext', 'markdown']
       let g:LanguageClient_virtualTextPrefix = "  » "
-
+      let g:LanguageClient_settingsPath = expand('~/.config/nvim/settings.json')
+      let g:LanguageClient_loggingFile = expand('~/.config/nvim/LanguageClient.log')
       let g:LanguageClient_serverCommands = {
-            \ 'rust': {
-            \   'name': 'rust-analyzer',
-            \   'command': ['rust-analyzer'],
-            \   'initializationOptions' : {
-            \     'inlayHints': { 'enable': v:true, 'chainingHints': v:true }
-            \   },
-            \ },
-            \ 'go': {
-            \   'name': 'gopls',
-            \   'command': ['gopls'],
-            \   'initializationOptions': {
-            \     'usePlaceholders': v:true,
-            \     'codelens': {
-            \       'generate': v:true,
-            \       'test': v:true,
-            \     },
-            \   },
-            \ },
+            \ 'rust': ['rust-analyzer'],
+            \ 'go': ['gopls'],
             \ 'c': ['ccls'],
             \ 'cpp': ['ccls'],
             \ 'tex': ['texlab'],
@@ -433,7 +418,6 @@ if !s:env_embedded
         if has_key(g:LanguageClient_serverCommands, &filetype)
           command! LC call LanguageClient_contextMenu()
           command! LCFmt call LanguageClient_textDocument_formatting()
-          " set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
 
           nnoremap <buffer> gK K
           nmap <buffer> <silent>  K <Plug>(lcn-hover)
