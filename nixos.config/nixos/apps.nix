@@ -86,6 +86,7 @@ in
     (mkIf cfg.media.enable {
       environment.systemPackages = with pkgs; [
         playerctl
+        spotify
         spotifywm
         feh
         mpv

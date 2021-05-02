@@ -491,7 +491,7 @@ main = do
                 $ withUrgencyHook NoUrgencyHook
                 $ fullscreenSupport
                 $ ewmh
-                $ Debug.debugManageHook
+                --  $ Debug.debugManageHook
                 $ def { manageHook          = manageDocks <+> myManageHook
                       , handleEventHook     = docksEventHook
                       , modMask             = myModMask
