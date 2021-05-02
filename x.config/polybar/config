@@ -60,7 +60,7 @@ font-3 = ${fonts.font-3}
 [bar/top]
 inherit = bar/base
 bottom = false
-modules-left = powermenu bspwm
+modules-left = powermenu bspwm xmonad
 modules-right = xkeyboard volume clock
 tray-position = right
 tray-padding = 4

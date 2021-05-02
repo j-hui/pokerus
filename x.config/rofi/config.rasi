@@ -8,7 +8,7 @@ configuration {
     /* theme: "purple"; */
     /* theme: "gruvbox-dark-soft"; */
     /* theme: "Pop-Dark"; */
-    theme: "glue_pro_blue";
+    /* theme: "glue_pro_blue"; */
 
     terminal: "kitty";
     show-icons: true;

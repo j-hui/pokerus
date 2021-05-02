@@ -3,22 +3,22 @@
 # Reset, Black, Red, Green, Yellow, Blue, Magenta, Cyan, Gray, DarkGray,
 # LightRed, LightGreen, LightYellow, LightBlue, LightMagenta, LightCyan, White.
 theme:
-  text: White                     # text in panes
-  header: White                   # header text in panes (e.g. 'Title', 'Artist', etc.)
-  banner: LightGreen              # the "spotify-tui" banner on launch
-  error_border: Red               # error dialog border
-  error_text: LightRed            # error message text (e.g. "Spotify API reported error 404")
-  hint: Yellow                    # hint text in errors
+#   text: White                     # text in panes
+#   header: White                   # header text in panes (e.g. 'Title', 'Artist', etc.)
+#   banner: LightGreen              # the "spotify-tui" banner on launch
+#   error_border: Red               # error dialog border
+#   error_text: LightRed            # error message text (e.g. "Spotify API reported error 404")
+#   hint: Yellow                    # hint text in errors
 
-  active: LightBlue               # current playing song in list
-  hovered: LightMagenta           # hovered pane border
-  inactive: Magenta               # borders of inactive panes
-  selected: Yellow                # a) selected pane border, b) hovered item in list, & c) track title in player
+  # inactive: Magenta               # borders of inactive panes
+  active: Green               # current playing song in list
+  hovered: Yellow                   # hovered pane border
+  selected: LightBlue               # a) selected pane border, b) hovered item in list, & c) track title in player
 
-  playbar_background: Black       # background of progress bar
-  playbar_progress: DarkGray      # filled-in part of the progress bar
-  playbar_progress_text: Yellow   # song length and time played/left indicator in the progress bar
-  playbar_text: Blue              # artist name in player pane
+#   playbar_background: Black       # background of progress bar
+#   playbar_progress: DarkGray      # filled-in part of the progress bar
+#   playbar_progress_text: Yellow   # song length and time played/left indicator in the progress bar
+#   playbar_text: Blue              # artist name in player pane
 
 behavior:
   seek_milliseconds: 5000
@@ -51,8 +51,8 @@ keybindings:
   copy_song_url: "y"
   copy_album_url: "Y"
   help: "?"
-  shuffle: "s"
-  repeat: "r"
+  shuffle: "r"
+  repeat: "R"
   search: "/"
   jump_to_context: "o"
   jump_to_album: "a"

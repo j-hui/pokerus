@@ -1,42 +1,46 @@
-! ! Dracula Xresources palette
-! *.foreground: #F8F8F2
-! *.background: #282A36
-! *.color0:     #000000
-! *.color8:     #4D4D4D
-! *.color1:     #FF5555
-! *.color9:     #FF6E67
-! *.color2:     #50FA7B
-! *.color10:    #5AF78E
-! *.color3:     #F1FA8C
-! *.color11:    #F4F99D
-! *.color4:     #BD93F9
-! *.color12:    #CAA9FA
-! *.color5:     #FF79C6
-! *.color13:    #FF92D0
-! *.color6:     #8BE9FD
-! *.color14:    #9AEDFE
-! *.color7:     #BFBFBF
-! *.color15:    #E6E6E6
+! More themes here: https://github.com/logico-dev/Xresources-themes
+
+! Note: under the base16 scheme, the shade is used for the light and dark variants of the same color
 
 ! Base16 Material Darker
 ! Scheme: Nate Peterson
 
-#define base00 #212121
-#define base01 #303030
-#define base02 #353535
-#define base03 #4a4a4a
-#define base04 #b2ccd6
-#define base05 #eeffff
-#define base06 #eeffff
-#define base07 #ffffff
-#define base08 #f07178
-#define base09 #f78c6c
-#define base0A #ffcb6b
-#define base0B #c3e88d
-#define base0C #89ddff
-#define base0D #82aaff
-#define base0E #c792ea
-#define base0F #ff5370
+/* #define base00 #212121 */
+/* #define base01 #303030 */
+/* #define base02 #353535 */
+/* #define base03 #4a4a4a */
+/* #define base04 #b2ccd6 */
+/* #define base05 #eeffff */
+/* #define base06 #eeffff */
+/* #define base07 #ffffff */
+/* #define base08 #f07178 */
+/* #define base09 #f78c6c */
+/* #define base0A #ffcb6b */
+/* #define base0B #c3e88d */
+/* #define base0C #89ddff */
+/* #define base0D #82aaff */
+/* #define base0E #c792ea */
+/* #define base0F #ff5370 */
+
+! Base16 Gruvbox dark, medium
+! Scheme: Dawid Kurek (dawikur@gmail.com), morhetz (https://github.com/morhetz/gruvbox)
+
+#define base00 #282828
+#define base01 #3c3836
+#define base02 #504945
+#define base03 #665c54
+#define base04 #bdae93
+#define base05 #d5c4a1
+#define base06 #ebdbb2
+#define base07 #fbf1c7
+#define base08 #fb4934
+#define base09 #fe8019
+#define base0A #fabd2f
+#define base0B #b8bb26
+#define base0C #8ec07c
+#define base0D #83a598
+#define base0E #d3869b
+#define base0F #d65d0e
 
 *foreground:   base05
 #ifdef background_opacity
@@ -72,5 +76,14 @@
 *color19:      base02
 *color20:      base04
 *color21:      base06
+
+! Rofi
+! State:          'bg',     'fg',   'bgalt', 'hlbg',   'hlfg'
+rofi.color-normal: base01,  base06,  base02,  base03,   base0A
+rofi.color-urgent: base01,  base08,  base02,  base03,   base0A
+rofi.color-active: base01,  base09,  base02,  base03,   base0A
+
+!                  'background', 'border', 'separator'
+rofi.color-window: base01,       base03,   base03
 
 XTerm.vt100.faceName: Source Code Pro:size=15

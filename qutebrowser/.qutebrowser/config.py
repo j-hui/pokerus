@@ -25,7 +25,8 @@ config.source('themes/material-darker.py')
 #         'horizontal': 8
 #     }
 # })
-c.colors.webpage.bg = c.colors.completion.item.selected.bg
+bg_color = "#a89984"
+c.colors.webpage.bg = bg_color
 
 # Put kitty, gvim, etc. in Qutebrowser's PATH, at least on macOS
 os.environ['PATH'] = '/usr/local/bin' + os.pathsep + os.environ['PATH']
@@ -148,6 +149,13 @@ c.aliases['readability'] = 'spawn --userscript readability'
 c.aliases['reader'] = 'spawn --userscript readability'
 c.aliases['bib'] = 'spawn --userscript getbib'
 c.aliases['pocket'] = 'spawn --userscript qutepocket'
+
+c.aliases['bg-norm'] = 'set colors.webpage.bg #ffffff'
+c.aliases['bg-dark'] = 'set colors.webpage.bg ' + bg_color
+c.aliases['style'] = 'config-cycle content.user_stylesheets         ' +
+        '"~/.config/qutebrowser/css/darculized-all-sites.css"       ' +
+        '"~/.config/qutebrowser/css/solarized-dark-all-sites.css"   ' +
+        '""'
 
 ### Aliases }}}
 
@@ -296,7 +304,7 @@ imap('<Ctrl+o>', 'open-editor')
 ## Misc. ergonics }}}
 
 ## Hints (t*) {{{
-nmap('T', 'hint --first inputs')
+nmap('T',  'hint --first inputs')
 nmap('tt', 'hint inputs')
 nmap('tf', 'hint --rapid links tab-bg')
 nmap('ty', 'hint links yank')
@@ -307,7 +315,7 @@ nmap('tO', 'hint links fill :open --tab --related {hint-url}')
 nmap('th', 'hint all hover')
 nmap('ti', 'hint images')
 nmap('tI', 'hint images tab')
-## Hints
+## }}} Hints
 
 ## Goto: (g*) {{{
 nmap('gp', 'open -- {clipboard}')
@@ -333,14 +341,8 @@ nmap('cS', 'navigate --tab strip')
 ## }}}
 
 ## Userscript/externally-dependent bindings {{{
-config.bind('<Ctrl-g>', 'config-cycle content.user_stylesheets     ' +
-        '"~/.config/qutebrowser/css/darculized-all-sites.css"      ' +
-        '"~/.config/qutebrowser/css/solarized-dark-all-sites.css"  ' +
-        '""')
-
 nmap('<Ctrl+Shift+l>', 'spawn --userscript qute-pass')
 imap('<Ctrl+Shift+l>', 'spawn --userscript qute-pass')
-
 nmap('yc', 'hint code userscript ' + userscript('code_select'))
 ## Userscript/externally-dependent bindings }}}
 
@@ -362,7 +364,7 @@ for mode in ['command', 'prompt']:
     config.bind('<Ctrl+h>'          , 'rl-backward-delete-char'     , mode=mode)
     config.bind('<Alt+Backspace>'   , 'rl-backward-kill-word'       , mode=mode)
     config.bind('<Ctrl+Alt+h>'      , 'rl-backward-kill-word'       , mode=mode)
-    config.bind('<Ctrl+w>'          , 'rl-unix-word-rubout'         , mode=mode)
+    config.bind('<Ctrl+w>'          , 'rl-backward-kill-word'       , mode=mode)
     config.bind('<Ctrl+u>'          , 'rl-unix-line-discard'        , mode=mode)
 
     config.bind('<Ctrl+b>'          , 'rl-backward-char'            , mode=mode)
@@ -443,3 +445,4 @@ config.set('content.javascript.enabled', True, 'chrome://*/*')
 config.set('content.javascript.enabled', True, 'qute://*/*')
 
 # Auto-generated }}}
+#  vim: set ts=8 sw=4 tw=80 et foldmethod=marker foldlevel=0:
