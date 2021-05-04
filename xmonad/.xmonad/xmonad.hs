@@ -7,7 +7,7 @@ import           Data.Bifunctor                      (Bifunctor (..))
 import           Data.Char                           (isSpace)
 import           Data.List                           (dropWhileEnd, elemIndex,
                                                       find, isPrefixOf, nub)
-import           Data.Maybe                          (catMaybes, fromMaybe)
+import           Data.Maybe                          (listToMaybe, catMaybes, fromMaybe)
 import           System.Exit                         (exitSuccess)
 import           System.IO.Unsafe                    (unsafePerformIO)
 
@@ -21,12 +21,13 @@ import           XMonad.Actions.CycleWS              (Direction1D (..),
                                                       nextScreen, prevScreen,
                                                       shiftTo)
 import           XMonad.Actions.Promote              (promote)
-import           XMonad.Actions.RotSlaves            (rotAllDown, rotAllUp, rotSlavesDown,
+import           XMonad.Actions.RotSlaves            (rotAllDown, rotAllUp,
+                                                      rotSlavesDown,
                                                       rotSlavesUp)
 import           XMonad.Actions.WithAll              (killAll)
 
 
-import           XMonad.Actions.DynamicProjects      (Project (..),
+import           XMonad.Actions.DynamicProjects      (activateProject, Project (..),
                                                       dynamicProjects,
                                                       lookupProject,
                                                       shiftToProject,
@@ -35,7 +36,7 @@ import           XMonad.Actions.DynamicWorkspaces    (addHiddenWorkspace)
 import qualified XMonad.Hooks.DynamicLog             as Log
 import           XMonad.Hooks.EwmhDesktops           (ewmh)
 import           XMonad.Hooks.FadeInactive           (fadeInactiveLogHook)
-import qualified XMonad.Hooks.ManageDebug            as Debug
+-- import qualified XMonad.Hooks.ManageDebug            as Debug
 import           XMonad.Hooks.ManageDocks            (avoidStruts,
                                                       docksEventHook,
                                                       manageDocks)
@@ -43,8 +44,8 @@ import           XMonad.Hooks.ManageHelpers          (composeOne, doCenterFloat,
                                                       doFullFloat, isFullscreen,
                                                       transience', (-?>))
 import           XMonad.Hooks.SetWMName              (setWMName)
-import           XMonad.Hooks.UrgencyHook            (focusUrgent, NoUrgencyHook (..),
-                                                      readUrgents,
+import           XMonad.Hooks.UrgencyHook            (NoUrgencyHook (..),
+                                                      focusUrgent, readUrgents,
                                                       withUrgencyHook)
 import           XMonad.Hooks.WorkspaceHistory       (workspaceHistory,
                                                       workspaceHistoryHook)
@@ -233,15 +234,18 @@ promptDesktop :: String -> X String
 promptDesktop prompt = do
   wins <- readUrgents
   history <- workspaceHistory
-  myDmenu prompt $ nub $ tail $ urgent wins ++ history ++ myWorkspaces ++ map projectName myProjects
+  myDmenu prompt $ nub $ urgent wins ++ tail history ++ myWorkspaces ++ map projectName myProjects
     where urgent wins = []
 
 switchDesktop :: String -> X ()
 switchDesktop name
   | name `elem` myWorkspaces = windows $ SS.greedyView name
   | otherwise = do
+        history <- workspaceHistory
         proj <- lookupProject name
-        forM_ proj switchProject
+        if listToMaybe history == Just name
+           then forM_ proj activateProject
+           else forM_ proj switchProject
 
 shiftToDesktop :: String -> X ()
 shiftToDesktop name
