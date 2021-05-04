@@ -232,7 +232,7 @@ in
         };
       };
 
-      compton = {
+      picom = {
         enable = true;
         vSync = true;
         backend = "glx";
