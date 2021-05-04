@@ -2,7 +2,10 @@
 
 ## Common packages
 
-    tree python3 htop fzf silversearcher-ag ripgrep curl wget gnupg
+    curl wget tree htop gnupg openssh-server \
+    fzf silversearcher-ag ripgrep thefuck exa \
+    python3-pip opam golang
+
 
 ## User Management
 
@@ -25,6 +28,7 @@ To set `editor` to point to `vim`:
 
     sudo update-alternatives --set editor /usr/bin/vim.basic
 
+
 ### Disable Root SSH Login
 
 Edit:
@@ -34,6 +38,7 @@ Edit:
 Set:
 
     PermitRootLogin no
+
 
 ### Boot to console
 
