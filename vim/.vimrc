@@ -349,12 +349,11 @@ if !s:env_embedded
 
   if has('nvim')
     " Only load heavier, asynchronous plugins in nvim. Keep vim light
-    Plug 'ncm2/ncm2'                            " Neovim completion manager
-      Plug 'roxma/nvim-yarp'                    " ^ dependency
+    Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp'   " Neovim completion manager
       Plug 'ncm2/ncm2-bufword'                  " Complete from buffer
       Plug 'ncm2/ncm2-path'                     " Complete from path
-      Plug 'ncm2/ncm2-markdown-subscope'        " Language subscop
-      Plug 'ncm2/ncm2-github'                   " Complete via GitHub
+      Plug 'ncm2/ncm2-markdown-subscope'        " Language subscope for markdown
+      Plug 'ncm2/ncm2-ultisnips'                " Snippets
       Plug 'ncm2/ncm2-vim' | Plug 'Shougo/neco-vim' " Completion for Vim
 
       function! NcmEnable() abort
@@ -388,6 +387,26 @@ if !s:env_embedded
         autocmd User Ncm2PopupOpen set completeopt=noinsert,menuone,noselect
         autocmd User Ncm2PopupClose set completeopt=menu,preview
       augroup END
+
+    if 0
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    Plug 'deoplete-plugins/deoplete-dictionary'   " Auto-complete dictionary word
+      let g:deoplete#enable_at_startup = 1
+
+      function s:DeopleteHooks()
+        " These might fail if deoplete is not yet installed
+        call deoplete#custom#option('auto_complete_delay', 200)
+        call deoplete#custom#option('smart_case', v:true)
+        call deoplete#custom#option('auto_refresh_delay', 500)
+
+        inoremap <C-x>x     <c-r>=deoplete#complete()<cr>
+        inoremap <C-x><C-x> <c-r>=deoplete#complete()<cr>
+        call deoplete#custom#var('omni', 'input_patterns', {
+              \ 'tex': g:vimtex#re#deoplete,
+              \})
+      endfunction
+      let g:plug_callbacks += [function('s:DeopleteHooks')]
+    endif
 
     Plug 'autozimu/LanguageClient-neovim', {
         \ 'branch': 'next',
@@ -453,7 +472,6 @@ if !s:env_embedded
       vnoremap gl :Neoformat<CR>
 
     Plug 'SirVer/ultisnips'                     " Snippet management
-    Plug 'ncm2/ncm2-ultisnips'
       let g:UltiSnipsExpandTrigger='<C-s>'
       let g:UltiSnipsJumpForwardTrigger='<C-s>'
       let g:UltiSnipsJumpBackwardTrigger='<C-x>'
