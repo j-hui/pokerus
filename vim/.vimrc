@@ -412,8 +412,7 @@ if !s:env_embedded
         \ 'branch': 'next',
         \ 'do': 'bash install.sh',
         \ }
-      " let g:LanguageClient_preferredMarkupKind = ['plaintext', 'markdown']
-      let g:LanguageClient_virtualTextPrefix = "  » "
+      " let g:LanguageClient_loggingLevel = 'DEBUG'
       let g:LanguageClient_settingsPath = expand('~/.config/nvim/settings.json')
       let g:LanguageClient_loggingFile = expand('~/.config/nvim/LanguageClient.log')
       let g:LanguageClient_serverCommands = {
@@ -425,11 +424,18 @@ if !s:env_embedded
             \ 'bib': ['texlab'],
             \ 'haskell': ['haskell-language-server', '--lsp'],
             \ 'nix': ['rnix-lsp'],
-            \ 'bash': ['bash-language-server', 'start'],
-            \ 'sh': ['bash-language-server', 'start'],
             \ 'vim': ['vim-language-server', '--stdio'],
             \ 'yaml': ['yaml-language-server', '--stdio'],
+            \ 'python': ['pyright-langserver', '--stdio'],
             \}
+
+      let g:LanguageClient_virtualTextPrefix = ' » '
+      " let g:LanguageClient_useVirtualText = 'Diagnostics'
+
+      let g:LanguageClient_codeLensDisplay = {
+            \ 'virtualTexthl': 'Comment',
+            \}
+      " let g:LanguageClient_preferredMarkupKind = ['plaintext', 'markdown']
 
       function LC_keybinds()
         if has_key(g:LanguageClient_serverCommands, &filetype)
@@ -1624,4 +1630,4 @@ if argc() > 1
 endif
 " }}}
 
-" vim: set ts=2 sw=2 tw=120 et foldmethod=marker foldlevel=1:
+" vim: set ts=2 sw=2 tw=120 et foldmethod=marker foldlevel=0:
