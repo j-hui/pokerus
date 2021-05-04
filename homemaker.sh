@@ -30,7 +30,7 @@ append () {
 
 
 append ~/.bashrc '~/.bash_aliases' '
-if [ -f ~/.bash_aliases ]; then
+if [ -f ~/.bash_aliases ] ; then
     . ~/.bash_aliases # Pokerus
 fi
 '

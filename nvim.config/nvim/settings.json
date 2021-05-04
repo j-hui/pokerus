@@ -1,0 +1,17 @@
+{
+  "rust-analyzer": {
+    "inlayHints": {
+      "enable": true,
+      "chainingHints": true,
+      "typeHints": true,
+      "parameterHints": true
+    }
+  },
+  "gopls": {
+    "usePlaceholders": true,
+    "codelens": {
+      "generate": true,
+      "test": true
+    }
+  }
+}

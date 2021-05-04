@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+# Janky command-line interface to spotify/spotifyd/whatever is playing
+# via playerctl/spt
+
+set -euf
+
+if [ "$#" -ne "1" ]; then
+    echo "Usage: $0 [play|prev|next|here|like]"
+fi
+
+case "$1" in
+    play|play-pause|pause)
+        playerctl --player=spotify,spotifyd,%d play-pause
+        ;;
+    prev|previous|p)
+        playerctl --player=spotify,spotifyd,%d previous
+        ;;
+    next|n)
+        playerctl --player=spotify,spotifyd,%d next
+        ;;
+    here)
+        # NOTE: very flaky
+        systemctl --user restart spotifyd
+        sleep 1
+        spt playback --tranfer "$(hostname)-spotifyd)"
+        ;;
+    like)
+        ;;
+esac

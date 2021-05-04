@@ -4,10 +4,11 @@
 pgrep sxhkd > /dev/null || sxhkd &
 
 dunst &
-polybar top &
 
-test -z "$(acpi --battery 2>/dev/null)" && polybar bottom &
-acpi --battery 2>/dev/null | grep Battery >/dev/null && polybar bottom-laptop &
+polybar top &
+polybar bottom &
+# test -z "$(acpi --battery 2>/dev/null)" && polybar bottom &
+# acpi --battery 2>/dev/null | grep Battery >/dev/null && polybar bottom-laptop &
 
 amixer sset Master 69%
 
@@ -17,19 +18,38 @@ xset r rate 250 69
 
 bspc monitor -d I II III IV V VI VII VIII
 
-bspc config border_width        4
-bspc config window_gap          15
+bspc config borderless_monocle true
+bspc config gapless_monocle true
+# bspc config gapless_monocle false
 
-bspc config split_ratio         0.52
-bspc config borderless_monocle  true
-bspc config gapless_monocle     false
+bspc config border_width 1
+bspc config window_gap 0
+# bspc config border_width 4
+# bspc config window_gap 15
+
+# Dracula colors
+# bspc config normal_border_color "#181a23"
+# bspc config active_border_color "#181a23"
+# bspc config focused_border_color "#bd93f9"
+# bspc config presel_feedback_color "#bd93f9"
+
+# Material darker colors
+bspc config normal_border_color "#808080"
+bspc config active_border_color "#808080"
+# bspc config focused_border_color "#89ddff"    # blue
+bspc config focused_border_color "#c3e88d"      # yellow
+bspc config presel_feedback_color "#bd93f9"
+
+# Extra padding for polybar
+# bspc config ignore_ewmh_struts true
+bspc config top_padding 27
+bspc config bottom_padding 27
+
+# bspc config split_ratio         0.52
 
 bspc config click_to_focus any
 
-bspc config normal_border_color "#44475a"
-bspc config active_border_color "#bd93f9"
-bspc config focused_border_color "#ff79c6"
-bspc config presel_feedback_color "#6272a4"
+bspc rule -a Pinentry state=floating center=on follow=on
 
 bspc rule -a Zathura state=tiled follow=on
 
