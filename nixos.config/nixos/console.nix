@@ -1,15 +1,13 @@
 { config, pkgs, lib, ... }:
 with lib;
 let
-  neovim-nightly-metadata = {
-    upattr = "neovim-unwrapped";
-    repo_git = "https://github.com/neovim/neovim";
-    branch = "master";
-    rev = "28a0f6b17ddb51f605abfcd9d48b8084545d5901";
-    sha256 = "sha256-vXoaqhbnfv34P0E2CIEMWD+0o9jUDu95Vjl33DIGxGw=";
-  };
-
-  # neovim =
+  # neovim-nightly-metadata = {
+  #   upattr = "neovim-unwrapped";
+  #   repo_git = "https://github.com/neovim/neovim";
+  #   branch = "master";
+  #   rev = "28a0f6b17ddb51f605abfcd9d48b8084545d5901";
+  #   sha256 = "sha256-vXoaqhbnfv34P0E2CIEMWD+0o9jUDu95Vjl33DIGxGw=";
+  # };
 
   unstable = import <nixpkgs-unstable> {};
   cfg = config.pokerus.console;
@@ -17,7 +15,6 @@ in
 {
   options.pokerus.console = {
     enable = mkEnableOption "Console configuration";
-    mail.enable = mkEnableOption "Mail services";
     virt.enable = mkEnableOption "Virtualization services";
     print.enable = mkEnableOption "Printing services";
     laptop.enable = mkEnableOption "Laptop settings";
@@ -25,11 +22,18 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
+      # nixpkgs.overlays = [
+      #   (import (builtins.fetchTarball {
+      #     url = https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz;
+      #   }))
+      # ];
+
       console.font = "Lat2-Terminus16";
       time.timeZone = "America/New_York";
       i18n.defaultLocale = "en_US.UTF-8";
 
-      environment.variables.EDITOR = "vim";
+      environment.variables.EDITOR = "nvim";
+      environment.variables.ESCDELAY = "10";
 
       environment.systemPackages = with pkgs; [
         # shell + terminal
@@ -44,8 +48,10 @@ in
         # text editing
         ed nano
         vimHugeX
-        neovim neovim-remote
-        emacs
+        neovim
+        # neovim-nightly
+        neovim-remote
+        # emacs
         # It was fun while it lasted
         # (wrapNeovim (neovim-unwrapped.overrideAttrs(old: {
         #   version = "0.5.0-${metadata.rev}";
@@ -58,6 +64,12 @@ in
         #   buildInputs = old.buildInputs ++ [ unstable.tree-sitter ];
         # })) {})
 
+        # Basic language servers
+        rnix-lsp
+        nodePackages.bash-language-server
+        nodePackages.vim-language-server
+        nodePackages.yaml-language-server
+
         # version control
         git gitAndTools.gh gitAndTools.delta
         subversion
@@ -67,12 +79,15 @@ in
         pass
         mkpasswd
         gopass
+        ripasso-cursive
+        xkcdpass
 
         # files
         ranger
         fzf
         ag
         ripgrep
+        vgrep
         fd
         bat
         diskus
@@ -80,16 +95,29 @@ in
         exa
         broot
         nnn
+        borgbackup
+        rclone
+        sqlite
+        zoxide
+        tokei
 
         # utilities
-        binutils-unwrapped
+        binutils
         unzip
         pv
         bc
         man-pages
         miller
-        jq
-        w3m
+        jq go-pup
+        w3m lynx
+        file
+        imagemagick
+        zstd
+        cmark
+        mdcat
+        sd
+        xsv
+        hexyl
 
         # process management
         htop
@@ -106,6 +134,8 @@ in
         python38Packages.speedtest-cli
         dhcp rustscan
         prettyping
+        gnutls
+        bandwhich
 
         # disk
         parted cryptsetup gptfdisk
@@ -125,7 +155,8 @@ in
         openssh.forwardX11 = true;
       };
 
-      networking.wireguard.enable = true;
+      # networking.wireguard.enable = true;
+      environment.etc.wireguard.source = "/persist/etc/wireguard";
 
       programs.ssh.askPassword = "";
       programs.ssh.startAgent = true;
@@ -150,7 +181,13 @@ in
     (mkIf cfg.print.enable {
       services = {
         printing.enable = true;
+        printing.drivers = with pkgs; [
+          hplipWithPlugin
+          # To add printers:
+          # nix run nixpkgs.hplipWithPlugin -c sudo hp-setup
+        ];
         avahi.enable = true;
+        avahi.nssmdns = true;
       };
     })
 
@@ -159,14 +196,7 @@ in
         libvirt virt-manager qemu
       ];
       virtualisation.libvirtd.enable = true;
-    })
-
-    (mkIf cfg.mail.enable {
-      environment.systemPackages = with pkgs; [
-        aerc
-        gcalcli
-        astroid notmuch offlineimap msmtp
-      ];
+      # Also remember to add user to libvirtd group
     })
   ];
 }

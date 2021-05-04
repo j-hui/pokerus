@@ -13,6 +13,7 @@ in
       nixos.source = "/persist/etc/nixos";
       NIXOS.source = "/persist/etc/NIXOS";
       machine-id.source = "/persist/etc/machine-id";
+      # cups.source = "/persist/etc/cups";
     };
 
     # systemd.tmpfiles.rules = [

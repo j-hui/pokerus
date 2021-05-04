@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+# Adapted from https://github.com/4lgn/word-lookup
+
+if  ! command -v xclip       >/dev/null || \
+    ! command -v curl        >/dev/null || \
+    ! command -v grep        >/dev/null || \
+    ! command -v sed         >/dev/null || \
+    ! command -v notify-send >/dev/null ; then
+    echo "Dependencies not met."
+    exit 1
+fi
+
+if ! [ -n "$DISPLAY" ]; then
+    echo "Cannot find X session."
+    exit 1
+fi
+
+word=$(xclip -o | xargs) # Use xargs to trim off excess whitespace
+if ! [ -n "$word" ]; then
+    echo "No word selected."
+    notify-send -u low -t 2000 "No word selected." ""
+    exit 1
+fi
+url_word="$(echo $word | tr ' ' '+')"
+
+res=$(curl -s "https://api.dictionaryapi.dev/api/v2/entries/en_US/$url_word")
+regex=$'"definition":"\K(.*?)(?=")'
+definitions=$(echo $res | grep -Po "$regex")
+separatedDefinition=$(sed ':a;N;$!ba;s/\n/\n\n/g' <<< "$definitions")
+
+if [ -n "$separatedDefinition" ]; then
+    notify-send -u low -t 10000 "$word" "$separatedDefinition"
+else
+    notify-send -u low -t 2000 "$word" "No definition found."
+    exit 1
+fi

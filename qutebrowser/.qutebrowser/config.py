@@ -17,12 +17,16 @@ import dracula.draw
 # Load existing settings made via :set
 config.load_autoconfig()
 
-dracula.draw.blood(c, {
-    'spacing': {
-        'vertical': 6,
-        'horizontal': 8
-    }
-})
+config.source('themes/material-darker.py')
+
+# dracula.draw.blood(c, {
+#     'spacing': {
+#         'vertical': 6,
+#         'horizontal': 8
+#     }
+# })
+bg_color = "#a89984"
+c.colors.webpage.bg = bg_color
 
 # Put kitty, gvim, etc. in Qutebrowser's PATH, at least on macOS
 os.environ['PATH'] = '/usr/local/bin' + os.pathsep + os.environ['PATH']
@@ -72,18 +76,30 @@ c.tabs.mousewheel_switching = False
 
 c.zoom.mouse_divider = 0
 
+padding = {
+    'top': 6,
+    'bottom': 6,
+    'right': 8,
+    'left': 8,
+}
+c.statusbar.padding = padding
+c.tabs.padding = padding
+c.tabs.indicator.width = 1
+c.tabs.favicons.scale = 1
 
 # Open external applications
-for site in ['zoommtg://*.zoom.us'
-            ,'https://*.slack.com'
-            ]:
+for site in [
+            'zoommtg://*.zoom.us',
+            'https://*.slack.com',
+        ]:
     config.set('content.unknown_url_scheme_policy', 'allow-all', site)
 
 # Acess clipboard
-for site in ['https://github.com/*'
-            ,'https://stackoverflow.com/*'
-            ,'https://*.stackexchange.com/*'
-            ]:
+for site in [
+            'https://github.com/*',
+            'https://stackoverflow.com/*',
+            'https://*.stackexchange.com/*',
+        ]:
     config.set('content.javascript.can_access_clipboard', True, site)
 
 ### Assorted configs }}}
@@ -107,8 +123,8 @@ c.aliases['o'] = 'open'
 c.aliases['O'] = 'open --tab'
 c.aliases['t'] = 'open --background'
 
-c.aliases['pt'] = 'enter-mode passthrough'
-c.aliases['passthrough'] = 'enter-mode passthrough'
+c.aliases['pt'] = 'mode-enter passthrough'
+c.aliases['passthrough'] = 'mode-enter passthrough'
 
 c.aliases['pin'] = 'tab-pin'
 
@@ -132,6 +148,14 @@ c.aliases['pass'] = 'spawn --userscript qute-pass'
 c.aliases['readability'] = 'spawn --userscript readability'
 c.aliases['reader'] = 'spawn --userscript readability'
 c.aliases['bib'] = 'spawn --userscript getbib'
+c.aliases['pocket'] = 'spawn --userscript qutepocket'
+
+c.aliases['bg-norm'] = 'set colors.webpage.bg #ffffff'
+c.aliases['bg-dark'] = 'set colors.webpage.bg ' + bg_color
+c.aliases['style'] = ('config-cycle content.user_stylesheets        ' +
+        '"~/.config/qutebrowser/css/darculized-all-sites.css"       ' +
+        '"~/.config/qutebrowser/css/solarized-dark-all-sites.css"   ' +
+        '""')
 
 ### Aliases }}}
 
@@ -193,9 +217,9 @@ nmap(']]', 'navigate next')
 nmap('f', 'hint')
 nmap('F', 'hint all tab')
 
-nmap('i', 'enter-mode insert')
-nmap('v', 'enter-mode caret')
-nmap('V', 'enter-mode caret ;; toggle-selection --line')
+nmap('i', 'mode-enter insert')
+nmap('v', 'mode-enter caret')
+nmap('V', 'mode-enter caret ;; toggle-selection --line')
 
 nmap('yy', 'yank') # url
 nmap('yt', 'yank title')
@@ -237,11 +261,11 @@ vmap('{', 'move-to-end-of-prev-block')
 vmap('}', 'move-to-end-of-next-block')
 
 for mode in ['prompt', 'register', 'hint', 'yesno', 'caret', 'insert', 'command']:
-    config.bind('<Escape>', 'leave-mode', mode=mode)
+    config.bind('<Escape>', 'mode-leave', mode=mode)
 
 config.bind('<Return>', 'command-accept', mode='command')
 
-config.bind('<Shift+Escape>', 'leave-mode', mode='passthrough')
+config.bind('<Shift+Escape>', 'mode-leave', mode='passthrough')
 
 config.bind('<Return>', 'follow-hint', mode='hint')
 
@@ -280,7 +304,7 @@ imap('<Ctrl+o>', 'open-editor')
 ## Misc. ergonics }}}
 
 ## Hints (t*) {{{
-nmap('T', 'hint --first inputs')
+nmap('T',  'hint --first inputs')
 nmap('tt', 'hint inputs')
 nmap('tf', 'hint --rapid links tab-bg')
 nmap('ty', 'hint links yank')
@@ -291,7 +315,7 @@ nmap('tO', 'hint links fill :open --tab --related {hint-url}')
 nmap('th', 'hint all hover')
 nmap('ti', 'hint images')
 nmap('tI', 'hint images tab')
-## Hints
+## }}} Hints
 
 ## Goto: (g*) {{{
 nmap('gp', 'open -- {clipboard}')
@@ -317,14 +341,8 @@ nmap('cS', 'navigate --tab strip')
 ## }}}
 
 ## Userscript/externally-dependent bindings {{{
-config.bind('<Ctrl-g>', 'config-cycle content.user_stylesheets     ' +
-        '"~/.config/qutebrowser/css/darculized-all-sites.css"      ' +
-        '"~/.config/qutebrowser/css/solarized-dark-all-sites.css"  ' +
-        '""')
-
 nmap('<Ctrl+Shift+l>', 'spawn --userscript qute-pass')
 imap('<Ctrl+Shift+l>', 'spawn --userscript qute-pass')
-
 nmap('yc', 'hint code userscript ' + userscript('code_select'))
 ## Userscript/externally-dependent bindings }}}
 
@@ -346,7 +364,7 @@ for mode in ['command', 'prompt']:
     config.bind('<Ctrl+h>'          , 'rl-backward-delete-char'     , mode=mode)
     config.bind('<Alt+Backspace>'   , 'rl-backward-kill-word'       , mode=mode)
     config.bind('<Ctrl+Alt+h>'      , 'rl-backward-kill-word'       , mode=mode)
-    config.bind('<Ctrl+w>'          , 'rl-unix-word-rubout'         , mode=mode)
+    config.bind('<Ctrl+w>'          , 'rl-backward-kill-word'       , mode=mode)
     config.bind('<Ctrl+u>'          , 'rl-unix-line-discard'        , mode=mode)
 
     config.bind('<Ctrl+b>'          , 'rl-backward-char'            , mode=mode)
@@ -427,3 +445,4 @@ config.set('content.javascript.enabled', True, 'chrome://*/*')
 config.set('content.javascript.enabled', True, 'qute://*/*')
 
 # Auto-generated }}}
+#  vim: set ts=8 sw=4 tw=80 et foldmethod=marker foldlevel=0:

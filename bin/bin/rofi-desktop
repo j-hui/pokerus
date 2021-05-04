@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+set -u
+
+desktop="$(wmctrl -d | rofi -dmenu)"
+desktopId="${desktop%% *}"
+wmctrl -i -s "$desktopId"

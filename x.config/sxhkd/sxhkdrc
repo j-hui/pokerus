@@ -38,6 +38,10 @@ super + i
 super + shift + i
     ~/bin/rofi-define
 
+## define selected text:
+super + d
+    ~/bin/word-lookup.sh
+
 ## rofi run:
 {super, super + ctrl} + space
     rofi -show {drun,run}
@@ -50,47 +54,28 @@ super {+ Tab, + grave}
 super + b
     rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'
 
-## scrot full-screen:
-Print
-    mkdir -p ~/Pictures/screenshots && \
-    scrot --focused \
-        ~/Pictures/screenshots/screenshot-%Y-%m-%d-%H-%M-%S.png \
-        -e 'notify-send "Captured screenshot: $f"'
-
-# NOTE: without the sleep scrot crashes with:
-#   giblib error: couldn't grab keyboard:Resource temporarily unavailable
-## scrot select:
+## screenshot fullscreen:
 shift + Print
-    mkdir -p ~/Pictures/screenshots && \
-    sleep 0.3 && \
-    scrot --select --freeze \
-        ~/Pictures/screenshots/screenshot-%Y-%m-%d-%H-%M-%S.png \
-        -e 'notify-send "Captured screenshot" $f'
+    ~/bin/screenshot-take --fullscreen
+
+## scrot select:
+Print
+    ~/bin/screenshot-take
 
 ## copy + delete most recent screenshot:
 super + Print
-    mkdir -p ~/Pictures/screenshots && \
-    cd ~/Pictures/screenshots && \
-    ls -1t | head -n 1 | xargs -r xclip -selection clipboard -t image/png && \
-    ls -1t | head -n 1 | xargs -r notify-send "Copied + deleted screenshot" && \
-    ls -1t | head -n 1 | xargs rm -fv
+    ~/bin/screenshot-copy
 
 ## copy most recent screenshot:
 super + shift + Print
-    mkdir -p ~/Pictures/screenshots && \
-    cd ~/Pictures/screenshots && \
-    ls -1t | head -n 1 | xargs -r xclip -selection clipboard -t image/png && \
-    ls -1t | head -n 1 | xargs -r notify-send "Copied screenshot"
+    ~/bin/screenshot-copy --no-delete
 
 ## delete most recent screenshot:
 ctrl + super + Print
-    mkdir -p ~/Pictures/screenshots && \
-    cd ~/Pictures/screenshots && \
-    ls -1t | head -n 1 | xargs -r notify-send "Deleted screenshot" && \
-    ls -1t | head -n 1 | xargs rm -fv
+    ~/bin/screenshot-copy --no-copy
 
 ## volume +/-:
-super {+ equal,+ minus}
+super {+equal, +minus}
     amixer sset Master 10%{+,-}
 
 ## XF86 volume control:
@@ -103,11 +88,11 @@ super {+ equal,+ minus}
 
 ## playerctl play/prev/next:
 super {+ backslash, + bracketleft, + bracketright}
-    playerctl {play-pause,previous,next}
+    playerctl --player=spotifyd,spotify,%any {play-pause,previous,next}
 
-## toggle dvorak:
-super + grave
-    ~/bin/toggle-kbmap
+# ## toggle dvorak:
+# super + grave
+#     ~/bin/toggle-kbmap
 
 #
 # bspwm hotkeys

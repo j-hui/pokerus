@@ -3,10 +3,17 @@ configuration {
     /* width: 169; */
     /* lines: 32; */
     /* columns: 1; */
-    theme: "/home/j-hui/.config/rofi/themes/sidetab.rasi";
+
+    /* theme: "android_notification"; */
+    /* theme: "purple"; */
+    /* theme: "gruvbox-dark-soft"; */
+    /* theme: "Pop-Dark"; */
+    /* theme: "glue_pro_blue"; */
+
     terminal: "kitty";
     show-icons: true;
     matching: "fuzzy";
+    sort: true;
     sorting-method: "fzf";
     scroll-method: 1;
     sidebar-mode: true;
