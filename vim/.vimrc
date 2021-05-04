@@ -316,22 +316,20 @@ if !s:env_embedded
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
     let g:fzf_preview_window = 'right:60%'
 
+    " Redefined using :Rg, but using word under cursor if no args are given
+    command! -bang -nargs=* Rg
+      \ call fzf#vim#grep(
+      \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>?<q-args>:expand('<cword>')), 1,
+      \   fzf#vim#with_preview(), <bang>0)
+    command! -bang -nargs=* RG
+      \ call fzf#vim#grep(
+      \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>?<q-args>:expand('<cword>')), 1,
+      \   fzf#vim#with_preview(), <bang>0)
+
     " Insert mode completion
     imap <c-x><c-k> <plug>(fzf-complete-word)
     imap <c-x><c-f> <plug>(fzf-complete-path)
     imap <c-x><c-l> <plug>(fzf-complete-line)
-
-    " function! s:build_quickfix_list(lines)
-    "   call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
-    "   copen
-    "   cc
-    " endfunction
-    " let g:fzf_action = {
-    "   \ 'ctrl-q': function('s:build_quickfix_list'),
-    "   \ 'ctrl-t': 'tab split',
-    "   \ 'ctrl-x': 'split',
-    "   \ 'ctrl-v': 'vsplit'
-    "   \ }
 
   Plug 'https://gitlab.com/mcepl/vim-fzfspell.git'    " FZF for z=
 
@@ -451,6 +449,8 @@ if !s:env_embedded
             \ 'args': ["-y=defaultIndent:\"  \""],
             \ 'stdin': 1,
             \}
+      nnoremap gl :Neoformat<CR>
+      vnoremap gl :Neoformat<CR>
 
     Plug 'SirVer/ultisnips'                     " Snippet management
     Plug 'ncm2/ncm2-ultisnips'
@@ -484,6 +484,7 @@ if !s:env_embedded
   Plug 'farmergreg/vim-lastplace'     " Open where last opened
   Plug 'duggiefresh/vim-easydir'      " Create directories when non-existent
   Plug 'strboul/urlview.vim'          " See all URLs in buffer
+  Plug 'chrisbra/Recover.vim'         " See diff for recover
 endif
 " }}}
 
@@ -1188,6 +1189,7 @@ nnoremap <space>id :put =strftime(\"%Y-%m-%d\")<CR>
 inoremap <C-g>d <C-R>=strftime("%Y-%m-%d")<CR>
 nnoremap <space>it :put =strftime(\"%Y-%m-%d %H:%M:%S\")<CR>
 inoremap <C-g>t <C-R>=strftime("%Y-%m-%d %H:%M:%S")<CR>
+inoremap <C-g>a <C-o>:AutoFormat<CR>
 
 " Auto indentation
 inoremap <C-g><C-g> <C-F>
@@ -1583,6 +1585,7 @@ augroup markdown_settings " {{{
   autocmd Filetype markdown setlocal
         \ tabstop=4
         \ expandtab
+        \ foldlevel=2
         \ shiftwidth=4
         \ softtabstop=4
         \ spell
