@@ -152,10 +152,10 @@ c.aliases['pocket'] = 'spawn --userscript qutepocket'
 
 c.aliases['bg-norm'] = 'set colors.webpage.bg #ffffff'
 c.aliases['bg-dark'] = 'set colors.webpage.bg ' + bg_color
-c.aliases['style'] = 'config-cycle content.user_stylesheets         ' +
+c.aliases['style'] = ('config-cycle content.user_stylesheets        ' +
         '"~/.config/qutebrowser/css/darculized-all-sites.css"       ' +
         '"~/.config/qutebrowser/css/solarized-dark-all-sites.css"   ' +
-        '""'
+        '""')
 
 ### Aliases }}}
 
