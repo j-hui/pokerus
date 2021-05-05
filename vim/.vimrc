@@ -349,6 +349,7 @@ if !s:env_embedded
 
   if has('nvim')
     " Only load heavier, asynchronous plugins in nvim. Keep vim light
+    if 1
     Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp'   " Neovim completion manager
       Plug 'ncm2/ncm2-bufword'                  " Complete from buffer
       Plug 'ncm2/ncm2-path'                     " Complete from path
@@ -388,9 +389,10 @@ if !s:env_embedded
         autocmd User Ncm2PopupClose set completeopt=menu,preview
       augroup END
 
-    if 0
+    else
+
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    Plug 'deoplete-plugins/deoplete-dictionary'   " Auto-complete dictionary word
+      Plug 'deoplete-plugins/deoplete-dictionary'   " Auto-complete dictionary word
       let g:deoplete#enable_at_startup = 1
 
       function s:DeopleteHooks()
@@ -406,6 +408,7 @@ if !s:env_embedded
               \})
       endfunction
       let g:plug_callbacks += [function('s:DeopleteHooks')]
+
     endif
 
     Plug 'autozimu/LanguageClient-neovim', {
@@ -422,7 +425,7 @@ if !s:env_embedded
             \ 'cpp': ['ccls'],
             \ 'tex': ['texlab'],
             \ 'bib': ['texlab'],
-            \ 'haskell': ['haskell-language-server', '--lsp'],
+            \ 'haskell': ['haskell-language-server-wrapper', '--lsp'],
             \ 'nix': ['rnix-lsp'],
             \ 'vim': ['vim-language-server', '--stdio'],
             \ 'yaml': ['yaml-language-server', '--stdio'],
@@ -437,11 +440,17 @@ if !s:env_embedded
             \}
       " let g:LanguageClient_preferredMarkupKind = ['plaintext', 'markdown']
 
+      function LC_started()
+        set signcolumn=yes
+        let g:LanguageClient_fzfOptions =
+              \ ['--delimiter', ':', '--preview-window', '+{2}-5'] +
+              \ fzf#vim#with_preview().options
+        command! LC call LanguageClient_contextMenu()
+        command! LCFmt call LanguageClient_textDocument_formatting()
+      endfunction
+
       function LC_keybinds()
         if has_key(g:LanguageClient_serverCommands, &filetype)
-          command! LC call LanguageClient_contextMenu()
-          command! LCFmt call LanguageClient_textDocument_formatting()
-
           nnoremap <buffer> gK K
           nmap <buffer> <silent>  K <Plug>(lcn-hover)
           nmap <buffer> <silent>  <C-]> <Plug>(lcn-definition)
@@ -456,10 +465,14 @@ if !s:env_embedded
         endif
       endfunction
 
+      function LC_stopped()
+        set signcolumn=auto
+      endfunction
+
       augroup LanguageClient_config
         autocmd!
-        autocmd User LanguageClientStarted setlocal signcolumn=yes
-        autocmd User LanguageClientStopped setlocal signcolumn=auto
+        autocmd User LanguageClientStarted call LC_started()
+        autocmd User LanguageClientStopped call LC_stopped()
         autocmd FileType * call LC_keybinds()
       augroup END
 
