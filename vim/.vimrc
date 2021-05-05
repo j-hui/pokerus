@@ -338,6 +338,8 @@ if !s:env_embedded
   Plug 'junegunn/gv.vim'                        " See Git history
 
   Plug 'tpope/vim-fugitive'                     " Git interaction
+    command! Gd Gdiffsplit
+    command! GD Gdiffsplit
 
   Plug 'preservim/tagbar'                       " Outline by tags
 
