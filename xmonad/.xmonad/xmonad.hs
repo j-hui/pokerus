@@ -279,7 +279,7 @@ myLayoutHook  = avoidStruts
 
     where stack   = renamed [Replace "stack"]
                   $ windowNavigation
-                  $ limitWindows 3          -- any more is unreadable
+                  $ limitWindows 2
                   $ mySpacing 2
                   $ Tall 1 (3/100) (1/2)
           tabs    = renamed [Replace "tabs"]
