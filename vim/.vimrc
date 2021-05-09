@@ -293,7 +293,7 @@ if !s:env_embedded
     nmap <C-w>9 <Plug>BufTabLine.Go(9)
     nmap <C-w>0 <Plug>BufTabLine.Go(-1)
 
-  Plug 'psliwka/vim-smoothie'     " Scroll acceleration animation
+  " Plug 'psliwka/vim-smoothie'     " Scroll acceleration animation
     " Note that <C-d> and <C-u> are remapped (among others)
     let g:smoothie_no_default_mappings = 0
     " Refresh rate (default 20, lower is smoother):
@@ -319,11 +319,11 @@ if !s:env_embedded
     " Redefined using :Rg, but using word under cursor if no args are given
     command! -bang -nargs=* Rg
       \ call fzf#vim#grep(
-      \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>?<q-args>:expand('<cword>')), 1,
+      \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(len(<q-args>)?<q-args>:expand('<cword>')), 1,
       \   fzf#vim#with_preview(), <bang>0)
     command! -bang -nargs=* RG
       \ call fzf#vim#grep(
-      \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>?<q-args>:expand('<cword>')), 1,
+      \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(len(<q-args>)?<q-args>:expand('<cword>')), 1,
       \   fzf#vim#with_preview(), <bang>0)
 
     " Insert mode completion
@@ -338,6 +338,8 @@ if !s:env_embedded
   Plug 'junegunn/gv.vim'                        " See Git history
 
   Plug 'tpope/vim-fugitive'                     " Git interaction
+    command! Gd Gdiffsplit
+    command! GD Gdiffsplit
 
   Plug 'preservim/tagbar'                       " Outline by tags
 
@@ -349,6 +351,7 @@ if !s:env_embedded
 
   if has('nvim')
     " Only load heavier, asynchronous plugins in nvim. Keep vim light
+    if 1
     Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp'   " Neovim completion manager
       Plug 'ncm2/ncm2-bufword'                  " Complete from buffer
       Plug 'ncm2/ncm2-path'                     " Complete from path
@@ -388,9 +391,10 @@ if !s:env_embedded
         autocmd User Ncm2PopupClose set completeopt=menu,preview
       augroup END
 
-    if 0
+    else
+
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    Plug 'deoplete-plugins/deoplete-dictionary'   " Auto-complete dictionary word
+      Plug 'deoplete-plugins/deoplete-dictionary'   " Auto-complete dictionary word
       let g:deoplete#enable_at_startup = 1
 
       function s:DeopleteHooks()
@@ -406,6 +410,7 @@ if !s:env_embedded
               \})
       endfunction
       let g:plug_callbacks += [function('s:DeopleteHooks')]
+
     endif
 
     Plug 'autozimu/LanguageClient-neovim', {
@@ -422,7 +427,7 @@ if !s:env_embedded
             \ 'cpp': ['ccls'],
             \ 'tex': ['texlab'],
             \ 'bib': ['texlab'],
-            \ 'haskell': ['haskell-language-server', '--lsp'],
+            \ 'haskell': ['haskell-language-server-wrapper', '--lsp'],
             \ 'nix': ['rnix-lsp'],
             \ 'vim': ['vim-language-server', '--stdio'],
             \ 'yaml': ['yaml-language-server', '--stdio'],
@@ -437,11 +442,20 @@ if !s:env_embedded
             \}
       " let g:LanguageClient_preferredMarkupKind = ['plaintext', 'markdown']
 
+      function LC_started()
+        set signcolumn=yes
+
+        " Taken from https://github.com/autozimu/LanguageClient-neovim/issues/1095
+        let g:LanguageClient_fzfOptions =
+              \ ['--delimiter', ':', '--preview-window', '+{2}-5'] +
+              \ fzf#vim#with_preview().options
+
+        command! LC call LanguageClient_contextMenu()
+        command! LCFmt call LanguageClient_textDocument_formatting()
+      endfunction
+
       function LC_keybinds()
         if has_key(g:LanguageClient_serverCommands, &filetype)
-          command! LC call LanguageClient_contextMenu()
-          command! LCFmt call LanguageClient_textDocument_formatting()
-
           nnoremap <buffer> gK K
           nmap <buffer> <silent>  K <Plug>(lcn-hover)
           nmap <buffer> <silent>  <C-]> <Plug>(lcn-definition)
@@ -456,10 +470,14 @@ if !s:env_embedded
         endif
       endfunction
 
+      function LC_stopped()
+        set signcolumn=auto
+      endfunction
+
       augroup LanguageClient_config
         autocmd!
-        autocmd User LanguageClientStarted setlocal signcolumn=yes
-        autocmd User LanguageClientStopped setlocal signcolumn=auto
+        autocmd User LanguageClientStarted call LC_started()
+        autocmd User LanguageClientStopped call LC_stopped()
         autocmd FileType * call LC_keybinds()
       augroup END
 
@@ -937,8 +955,16 @@ if !s:env_embedded
 
   Plug 'leafgarland/typescript-vim'
   Plug 'keith/swift.vim'
-  Plug 'LucHermitte/valgrind.vim'
+  Plug 'j-hui/valgrind.vim'
     let g:valgrind_arguments='--leak-check=yes '
+    function ValgrindHook()
+      nmap [v <Plug>ValgrindStackUp
+      nmap ]v <Plug>ValgrindStackDown
+    endfunction
+    augroup valgrind_hook
+      autocmd!
+      autocmd User ValgrindEnter call ValgrindHook()
+    augroup END
   Plug 'ziglang/zig.vim'
   Plug 'dag/vim-fish'
   Plug 'cespare/vim-toml'
@@ -1457,11 +1483,15 @@ augroup END " }}}
 
 augroup c_settings " {{{
   autocmd!
+        " \ tabstop=8
+        " \ noexpandtab
+        " \ shiftwidth=8
+        " \ softtabstop=8
   autocmd FileType c setlocal
-        \ tabstop=8
-        \ noexpandtab
-        \ shiftwidth=8
-        \ softtabstop=8
+        \ tabstop=2
+        \ expandtab
+        \ shiftwidth=2
+        \ softtabstop=2
         \ foldmethod=syntax
         \ foldlevel=5
   autocmd FileType c syn sync fromstart

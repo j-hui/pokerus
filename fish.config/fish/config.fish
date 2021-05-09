@@ -68,6 +68,7 @@ abbr --add o open
 # Note: Unlike other shells, $PATH is a list, not a colon-delimited string.
 set PATH ~/bin $PATH
 set PATH ~/.cargo/bin $PATH
+set PATH ~/go/bin $PATH
 
 ## Export variables }}}
 
