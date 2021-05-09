@@ -346,4 +346,4 @@ if [ -f ~/.bash_local ]; then
      source ~/.bash_local
 fi
 
-# vim:fileencoding=utf-8:ft=bash
+# vim:fileencoding=utf-8:ft=sh
