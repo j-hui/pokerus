@@ -293,7 +293,7 @@ if !s:env_embedded
     nmap <C-w>9 <Plug>BufTabLine.Go(9)
     nmap <C-w>0 <Plug>BufTabLine.Go(-1)
 
-  Plug 'psliwka/vim-smoothie'     " Scroll acceleration animation
+  " Plug 'psliwka/vim-smoothie'     " Scroll acceleration animation
     " Note that <C-d> and <C-u> are remapped (among others)
     let g:smoothie_no_default_mappings = 0
     " Refresh rate (default 20, lower is smoother):
@@ -319,11 +319,11 @@ if !s:env_embedded
     " Redefined using :Rg, but using word under cursor if no args are given
     command! -bang -nargs=* Rg
       \ call fzf#vim#grep(
-      \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>?<q-args>:expand('<cword>')), 1,
+      \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(len(<q-args>)?<q-args>:expand('<cword>')), 1,
       \   fzf#vim#with_preview(), <bang>0)
     command! -bang -nargs=* RG
       \ call fzf#vim#grep(
-      \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>?<q-args>:expand('<cword>')), 1,
+      \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(len(<q-args>)?<q-args>:expand('<cword>')), 1,
       \   fzf#vim#with_preview(), <bang>0)
 
     " Insert mode completion
@@ -444,9 +444,12 @@ if !s:env_embedded
 
       function LC_started()
         set signcolumn=yes
+
+        " Taken from https://github.com/autozimu/LanguageClient-neovim/issues/1095
         let g:LanguageClient_fzfOptions =
               \ ['--delimiter', ':', '--preview-window', '+{2}-5'] +
               \ fzf#vim#with_preview().options
+
         command! LC call LanguageClient_contextMenu()
         command! LCFmt call LanguageClient_textDocument_formatting()
       endfunction
@@ -952,8 +955,16 @@ if !s:env_embedded
 
   Plug 'leafgarland/typescript-vim'
   Plug 'keith/swift.vim'
-  Plug 'LucHermitte/valgrind.vim'
+  Plug 'j-hui/valgrind.vim'
     let g:valgrind_arguments='--leak-check=yes '
+    function ValgrindHook()
+      nmap [v <Plug>ValgrindStackUp
+      nmap ]v <Plug>ValgrindStackDown
+    endfunction
+    augroup valgrind_hook
+      autocmd!
+      autocmd User ValgrindEnter call ValgrindHook()
+    augroup END
   Plug 'ziglang/zig.vim'
   Plug 'dag/vim-fish'
   Plug 'cespare/vim-toml'
@@ -1472,11 +1483,15 @@ augroup END " }}}
 
 augroup c_settings " {{{
   autocmd!
+        " \ tabstop=8
+        " \ noexpandtab
+        " \ shiftwidth=8
+        " \ softtabstop=8
   autocmd FileType c setlocal
-        \ tabstop=8
-        \ noexpandtab
-        \ shiftwidth=8
-        \ softtabstop=8
+        \ tabstop=2
+        \ expandtab
+        \ shiftwidth=2
+        \ softtabstop=2
         \ foldmethod=syntax
         \ foldlevel=5
   autocmd FileType c syn sync fromstart
