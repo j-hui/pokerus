@@ -69,6 +69,9 @@ abbr --add o open
 set PATH ~/bin $PATH
 set PATH ~/.cargo/bin $PATH
 set PATH ~/go/bin $PATH
+set PATH ~/.local/bin $PATH
+set PATH ~/.cabal/bin $PATH
+set PATH ~/.ghcup/bin $PATH
 
 ## Export variables }}}
 
