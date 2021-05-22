@@ -221,13 +221,20 @@ if [ "${0#*bash}" != "$0" ]; then
     GREEN="\[\033[40;0;32m\]"
     YELLOW="\[\033[40;0;33m\]"
     BLUE="\[\033[40;0;34m\]"
-    PURPLE="\[\033[40;0;35m\]"
-    CYAN="\[\033[40;1;36m\]"
-    GRAY="\[\033[40;0;37m\]"
+    MAGENTA="\[\033[40;0;35m\]"
+    CYAN="\[\033[40;0;36m\]"
+    LIGHTGRAY="\[\033[40;0;37m\]"
+    GRAY="\[\033[40;0;90m\]"
+    LIGHTRED="\[\033[40;0;91m\]"
+    LIGHTGREEN="\[\033[40;0;92m\]"
+    LIGHTYELLOW="\[\033[40;0;93m\]"
+    LIGHTBLUE="\[\033[40;0;94m\]"
+    LIGHTMAGENTA="\[\033[40;0;95m\]"
+    LIGHTCYAN="\[\033[40;0;96m\]"
     CLEAR="\[\033[0m\]"
 
     # Prompt formatting
-    BASE="$GRAY[\A] $YELLOW\u$GRAY@$PURPLE\h$GRAY:$BLUE\w$CLEAR"
+    BASE="$BLUE[\A] $LIGHTYELLOW\u$BLUE@$LIGHTCYAN\h$BLUE:$LIGHTRED\w$CLEAR"
 
     prompt-basic() {
         PS1='\u@\h:\w\$ '
