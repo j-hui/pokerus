@@ -167,3 +167,4 @@ Lua
 CLI
 Valgrind
 valgrind
+struct
