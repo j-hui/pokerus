@@ -131,6 +131,10 @@ if command -v exa >/dev/null
 end
 ## Exa }}}
 
+## Stack {{{
+abbr --add stacki stack --no-nix-pure ghci
+# Stack }}}
+
 ## nnn {{{
 set -gx NNN_FIFO '/tmp/nnn.fifo'
 set -gx NNN_PLUG 'o:fzopen;f:fzfcd;m:mimelist;p:preview-tabbed;d:dragdrop;u:dups'
