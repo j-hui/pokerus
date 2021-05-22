@@ -5,6 +5,25 @@
       "chainingHints": true,
       "typeHints": true,
       "parameterHints": true
+    },
+    "procMacro": {
+      "enable": true
+    },
+    "diagnostics": {
+      "enable": true
+    },
+    "lens": {
+      "enable": true,
+      "debug": false
+    },
+    "checkOnSave": {
+      "enable": true
+    },
+    "cargo": {
+      "loadOutDirsFromCheck": true
+    },
+    "autoimport": {
+      "enable": true
     }
   },
   "gopls": {
@@ -13,5 +32,17 @@
       "generate": true,
       "test": true
     }
+  },
+  "ccls": {
+    "highlight": {
+      "lsRanges": true
+    }
+  },
+  "efm-langserver": {
+    "documentFormatting": true,
+    "hover": true,
+    "documentSymbol": true,
+    "codeAction": true,
+    "completion": true
   }
 }
