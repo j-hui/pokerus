@@ -205,6 +205,9 @@ function s:PlugUltisnips()
 endfunction
 
 function plugins#ide#setup()
+  if !has('nvim')
+    return []
+  endif
   let l:callbacks = []
   let l:callbacks += s:PlugLCN()
   let l:callbacks += s:PlugNcm2()
