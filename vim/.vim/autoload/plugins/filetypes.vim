@@ -189,7 +189,7 @@ endfunction
 
 function s:PlugValgrind()
   Plug 'j-hui/valgrind.vim'
-    let g:valgrind_arguments='--leak-check=yes '
+    let g:valgrind_arguments='--leak-check=yes --num-callers=64'
     function ValgrindHook()
       nmap [v <Plug>ValgrindStackUp
       nmap ]v <Plug>ValgrindStackDown
