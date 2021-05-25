@@ -44,5 +44,10 @@
     "documentSymbol": true,
     "codeAction": true,
     "completion": true
+  },
+  "haskell-language-server": {
+    "haskell": {
+      "formattingProvider": "stylish-haskell"
+    }
   }
 }
