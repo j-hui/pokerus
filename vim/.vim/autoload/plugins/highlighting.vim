@@ -6,14 +6,17 @@ function plugins#highlighting#setup()
   Plug 'sainnhe/sonokai'          " Monokai-like
   " sainnhe's themes
 
+    let g:gruvbox_material_enable_bold = 1
+
     function! s:mod_highlight() abort
       highlight Error    cterm=undercurl gui=undercurl
       highlight ErrorMsg cterm=undercurl gui=undercurl
       highlight ALEError cterm=undercurl gui=undercurl
       highlight SpellBad cterm=undercurl gui=undercurl
       " Darken Pmenu background to avoid clash with Cursorline or ColorColumn
-      highlight Pmenu ctermbg=233
+      " highlight Pmenu ctermbg=233
     endfunction
+
 
     augroup AddUndercurl
       autocmd!
