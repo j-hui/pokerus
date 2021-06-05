@@ -429,16 +429,10 @@ prog "Backing up nixos configs to $MOUNT/persist/etc/..." # {{{
 prog "(This is to make darlings setup easier later on...)"
 sleep 1
 
-prog "Copying $MOUNT/etc/{NIXOS,nixos/configuration.nix,nixos/hardware-configuration.nix} to $MOUNT/persist/etc/..."
-mkdir -p $MOUNT/persist/etc/nixos
-cp "$MOUNT"/etc/NIXOS "$MOUNT"/persist/etc/
-cp "$MOUNT"/etc/nixos/configuration.nix "$MOUNT"/persist/etc/nixos/
-cp "$MOUNT"/etc/nixos/hardware-configuration.nix "$MOUNT"/persist/etc/nixos/
-
 prog "Done."
 sleep 1 # }}}
 
 prog "All done."
-prog "Reboot and go from there."
+prog "Reboot and go from there. If setting up darlings, run ./nix-infect.sh."
 
 # vim: set ts=4 sw=0 tw=80 et foldmethod=marker:

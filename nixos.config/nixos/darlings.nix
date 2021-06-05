@@ -13,19 +13,15 @@ in
       nixos.source = "/persist/etc/nixos";
       NIXOS.source = "/persist/etc/NIXOS";
       machine-id.source = "/persist/etc/machine-id";
+      "NetworkManager/system-connections".source = "/persist/etc/NetworkManager/system-connections";
       # cups.source = "/persist/etc/cups";
     };
 
-    # systemd.tmpfiles.rules = [
-      # "d /var/lib/libvirt 644 root root - -"
-      # "L /var/lib/libvirt/storage - - - - /persist/var/lib/libvirt/storage"
-      # "L /var/lib/libvirt/images - - - - /persist/var/lib/libvirt/images"
-      # "L /var/lib/libvirt/qemu - - - - /persist/var/lib/libvirt/qemu"
-      # "L /var/lib/libvirt/secrets - - - - /persist/var/lib/libvirt/secrets"
-      # "L /var/lib/libvirt/nwfilter - - - - /persist/var/lib/libvirt/nwfilter"
-      # "L /var/lib/libvirt/dnsmasq - - - - /persist/var/lib/libvirt/dnsmasq"
-      # "L /var/lib/libvirt/qemu.conf - - - - /persist/var/lib/libvirt/qemu.conf"
-    # ];
+    systemd.tmpfiles.rules = [
+      "L /var/lib/NetworkManager/secret_key - - - - /persist/var/lib/NetworkManager/secret_key"
+      "L /var/lib/NetworkManager/seen-bssids - - - - /persist/var/lib/NetworkManager/seen-bssids"
+      "L /var/lib/NetworkManager/timestamps - - - - /persist/var/lib/NetworkManager/timestamps"
+    ];
 
     security.sudo.extraConfig = ''
       # rollback results in sudo lectures after each reboot
