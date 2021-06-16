@@ -177,18 +177,16 @@ in
     (mkIf cfg.mail.enable {
       environment.systemPackages = with pkgs; [
         unstable.aerc
-        gcalcli
-        astroid
-        alot
-        notmuch
-        lieer
-        afew
-        msmtp
-        offlineimap
-        thunderbird
-        neomutt notmuch-bower unstable.meli
+        dante
+        neomutt
+
+        notmuch notmuch-addrlookup afew
+        unstable.lieer
+
         cmark w3m
+
         newsboat
+        gcalcli
       ];
     })
 
