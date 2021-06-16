@@ -86,7 +86,8 @@ endfunction
 
 function s:Appearance()
   set background=dark
-  set nu rnu                " Line numbers and relative line numbers
+  set number                " Line numbers
+  set relativenumber        " Relative line numbers
   set display+=lastline     " Show as much as possible of the last line
   set scrolloff=5           " Keep a few lines under the cursor
   set sidescrolloff=2       " Keep a few lines to the side of the cursor
