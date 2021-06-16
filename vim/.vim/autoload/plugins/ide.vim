@@ -67,7 +67,13 @@ function s:PlugNcm2()
 endfunction
 
 function s:PlugDeoplete()
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  if has('nvim')
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  else
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'roxma/nvim-yarp'
+    Plug 'roxma/vim-hug-neovim-rpc'
+  endif
 
     Plug 'deoplete-plugins/deoplete-dictionary'
     " Auto-complete dictionary word
@@ -80,6 +86,12 @@ function s:PlugDeoplete()
       call deoplete#custom#option('smart_case', v:true)
       call deoplete#custom#option('auto_refresh_delay', 500)
       set completeopt-=preview
+
+      if exists('g:ale_linters')
+        call deoplete#custom#option('sources', {
+            \ '_': ['ale'],
+            \})
+      endif
 
       inoremap <C-x>x     <c-r>=deoplete#complete()<cr>
       inoremap <C-x><C-x> <c-r>=deoplete#complete()<cr>
@@ -195,12 +207,121 @@ function s:PlugNeomake()
 endfunction
 
 function s:PlugUltisnips()
-  Plug 'SirVer/ultisnips'                     " Snippet management
+  Plug 'SirVer/ultisnips'
+  " Snippet management
     let g:UltiSnipsExpandTrigger='<M-n>'
     let g:UltiSnipsJumpForwardTrigger='<M-n>'
     let g:UltiSnipsJumpBackwardTrigger='<M-p>'
   Plug 'honza/vim-snippets'                   " Std lib for snippets
   Plug 'rbonvall/snipmate-snippets-bib'       " Snippets for .bib files
+  return []
+endfunction
+
+function s:PlugALELsp()
+  Plug 'dense-analysis/ale'
+  " Asynchronous linting
+  Plug 'prabirshrestha/vim-lsp'
+  " LSP client
+  Plug 'rhysd/vim-lsp-ale'
+  " Integrate ALE With vim-lsp
+  Plug 'lighttiger2505/deoplete-vim-lsp'
+  " Integrate vim-lsp with Deoplete
+  Plug 'thomasfaingnaert/vim-lsp-snippets'
+  Plug 'thomasfaingnaert/vim-lsp-ultisnips'
+
+    let g:ale_sign_column_always = 1
+    let g:ale_lint_delay = 100
+    let g:ale_virtualtext_cursor = 1
+
+    " let g:ale_lsp_suggestions = 1
+    let g:ale_hover_to_preview = 1
+    " let g:ale_floating_preview = 1
+
+    let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+    let g:ale_echo_msg_error_str = 'E'
+    let g:ale_echo_msg_warning_str = 'W'
+    let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰']
+    let g:ale_virtualtext_prefix = '» '
+    let g:ale_sign_error = ' ✖'
+    let g:ale_sign_warning = ' ‼'
+    let g:ale_sign_info = ' ℹ'
+
+    let g:ale_linters = {
+          \ 'rust': ['vim-lsp', 'cargo', 'rustc'],
+          \ 'tex': ['proselint', 'chktex'],
+          \ 'markdown': ['proselint', 'mdl'],
+          \ 'c': ['vim-lsp'],
+          \ 'cpp': ['vim-lsp'],
+          \ 'haskell': ['vim-lsp'],
+          \}
+    let g:ale_fixers = {
+          \ 'rust': ['rustfmt'],
+          \ 'bib': ['bibclean'],
+          \ 'haskell': ['brittany'],
+          \ '*': ['trim_whitespace', 'remove_trailing_lines'],
+          \}
+    let g:ale_tex_chktex_options = '-n1 -n36 -n26'
+
+    augroup vim_lsp_ft
+      autocmd!
+      autocmd User lsp_setup call lsp#register_server({
+            \ 'name': 'rust-analyzer',
+            \ 'cmd': {server_info->['rust-analyzer']},
+            \ 'allowlist': ['rust'],
+            \ })
+      autocmd User lsp_setup call lsp#register_server({
+            \ 'name': 'gopls',
+            \ 'cmd': {server_info->['gopls']},
+            \ 'allowlist': ['go'],
+            \ })
+      autocmd User lsp_setup call lsp#register_server({
+            \ 'name': 'ccls',
+            \ 'cmd': {server_info->['ccls']},
+            \ 'allowlist': ['c', 'cpp'],
+            \ })
+      autocmd User lsp_setup call lsp#register_server({
+            \ 'name': 'pyright-langserver',
+            \ 'cmd': {server_info->['pyright-langserver', '--lsp']},
+            \ 'allowlist': ['python'],
+            \ })
+      autocmd User lsp_setup call lsp#register_server({
+            \ 'name': 'ocamllsp',
+            \ 'cmd': {server_info->['ocamllsp']},
+            \ 'allowlist': ['ocaml'],
+            \ })
+      autocmd User lsp_setup call lsp#register_server({
+            \ 'name': 'zls',
+            \ 'cmd': {server_info->['zls']},
+            \ 'allowlist': ['zig'],
+            \ })
+      autocmd User lsp_setup call lsp#register_server({
+            \ 'name': 'haskell-language-server',
+            \ 'cmd': {server_info->['haskell-language-server-wrapper', '--lsp']},
+            \ 'allowlist': ['haskell'],
+            \ })
+    augroup END
+
+    " This way I can do Al<tab> for autocompletion without remembering to capitalize the 'L'
+    command! AleInfo ALEInfo
+    command! Aleinfo ALEInfo
+
+    nmap <silent> [a <Plug>(ale_previous_wrap)
+    nmap <silent> ]a <Plug>(ale_next_wrap)
+
+    nmap <silent> <C-l>q      <Plug>(ale_toggle)
+    nmap <silent> gd      <Plug>(ale_go_to_definition)
+    nmap <silent> <C-l>gs     <Plug>(ale_go_to_definition_in_split)
+    nmap <silent> <C-l>gv     <Plug>(ale_go_to_definition_in_vsplit)
+
+    nmap <silent> g/     <Plug>(ale_find_references)
+    nmap <silent> <C-l>fr     :ALERepeatSelection<CR>
+    nmap <silent> <C-l>fs     :ALEFindReferences -split<CR>
+    nmap <silent> <C-l>fv     :ALEFindReferences -vsplit<CR>
+
+    nnoremap <buffer> gK K
+    nmap <silent> K      <Plug>(ale_hover)
+    nmap <silent> gQ     <Plug>(ale_fix)
+
   return []
 endfunction
 
@@ -213,6 +334,8 @@ function plugins#ide#setup()
   let l:callbacks += s:PlugNcm2()
   let l:callbacks += s:PlugNeomake()
   let l:callbacks += s:PlugNeoformat()
+  " let l:callbacks += s:PlugALELsp()
+  " let l:callbacks += s:PlugDeoplete()
   let l:callbacks += s:PlugUltisnips()
   return l:callbacks
 endfunction
