@@ -190,10 +190,13 @@ endfunction
 function s:PlugValgrind()
   Plug 'j-hui/valgrind.vim'
     let g:valgrind_arguments='--leak-check=yes --num-callers=64'
+    let g:valgrind_strip_program_output = 0
+
     function ValgrindHook()
       nmap [v <Plug>ValgrindStackUp
       nmap ]v <Plug>ValgrindStackDown
     endfunction
+
     augroup valgrind_hook
       autocmd!
       autocmd User ValgrindEnter call ValgrindHook()
