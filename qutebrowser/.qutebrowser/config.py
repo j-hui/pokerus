@@ -66,7 +66,7 @@ c.content.autoplay = False
 c.tabs.background = True
 c.tabs.close_mouse_button = 'right'
 
-c.colors.webpage.prefers_color_scheme_dark = True
+c.colors.webpage.preferred_color_scheme = 'dark'
 
 c.downloads.remove_finished = 696969
 
@@ -219,7 +219,7 @@ nmap('F', 'hint all tab')
 
 nmap('i', 'mode-enter insert')
 nmap('v', 'mode-enter caret')
-nmap('V', 'mode-enter caret ;; toggle-selection --line')
+nmap('V', 'mode-enter caret ;; selection-toggle --line')
 
 nmap('yy', 'yank') # url
 nmap('yt', 'yank title')
@@ -267,7 +267,7 @@ config.bind('<Return>', 'command-accept', mode='command')
 
 config.bind('<Shift+Escape>', 'mode-leave', mode='passthrough')
 
-config.bind('<Return>', 'follow-hint', mode='hint')
+config.bind('<Return>', 'hint-follow', mode='hint')
 
 config.bind('<Return>', 'prompt-accept', mode='prompt')
 config.bind('<Up>', 'prompt-item-focus prev', mode='prompt')
