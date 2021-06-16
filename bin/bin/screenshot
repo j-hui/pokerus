@@ -1,0 +1,103 @@
+#!/usr/bin/env bash
+
+set -euf
+
+## Defaults ##
+
+filepath=~/Pictures/screenshots
+filename=screenshot-%Y-%m-%d-%H-%M-%S.png
+
+copy="y"
+delete="y"
+fullscreen="n"
+
+usage () {
+    echo "$0 [--fullscreen|-f] [--no-copy|-c] [--no-delete|-d] [filename]"
+}
+
+## Parse CLI args ##
+
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+    --fullscreen|-f)
+        fullscreen="y"
+        scrot_args="--focused"
+        shift
+        ;;
+    --no-copy|-c)
+        copy="n"
+        shift
+        ;;
+    --no-delete|-d)
+        delete="n"
+        shift
+        ;;
+    *)
+        break
+        ;;
+    esac
+done
+
+if [ "$#" -gt 0 ]; then
+    filename="$1"
+    shift
+fi
+
+if [ "$#" -gt 0 ]; then
+    echo "Unrecognized arguments:" "$@"
+    usage
+    exit 1
+fi
+
+## Take screenshot ##
+
+mkdir -p "$filepath"
+
+case "$fullscreen" in
+    y)
+        scrot_args="--focused"
+        ;;
+    *)
+        scrot_args="--select --freeze"
+        # NOTE: without the sleep scrot crashes with:
+        #   giblib error: couldn't grab keyboard:Resource temporarily unavailable
+        sleep 0.3
+        ;;
+esac
+
+screenshot="$(scrot $scrot_args "${filepath}/${filename}" -e 'echo $f')"
+
+## Copy/delete screenshot
+
+msg="Captured screenshot"
+
+case "${copy},${delete}" in
+    y,y)
+        msg2="Copied to clipboard (not saved)"
+        ;;
+    n,y)
+        # This mode doesn't really make any sense
+        msg2="Deleted it immediately (but why)"
+        ;;
+    y,n)
+        msg2="Copied to clipboard and saved to ${screenshot}"
+        ;;
+    n,n)
+        msg2="Saved to ${screenshot}"
+        ;;
+    *)
+        echo "Invalid mode: copy=${copy}, delete=${delete}"
+        usage
+        exit 1
+        ;;
+esac
+
+if [ "${copy}" = "y" ]; then
+    xclip -selection clipboard -t image/png "${screenshot}"
+fi
+
+if [ "${delete}" = "y" ]; then
+    rm -fv "${screenshot}"
+fi
+
+notify-send "$msg" "$msg2"
