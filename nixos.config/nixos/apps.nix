@@ -17,6 +17,29 @@ let
           withALSA = true;
           withPulseAudio = true;
         }));
+
+  efm-langserver = pkgs.buildGoModule rec {
+    pname = "efm-langserver";
+    version = "0.0.29";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "mattn";
+      repo = "efm-langserver";
+      rev = "v${version}";
+      sha256 = "0zz63w5g8siaip0fqc5mqx7y6kcvi9c2k2w6xz8wrl3kicbwcvgw";
+    };
+
+    # subPackages = [ "." ];
+
+    vendorSha256 = "b5c6bed5246b172bd4f2db4799f3058865ddd40f2b4121169b531cdaaa7411f2";
+
+    meta = with lib; {
+      description = "General purpose Language Server";
+      homepage = "https://github.com/mattn/efm-langserver";
+      license = licenses.mit;
+      platforms = platforms.unix;
+    };
+  };
 in
 {
 
@@ -224,6 +247,8 @@ in
 
     (mkIf cfg.dev.enable {
 
+      # required for rr
+      boot.kernel.sysctl."kernel.perf_event_paranoid" = 1;
       systemd.tmpfiles.rules = [
         "L /usr/share/dict/words - - - - ${config.system.path}/lib/aspell/en-common.wl"
       ];
@@ -232,6 +257,10 @@ in
         editorconfig-core-c
         pre-commit
 
+        # Debugging
+        gdb
+        rr # requires sysctl: kernel.perf_event_paranoid = 1
+
         # Writing
         libqalculate wordnet scowl
         (aspellWithDicts (ds: with ds; [
@@ -239,6 +268,9 @@ in
         ]))
         languagetool
         proselint
+        vale
+
+        efm-langserver
 
         # Markup
         hugo
@@ -257,9 +289,11 @@ in
         # C
         gcc gnumake automake cmake autoconf pkg-config m4 libtool dpkg
         clang clang-tools
+        bear
         cdecl
         valgrind
         unstable.universal-ctags
+        unstable.checkmake
         ccls
 
         # Python
@@ -271,23 +305,41 @@ in
         ]))
         unstable.nodePackages.pyright
 
+        # Scala
+        scala
+        sbt metals
+
+        # Java
+        jdk
+
         # Javascript
+        nodejs
         nodePackages.javascript-typescript-langserver
 
         # OCaml
         opam
+        ocamlPackages.ocaml-lsp
+        ocamlformat
 
         # Haskell
-        stack ghc haskellPackages.haskell-language-server stylish-haskell stylish-cabal
+        unstable.stack
+        ghc
+        haskellPackages.hoogle
+        cabal2nix cabal-install
+        unstable.haskellPackages.haskell-language-server
+        hlint
+        stylish-haskell stylish-cabal
+        haskellPackages.floskell
 
         # Go
         go gopls
 
         # Rust
-        rustup rustfmt rust-analyzer
+        rustup rustfmt rust-analyzer crate2nix
 
         # Latex
         tectonic texlive.combined.scheme-full bibclean texlab
+        graphviz
 
         # Pandoc
         pandoc haskellPackages.pandoc-citeproc
@@ -303,6 +355,14 @@ in
 
         # Zig
         zig
+        unstable.zls
+
+        # Vim
+        vim-vint
+
+        # Shell
+        shellcheck
+        shfmt
       ];
     })
   ];
