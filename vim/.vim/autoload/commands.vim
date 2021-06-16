@@ -21,7 +21,7 @@ function commands#setup()
   " }}}
 
   " Trim trailing spaces {{{
-  command! -range Trim <line1>,<line2> substitute/\s\+$//g | normal! ``
+  command! -range Trim <line1>,<line2> substitute/\s\+$//g | noh | normal! ``
   " }}}
 
   " Go to location of file {{{
