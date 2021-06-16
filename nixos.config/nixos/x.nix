@@ -37,7 +37,7 @@ in
     };
 
     environment.systemPackages = with pkgs; [
-      gtk3 glib
+      gtk3 glib xorg.xf86inputsynaptics
       lxappearance
       bspwm sxhkd
       xdo xdotool wmctrl xorg.xev
@@ -158,6 +158,23 @@ in
           accelProfile = "flat";
           tappingDragLock = false;
         };
+
+        inputClassSections = [
+          # Double the mouse pointer speed. This 3x3 coordinate transformation
+          # matrix is applied to the 3-vector (x, y, 1) to perform an affine
+          # transformation. The matrix we use below is:
+          #
+          #   [ f 0 0 ] [ x ]   [ f*x ]
+          #   [ 0 f 0 ] [ y ] = [ f*y ]
+          #   [ 0 0 1 ] [ 1 ]   [  1  ]
+          #
+          # where f = mouse speed factor (e.g., 2.0).
+          ''
+            Identifier "My speedy mouse"
+            MatchIsPointer "Yes"
+            Option "TransformationMatrix" "2.0 0 0 0 2.0 0 0 0 1"
+          ''
+        ];
 
         # NOTE: no difference between these modes for LED monitors
         serverFlagsSection =
