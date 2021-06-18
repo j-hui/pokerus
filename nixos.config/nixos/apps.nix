@@ -250,6 +250,8 @@ in
       systemd.tmpfiles.rules = [
         "L /usr/share/dict/words - - - - ${config.system.path}/lib/aspell/en-common.wl"
       ];
+
+      services.udev.packages = [ unstable.pkgs.platformio ];
       environment.systemPackages = with pkgs; [
         vscode # I don't actually user this but handy to keep around
         editorconfig-core-c
@@ -268,6 +270,7 @@ in
         proselint
         vale
 
+        unstable.platformio
         efm-langserver
 
         # Markup
