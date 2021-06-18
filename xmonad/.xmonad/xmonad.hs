@@ -18,7 +18,40 @@ import           Data.Maybe                     ( catMaybes
 import           System.Exit                    ( exitSuccess )
 import           System.IO.Unsafe               ( unsafePerformIO )
 
-import           XMonad
+import XMonad
+    ( mod4Mask,
+      io,
+      spawn,
+      (|||),
+      xmonad,
+      (-->),
+      (<&&>),
+      (<+>),
+      (=?),
+      className,
+      composeAll,
+      doF,
+      doFloat,
+      doShift,
+      liftX,
+      title,
+      sendMessage,
+      windows,
+      withFocused,
+      KeyMask,
+      Window,
+      Dimension,
+      MonadIO,
+      Default(def),
+      MonadState(get),
+      ManageHook,
+      X,
+      XConfig(manageHook, handleEventHook, modMask, terminal,
+              startupHook, layoutHook, workspaces, borderWidth,
+              normalBorderColor, focusedBorderColor, focusFollowsMouse, logHook,
+              keys),
+      ChangeLayout(NextLayout, FirstLayout),
+      Tall(Tall) )
 import qualified XMonad.Core                   as Core
 import qualified XMonad.StackSet               as SS
 
@@ -210,12 +243,12 @@ myWorkspaces = ["home", "hide", "misc"]
 myProjects :: [Project]
 myProjects =
   [ Project { projectName      = "acuity"
-            , projectDirectory = "~/acuity"
-            , projectStartHook = Just $ spawn $ myTerminalAt "~/acuity"
+            , projectDirectory = "~/Documents/acuity"
+            , projectStartHook = Just $ spawn $ myTerminalAt "~/Documents/acuity"
             }
   , Project { projectName      = "valor"
-            , projectDirectory = "~/valor"
-            , projectStartHook = Just $ spawn $ myEditor "~/valor/index.md"
+            , projectDirectory = "~/Documents/valor"
+            , projectStartHook = Just $ spawn $ myEditor "~/Documents/valor/index.md"
             }
   , Project
     { projectName      = "www"
