@@ -211,6 +211,7 @@ function s:PlugMisc()
   Plug 'cespare/vim-toml'
   Plug 'neomutt/neomutt.vim'
   Plug 'adborden/vim-notmuch-address', { 'for': 'mail' }
+  Plug 'liuchengxu/graphviz.vim'
 endfunction
 
 function plugins#filetypes#setup()

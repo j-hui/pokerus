@@ -106,6 +106,8 @@ function plugins#subsystems#setup()
 
     nnoremap <leader>gd :Gdiffsplit<CR>
     let g:which_key_map['g']['d'] = 'git-diff-split'
+    nnoremap <leader>gD :Git diff --cached<CR>
+    let g:which_key_map['g']['D'] = 'git-diff-cached'
     nnoremap <leader>gp :Git pull<CR>
     let g:which_key_map['g']['p'] = 'git-pull'
     nnoremap <leader>gP :Git push<CR>
@@ -114,10 +116,8 @@ function plugins#subsystems#setup()
     let g:which_key_map['g']['l'] = 'git-log'
     nnoremap <leader>gc :Git commit<CR>
     let g:which_key_map['g']['c'] = 'git-commit'
-    nnoremap <leader>gg :Git<CR>
-    let g:which_key_map['g']['g'] = 'git-status'
-    nnoremap <leader>gs :Git diff --cached<CR>
-    let g:which_key_map['g']['s'] = 'git-diff-cached'
+    nnoremap <leader>gs :Git<CR>
+    let g:which_key_map['g']['s'] = 'git-status'
 
     augroup fugitive_maps
       autocmd!
