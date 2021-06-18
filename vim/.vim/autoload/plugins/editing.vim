@@ -50,11 +50,17 @@ function plugins#editing#setup()
     nmap ss <plug>(SubversiveSubstituteLine)
     nmap S <plug>(SubversiveSubstituteToEndOfLine)
     " Substitute word under cursor in motion
+
+    let g:which_key_map['s'] = 'subversive-substitute-range'
+    let g:which_key_map['ss'] = 'subversive-substitute-word-range'
+
+    nmap <leader>s <plug>(SubversiveSubstituteRange)
+    xmap <leader>s <plug>(SubversiveSubstituteRange)
     nmap <leader>ss <plug>(SubversiveSubstituteWordRange)
-    nmap <leader>css <plug>(SubversiveSubstituteWordRangeConfirm)
+
     " Paste in visual mode
     xmap p <plug>(SubversiveSubstitute)
-    xmap P <plug>(SubversiveSubstitute
+    xmap P <plug>(SubversiveSubstitute)
 
   " These are deprecated in favor of vim-sandwich, which does both and more.
   " However, it's a pretty utility we don't want to use/watch break in
@@ -85,18 +91,18 @@ function plugins#editing#setup()
             \ ]
 
       " We also add text object targets for interacting with inner surroundings:
-      xmap is <Plug>(textobj-sandwich-query-i)
-      xmap as <Plug>(textobj-sandwich-query-a)
-      omap is <Plug>(textobj-sandwich-query-i)
-      omap as <Plug>(textobj-sandwich-query-a)
-      xmap iss <Plug>(textobj-sandwich-auto-i)
-      xmap ass <Plug>(textobj-sandwich-auto-a)
-      omap iss <Plug>(textobj-sandwich-auto-i)
-      omap ass <Plug>(textobj-sandwich-auto-a)
-      xmap im <Plug>(textobj-sandwich-literal-query-i)
-      xmap am <Plug>(textobj-sandwich-literal-query-a)
-      omap im <Plug>(textobj-sandwich-literal-query-i)
-      omap am <Plug>(textobj-sandwich-literal-query-a)
+      xmap is   <Plug>(textobj-sandwich-query-i)
+      xmap as   <Plug>(textobj-sandwich-query-a)
+      omap is   <Plug>(textobj-sandwich-query-i)
+      omap as   <Plug>(textobj-sandwich-query-a)
+      xmap iss  <Plug>(textobj-sandwich-auto-i)
+      xmap ass  <Plug>(textobj-sandwich-auto-a)
+      omap iss  <Plug>(textobj-sandwich-auto-i)
+      omap ass  <Plug>(textobj-sandwich-auto-a)
+      xmap im   <Plug>(textobj-sandwich-literal-query-i)
+      xmap am   <Plug>(textobj-sandwich-literal-query-a)
+      omap im   <Plug>(textobj-sandwich-literal-query-i)
+      omap am   <Plug>(textobj-sandwich-literal-query-a)
 
       augroup SandwichFiletypes
         autocmd!

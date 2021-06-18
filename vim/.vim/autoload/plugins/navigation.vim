@@ -12,26 +12,29 @@ function plugins#navigation#setup()
           \ '*' : ["i'", "i'", 'i)', 'i]', 'i}'],
           \ 'html,xml' : ['at', 'it'],
           \}
-    nmap gv <Plug>(wildfire-quick-select)
+    nmap <leader>v <Plug>(wildfire-quick-select)
+    let g:which_key_map['v'] = 'wildfire-quick-select'
 
   Plug 'justinmk/vim-sneak'
   " s works like f/t but with two chars
 
     let g:sneak#label = 1                     " Easy-motion-like labels
-    let g:sneak#s_next = 1                    " Empty search uses most recent recent
+    let g:sneak#s_next = 1                    " Empty search uses most recent
+    let g:sneak#target_labels = ',sftunq/SFGHLTUNRMQZ?0'
+    let g:sneak#prompt = ' » '
 
     " 2-character Sneak (default)
-    nmap gz <Plug>Sneak_s
-    nmap gZ <Plug>Sneak_S
-    xmap z <Plug>Sneak_s
-    xmap Z <Plug>Sneak_S
-    omap z <Plug>Sneak_s
-    omap Z <Plug>Sneak_S
+    nmap <Tab> <Plug>Sneak_s
+    nmap <BS> <Plug>Sneak_S
+    xmap <Tab> <Plug>Sneak_s
+    xmap <BS> <Plug>Sneak_S
+    omap <Tab> <Plug>Sneak_s
+    omap <BS> <Plug>Sneak_S
 
     " Already mapped ; to :
-    map , <Plug>Sneak_;
-    map ]f <Plug>Sneak_;
-    map [f <Plug>Sneak_,
+    map ,       <Plug>Sneak_;
+    map ]<Tab>  <Plug>Sneak_;
+    map [<Tab>  <Plug>Sneak_,
 
     " 1-character enhanced 'f'
     nmap f <Plug>Sneak_f

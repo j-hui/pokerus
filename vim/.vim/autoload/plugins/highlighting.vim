@@ -62,14 +62,16 @@ function plugins#highlighting#setup()
   Plug 'lfv89/vim-interestingwords'
   " Persistent word highlighting
     let g:interestingWordsDefaultMappings = 0
-    nnoremap <silent> gm :call InterestingWords('n')<cr>
-    vnoremap <silent> gm :call InterestingWords('v')<cr>
-    nnoremap <silent> gM :call UncolorAllWords()<cr>
-
-    nnoremap <silent> m] :call WordNavigation(1)<cr>
-    nnoremap <silent> m[ :call WordNavigation(0)<cr>
-
     command! Noh noh | call UncolorAllWords()
+
+    nnoremap <silent> <leader>m :call InterestingWords('n')<cr>
+    vnoremap <silent> <leader>m :call InterestingWords('v')<cr>
+    nnoremap <silent> <leader>M :Noh <cr>
+    let g:which_key_map['m'] = 'mark-interesting'
+    let g:which_key_map['M'] = 'unmark-all'
+
+    nnoremap <silent> ]m :call WordNavigation(1)<cr>
+    nnoremap <silent> [m :call WordNavigation(0)<cr>
 
   Plug 'machakann/vim-highlightedyank'
   " Briefly highlight yanked item

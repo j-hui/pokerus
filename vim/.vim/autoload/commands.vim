@@ -105,5 +105,15 @@ function commands#setup()
     \ <line1>,<line2>substitute:\v([}"])(\s*\n)+(\s*\a+\s*\=):\1,\2\3:giep
   " }}}
 
+
+  " SyntaxGroup: add missing commas to BibTeX file {{{
+  function s:show_syntax_group()
+    echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+          \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+          \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"
+  endfunction
+  command! SyntaxGroup call s:show_syntax_group()
+  " }}}
+
 endfunction
 " vim: set ts=2 sw=2 tw=80 et foldmethod=marker foldlevel=0 :
