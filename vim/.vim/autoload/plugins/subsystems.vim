@@ -75,13 +75,13 @@ function plugins#subsystems#setup()
       nmap <leader>fb :Buffers<CR>
       let g:which_key_map['f']['b'] = 'fzf-buffers'
 
-      " Lines (current buffer only)
-      nmap <leader>fl :BLines<CR>
-      let g:which_key_map['f']['b'] = 'fzf-buffer-lines'
-
       " Lines
-      nmap <leader>fL :Lines<CR>
-      let g:which_key_map['f']['b'] = 'fzf-lines'
+      nmap <leader>fl :Lines<CR>
+      let g:which_key_map['f']['l'] = 'fzf-lines'
+
+      " Lines (current buffer only)
+      nmap <leader>fL :BLines<CR>
+      let g:which_key_map['f']['L'] = 'fzf-buffer-lines'
 
       " Command history
       nmap <leader>f: :History:<CR>
@@ -105,16 +105,24 @@ function plugins#subsystems#setup()
     let g:which_key_map['g'] = { 'name': '+git' }
 
     nnoremap <leader>gd :Gdiffsplit<CR>
+    let g:which_key_map['g']['d'] = 'git-diff-split'
     nnoremap <leader>gp :Git pull<CR>
-    let g:which_key_map['g']['p'] = 'git-push'
+    let g:which_key_map['g']['p'] = 'git-pull'
     nnoremap <leader>gP :Git push<CR>
-    let g:which_key_map['g']['P'] = 'git-pull'
+    let g:which_key_map['g']['P'] = 'git-push'
     nnoremap <leader>gl :Gclog<CR>
     let g:which_key_map['g']['l'] = 'git-log'
     nnoremap <leader>gc :Git commit<CR>
     let g:which_key_map['g']['c'] = 'git-commit'
-    nnoremap <leader>gs :Git status<CR>
-    let g:which_key_map['g']['s'] = 'git-status'
+    nnoremap <leader>gg :Git<CR>
+    let g:which_key_map['g']['g'] = 'git-status'
+    nnoremap <leader>gs :Git diff --cached<CR>
+    let g:which_key_map['g']['s'] = 'git-diff-cached'
+
+    augroup fugitive_maps
+      autocmd!
+      autocmd Filetype fugitive,git nmap <buffer> q gq
+    augroup END
 
   Plug 'rhysd/git-messenger.vim'
   " Super-charged git blame

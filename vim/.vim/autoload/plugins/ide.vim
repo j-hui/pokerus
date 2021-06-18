@@ -31,7 +31,7 @@ function s:PlugNcm2()
     Plug 'ncm2/ncm2-markdown-subscope'        " Language subscope for markdown
     Plug 'ncm2/ncm2-ultisnips'                " Snippets
     Plug 'ncm2/ncm2-vim' | Plug 'Shougo/neco-vim' " Completion for Vim
-    let g:ncm2#popup_delay = 169
+    let g:ncm2#popup_delay = 69
 
     function! s:NcmEnable() abort
       try
@@ -402,8 +402,11 @@ endfunction
 function s:PlugAsyncomplete()
   Plug 'prabirshrestha/asyncomplete.vim'
     Plug 'prabirshrestha/asyncomplete-buffer.vim'
+    Plug 'prabirshrestha/asyncomplete-file.vim'
     Plug 'prabirshrestha/asyncomplete-lsp.vim'
     Plug 'andreypopp/asyncomplete-ale.vim'
+    Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
+
 
     function s:AsyncompleteHooks()
       call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
@@ -413,6 +416,16 @@ function s:PlugAsyncomplete()
       \ 'config': {
       \    'max_buffer_size': 5000000,
       \  },
+      \ }))
+      call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+      \ 'name': 'file',
+      \ 'allowlist': ['*'],
+      \ 'completor': function('asyncomplete#sources#file#completor')
+      \ }))
+      call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
+      \ 'name': 'ultisnips',
+      \ 'allowlist': ['*'],
+      \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
       \ }))
     endfunction
 
@@ -439,9 +452,11 @@ function plugins#ide#setup()
   " let l:callbacks += s:PlugNcm2()
   " let l:callbacks += s:PlugNeomake()
   " let l:callbacks += s:PlugNeoformat()
+
   let l:callbacks += s:PlugALE()
   let l:callbacks += s:PlugVimLsp()
   let l:callbacks += s:PlugAsyncomplete()
+
   " let l:callbacks += s:PlugDeoplete()
   let l:callbacks += s:PlugUltisnips()
   let l:callbacks += s:PlugVista()
