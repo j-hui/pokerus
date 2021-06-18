@@ -187,6 +187,7 @@ function s:Misc()
   set shell=bash
   set modeline
   set modelines=5
+  set timeoutlen=300
   let c_syntax_for_h = 1 " Instead of C++
 endfunction
 

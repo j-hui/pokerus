@@ -16,44 +16,44 @@ function s:PlugCoq()
     let g:coqtail_nomap = 1
 
     function DefineCoqtailMappings()
+        let g:which_key_map['c'] = { 'name': '+coqtail' }
+
         " Coqtail control
-        nmap <buffer> <c-c>Q        <Plug>CoqStart
-        nmap <buffer> <c-c>q        <Plug>CoqStop
-        nmap <buffer> <c-c>D        <Plug>CoqToggleDebug
-        nmap <buffer> <c-c>r        <Plug>CoqRestorePanels
-        nmap <buffer> <c-c><c-c>    <Plug>CoqRestorePanels
+        nmap <buffer> <leader>cQ        <Plug>CoqStart
+        nmap <buffer> <leader>cq        <Plug>CoqStop
+        nmap <buffer> <leader>cD        <Plug>CoqToggleDebug
+        nmap <buffer> <leader>cr        <Plug>CoqRestorePanels
 
         " Checked region navigation
-        nmap <buffer> <c-c>.                <Plug>CoqToLine
-        imap <buffer> <c-c>.           <Esc><Plug>CoqToLine
-        nmap <buffer> <c-c>l             mz$<Plug>CoqToLine`z
-        imap <buffer> <c-c>l        <Esc>mz$<Plug>CoqToLine`z
-        nmap <buffer> <c-c><CR>          mz$<Plug>CoqToLine`z
-        imap <buffer> <c-c><CR>     <Esc>mz$<Plug>CoqToLine`z
-        nmap <buffer> <c-c>j                <Plug>CoqNext
-        nmap <buffer> <c-c>k                <Plug>CoqUndo
-        nmap <buffer> <c-c>h                <Plug>CoqJumpToEnd
+        nmap <buffer> <leader>cl             <Plug>CoqToLine
+        nmap <buffer> <leader>cc             mz$<Plug>CoqToLine`z
+        imap <buffer> <C-c>l            <Esc><Plug>CoqToLine
+        imap <buffer> <C-c>cc           <Esc>mz$<Plug>CoqToLine`z
+
+        nmap <buffer> <leader>cj        <Plug>CoqNext
+        nmap <buffer> <leader>ck        <Plug>CoqUndo
+        nmap <buffer> <leader>ch        <Plug>CoqJumpToEnd
 
         " Goal buffer navigation
-        nmap <buffer> <c-c>g        <Plug>CoqGotoGoalStart
-        nmap <buffer> <c-c>G        <Plug>CoqGotoGoalEnd
-        nmap <buffer> <c-c>]]       <Plug>CoqGotoGoalNextStart
-        nmap <buffer> <c-c>][       <Plug>CoqGotoGoalNextEnd
-        nmap <buffer> <c-c>[[       <Plug>CoqGotoGoalPrevStart
-        nmap <buffer> <c-c>[]       <Plug>CoqGotoGoalPrevEnd
+        nmap <buffer> <leader>cg        <Plug>CoqGotoGoalStart
+        nmap <buffer> <leader>cG        <Plug>CoqGotoGoalEnd
+        nmap <buffer> ]c                <Plug>CoqGotoGoalNextStart
+        nmap <buffer> ]C                <Plug>CoqGotoGoalNextEnd
+        nmap <buffer> [c                <Plug>CoqGotoGoalPrevStart
+        nmap <buffer> [C                <Plug>CoqGotoGoalPrevEnd
 
         " Semantic features
-        nmap <buffer> <c-c><c-]>    <Plug>CoqGotoDef
-        nmap <buffer> <c-c>c        <Plug>CoqCheck
-        xmap <buffer> <c-c>c        <Plug>CoqCheck
-        nmap <buffer> <c-c>a        <Plug>CoqAbout
-        xmap <buffer> <c-c>a        <Plug>CoqAbout
-        nmap <buffer> <c-c>s        <Plug>CoqSearch
-        xmap <buffer> <c-c>s        <Plug>CoqSearch
-        nmap <buffer> <c-c>d        <Plug>CoqPrint
-        xmap <buffer> <c-c>d        <Plug>CoqPrint
-        nmap <buffer> <c-c>f        <Plug>CoqLocate
-        xmap <buffer> <c-c>f        <Plug>CoqLocate
+        nmap <buffer> <c-]>             <Plug>CoqGotoDef
+        nmap <buffer> <leader>cc        <Plug>CoqCheck
+        xmap <buffer> <leader>cc        <Plug>CoqCheck
+        nmap <buffer> <leader>ca        <Plug>CoqAbout
+        xmap <buffer> <leader>ca        <Plug>CoqAbout
+        nmap <buffer> <leader>cs        <Plug>CoqSearch
+        xmap <buffer> <leader>cs        <Plug>CoqSearch
+        nmap <buffer> <leader>cd        <Plug>CoqPrint
+        xmap <buffer> <leader>cd        <Plug>CoqPrint
+        nmap <buffer> <leader>cf        <Plug>CoqLocate
+        xmap <buffer> <leader>cf        <Plug>CoqLocate
     endfunction
 
     augroup coqtail_mappings
@@ -88,27 +88,16 @@ function s:PlugLatex()
     " let g:vimtex_disable_recursive_main_file_detection = 1
 
     function! VimtexConfig()
+      let g:which_key_map['c'] = { 'name': '+vimtex' }
+      nmap <buffer> <leader>cc        <plug>(vimtex-compile-ss)
+      nmap <buffer> <leader>c<Space>  <plug>(vimtex-view)
+      nmap <buffer> <leader>ce        <plug>(vimtex-errors)
+
       imap <buffer> <C-g>]            <plug>(vimtex-delim-close)
-
-      nmap <buffer> <C-c><CR>         <plug>(vimtex-compile-ss)
-      vmap <buffer> <C-c><CR>    <ESC><plug>(vimtex-compile-ss)
-      imap <buffer> <C-c><CR>    <ESC><plug>(vimtex-compile-ss)
-      nmap <buffer> <C-c>l            <plug>(vimtex-compile-ss)
-      vmap <buffer> <C-c>l       <ESC><plug>(vimtex-compile-ss)
-      imap <buffer> <C-c>l       <ESC><plug>(vimtex-compile-ss)
-
-      nmap <buffer> <C-c><Space>      <plug>(vimtex-view)
-      vmap <buffer> <C-c><Space> <ESC><plug>(vimtex-view)
-      imap <buffer> <C-c><Space> <ESC><plug>(vimtex-view)
-
-      nmap <buffer> <C-c>c            <plug>(vimtex-errors)
-      vmap <buffer> <C-c>c       <ESC><plug>(vimtex-errors)
-      imap <buffer> <C-c>c       <ESC><plug>(vimtex-errors)
-
-      imap <buffer> <C-g>e      \emph{}<left>
-      imap <buffer> <C-g>t      \texttt{}<left>
-      imap <buffer> <C-g>b      \textbf{}<left>
-      imap <buffer> <C-g>i      \textit{}<left>
+      imap <buffer> <C-g>e            \emph{}<left>
+      imap <buffer> <C-g>t            \texttt{}<left>
+      imap <buffer> <C-g>b            \textbf{}<left>
+      imap <buffer> <C-g>i            \textit{}<left>
     endfunction
 
     augroup vimtex_settings
@@ -220,8 +209,8 @@ function s:PlugMisc()
   Plug 'keith/swift.vim'
   Plug 'dag/vim-fish'
   Plug 'cespare/vim-toml'
-  Plug 'adborden/vim-notmuch-address',      { 'for': 'mail' }
   Plug 'neomutt/neomutt.vim'
+  Plug 'adborden/vim-notmuch-address', { 'for': 'mail' }
 endfunction
 
 function plugins#filetypes#setup()
