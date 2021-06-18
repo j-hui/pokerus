@@ -37,46 +37,62 @@ function plugins#subsystems#setup()
     command! FZHere call fzf#run(fzf#wrap({'dir': expand('%:h')}))
 
     " Normal mode mappings (with mnemonics)
+      let g:which_key_map['f'] = { 'name': '+fzf' }
 
       " Ripgrep (under cursor)
-      nmap <C-x>r :Rg<CR>
+      nmap <leader>fr :Rg<CR>
+      let g:which_key_map['f']['r'] = 'fzf-ripgrep'
 
       " Ripgrep live (starting with word under cursor)
-      nmap <C-x>R :call RipgrepFzf(expand('<cword>'), 0)<CR>
+      nmap <leader>fR :call RipgrepFzf(expand('<cword>'), 0)<CR>
+      let g:which_key_map['f']['R'] = 'fzf-ripgrep-live'
 
       " Files
-      nmap <C-x>f :Files<CR>
+      nmap <leader>ff :Files<CR>
+      let g:which_key_map['f']['f'] = 'fzf-files'
 
       " Git files
-      nmap <C-x>F :GFiles<CR>
+      nmap <leader>fF :GFiles<CR>
+      let g:which_key_map['f']['F'] = 'fzf-git-files'
 
       " Here (like Files/:FZF, but relative to directory of current file)
-      nmap <C-x>H :call fzf#run(fzf#wrap({'dir': expand('%:h')}))<CR>
+      nmap <leader>fH :call fzf#run(fzf#wrap({'dir': expand('%:h')}))<CR>
+      let g:which_key_map['f']['H'] = 'fzf-files-here'
 
       " Git commits (current buffer only)
-      nmap <C-x>g :BCommits<CR>
+      nmap <leader>fg :BCommits<CR>
+      let g:which_key_map['f']['g'] = 'fzf-git-commits-buffer'
 
       " Git commits
-      nmap <C-x>G :Commits<CR>
+      nmap <leader>fG :Commits<CR>
+      let g:which_key_map['f']['G'] = 'fzf-git-commits'
 
       " Buffers (and history)
-      nmap <C-x>h :History<CR>
+      nmap <leader>fh :History<CR>
+      let g:which_key_map['f']['h'] = 'fzf-history-buffers'
 
       " Buffers
-      nmap <C-x>b :Buffers<CR>
+      nmap <leader>fb :Buffers<CR>
+      let g:which_key_map['f']['b'] = 'fzf-buffers'
 
       " Lines (current buffer only)
-      nmap <C-x>l :BLines<CR>
+      nmap <leader>fl :BLines<CR>
+      let g:which_key_map['f']['b'] = 'fzf-buffer-lines'
 
       " Lines
-      nmap <C-x>L :Lines<CR>
+      nmap <leader>fL :Lines<CR>
+      let g:which_key_map['f']['b'] = 'fzf-lines'
 
       " Command history
-      nmap <C-x>: :History:<CR>
-      nmap <C-x>; :History:<CR>
+      nmap <leader>f: :History:<CR>
+      let g:which_key_map['f'][':'] = 'fzf-history-:'
+      nmap <leader>f; :History:<CR>
+      let g:which_key_map['f'][';'] = 'fzf-history-:'
 
       " Search history
-      nmap <C-x>/ :History/<CR>
+      nmap <leader>f/ :History/<CR>
+      let g:which_key_map['f']['/'] = 'fzf-history-/'
+
 
   Plug 'https://gitlab.com/mcepl/vim-fzfspell.git'
   " FZF for z=
@@ -86,13 +102,25 @@ function plugins#subsystems#setup()
 
   Plug 'tpope/vim-fugitive'
   " Git interaction
-    command! Gd Gdiffsplit
-    command! GD Gdiffsplit
+    let g:which_key_map['g'] = { 'name': '+git' }
+
+    nnoremap <leader>gd :Gdiffsplit<CR>
+    nnoremap <leader>gp :Git pull<CR>
+    let g:which_key_map['g']['p'] = 'git-push'
+    nnoremap <leader>gP :Git push<CR>
+    let g:which_key_map['g']['P'] = 'git-pull'
+    nnoremap <leader>gl :Gclog<CR>
+    let g:which_key_map['g']['l'] = 'git-log'
+    nnoremap <leader>gc :Git commit<CR>
+    let g:which_key_map['g']['c'] = 'git-commit'
+    nnoremap <leader>gs :Git status<CR>
+    let g:which_key_map['g']['s'] = 'git-status'
 
   Plug 'rhysd/git-messenger.vim'
   " Super-charged git blame
     let g:git_messenger_no_default_mappings = v:true
-    nmap gb <Plug>(git-messenger)
+    nmap <leader>gb <Plug>(git-messenger)
+    let g:which_key_map['g']['b'] = 'git-blame'
 
   Plug 'preservim/tagbar'
   " Outline by tags
@@ -103,5 +131,11 @@ function plugins#subsystems#setup()
   Plug 'itchyny/calendar.vim'
   " Calendar app in Vim
 
-  return []
+  Plug 'liuchengxu/vim-which-key'
+    nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+    function s:WhichKeyHooks()
+      call which_key#register('<Space>', "g:which_key_map")
+    endfunction
+
+  return [function('s:WhichKeyHooks')]
 endfunction

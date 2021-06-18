@@ -35,17 +35,6 @@ function plugins#window#setup()
     let g:buftabline_indicators = 1 " Show whether modified
     let g:buftabline_numbers  = 1   " Show buffer numbers
 
-    nmap <C-w>1 <Plug>BufTabLine.Go(1)
-    nmap <C-w>2 <Plug>BufTabLine.Go(2)
-    nmap <C-w>3 <Plug>BufTabLine.Go(3)
-    nmap <C-w>4 <Plug>BufTabLine.Go(4)
-    nmap <C-w>5 <Plug>BufTabLine.Go(5)
-    nmap <C-w>6 <Plug>BufTabLine.Go(6)
-    nmap <C-w>7 <Plug>BufTabLine.Go(7)
-    nmap <C-w>8 <Plug>BufTabLine.Go(8)
-    nmap <C-w>9 <Plug>BufTabLine.Go(9)
-    nmap <C-w>0 <Plug>BufTabLine.Go(-1)
-
   Plug 'moll/vim-bbye'
   " Delete buffers without messing up buffer layout
 
