@@ -146,7 +146,9 @@ function s:PlugLCN()
     function s:LC_keybinds()
       if has_key(g:LanguageClient_serverCommands, &filetype)
         nmap <buffer> <silent> <leader>l<space>   <Plug>(lcn-hover)
-        nmap <buffer> <silent> <C-h> <Plug>(lcn-explain-error)
+
+        nmap <buffer> <silent> <leader>lk <Plug>(lcn-hover)
+        nmap <buffer> <silent> <leader>lj <Plug>(lcn-explain-error)
 
         nmap <buffer> <silent> <leader>ll <Plug>(lcn-menu)
         nmap <buffer> <silent> <leader>ld <Plug>(lcn-definition)
@@ -157,8 +159,8 @@ function s:PlugLCN()
         nmap <buffer> <silent> <leader>lR <Plug>(lcn-rename)
         nmap <buffer> <silent> <leader>l/ <Plug>(lcn-symbols)
 
-        nmap <buffer> <silent> <leader>la <Plug>(lcn-code-lens-action)
-        nmap <buffer> <silent> <leader>lA <Plug>(lcn-code-action)
+        nmap <buffer> <silent> <leader>la <Plug>(lcn-code-action)
+        nmap <buffer> <silent> <leader>lA <Plug>(lcn-code-lens-action)
         nmap <buffer> <silent> <leader>lq <Plug>(lcn-format)
 
         nmap <buffer> <silent> ]a <Plug>(lcn-diagnostics-next)
@@ -300,11 +302,12 @@ function s:PlugVimLsp()
 
     function s:VimLspMappings()
       nmap <silent> <leader>l<space> <Plug>(lsp-hover)
+      nmap <silent> <leader>lk <Plug>(lsp-hover)
 
       nmap <silent> <leader>lr <Plug>(lsp-references)
       nmap <silent> <leader>lR <Plug>(lsp-rename)
-      nmap <silent> <leader>la <Plug>(lsp-code-lens)
-      nmap <silent> <leader>lA <Plug>(lsp-code-action)
+      nmap <silent> <leader>la <Plug>(lsp-code-action)
+      nmap <silent> <leader>lA <Plug>(lsp-code-lens)
 
       nmap <silent> <leader>l/ <Plug>(lsp-document-symbol-search)
       nmap <silent> <leader>l? <Plug>(lsp-document-symbol)
@@ -448,14 +451,14 @@ function plugins#ide#setup()
   let g:which_key_map['l'] = { 'name': '+lsp' }
 
   let l:callbacks = []
-  " let l:callbacks += s:PlugLCN()
-  " let l:callbacks += s:PlugNcm2()
-  " let l:callbacks += s:PlugNeomake()
-  " let l:callbacks += s:PlugNeoformat()
+  let l:callbacks += s:PlugLCN()
+  let l:callbacks += s:PlugNcm2()
+  let l:callbacks += s:PlugNeomake()
+  let l:callbacks += s:PlugNeoformat()
 
-  let l:callbacks += s:PlugALE()
-  let l:callbacks += s:PlugVimLsp()
-  let l:callbacks += s:PlugAsyncomplete()
+  " let l:callbacks += s:PlugALE()
+  " let l:callbacks += s:PlugVimLsp()
+  " let l:callbacks += s:PlugAsyncomplete()
 
   " let l:callbacks += s:PlugDeoplete()
   let l:callbacks += s:PlugUltisnips()
