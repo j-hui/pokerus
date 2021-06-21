@@ -23,9 +23,9 @@ function plugins#navigation#setup()
     let g:sneak#target_labels = ',sftunq/SFGHLTUNRMQZ?0'
     let g:sneak#prompt = ' » '
 
-    " 2-character Sneak (default)
-    nmap <Tab> <Plug>Sneak_s
-    nmap <BS> <Plug>Sneak_S
+    " 2-character Sneak
+    nmap <leader>f <Plug>Sneak_s
+    nmap <leader>F <Plug>Sneak_S
     xmap <Tab> <Plug>Sneak_s
     xmap <BS> <Plug>Sneak_S
     omap <Tab> <Plug>Sneak_s
