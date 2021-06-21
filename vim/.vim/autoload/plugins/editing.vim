@@ -113,6 +113,8 @@ function plugins#editing#setup()
       augroup END
     endfunction
 
+    Plug 'matze/vim-move'
+
     return [function('s:SandwichCallback')]
 endfunction
 
