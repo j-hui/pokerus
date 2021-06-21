@@ -37,61 +37,61 @@ function plugins#subsystems#setup()
     command! FZHere call fzf#run(fzf#wrap({'dir': expand('%:h')}))
 
     " Normal mode mappings (with mnemonics)
-      let g:which_key_map['f'] = { 'name': '+fzf' }
+      let g:which_key_map[';'] = { 'name': '+fzf' }
 
       " Ripgrep (under cursor)
-      nmap <leader>fr :Rg<CR>
-      let g:which_key_map['f']['r'] = 'fzf-ripgrep'
+      nmap <leader>;r :Rg<CR>
+      let g:which_key_map[';']['r'] = 'fzf-ripgrep'
 
       " Ripgrep live (starting with word under cursor)
-      nmap <leader>fR :call RipgrepFzf(expand('<cword>'), 0)<CR>
-      let g:which_key_map['f']['R'] = 'fzf-ripgrep-live'
+      nmap <leader>;R :call RipgrepFzf(expand('<cword>'), 0)<CR>
+      let g:which_key_map[';']['R'] = 'fzf-ripgrep-live'
 
       " Files
-      nmap <leader>ff :Files<CR>
-      let g:which_key_map['f']['f'] = 'fzf-files'
+      nmap <leader>;f :Files<CR>
+      let g:which_key_map[';']['f'] = 'fzf-files'
 
       " Git files
-      nmap <leader>fF :GFiles<CR>
-      let g:which_key_map['f']['F'] = 'fzf-git-files'
+      nmap <leader>;F :GFiles<CR>
+      let g:which_key_map[';']['F'] = 'fzf-git-files'
 
       " Here (like Files/:FZF, but relative to directory of current file)
-      nmap <leader>fH :call fzf#run(fzf#wrap({'dir': expand('%:h')}))<CR>
-      let g:which_key_map['f']['H'] = 'fzf-files-here'
+      nmap <leader>;H :call fzf#run(fzf#wrap({'dir': expand('%:h')}))<CR>
+      let g:which_key_map[';']['H'] = 'fzf-files-here'
 
       " Git commits (current buffer only)
-      nmap <leader>fg :BCommits<CR>
-      let g:which_key_map['f']['g'] = 'fzf-git-commits-buffer'
+      nmap <leader>;g :BCommits<CR>
+      let g:which_key_map[';']['g'] = 'fzf-git-commits-buffer'
 
       " Git commits
-      nmap <leader>fG :Commits<CR>
-      let g:which_key_map['f']['G'] = 'fzf-git-commits'
+      nmap <leader>;G :Commits<CR>
+      let g:which_key_map[';']['G'] = 'fzf-git-commits'
 
       " Buffers (and history)
-      nmap <leader>fh :History<CR>
-      let g:which_key_map['f']['h'] = 'fzf-history-buffers'
+      nmap <leader>;h :History<CR>
+      let g:which_key_map[';']['h'] = 'fzf-history-buffers'
 
       " Buffers
-      nmap <leader>fb :Buffers<CR>
-      let g:which_key_map['f']['b'] = 'fzf-buffers'
+      nmap <leader>;b :Buffers<CR>
+      let g:which_key_map[';']['b'] = 'fzf-buffers'
 
       " Lines
-      nmap <leader>fl :Lines<CR>
-      let g:which_key_map['f']['l'] = 'fzf-lines'
+      nmap <leader>;l :Lines<CR>
+      let g:which_key_map[';']['l'] = 'fzf-lines'
 
       " Lines (current buffer only)
-      nmap <leader>fL :BLines<CR>
-      let g:which_key_map['f']['L'] = 'fzf-buffer-lines'
+      nmap <leader>;L :BLines<CR>
+      let g:which_key_map[';']['L'] = 'fzf-buffer-lines'
 
       " Command history
-      nmap <leader>f: :History:<CR>
-      let g:which_key_map['f'][':'] = 'fzf-history-:'
-      nmap <leader>f; :History:<CR>
-      let g:which_key_map['f'][';'] = 'fzf-history-:'
+      nmap <leader>;: :History:<CR>
+      let g:which_key_map[';'][':'] = 'fzf-history-:'
+      nmap <leader>;; :History:<CR>
+      let g:which_key_map[';'][';'] = 'fzf-history-:'
 
       " Search history
-      nmap <leader>f/ :History/<CR>
-      let g:which_key_map['f']['/'] = 'fzf-history-/'
+      nmap <leader>;/ :History/<CR>
+      let g:which_key_map[';']['/'] = 'fzf-history-/'
 
 
   Plug 'https://gitlab.com/mcepl/vim-fzfspell.git'
