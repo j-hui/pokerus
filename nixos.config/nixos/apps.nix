@@ -297,6 +297,7 @@ in
 
         # Lua
         lua
+        unstable.sumneko-lua-language-server
 
         # TLA
         tlaps
