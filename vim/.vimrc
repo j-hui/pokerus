@@ -1,5 +1,5 @@
 " ============================================================================
-" Pokerus .vimrc (by J-Hui)
+" Pokerus .vimrc (by j-hui)
 " ============================================================================
 
 if 0
@@ -17,6 +17,9 @@ endif
 set nocompatible
 filetype plugin on
 syntax on
+
+" Define this before anything else, since it is effectful
+let g:mapleader = "\<Space>"
 
 " These are defined in .vim/autoload/
 call plugins#setup()

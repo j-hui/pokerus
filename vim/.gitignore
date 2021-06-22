@@ -1,1 +1,2 @@
 *.spl
+.vim/autoload/local

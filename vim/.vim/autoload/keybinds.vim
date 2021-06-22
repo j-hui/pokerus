@@ -1,12 +1,5 @@
 
-function keybinds#setup()
-
-  " Disable ex mode
-  nnoremap Q <nop>
-  nnoremap gQ <nop>
-
-  " Readline bindings {{{
-  " ----------------------------------------------------------------------------
+function s:readlineMaps()
   " NOTE: some readline-style bindings cherrypicked/simplified from tpope/vim-rsi
 
   if &encoding ==# 'latin1' && has('gui_running') && !empty(findfile('plugin/sensible.vim', escape(&rtp, ' ')))
@@ -46,19 +39,9 @@ function keybinds#setup()
     autocmd GUIEnter * call s:MapMeta()
     augroup END
   endif
-  " }}}
+endfunction
 
-  " Appearance {{{
-  " ----------------------------------------------------------------------------
-
-  " Wrangle folds from jumping
-  nnoremap Q za
-
-  " }}}
-
-  " Navigation {{{
-  " ----------------------------------------------------------------------------
-
+function s:navigationMaps()
   " Block-oriented (non-linewise) navigation
   nnoremap j gj
   nnoremap k gk
@@ -117,11 +100,11 @@ function keybinds#setup()
   " inoremap <expr> <C-F> col('.')>strlen(getline('.'))?"\<Lt>C-F>":"\<Lt>Right>"
   " inoremap <expr> <C-B> getline('.')=~'^\s*$'&&col('.')>strlen(getline('.'))?"0\<Lt>C-D>\<Lt>Esc>kJs":"\<Lt>Left>"
 
-  " }}}
+  " Wrangle folds from jumping
+  nnoremap Q za
+endfunction
 
-  " Editing {{{
-  " ----------------------------------------------------------------------------
-
+function s:editingMaps()
   set pastetoggle=<F2>
   " Don't leave visual mode when indending
   xnoremap < <gv
@@ -148,11 +131,9 @@ function keybinds#setup()
   inoremap <C-y> <C-o>"-p
 
   " inoremap <expr> <C-D> col('.')>strlen(getline('.'))?"\<Lt>C-D>":"\<Lt>Del>"
-  " }}}
+endfunction
 
-  " Command mode {{{
-  " ----------------------------------------------------------------------------
-
+function s:commandMaps()
   " Eliminate extra key press
   nnoremap ; :
   vnoremap ; :
@@ -208,12 +189,19 @@ function keybinds#setup()
 
   " Yank from delete register
   cnoremap <C-Y> <C-R>-
-
-  " }}}
- 
-  " Syntax group underneath cursor
-  map <F8>
-        \ :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
-        \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
-        \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 endfunction
+
+function keybinds#setup()
+
+  " Disable ex mode
+  nnoremap Q <nop>
+  nnoremap gQ <nop>
+
+  call s:readlineMaps()
+  call s:navigationMaps()
+  call s:editingMaps()
+  call s:commandMaps()
+
+endfunction
+
+" vim: set ts=2 sw=2 tw=80 et foldmethod=syntax :

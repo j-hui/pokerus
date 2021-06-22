@@ -21,7 +21,7 @@ function commands#setup()
   " }}}
 
   " Trim trailing spaces {{{
-  command! -range Trim <line1>,<line2> substitute/\s\+$//g | normal! ``
+  command! -range Trim <line1>,<line2> substitute/\s\+$//g | noh | normal! ``
   " }}}
 
   " Go to location of file {{{
@@ -103,6 +103,16 @@ function commands#setup()
   " BibCommas: add missing commas to BibTeX file {{{
   command! -buffer -range=% -bar BibCommas keeppatterns
     \ <line1>,<line2>substitute:\v([}"])(\s*\n)+(\s*\a+\s*\=):\1,\2\3:giep
+  " }}}
+
+
+  " SyntaxGroup: add missing commas to BibTeX file {{{
+  function s:show_syntax_group()
+    echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+          \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+          \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"
+  endfunction
+  command! SyntaxGroup call s:show_syntax_group()
   " }}}
 
 endfunction

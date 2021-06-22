@@ -5,6 +5,7 @@ scriptencoding utf-8
 " some plugins if there is anything to suggest we are running within some
 " non-terminal application:
 let s:env_embedded = exists('g:vscode')
+" TODO: currently unused
 
 let g:colorscheme = 'gruvbox-material'
 let g:lightline_colorscheme = substitute(g:colorscheme, '-', '_', 'g')
@@ -16,6 +17,10 @@ let g:lightline = {
       \ 'component': {},
       \ 'component_function': {},
       \}
+
+let g:which_key_map = { 'name': '+leader' }
+let g:which_key_map_prev = { 'name': '+prev' }
+let g:which_key_map_next = { 'name': '+next' }
 
 function s:ColorSchemeCb()
   try
@@ -29,6 +34,7 @@ function plugins#setup()
   let l:plug_callbacks = [function('s:ColorSchemeCb')]
 
   call plug#begin('~/.vimplugins/plugged')
+
   let l:plug_callbacks += plugins#highlighting#setup()
   let l:plug_callbacks += plugins#window#setup()
   let l:plug_callbacks += plugins#ide#setup()
@@ -37,7 +43,11 @@ function plugins#setup()
   let l:plug_callbacks += plugins#filetypes#setup()
   let l:plug_callbacks += plugins#navigation#setup()
   let l:plug_callbacks += plugins#editing#setup()
-  let l:plug_callbacks += plugins#local#setup()
+
+  if filereadable(expand('~/.vim/autoload/local/plugins.vim'))
+    let l:plug_callbacks += local#plugins#setup()
+  endif
+
   call plug#end()
 
   " try

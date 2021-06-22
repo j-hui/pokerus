@@ -71,7 +71,7 @@ in
         nodePackages.yaml-language-server
 
         # version control
-        git gitAndTools.gh gitAndTools.delta
+        gitAndTools.gitFull gitAndTools.gh gitAndTools.delta
         subversion
         mercurial
 
@@ -95,11 +95,15 @@ in
         exa
         broot
         nnn
+        unstable.xplr
         borgbackup
         rclone
         sqlite
         zoxide
         tokei
+        yank
+        ruplacer
+        skim
 
         # utilities
         binutils
@@ -119,12 +123,15 @@ in
         xsv
         hexyl
 
+        nix-prefetch-git
+
         # process management
         htop
         iotop
         tree
         killall
         gotop
+        unstable.bottom
         procs
 
         # networking
@@ -135,6 +142,7 @@ in
         dhcp rustscan
         prettyping
         gnutls
+        bridge-utils
         bandwhich
 
         # disk

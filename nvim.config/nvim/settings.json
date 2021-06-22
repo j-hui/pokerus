@@ -45,9 +45,9 @@
     "codeAction": true,
     "completion": true
   },
-  "haskell-language-server": {
+  "haskell-language-server-wrapper": {
     "haskell": {
-      "formattingProvider": "stylish-haskell"
+      "formattingProvider": "brittany"
     }
   }
 }
