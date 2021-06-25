@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# Example output of wordnet <word> -over
+# 36. beget, get, engender, father, mother, sire, generate, bring forth -- (make children; "Abraham begot Isaac"; "Men often father children but don't recognize them")
+# this line should be converted into a list [beget, get, engender, father, mother, sire, generate, bring forth]
+# use regex to select lines that start with: <int>\. . * --
+
+declare -a wn_array
+
+while IFS= read -r line; do
+    wn_array+=("$(echo "$line" | grep ^[0-9]. | cut -d'.' -f 2 | cut -d'-' -f 1 | grep -o "[a-z].*"),")
+done < <( wn $1 -over)
+
+echo ${wn_array[@]} | tr ',' '\n' | sed '/^[[:space:]]*$/d' | sort -u
+echo
