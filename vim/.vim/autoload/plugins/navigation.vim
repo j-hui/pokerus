@@ -23,9 +23,12 @@ function plugins#navigation#setup()
     let g:sneak#target_labels = ',sftunq/SFGHLTUNRMQZ?0'
     let g:sneak#prompt = ' » '
 
+    let g:which_key_map['<Tab>'] = 'sneak-forward'
+    let g:which_key_map['<BS>'] = 'sneak-backward'
+
     " 2-character Sneak
-    nmap <leader>f <Plug>Sneak_s
-    nmap <leader>F <Plug>Sneak_S
+    nmap <leader><Tab> <Plug>Sneak_s
+    nmap <leader><BS> <Plug>Sneak_S
     xmap <Tab> <Plug>Sneak_s
     xmap <BS> <Plug>Sneak_S
     omap <Tab> <Plug>Sneak_s
