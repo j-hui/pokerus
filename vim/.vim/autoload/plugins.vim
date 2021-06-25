@@ -19,8 +19,6 @@ let g:lightline = {
       \}
 
 let g:which_key_map = { 'name': '+leader' }
-let g:which_key_map_prev = { 'name': '+prev' }
-let g:which_key_map_next = { 'name': '+next' }
 
 function s:ColorSchemeCb()
   try
