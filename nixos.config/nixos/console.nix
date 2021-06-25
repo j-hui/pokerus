@@ -104,6 +104,7 @@ in
         yank
         ruplacer
         skim
+        trash-cli
 
         # utilities
         binutils
@@ -153,6 +154,7 @@ in
         # hardware management
         smartmontools lsof pciutils glxinfo acpi
         radeontop lshw mcelog fwts lm_sensors inxi
+        unstable.qmk
 
         # testing
         stress mesa-demos
