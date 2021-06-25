@@ -115,6 +115,12 @@ function plugins#editing#setup()
 
     Plug 'matze/vim-move'
 
+    Plug 'lervag/lists.vim'
+      let g:lists_filetypes = ['wiki', 'markdown']
+
+      nmap <leader>wlt <plug>(lists-toggle)
+      imap <C-g>lt <plug>(lists-toggle)
+
     return [function('s:SandwichCallback')]
 endfunction
 

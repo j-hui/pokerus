@@ -1,4 +1,3 @@
-
 function s:readlineMaps()
   " NOTE: some readline-style bindings cherrypicked/simplified from tpope/vim-rsi
 
@@ -191,6 +190,20 @@ function s:commandMaps()
   cnoremap <C-Y> <C-R>-
 endfunction
 
+function s:leaderMaps()
+  " Key guide for these bindings defined with Plug 'liuchengxu/vim-which-key'
+  nnoremap <leader>bn :bn<CR>
+  nnoremap <leader>bp :bp<CR>
+  nnoremap <leader>bq :q<CR>
+  nnoremap <leader>bw :bw<CR>
+  nnoremap <leader>bj <C-w>j
+  nnoremap <leader>bk <C-w>k
+  nnoremap <leader>bh <C-w>h
+  nnoremap <leader>bl <C-w>l
+  nnoremap <leader>bs <C-w>s
+  nnoremap <leader>bv <C-w>v
+endfunction
+
 function keybinds#setup()
 
   " Disable ex mode
@@ -201,6 +214,7 @@ function keybinds#setup()
   call s:navigationMaps()
   call s:editingMaps()
   call s:commandMaps()
+  call s:leaderMaps()
 
 endfunction
 
