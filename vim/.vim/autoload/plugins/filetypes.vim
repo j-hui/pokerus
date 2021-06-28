@@ -98,6 +98,18 @@ function s:PlugLatex()
       imap <buffer> <C-g>t            \texttt{}<left>
       imap <buffer> <C-g>b            \textbf{}<left>
       imap <buffer> <C-g>i            \textit{}<left>
+
+      if g:completion_tool ==# 'ncm2'
+        call ncm2#register_source({
+            \ 'name': 'vimtex',
+            \ 'priority': 8,
+            \ 'scope': ['tex'],
+            \ 'mark': 'tex',
+            \ 'word_pattern': '\w+',
+            \ 'complete_pattern': g:vimtex#re#ncm2,
+            \ 'on_complete': ['ncm2#on_complete#omni', 'vimtex#complete#omnifunc'],
+            \ })
+      endif
     endfunction
 
     augroup vimtex_settings

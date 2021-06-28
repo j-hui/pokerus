@@ -7,6 +7,7 @@ scriptencoding utf-8
 let s:env_embedded = exists('g:vscode')
 " TODO: currently unused
 
+let g:completion_tool = 'none'
 let g:colorscheme = 'gruvbox-material'
 let g:lightline_colorscheme = substitute(g:colorscheme, '-', '_', 'g')
 let g:lightline = {
