@@ -109,6 +109,12 @@ function s:editingMaps()
   xnoremap < <gv
   xnoremap > >gv
 
+  " Current filename w/o extension
+  inoremap <C-g>f <C-r>=expand('%:t:r')<CR>
+
+  " Current filename w/ extension
+  inoremap <C-g>F <C-r>=expand('%:t')<CR>
+
   " Correct spelling
   inoremap <C-g>l <c-g>u<Esc>[s1z=`]a<c-g>u
 
@@ -196,6 +202,7 @@ function s:leaderMaps()
   nnoremap <leader>bp :bp<CR>
   nnoremap <leader>bq :q<CR>
   nnoremap <leader>bw :bw<CR>
+  nnoremap <leader>bc :cclose\|lclose<CR>
   nnoremap <leader>bj <C-w>j
   nnoremap <leader>bk <C-w>k
   nnoremap <leader>bh <C-w>h
