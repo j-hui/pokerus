@@ -93,6 +93,14 @@ function plugins#subsystems#setup()
       nmap <leader>f/ :History/<CR>
       let g:which_key_map['f']['/'] = 'fzf-history-/'
 
+  Plug 'tweekmonster/fzf-filemru'
+    " Most recently used files
+
+    nmap <leader>fm :ProjectMru<CR>
+    let g:which_key_map['f']['m'] = 'fzf-project-mru'
+
+    nmap <leader>fM :FilesMru<CR>
+    let g:which_key_map['f']['M'] = 'fzf-files-mru'
 
   Plug 'https://gitlab.com/mcepl/vim-fzfspell.git'
   " FZF for z=
@@ -101,6 +109,7 @@ function plugins#subsystems#setup()
   " See yank registers
 
   Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-rhubarb'
   " Git interaction
     let g:which_key_map['g'] = { 'name': '+git' }
 
@@ -118,6 +127,13 @@ function plugins#subsystems#setup()
     let g:which_key_map['g']['c'] = 'git-commit'
     nnoremap <leader>gs :Git<CR>
     let g:which_key_map['g']['s'] = 'git-status'
+
+  Plug 'rbong/vim-flog'
+  " Git log
+    nnoremap <leader>gf :Flogsplit<CR>
+    let g:which_key_map['g']['f'] = 'git-flog-split'
+    nnoremap <leader>gf :Flog<CR>
+    let g:which_key_map['g']['F'] = 'git-flog'
 
     augroup fugitive_maps
       autocmd!
@@ -165,6 +181,7 @@ function plugins#subsystems#setup()
     let g:which_key_map['b']['l'] = 'window-right'
     let g:which_key_map['b']['s'] = 'window-horizontal-split'
     let g:which_key_map['b']['v'] = 'window-vertical-split'
+    let g:which_key_map['b']['c'] = 'buffer-close-lists'
 
   return [function('s:WhichKeyHooks')]
 endfunction
