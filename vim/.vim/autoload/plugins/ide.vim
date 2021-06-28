@@ -25,6 +25,7 @@ let s:lsp_rootmarkers = {
 let g:vista_executive_for = {}
 
 function s:PlugNcm2()
+  let g:completion_tool = 'ncm2'
   Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp'
     Plug 'ncm2/ncm2-bufword'                  " Complete from buffer
     Plug 'ncm2/ncm2-path'                     " Complete from path
@@ -68,6 +69,7 @@ function s:PlugNcm2()
 endfunction
 
 function s:PlugDeoplete()
+  let g:completion_tool = 'deoplete'
   if has('nvim')
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   else
@@ -403,6 +405,7 @@ function s:PlugVimLsp()
 endfunction
 
 function s:PlugAsyncomplete()
+  let g:completion_tool = 'asyncomplete'
   Plug 'prabirshrestha/asyncomplete.vim'
     Plug 'prabirshrestha/asyncomplete-buffer.vim'
     Plug 'prabirshrestha/asyncomplete-file.vim'
