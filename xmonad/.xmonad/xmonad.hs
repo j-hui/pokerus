@@ -45,11 +45,9 @@ import XMonad
       Default(def),
       MonadState(get),
       ManageHook,
+      Resize(..),
       X,
-      XConfig(manageHook, handleEventHook, modMask, terminal,
-              startupHook, layoutHook, workspaces, borderWidth,
-              normalBorderColor, focusedBorderColor, focusFollowsMouse, logHook,
-              keys),
+      XConfig(..),
       ChangeLayout(NextLayout, FirstLayout),
       Tall(Tall) )
 import qualified XMonad.Core                   as Core
@@ -401,8 +399,8 @@ myKeys =
 
   -- , ("M-S-.",          nextScreen)
   -- , ("M-S-,",          prevScreen)
-  -- , ("M-S-h",          sendMessage Shrink)
-  -- , ("M-S-l",          sendMessage Expand)
+  , ("M-b",          sendMessage Shrink)
+  , ("M-f",          sendMessage Expand)
 
   -- Window management
   , ("M-w"                    , kill1)
@@ -443,8 +441,8 @@ myKeys =
   , ("<XF86AudioLowerVolume>" , spawn "amixer sset Master 10%-")
   , ("<XF86AudioRaiseVolume>" , spawn "amixer sset Master 10%+")
   , ("<XF86AudioMute>"        , spawn "amixer sset Master 0%")
-  , ("<XF86MonBrightnessUp>"  , spawn "brightnessctl set +10%")
-  , ("<XF86MonBrightnessDown>", spawn "brightnessctl set -10%")
+  , ("<XF86MonBrightnessUp>"  , spawn "brightnessctl set 10%+")
+  , ("<XF86MonBrightnessDown>", spawn "brightnessctl set 10%-")
   , ("<Print>"                , mySpawn "screenshot")
   , ("S-<Print>"              , mySpawn "screenshot --fullscreen")
   , ("M-x"                    , mySpawn "screenshot")
