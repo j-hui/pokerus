@@ -209,6 +209,57 @@ function s:PlugZig()
     let g:zig_fmt_autosave = 0
 endfunction
 
+function s:PlugWiki()
+  Plug 'lervag/wiki.vim'
+  Plug 'lervag/wiki-ft.vim'
+    let g:wiki_root = '~/wiki'
+
+    let g:wiki_filetypes = ['wiki']
+    let g:wiki_link_extension = '.wiki'
+    let g:which_key_map['w'] = { 'name': '+wiki' }
+    let g:wiki_link_target_type = 'wiki'
+    let g:wiki_write_on_nav = 1
+
+    let g:wiki_mappings_use_defaults = 'none'
+
+    nmap <leader>wo <plug>(wiki-open)
+    nmap <leader>wi <plug>(wiki-index)
+    nmap <leader>wj <plug>(wiki-journal)
+    nmap <leader>fw <plug>(wiki-fzf-pages)
+    let g:which_key_map['f']['w'] = 'fzf-wiki-open'
+    " Additional wiki ft-only mappings in after/ftplugin/wiki.vim
+
+    let g:wiki_map_link_create = 'WikiLinkSpaceToHyphen'
+    let g:wiki_map_create_page = 'WikiLinkSpaceToHyphen'
+
+    function WikiLinkSpaceToHyphen(text) abort
+      let l:lowered = tolower(a:text)
+      let l:no_spaces = substitute(l:lowered, '\s\+', '-', 'g')
+      let l:no_quotes = substitute(substitute(l:no_spaces, '"', '', 'g'), "'", '', 'g')
+      let l:no_symbols = substitute(l:no_quotes, '[!?\\\$~]', '', 'g')
+      return l:no_symbols
+    endfunction
+
+    function! s:VimWikiConfig()
+      if g:completion_tool ==# 'ncm2'
+        call ncm2#register_source({
+            \ 'name': 'wiki',
+            \ 'priority': 9,
+            \ 'scope': ['wiki'],
+            \ 'word_pattern': '\w+',
+            \ 'complete_pattern': '\[\[',
+            \ 'on_complete': ['ncm2#on_complete#delay', 200,
+            \                 'ncm2#on_complete#omni', 'wiki#complete#omnicomplete'],
+            \ })
+      endif
+    endfunction
+
+    augroup vimwiki_settings
+      autocmd!
+      autocmd User WikiBufferInitialized call s:VimWikiConfig()
+    augroup END
+endfunction
+
 function s:PlugMisc()
   Plug 'leanprover/lean.vim'
   Plug 'idris-hackers/idris-vim'
@@ -237,6 +288,7 @@ function plugins#filetypes#setup()
   call s:PlugValgrind()
   call s:PlugZig()
   call s:PlugMisc()
+  call s:PlugWiki()
   return []
 endfunction
 
