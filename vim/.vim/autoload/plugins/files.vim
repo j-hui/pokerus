@@ -38,6 +38,10 @@ function s:PlugDirvish()
   return []
 endfunction
 
+function s:PlugRooter()
+  Plug 'airblade/vim-rooter'
+endfunction
+
 function plugins#files#setup()
   let l:callbacks = []
   Plug 'tpope/vim-eunuch'             " UNIX-like functionality in Vim
@@ -46,6 +50,7 @@ function plugins#files#setup()
   Plug 'duggiefresh/vim-easydir'      " Create directories when non-existent
   Plug 'strboul/urlview.vim'          " See all URLs in buffer
   Plug 'chrisbra/Recover.vim'         " See diff for recover
+  Plug 'lervag/file-line'             " Open file:line
   let l:callbacks += s:PlugDirvish()
   return l:callbacks
 endfunction
