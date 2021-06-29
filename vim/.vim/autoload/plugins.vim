@@ -43,8 +43,8 @@ function plugins#setup()
   let l:plug_callbacks += plugins#navigation#setup()
   let l:plug_callbacks += plugins#editing#setup()
 
-  if filereadable(expand('~/.vim/autoload/local/plugins.vim'))
-    let l:plug_callbacks += local#plugins#setup()
+  if filereadable(expand('~/.vim/autoload/local.vim'))
+    let l:plug_callbacks += local#plugins_setup()
   endif
 
   call plug#end()
