@@ -3,5 +3,5 @@ function fsh -d "ssh using fish"
         echo "No arguments given."
         return 1
     end
-    ssh $argv fish
+    ssh -t $argv fish
 end
