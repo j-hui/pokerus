@@ -288,6 +288,8 @@ unmapAllExcept([],
     /cloud\.digitalocean\.com/);
 unmapAllExcept([],
     /learn\.dvorak\.nl/);
+unmapAllExcept([],
+    /monkeytype\.com/);
 
 dbg("Qute keys mapped");
 
