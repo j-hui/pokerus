@@ -16,11 +16,13 @@ set -g forgit_pager        "$FORGIT_PAGER"
 set -g forgit_show_pager   "$FORGIT_SHOW_PAGER"
 set -g forgit_diff_pager   "$FORGIT_DIFF_PAGER"
 set -g forgit_ignore_pager "$FORGIT_IGNORE_PAGER"
+set -g forgit_log_format   "$FORGIT_LOG_FORMAT"
 
 test -z "$forgit_pager";        and set -g forgit_pager        (git config core.pager || echo 'cat')
 test -z "$forgit_show_pager";   and set -g forgit_show_pager   (git config pager.show || echo "$forgit_pager")
 test -z "$forgit_diff_pager";   and set -g forgit_diff_pager   (git config pager.diff || echo "$forgit_pager")
 test -z "$forgit_ignore_pager"; and set -g forgit_ignore_pager (type -q bat >/dev/null 2>&1 && echo 'bat -l gitignore --color=always' || echo 'cat')
+test -z "$forgit_log_format";   and set -g forgit_log_format   "-%C(auto)%h%d %s %C(black)%C(bold)%cr%Creset"
 
 # https://github.com/wfxr/emoji-cli
 type -q emojify >/dev/null 2>&1 && set -g forgit_emojify '|emojify'
@@ -42,7 +44,7 @@ function forgit::log -d "git commit viewer"
         $FORGIT_FZF_DEFAULT_OPTS
         +s +m --tiebreak=index
         --bind=\"enter:execute($cmd |env LESS='-r' less)\"
-        --bind=\"ctrl-y:execute-silent(echo {} |grep -Eo '[a-f0-9]+' | head -1 | tr -d '\n' | $copy_cmd)\"
+        --bind=\"ctrl-y:execute-silent(echo {} |grep -Eo '[a-f0-9]+' | head -1 | tr -d '[:space:]' |$copy_cmd)\"
         $FORGIT_LOG_FZF_OPTS
     "
 
@@ -52,7 +54,7 @@ function forgit::log -d "git commit viewer"
         set graph ""
     end
 
-    eval "git log $graph --color=always --format='%C(auto)%h%d %s %C(black)%C(bold)%cr%Creset' $argv $forgit_emojify" |
+    eval "git log $graph --color=always --format='$forgit_log_format' $argv $forgit_emojify" |
         env FZF_DEFAULT_OPTS="$opts" fzf --preview="$cmd"
 end
 
@@ -60,9 +62,8 @@ end
 function forgit::diff -d "git diff viewer"
     forgit::inside_work_tree || return 1
     if count $argv > /dev/null
-        if git rev-parse "$1" > /dev/null 2>&1
-            #set commit "$1" && set files ("${@:2}")
-            set commit "$1" && set files "$2"
+        if git rev-parse "$argv[1]" > /dev/null 2>&1
+            set commit "$argv[1]" && set files "$argv[2..]"
         else
             set files "$argv"
         end
@@ -146,17 +147,26 @@ function forgit::reset::head -d "git reset HEAD (unstage) selector"
 end
 
 # git checkout-restore selector
-function forgit::checkout_file -d "git checkout-restore selector"
+function forgit::checkout::file -d "git checkout-file selector" --argument-names 'file_name'
     forgit::inside_work_tree || return 1
+
+    if test -n "$file_name"
+        git checkout -- "$file_name"
+        set checkout_status $status
+        git status --short
+        return $checkout_status
+    end
+
 
     set cmd "git diff --color=always -- {} | $forgit_diff_pager"
     set opts "
         $FORGIT_FZF_DEFAULT_OPTS
         -m -0
-        $FORGIT_CHECKOUT_FZF_OPTS
+        $FORGIT_CHECKOUT_FILE_FZF_OPTS
     "
     set git_rev_parse (git rev-parse --show-toplevel)
     set files (git ls-files --modified "$git_rev_parse" | env FZF_DEFAULT_OPTS="$opts" fzf --preview="$cmd")
+
     if test -n "$files"
         for file in $files
             echo $file | tr '\n' '\0' | xargs -I{} -0 git checkout -q {}
@@ -165,6 +175,71 @@ function forgit::checkout_file -d "git checkout-restore selector"
         return
     end
     echo 'Nothing to restore.'
+end
+
+function forgit::checkout::commit -d "git checkout commit selector" --argument-names 'commit_id'
+    forgit::inside_work_tree || return 1
+
+    if test -n "$commit_id"
+        git checkout "$commit_id"
+        set checkout_status $status
+        git status --short
+        return $checkout_status
+    end
+
+    if test -n "$FORGIT_COPY_CMD"
+        set copy_cmd $FORGIT_COPY_CMD
+    else
+        set copy_cmd pbcopy
+    end
+
+
+    set cmd "echo {} |grep -Eo '[a-f0-9]+' |head -1 |xargs -I% git show --color=always % | $forgit_show_pager"
+    set opts "
+        $FORGIT_FZF_DEFAULT_OPTS
+        +s +m --tiebreak=index
+        --bind=\"ctrl-y:execute-silent(echo {} |grep -Eo '[a-f0-9]+' | head -1 | tr -d '[:space:]' | $copy_cmd)\"
+        $FORGIT_COMMIT_FZF_OPTS
+    "
+
+    if set -q FORGIT_LOG_GRAPH_ENABLE
+        set graph "--graph"
+    else
+        set graph ""
+    end
+
+    eval "git log $graph --color=always --format='$forgit_log_format' $forgit_emojify" |
+        FZF_DEFAULT_OPTS="$opts" fzf --preview="$cmd" |grep -Eo '[a-f0-9]+' |head -1 |xargs -I% git checkout % --
+end
+
+
+function forgit::checkout::branch -d "git checkout branch selector" --argument-names 'input_branch_name'
+    forgit::inside_work_tree || return 1
+
+    if test -n "$input_branch_name"
+        git checkout -b "$input_branch_name"
+        set checkout_status $status
+        git status --short
+        return $checkout_status
+    end
+
+    set cmd "git branch --color=always --verbose --all | sort -k1.1,1.1 -r"
+    set preview "git log {1} --graph --pretty=format:'$forgit_log_format' --color=always --abbrev-commit --date=relative"
+
+    set opts "
+        $FORGIT_FZF_DEFAULT_OPTS
+        +s +m --tiebreak=index --header-lines=1
+        $FORGIT_CHECKOUT_BRANCH_FZF_OPTS
+        "
+
+    set branch (eval "$cmd" | FZF_DEFAULT_OPTS="$opts" fzf --preview="$preview" | awk '{print $1}')
+
+    test -z "$branch" && return 1
+
+    # track the remote branch if possible
+    if not git checkout --track "$branch" 2>/dev/null
+        git checkout "$branch"
+    end
 end
 
 # git stash viewer
@@ -201,14 +276,13 @@ function forgit::clean -d "git clean selector"
     echo 'Nothing to clean.'
 end
 
-function forgit::cherry::pick -d "git cherry-picking"
+function forgit::cherry::pick -d "git cherry-picking" --argument-names 'target'
     forgit::inside_work_tree || return 1
     set base (git branch --show-current)
-    if not count $argv > /dev/null
+    if test -z "$target"
         echo "Please specify target branch"
         return 1
     end
-    set target $argv[1]
     set preview "echo {1} | xargs -I% git show --color=always % | $forgit_show_pager"
     set opts "
         $FORGIT_FZF_DEFAULT_OPTS
@@ -221,8 +295,49 @@ function forgit::cherry::pick -d "git cherry-picking"
         xargs -I% git cherry-pick %
 end
 
+function forgit::fixup -d "git fixup"
+    forgit::inside_work_tree || return 1
+    git diff --cached --quiet && echo 'Nothing to fixup: there are no staged changes.' && return 1
 
-function forgit::rebase -d "git rebase "
+    if set -q FORGIT_LOG_GRAPH_ENABLE
+        set graph "--graph"
+    else
+        set graph ""
+    end
+
+    set cmd "git log $graph --color=always --format='$forgit_log_format' $argv $forgit_emojify"
+    set files (echo $argv | sed -nE 's/.* -- (.*)/\1/p')
+    set preview "echo {} |grep -Eo '[a-f0-9]+' |head -1 |xargs -I% git show --color=always % -- $files | $forgit_show_pager"
+
+    if test -n "$FORGIT_COPY_CMD"
+        set copy_cmd $FORGIT_COPY_CMD
+    else
+        set copy_cmd pbcopy
+    end
+
+    set opts "
+        $FORGIT_FZF_DEFAULT_OPTS
+        +s +m --tiebreak=index
+        --bind=\"ctrl-y:execute-silent(echo {} |grep -Eo '[a-f0-9]+' | head -1 | tr -d '[:space:]' |$copy_cmd)\"
+        $FORGIT_FIXUP_FZF_OPTS
+    "
+
+    set target_commit (eval "$cmd" | FZF_DEFAULT_OPTS="$opts" fzf --preview="$preview" | grep -Eo '[a-f0-9]+' | head -1)
+
+    if test -n "$target_commit" && git commit --fixup "$target_commit"
+        # "$target_commit~" is invalid when the commit is the first commit, but we can use "--root" instead
+        set prev_commit "$target_commit~"
+        if test "(git rev-parse '$target_commit')" = "(git rev-list --max-parents=0 HEAD)"
+            set prev_commit "--root"
+        end
+
+        GIT_SEQUENCE_EDITOR=: git rebase --autostash -i --autosquash "$prev_commit"
+    end
+
+end
+
+
+function forgit::rebase -d "git rebase"
     forgit::inside_work_tree || return 1
 
     if set -q FORGIT_LOG_GRAPH_ENABLE
@@ -230,7 +345,7 @@ function forgit::rebase -d "git rebase "
     else
         set graph ""
     end
-    set cmd "git log $graph --color=always --format='%C(auto)%h%d %s %C(black)%C(bold)%cr%Creset' $argv $forgit_emojify"
+    set cmd "git log $graph --color=always --format='$forgit_log_format' $argv $forgit_emojify"
 
     set files (echo $argv | sed -nE 's/.* -- (.*)/\1/p')
     set preview "echo {} |grep -Eo '[a-f0-9]+' |head -1 |xargs -I% git show --color=always % -- $files | $forgit_show_pager"
@@ -244,12 +359,15 @@ function forgit::rebase -d "git rebase "
     set opts "
         $FORGIT_FZF_DEFAULT_OPTS
         +s +m --tiebreak=index
-        --bind=\"ctrl-y:execute-silent(echo {} |grep -Eo '[a-f0-9]+' | head -1 | tr -d '\n' |$copy_cmd)\"
+        --bind=\"ctrl-y:execute-silent(echo {} |grep -Eo '[a-f0-9]+' | head -1 | tr -d '[:space:]' |$copy_cmd)\"
         $FORGIT_REBASE_FZF_OPTS
     "
-    eval "$cmd" | FZF_DEFAULT_OPTS="$opts" fzf --preview="$preview" |
-        grep -Eo '[a-f0-9]+' | head -1 |
-        xargs -I% git rebase -i %
+    set commit (eval "$cmd" | FZF_DEFAULT_OPTS="$opts" fzf --preview="$preview" |
+        grep -Eo '[a-f0-9]+' | head -1)
+
+    if test $commit
+        git rebase -i "$commit"
+    end
 end
 
 # git ignore generator
@@ -258,7 +376,7 @@ if test -z "$FORGIT_GI_REPO_REMOTE"
 end
 
 if test -z "$FORGIT_GI_REPO_LOCAL"
-    if test "XDG_CACHE_HOME"
+    if test -z "XDG_CACHE_HOME"
         set -g FORGIT_GI_REPO_LOCAL $XDG_CACHE_HOME/forgit/gi/repos/dvcs/gitignore
     else
         set -g FORGIT_GI_REPO_LOCAL $HOME/.cache/forgit/gi/repos/dvcs/gitignore
@@ -374,10 +492,16 @@ if test -z "$FORGIT_NO_ALIASES"
         alias gi 'forgit::ignore'
     end
 
-    if test -n "$forgit_restore"
-        alias $forgit_restore 'forgit::checkout_file'
+    if test -n "$forgit_checkout_file"
+        alias $forgit_checkout_file 'forgit::checkout::file'
     else
-        alias gcf 'forgit::checkout_file'
+        alias gcf 'forgit::checkout::file'
+    end
+
+    if test -n "$forgit_checkout_branch"
+        alias $forgit_checkout_branch 'forgit::checkout::branch'
+    else
+        alias gcb 'forgit::checkout::branch'
     end
 
     if test -n "$forgit_clean"
@@ -403,4 +527,17 @@ if test -z "$FORGIT_NO_ALIASES"
     else
         alias grb 'forgit::rebase'
     end
+
+    if test -n "$forgit_fixup"
+        alias $forgit_fixup 'forgit::fixup'
+    else
+        alias gfu 'forgit::fixup'
+    end
+
+    if test -n "$forgit_checkout_commit"
+        alias $forgit_checkout_commit 'forgit::checkout::commit'
+    else
+        alias gco 'forgit::checkout::commit'
+    end
+
 end
