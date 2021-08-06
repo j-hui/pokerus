@@ -75,16 +75,12 @@ in
 
         systemPackages = with pkgs; [
 
-          (unstable.qutebrowser.overrideAttrs (old: {
-            propagatedBuildInputs =
-              old.propagatedBuildInputs ++ [
-                pkgs.python3Packages.pocket
-                # pkgs.python3Packages.setuptools # TODO: remove after upstream fix
-              ];
-          }))
+          unstable.qutebrowser
 
           (unstable.luakit.overrideAttrs (old: {
           }))
+          unstable.nyxt
+          unstable.vieb
           surf
           firefox google-chrome chromium
 
@@ -252,6 +248,7 @@ in
       ];
 
       services.udev.packages = [ unstable.pkgs.platformio ];
+
       environment.systemPackages = with pkgs; [
         vscode # I don't actually user this but handy to keep around
         editorconfig-core-c
@@ -290,7 +287,7 @@ in
         # C
         gcc gnumake automake cmake autoconf pkg-config m4 libtool dpkg
         clang clang-tools
-        bear
+        bear pythonPackages.compiledb
         cdecl
         valgrind
         unstable.universal-ctags
@@ -329,21 +326,21 @@ in
         cabal2nix cabal-install
         unstable.haskellPackages.haskell-language-server
         hlint
-        stylish-haskell stylish-cabal
+        stylish-haskell
         haskellPackages.floskell
 
         # Go
         go gopls
 
         # Rust
-        rustup rustfmt rust-analyzer crate2nix
+        rustup rustfmt unstable.rust-analyzer crate2nix
 
         # Latex
         tectonic texlive.combined.scheme-full bibclean texlab
         graphviz
 
         # Pandoc
-        pandoc haskellPackages.pandoc-citeproc
+        pandoc
 
         # Lean
         elan
