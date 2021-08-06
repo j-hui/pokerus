@@ -349,12 +349,11 @@ qmk cformat -b branch_name
 ## `qmk docs`
 
 This command starts a local HTTP server which you can use for browsing or improving the docs. Default port is 8936.
-Use the `-b`/`--browser` flag to automatically open the local webserver in your default browser.
 
 **Usage**:
 
 ```
-qmk docs [-b] [-p PORT]
+qmk docs [-p PORT]
 ```
 
 ## `qmk generate-docs`

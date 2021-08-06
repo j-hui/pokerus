@@ -15,7 +15,7 @@
  */
 #pragma once
 
-#include "platform_deps.h"
+#include "platform.h"
 #include "wait.h"
 #include "matrix.h"
 #include "keymap.h"
