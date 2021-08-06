@@ -19,6 +19,9 @@ ignores () {
         ..)
             echo .
             ;;
+        README.md)
+            echo .
+            ;;
         *)
             echo "$1"
             ;;
