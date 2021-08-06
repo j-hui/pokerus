@@ -32,21 +32,21 @@ infect () {
     src="$1"
     dst="$2"
 
-	if ! [ -d "$src" ]; then
-		wecho "Source $src is not a directory"
+    if ! [ -d "$src" ]; then
+        wecho "Source $src is not a directory"
         return
     fi
 
     pecho "Infecting $dst with contents of $src..."
 
     if ! [ -d "$dst" ]; then
-		pecho "Destination $dst does not yet existing, creating now..."
+        pecho "Destination $dst does not yet existing, creating now..."
         mkdir -p "$dst"
     fi
 
     ls -1 -a "$src" | while read -r f ; do
         # Skip ignored items
-        case "$(ignores $f)" in .|..|"") continue ;; esac
+        case "$(ignores "$f")" in .|..|"") continue ;; esac
 
         if [ -h "$dst/$f" ]; then
             # Some symbolic link already exists at dst
@@ -67,8 +67,8 @@ infect () {
 }
 
 if [ "$#" -lt 1 ]; then
-	echo "usage: $0 [<boxes> ...]"
-	exit -1
+    echo "usage: $0 [<boxes> ...]"
+    exit 1
 fi
 
 for dir in "$@"; do
