@@ -1,3 +1,5 @@
+[init]
+    defaultbranch = main
 [diff]
     mnemonicPrefix = true
 [push]
