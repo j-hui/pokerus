@@ -16,6 +16,7 @@ in
   options.pokerus.console = {
     enable = mkEnableOption "Console configuration";
     virt.enable = mkEnableOption "Virtualization services";
+    docker.enable = mkEnableOption "Docker services";
     print.enable = mkEnableOption "Printing services";
     laptop.enable = mkEnableOption "Laptop settings";
   };
@@ -207,6 +208,13 @@ in
       ];
       virtualisation.libvirtd.enable = true;
       # Also remember to add user to libvirtd group
+    })
+
+    (mkIf cfg.docker.enable {
+      environment.systemPackages = with pkgs; [
+        docker
+      ];
+      virtualisation.docker.enable = true;
     })
   ];
 }
