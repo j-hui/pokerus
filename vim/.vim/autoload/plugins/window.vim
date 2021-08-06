@@ -18,6 +18,8 @@ function plugins#window#setup()
       \ [ 'scrollbar'],
       \ [ 'spell', 'fileformat', 'fileencoding', 'filetype' ],
       \]
+    let g:lightline['separator'] = {'left': '▓▒░', 'right': '░▒▓' }
+    let g:lightline['subseparator'] =  { 'left': '·', 'right': '·' }
 
     let g:lightline['component']['scrollbar'] = '%{ScrollStatus()}'
     let g:lightline['component']['formatoptions'] = '%{&formatoptions}'
