@@ -117,8 +117,6 @@ mkdir -p ~/.tmp/backup ~/.tmp/swp ~/.tmp/undo
 ## Kitty {{{
 if command -v kitty >/dev/null
     abbr --add k kitty +kitten
-
-    alias ssh='kitty +kitten ssh'
     alias icat='kitty +kitten icat --align left'
 end
 ## Kitty }}}
