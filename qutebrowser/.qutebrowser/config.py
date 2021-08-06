@@ -70,7 +70,7 @@ c.colors.webpage.preferred_color_scheme = 'dark'
 
 c.downloads.remove_finished = 696969
 
-c.tabs.last_close = 'close'
+c.tabs.last_close = 'default-page'
 c.tabs.width = '10%'
 c.tabs.mousewheel_switching = False
 
@@ -99,6 +99,7 @@ for site in [
             'https://github.com/*',
             'https://stackoverflow.com/*',
             'https://*.stackexchange.com/*',
+            'https://*.google.com/*',
         ]:
     config.set('content.javascript.can_access_clipboard', True, site)
 
