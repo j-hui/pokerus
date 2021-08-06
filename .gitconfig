@@ -1,0 +1,5 @@
+# Add to
+# git config --local include.path ../.gitconfig
+[include]
+    path =  pokerus.immune/scripts/scripts.config
+    path =  pokerus.immune/subtrees/subtrees.config
