@@ -44,6 +44,7 @@ in
         asciinema
         tealdeer
         doge
+        ruby
 
         # text editing
         ed nano
@@ -124,6 +125,9 @@ in
         xsv
         hexyl
 
+        # nix utilities
+        patchelf
+        nix-index
         nix-prefetch-git
 
         # process management
@@ -154,6 +158,7 @@ in
         # hardware management
         smartmontools lsof pciutils glxinfo acpi
         radeontop lshw mcelog fwts lm_sensors inxi
+        usbutils
         unstable.qmk
 
         # testing
@@ -206,6 +211,7 @@ in
         libvirt virt-manager qemu
       ];
       virtualisation.libvirtd.enable = true;
+      virtualisation.docker.enable = true;
       # Also remember to add user to libvirtd group
     })
   ];
