@@ -12,6 +12,8 @@ forgit_show_pager=${FORGIT_SHOW_PAGER:-$(git config pager.show || echo "$forgit_
 forgit_diff_pager=${FORGIT_DIFF_PAGER:-$(git config pager.diff || echo "$forgit_pager")}
 forgit_ignore_pager=${FORGIT_IGNORE_PAGER:-$(hash bat &>/dev/null && echo 'bat -l gitignore --color=always' || echo 'cat')}
 
+forgit_log_format=${FORGIT_LOG_FORMAT:-%C(auto)%h%d %s %C(black)%C(bold)%cr%Creset}
+
 # git commit viewer
 forgit::log() {
     forgit::inside_work_tree || return 1
@@ -22,12 +24,12 @@ forgit::log() {
         $FORGIT_FZF_DEFAULT_OPTS
         +s +m --tiebreak=index
         --bind=\"enter:execute($cmd | LESS='-r' less)\"
-        --bind=\"ctrl-y:execute-silent(echo {} |grep -Eo '[a-f0-9]+' | head -1 | tr -d '\n' |${FORGIT_COPY_CMD:-pbcopy})\"
+        --bind=\"ctrl-y:execute-silent(echo {} |grep -Eo '[a-f0-9]+' | head -1 | tr -d '[:space:]' |${FORGIT_COPY_CMD:-pbcopy})\"
         $FORGIT_LOG_FZF_OPTS
     "
     graph=--graph
     [[ $FORGIT_LOG_GRAPH_ENABLE == false ]] && graph=
-    eval "git log $graph --color=always --format='%C(auto)%h%d %s %C(black)%C(bold)%cr%Creset' $* $forgit_emojify" |
+    eval "git log $graph --color=always --format='$forgit_log_format' $* $forgit_emojify" |
         FZF_DEFAULT_OPTS="$opts" fzf --preview="$cmd"
 }
 
@@ -105,21 +107,6 @@ forgit::reset::head() {
     echo 'Nothing to unstage.'
 }
 
-# git checkout-restore selector
-forgit::restore() {
-    forgit::inside_work_tree || return 1
-    local cmd files opts
-    cmd="git diff --color=always -- {} | $forgit_diff_pager"
-    opts="
-        $FORGIT_FZF_DEFAULT_OPTS
-        -m -0
-        $FORGIT_CHECKOUT_FZF_OPTS
-    "
-    files="$(git ls-files --modified "$(git rev-parse --show-toplevel)"| FZF_DEFAULT_OPTS="$opts" fzf --preview="$cmd")"
-    [[ -n "$files" ]] && echo "$files" | tr '\n' '\0' | xargs -0 -I% git checkout % && git status --short && return
-    echo 'Nothing to restore.'
-}
-
 # git stash viewer
 forgit::stash::show() {
     forgit::inside_work_tree || return 1
@@ -165,21 +152,105 @@ forgit::cherry::pick() {
 
 forgit::rebase() {
     forgit::inside_work_tree || return 1
-    local cmd preview opts graph files
+    local cmd preview opts graph files commit
     graph=--graph
     [[ $FORGIT_LOG_GRAPH_ENABLE == false ]] && graph=
-    cmd="git log $graph --color=always --format='%C(auto)%h%d %s %C(black)%C(bold)%cr%Creset' $* $forgit_emojify"
+    cmd="git log $graph --color=always --format='$forgit_log_format' $* $forgit_emojify"
     files=$(sed -nE 's/.* -- (.*)/\1/p' <<< "$*") # extract files parameters for `git show` command
     preview="echo {} |grep -Eo '[a-f0-9]+' |head -1 |xargs -I% git show --color=always % -- $files | $forgit_show_pager"
     opts="
         $FORGIT_FZF_DEFAULT_OPTS
         +s +m --tiebreak=index
-        --bind=\"ctrl-y:execute-silent(echo {} |grep -Eo '[a-f0-9]+' | head -1 | tr -d '\n' |${FORGIT_COPY_CMD:-pbcopy})\"
+        --bind=\"ctrl-y:execute-silent(echo {} |grep -Eo '[a-f0-9]+' | head -1 | tr -d '[:space:]' |${FORGIT_COPY_CMD:-pbcopy})\"
         $FORGIT_REBASE_FZF_OPTS
     "
-    eval "$cmd" | FZF_DEFAULT_OPTS="$opts" fzf --preview="$preview" |
-        grep -Eo '[a-f0-9]+' | head -1 |
-        xargs -I% git rebase -i %
+    commit=$(eval "$cmd" | FZF_DEFAULT_OPTS="$opts" fzf --preview="$preview" |
+        grep -Eo '[a-f0-9]+' | head -1)
+    [[ -n "$commit" ]] && git rebase -i "$commit"
+}
+
+forgit::fixup() {
+    forgit::inside_work_tree || return 1
+    git diff --cached --quiet && echo 'Nothing to fixup: there are no staged changes.' && return 1
+    local cmd preview opts graph files target_commit prev_commit
+    graph=--graph
+    [[ $FORGIT_LOG_GRAPH_ENABLE == false ]] && graph=
+    cmd="git log $graph --color=always --format='$forgit_log_format' $* $forgit_emojify"
+    files=$(sed -nE 's/.* -- (.*)/\1/p' <<< "$*")
+    preview="echo {} |grep -Eo '[a-f0-9]+' |head -1 |xargs -I% git show --color=always % -- $files | $forgit_show_pager"
+    opts="
+        $FORGIT_FZF_DEFAULT_OPTS
+        +s +m --tiebreak=index
+        --bind=\"ctrl-y:execute-silent(echo {} |grep -Eo '[a-f0-9]+' | head -1 | tr -d '[:space:]' |${FORGIT_COPY_CMD:-pbcopy})\"
+        $FORGIT_FIXUP_FZF_OPTS
+    "
+    target_commit=$(eval "$cmd" | FZF_DEFAULT_OPTS="$opts" fzf --preview="$preview" |
+        grep -Eo '[a-f0-9]+' | head -1)
+    if [[ -n "$target_commit" ]] && git commit --fixup "$target_commit"; then
+        # "$target_commit~" is invalid when the commit is the first commit, but we can use "--root" instead
+        if [[ "$(git rev-parse "$target_commit")" == "$(git rev-list --max-parents=0 HEAD)" ]]; then
+            prev_commit="--root"
+        else
+            prev_commit="$target_commit~"
+        fi
+        # rebase will fail if there are unstaged changes so --autostash is needed to temporarily stash them
+        # GIT_SEQUENCE_EDITOR=: is needed to skip the editor
+        GIT_SEQUENCE_EDITOR=: git rebase --autostash -i --autosquash "$prev_commit"
+    fi
+
+}
+
+# git checkout-file selector
+forgit::checkout::file() {
+    forgit::inside_work_tree || return 1
+    [[ $# -ne 0 ]] && { git checkout -- "$@"; return $?; }
+    local cmd files opts
+    cmd="git diff --color=always -- {} | $forgit_diff_pager"
+    opts="
+        $FORGIT_FZF_DEFAULT_OPTS
+        -m -0
+        $FORGIT_CHECKOUT_FILE_FZF_OPTS
+    "
+    files="$(git ls-files --modified "$(git rev-parse --show-toplevel)"| FZF_DEFAULT_OPTS="$opts" fzf --preview="$cmd")"
+    [[ -n "$files" ]] && echo "$files" | tr '\n' '\0' | xargs -0 -I% git checkout %
+}
+
+# git checkout-branch selector
+forgit::checkout::branch() {
+    forgit::inside_work_tree || return 1
+    [[ $# -ne 0 ]] && { git checkout -b "$@"; return $?; }
+    local cmd preview opts branch
+    cmd="git branch --color=always --verbose --all | sort -k1.1,1.1 -r"
+    preview="git log {1} --graph --pretty=format:'$forgit_log_format' --color=always --abbrev-commit --date=relative"
+    opts="
+        $FORGIT_FZF_DEFAULT_OPTS
+        +s +m --tiebreak=index --header-lines=1
+        $FORGIT_CHECKOUT_BRANCH_FZF_OPTS
+        "
+    branch="$(eval "$cmd" | FZF_DEFAULT_OPTS="$opts" fzf --preview="$preview" | awk '{print $1}')"
+    [[ -z "$branch" ]] && return 1
+    # track the remote branch if possible
+    if ! git checkout --track "$branch" 2>/dev/null; then
+        git checkout "$branch"
+    fi
+}
+
+# git checkout-commit selector
+forgit::checkout::commit() {
+    forgit::inside_work_tree || return 1
+    [[ $# -ne 0 ]] && { git checkout "$@"; return $?; }
+    local cmd opts graph
+    cmd="echo {} |grep -Eo '[a-f0-9]+' |head -1 |xargs -I% git show --color=always % | $forgit_show_pager"
+    opts="
+        $FORGIT_FZF_DEFAULT_OPTS
+        +s +m --tiebreak=index
+        --bind=\"ctrl-y:execute-silent(echo {} |grep -Eo '[a-f0-9]+' | head -1 | tr -d '[:space:]' |${FORGIT_COPY_CMD:-pbcopy})\"
+        $FORGIT_COMMIT_FZF_OPTS
+    "
+    graph=--graph
+    [[ $FORGIT_LOG_GRAPH_ENABLE == false ]] && graph=
+    eval "git log $graph --color=always --format='$forgit_log_format' $forgit_emojify" |
+        FZF_DEFAULT_OPTS="$opts" fzf --preview="$cmd" |grep -Eo '[a-f0-9]+' |head -1 |xargs -I% git checkout % --
 }
 
 # git ignore generator
@@ -253,9 +324,12 @@ if [[ -z "$FORGIT_NO_ALIASES" ]]; then
     alias "${forgit_log:-glo}"='forgit::log'
     alias "${forgit_diff:-gd}"='forgit::diff'
     alias "${forgit_ignore:-gi}"='forgit::ignore'
-    alias "${forgit_restore:-gcf}"='forgit::restore'
+    alias "${forgit_checkout_file:-gcf}"='forgit::checkout::file'
+    alias "${forgit_checkout_branch:-gcb}"='forgit::checkout::branch'
+    alias "${forgit_checkout_commit:-gco}"='forgit::checkout::commit'
     alias "${forgit_clean:-gclean}"='forgit::clean'
     alias "${forgit_stash_show:-gss}"='forgit::stash::show'
     alias "${forgit_cherry_pick:-gcp}"='forgit::cherry::pick'
     alias "${forgit_rebase:-grb}"='forgit::rebase'
+    alias "${forgit_fixup:-gfu}"='forgit::fixup'
 fi
