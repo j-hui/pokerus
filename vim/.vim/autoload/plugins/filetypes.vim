@@ -94,7 +94,7 @@ function s:PlugLatex()
       nmap <buffer> <leader>ce        <plug>(vimtex-errors)
 
       imap <buffer> <C-g>]            <plug>(vimtex-delim-close)
-      imap <buffer> <C-g>e            \emph{}<left>
+      imap <buffer> <C-g>/            \emph{}<left>
       imap <buffer> <C-g>t            \texttt{}<left>
       imap <buffer> <C-g>b            \textbf{}<left>
       imap <buffer> <C-g>i            \textit{}<left>
@@ -260,6 +260,11 @@ function s:PlugWiki()
     augroup END
 endfunction
 
+function s:PlugMail()
+  " Plug 'felipec/notmuch-vim'
+  Plug 'adborden/vim-notmuch-address', { 'for': 'mail' }
+endfunction
+
 function s:PlugMisc()
   Plug 'leanprover/lean.vim'
   Plug 'idris-hackers/idris-vim'
@@ -273,7 +278,6 @@ function s:PlugMisc()
   Plug 'dag/vim-fish'
   Plug 'cespare/vim-toml'
   Plug 'neomutt/neomutt.vim'
-  Plug 'adborden/vim-notmuch-address', { 'for': 'mail' }
   Plug 'liuchengxu/graphviz.vim'
   Plug 'editorconfig/editorconfig-vim'
 endfunction
@@ -288,6 +292,7 @@ function plugins#filetypes#setup()
   call s:PlugValgrind()
   call s:PlugZig()
   call s:PlugMisc()
+  call s:PlugMail()
   call s:PlugWiki()
   return []
 endfunction

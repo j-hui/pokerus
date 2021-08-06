@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# Test script for git alias setup
+
+echo "Hello world!"
+echo
+echo
+echo "GIT_PREFIX: ${GIT_PREFIX:-NONE}"
+echo "pwd: $(pwd)"
+echo "\$#: $#"
+echo "\$0: $0"
+echo "\$1: $1"
+echo "\$@: $@"
+echo
+echo
+echo "In the same directory:"
+echo
+ls -1 "$GIT_PREFIX"

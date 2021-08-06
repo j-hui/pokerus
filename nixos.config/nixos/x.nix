@@ -92,7 +92,7 @@ in
     ];
 
     fonts = {
-      enableFontDir = true;
+      fontDir.enable = true;
       enableGhostscriptFonts = true;
       fonts = with pkgs; [
         corefonts
@@ -141,7 +141,6 @@ in
       greenclip.enable = true;
       dbus = {
         enable = true;
-        socketActivated = true;
       };
       xserver = {
         enable = true;
@@ -155,8 +154,10 @@ in
         # Enable touchpad support.
         libinput = {
           enable = true;
-          accelProfile = "flat";
-          tappingDragLock = false;
+          touchpad = {
+            accelProfile = "flat";
+            tappingDragLock = false;
+          };
         };
 
         inputClassSections = [
@@ -173,6 +174,11 @@ in
             Identifier "My speedy mouse"
             MatchIsPointer "Yes"
             Option "TransformationMatrix" "2.0 0 0 0 2.0 0 0 0 1"
+          ''
+          ''
+            Identifier "My speedy touchpad"
+            MatchIsTouchpad "Yes"
+            Option "TransformationMatrix" "4.0 0 0 0 4.0 0 0 0 1"
           ''
         ];
 
