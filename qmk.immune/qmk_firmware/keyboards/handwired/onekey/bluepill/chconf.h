@@ -26,3 +26,4 @@
 #define CH_CFG_USE_CONDVARS_TIMEOUT FALSE
 
 #include_next <chconf.h>
+

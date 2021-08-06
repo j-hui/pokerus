@@ -4,11 +4,8 @@
   "maintainer": "Conor-Burns",
   "width": 12,
   "height": 5,
-  "layout_aliases": {
-    "LAYOUT": "LAYOUT_all"
-  },
   "layouts": {
-    "LAYOUT_all": {
+    "LAYOUT": {
       "layout": [
           {"x":11, "y":0},
           {"x":0, "y":1},
