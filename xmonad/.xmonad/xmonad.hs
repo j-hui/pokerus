@@ -282,7 +282,7 @@ myProjects =
     , projectStartHook = Just $ do
                            sendMessage FirstLayout
                            spawn $ myTerminal ++ " spt"
-                                           -- spawn "spotify"
+                           spawn "spotify"
     }
   , Project { projectName      = "research"
             , projectDirectory = "~/research"
@@ -364,35 +364,32 @@ myLayoutHook =
 --
 myKeys :: [(String, X ())]
 myKeys =
-  [ ("M-z"                    , xmonadRecompile)
-  , ("M-S-z z"                , xmonadRestart)
-  , ("M-S-z M-S-z"            , xmonadRestart)
-  , ("M-S-z q"                , io exitSuccess)  -- Quit XMonad
+  [ ("M-z z"                  , xmonadRecompile)
+  , ("M-z r"                  , xmonadRestart)
+  , ("M-z q"                  , io exitSuccess)  -- Quit XMonad
+
   , ("M-l"                    , spawn "dunstctl close-all")
   , ("M-S-l"                  , spawn "xset s activate")
 
-  -- Query
-  , ("M-q d"                  , mySpawn "word-lookup")
-
-  -- Application spawning
-  , ("M-S-a"                  , spawn "rofi -show drun")
-  , ("M-a d"                  , mySpawn "rofi-define")
-  , ("M-a p"                  , spawn "rofi-pass")
-  , ("M-a f"                  , spawn "thunar")
-
-  -- Direct spawning
-  , ("M-;"                    , spawn myTerminal)
+  -- Applications
+  , ("M-;"                    , spawn "rofi -show drun")
   , ("M-S-;"                  , spawn "rofi -show run")
+
+  , ("M-<Return>"             , spawn myTerminal)
   , ("M-g"                    , spawn myBrowser')
-  , ("M-S-g", spawn $ myBrowser' ++ " --incognito")
+  , ("M-S-g"                  , spawn $ myBrowser' ++ " --incognito")
+  , ("M-d"                    , mySpawn "rofi-define")
+  , ("M-S-d"                  , mySpawn "word-lookup")
+  , ("M-o"                    , spawn "rofi-pass")
+  , ("M-S-o"                  , spawn "thunar")
 
   -- Workspaces
   , ("M-/"                    , spawn "rofi -show windowcd")
   , ("M-S-/"                  , spawn "rofi -show window")
-  , ("M-s", promptDesktop "Switch to" >>= switchDesktop)
-  , ("M-S-s", promptDesktop "Shift to" >>= shiftToDesktop)
+  , ("M-s"                    , promptDesktop "Switch to" >>= switchDesktop)
+  , ("M-S-s"                  , promptDesktop "Shift to" >>= shiftToDesktop)
 
-  -- , ("M-<Right>",      moveTo Next nonNSP)
+  -- , ("M-<Right>",      moveTo Next nonNSP)  , ("M-<Enter>"              , spawn myTerminal)
   -- , ("M-<Left>",       moveTo Prev nonNSP)
   -- , ("M-S-<Right>",    shiftTo Next nonNSP >> moveTo Next nonNSP)
   -- , ("M-S-<Left>",     shiftTo Prev nonNSP >> moveTo Prev nonNSP)
@@ -406,7 +403,7 @@ myKeys =
   , ("M-w"                    , kill1)
   , ("M-S-w"                  , killAll)
   , ("M-t"                    , withFocused $ windows . SS.sink)
-  , ("M-S-t", withFocused $ windows . (`SS.float` floatFront))
+  , ("M-S-t"                  , withFocused $ windows . (`SS.float` floatFront))
 
   -- Window navigation
   , ("M-j"                    , windows SS.focusDown)     -- Move focus to the next window
@@ -422,7 +419,7 @@ myKeys =
   -- , ("M-S-h", promote)                  -- Move focused window to master pane, but maintain order
   , ("M-m"                    , sendMessage NextLayout)       -- Toggle layout
   , ("M-S-m"                  , sendMessage $ Toggle MIRROR)  -- Mirror layout
-  , ("M-<Enter>", focusUrgent >> windows SS.swapMaster) -- Move focus to urgent window
+  -- , ("M-<Enter>", focusUrgent >> windows SS.swapMaster) -- Move focus to urgent window
 
   -- Layouts
 
@@ -448,7 +445,7 @@ myKeys =
   , ("M-x"                    , mySpawn "screenshot")
   , ("M-S-x"                  , mySpawn "screenshot --fullscreen")
   , ("M-c"                    , mySpawn "screenshot --no-delete")
-  , ("M-S-c", mySpawn "screenshot --fullscreen --no-delete")
+  , ("M-S-c"                  , mySpawn "screenshot --fullscreen --no-delete")
   -- TODO: make M-v fullscreen mode
   ]
  where
