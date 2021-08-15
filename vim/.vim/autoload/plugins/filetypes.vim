@@ -280,6 +280,7 @@ function s:PlugMisc()
   Plug 'neomutt/neomutt.vim'
   Plug 'liuchengxu/graphviz.vim'
   Plug 'editorconfig/editorconfig-vim'
+  Plug 'mboughaba/i3config.vim'
 endfunction
 
 function plugins#filetypes#setup()
