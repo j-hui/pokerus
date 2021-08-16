@@ -210,10 +210,21 @@ in
     (mkIf cfg.virt.enable {
       environment.systemPackages = with pkgs; [
         libvirt virt-manager qemu
+        vagrant
       ];
+      # For libvirt
       virtualisation.libvirtd.enable = true;
-      virtualisation.docker.enable = true;
       # Also remember to add user to libvirtd group
+
+      # For docker
+      virtualisation.docker.enable = true;
+
+      # For vagrant
+      environment.variables.VAGRANT_DEFAULT_PROVIDER = "libvirt";
+      services.nfs.server.enable = true;
+      networking.firewall.extraCommands = ''
+        ip46tables -I INPUT 1 -i vboxnet+ -p tcp -m tcp --dport 2049 -j ACCEPT
+      '';
     })
 
     (mkIf cfg.docker.enable {
