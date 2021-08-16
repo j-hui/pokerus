@@ -52,7 +52,8 @@ function fish_prompt --description 'Write out fancy fishy prompt'
     set_color $fish_color_normal
 
     # VCS
-    __terlar_git_prompt
+    # __terlar_git_prompt
+    fish_git_prompt
     fish_hg_prompt
     set_color $fish_color_normal
 
