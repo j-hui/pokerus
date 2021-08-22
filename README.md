@@ -9,13 +9,9 @@ First, install these core dependencies:
 
     sudo git bash
 
-Then, retrieve this repo:
+Then, retrieve this repo and set up git aliases:
 
-    git clone git@github.com:j-hui/pokerus.git ~/pokerus && cd ~/pokerus
-
-Set up the git aliases:
-
-    git config --local include.path ../.gitconfig
+    git clone git@github.com:j-hui/pokerus.git ~/pokerus && cd ~/pokerus && git config --local include.path ../.gitconfig
 
 Optionally, disinfect your system (warning: not well-tested):
 
