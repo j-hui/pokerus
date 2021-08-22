@@ -3,3 +3,6 @@
 [include]
     path =  pokerus.immune/scripts/scripts.config
     path =  pokerus.immune/subtrees/subtrees.config
+
+[pull]
+    rebase = interactive
