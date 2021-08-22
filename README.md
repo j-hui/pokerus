@@ -1,7 +1,6 @@
 # Pokerus
 
-Maintaining my dot files across macOS and Linux.
-This `README.md` contains some handy notes for setting things up.
+Maintaining my dot files across multiple environments.
 
 ## Basic setup
 
