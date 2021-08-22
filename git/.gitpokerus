@@ -5,7 +5,7 @@
 [push]
     default = simple
 [pull]
-    rebase = interactive
+    rebase = false
 [alias]
     co = checkout
     br = branch
