@@ -54,17 +54,16 @@ import qualified XMonad.Core                   as Core
 import qualified XMonad.StackSet               as SS
 
 import           XMonad.Actions.CopyWindow      ( kill1 )
-import           XMonad.Actions.CycleWS         ( Direction1D(..)
-                                                , WSType(..)
-                                                , moveTo
+import           XMonad.Actions.CycleWS         ( WSType(..)
                                                 , nextScreen
                                                 , prevScreen
-                                                , shiftTo
+                                                , shiftPrevScreen
+                                                , shiftNextScreen
+                                                , swapPrevScreen
+                                                , swapNextScreen
                                                 )
 import           XMonad.Actions.Promote         ( promote )
-import           XMonad.Actions.RotSlaves       ( rotAllDown
-                                                , rotAllUp
-                                                , rotSlavesDown
+import           XMonad.Actions.RotSlaves       ( rotSlavesDown
                                                 , rotSlavesUp
                                                 )
 import           XMonad.Actions.WithAll         ( killAll )
@@ -106,9 +105,12 @@ import           XMonad.Hooks.WorkspaceHistory  ( workspaceHistory
 
 
 import qualified XMonad.Layout.Tabbed          as Tabbed
+import qualified XMonad.Layout.BoringWindows   as Boring
 
 -- Layouts modifiers
-import           XMonad.Layout.Fullscreen       ( fullscreenFocus
+import           XMonad.Layout.Fullscreen       (fullscreenEventHook
+                                                , fullscreenManageHook
+                                                , fullscreenFocus
                                                 , fullscreenSupport
                                                 )
 import           XMonad.Layout.LayoutModifier   ( ModifiedLayout(..) )
@@ -121,7 +123,7 @@ import           XMonad.Layout.MultiToggle      ( Toggle(..)
                                                 , single
                                                 )
 import           XMonad.Layout.MultiToggle.Instances
-                                                ( StdTransformers(MIRROR) )
+                                                ( StdTransformers(..) )
 import           XMonad.Layout.NoBorders        ( noBorders )
 import           XMonad.Layout.Renamed          ( Rename(..)
                                                 , renamed
@@ -197,6 +199,9 @@ myBgColor = fromXres "*color18"
 
 myBgColor' :: String
 myBgColor' = fromXres "*color8"
+
+myAccentColor :: String
+myAccentColor = fromXres "*color6"
 
 myTabTheme :: Tabbed.Theme
 myTabTheme = def { Tabbed.activeColor         = myBgColor'
@@ -348,8 +353,10 @@ floatFront :: SS.RationalRect
 floatFront = SS.RationalRect (1 / 6) (1 / 6) (2 / 3) (2 / 3)
 
 myLayoutHook :: ModifiedLayout _ _ Window
-myLayoutHook =
-  avoidStruts . mkToggle (single MIRROR) $ noBorders tabs ||| stack
+myLayoutHook = avoidStruts
+             $ mkToggle (single FULL)
+             $ mkToggle (single MIRROR)
+             $ Boring.boringWindows (noBorders tabs) ||| Boring.boringAuto stack
 
  where
   stack =
@@ -389,15 +396,12 @@ myKeys =
   , ("M-s"                    , promptDesktop "Switch to" >>= switchDesktop)
   , ("M-S-s"                  , promptDesktop "Shift to" >>= shiftToDesktop)
 
-  -- , ("M-<Right>",      moveTo Next nonNSP)  , ("M-<Enter>"              , spawn myTerminal)
-  -- , ("M-<Left>",       moveTo Prev nonNSP)
-  -- , ("M-S-<Right>",    shiftTo Next nonNSP >> moveTo Next nonNSP)
-  -- , ("M-S-<Left>",     shiftTo Prev nonNSP >> moveTo Prev nonNSP)
-
-  -- , ("M-S-.",          nextScreen)
-  -- , ("M-S-,",          prevScreen)
-  , ("M-b",          sendMessage Shrink)
-  , ("M-f",          sendMessage Expand)
+  , ("M-.",                     nextScreen)
+  , ("M-,",                     prevScreen)
+  , ("M-S-.",                   shiftNextScreen)
+  , ("M-S-,",                   shiftPrevScreen)
+  , ("M-`",                     swapNextScreen)
+  , ("M-S-`",                   swapPrevScreen)
 
   -- Window management
   , ("M-w"                    , kill1)
@@ -406,25 +410,26 @@ myKeys =
   , ("M-S-t"                  , withFocused $ windows . (`SS.float` floatFront))
 
   -- Window navigation
-  , ("M-j"                    , windows SS.focusDown)     -- Move focus to the next window
-  , ("M-k"                    , windows SS.focusUp)       -- Move focus to the prev window
-  , ("M-S-j"                  , windows SS.swapDown)      -- Swap focused window with next window
-  , ("M-S-k"                  , windows SS.swapUp)        -- Swap focused window with prev window
-  , ("M-r"                    , rotSlavesDown)            -- Rotate all windows except master
-  , ("M-S-r"                  , rotSlavesUp)              -- Rotate all windows except master
-  -- , ("M-S-n", rotAllUp)                 -- Rotate all windows
-  -- , ("M-S-p", rotAllDown)               -- Rotate all windows
-  , ("M-h"                    , windows SS.focusMaster)   -- Move focus to the master window
-  , ("M-S-h"                  , windows SS.swapMaster)   -- Swap the focused window and the master window
-  -- , ("M-S-h", promote)                  -- Move focused window to master pane, but maintain order
+  , ("M-j"                    , Boring.focusDown)       -- Move focus to the next window
+  , ("M-k"                    , Boring.focusUp)         -- Move focus to the prev window
+  , ("M-S-j"                  , windows SS.swapDown)    -- Swap focused window with next window
+  , ("M-S-k"                  , windows SS.swapUp)      -- Swap focused window with prev window
+  , ("M-r"                    , rotSlavesDown)          -- Rotate all windows except master
+  , ("M-S-r"                  , rotSlavesUp)            -- Rotate all windows except master
+  , ("M-h"                    , Boring.focusMaster)     -- Move focus to the master window
+  , ("M-S-h"                  , windows SS.swapMaster)  -- Swap the focused window and the master window
+
   , ("M-m"                    , sendMessage NextLayout)       -- Toggle layout
   , ("M-S-m"                  , sendMessage $ Toggle MIRROR)  -- Mirror layout
-  -- , ("M-<Enter>", focusUrgent >> windows SS.swapMaster) -- Move focus to urgent window
+  , ("M-S-u", sendMessage $ Toggle FULL)                      -- Toggle on full layout
+  , ("M-u", focusUrgent >> windows SS.swapMaster)             -- Move focus to urgent window
+  -- TODO: make M-v fullscreen mode
 
-  -- Layouts
+  , ("M-b",   sendMessage Shrink)
+  , ("M-f",   sendMessage Expand)
+  , ("M-S-f", increaseLimit)              -- Increase number of windows that can be shown
+  , ("M-S-b", decreaseLimit)              -- Decrease number of windows that can be shown
 
-  -- , ("M-.", increaseLimit)              -- Increase number of windows that can be shown
-  -- , ("M-,", decreaseLimit)              -- Decrease number of windows that can be shown
   , ("M-'"                    , mySpawn "mediactl play-pause")
   , ("M-["                    , mySpawn "mediactl previous")
   , ("M-]"                    , mySpawn "mediactl next")
@@ -446,7 +451,6 @@ myKeys =
   , ("M-S-x"                  , mySpawn "screenshot --fullscreen")
   , ("M-c"                    , mySpawn "screenshot --no-delete")
   , ("M-S-c"                  , mySpawn "screenshot --fullscreen --no-delete")
-  -- TODO: make M-v fullscreen mode
   ]
  where
   nonNSP :: WSType
@@ -577,8 +581,8 @@ main = do
       $ fullscreenSupport
       $ ewmh
           --  $ Debug.debugManageHook
-      $ def { manageHook         = manageDocks <+> myManageHook
-            , handleEventHook    = docksEventHook
+      $ def { manageHook         = manageDocks <+> fullscreenManageHook <+> myManageHook
+            , handleEventHook    = docksEventHook <+> fullscreenEventHook
             , modMask            = myModMask
             , terminal           = myTerminal
             , startupHook        = myStartupHook
@@ -586,7 +590,7 @@ main = do
             , workspaces         = myWorkspaces
             , borderWidth        = myBorderWidth
             , normalBorderColor  = myBgColor
-            , focusedBorderColor = myBgColor'
+            , focusedBorderColor = myFgColor
             , focusFollowsMouse  = False
             , logHook = myLogHook <+> workspaceHistoryHook <+> polybarHook d
             , keys               = (`mkKeymap` myKeys)
