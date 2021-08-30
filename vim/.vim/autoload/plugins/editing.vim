@@ -41,6 +41,8 @@ function plugins#editing#setup()
   Plug 'tranvansang/vim-close-pair'
   " Manually close pairs
     let g:close_pair_key = '<C-]>'
+    imap <C-g>] <C-]><Left>
+    imap <C-g>o <C-]><Left><CR><Up><C-o>o
 
   Plug 'svermeulen/vim-subversive'
   " Substitute from yank
