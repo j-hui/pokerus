@@ -466,7 +466,8 @@ function s:PlugCoc()
 
     " For some reason, Coc is using these weird highlights
     highlight default link FgCocHintFloatBgCocFloating CocHintFloat
-    highlight default link FgCocWarnFloatBgCocFloating CocWarnFloat
+    highlight default link FgCocInfoFloatBgCocFloating CocHintFloat
+    highlight default link FgCocWarningFloatBgCocFloating CocWarnFloat
     highlight default link FgCocErrorFloatBgCocFloating CocErrorFloat
 
     augroup coc_autocmds
