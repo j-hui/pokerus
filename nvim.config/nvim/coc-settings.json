@@ -1,6 +1,10 @@
 {
   "codeLens.enable": true,
   "codeLens.separator": "ℹ",
+  "diagnostic.errorSign": "✖",
+  "diagnostic.warningSign": "⚠",
+  "diagnostic.infoSign": "ℹ",
+  "diagnostic.hintSign": "»",
   "languageserver": {
     "haskell": {
       "command": "haskell-language-server-wrapper",
