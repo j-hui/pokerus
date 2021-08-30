@@ -1,4 +1,6 @@
 {
+  "codeLens.enable": true,
+  "codeLens.separator": "ℹ",
   "languageserver": {
     "haskell": {
       "command": "haskell-language-server-wrapper",

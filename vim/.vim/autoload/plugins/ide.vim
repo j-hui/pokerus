@@ -155,10 +155,10 @@ function s:PlugLCN()
         nmap <buffer> <silent> <leader>ll <Plug>(lcn-menu)
         nmap <buffer> <silent> <leader>ld <Plug>(lcn-definition)
         nmap <buffer> <silent> <leader>lt <Plug>(lcn-type-definition)
-        nmap <buffer> <silent> <leader>lt <Plug>(lcn-implementation)
+        nmap <buffer> <silent> <leader>li <Plug>(lcn-implementation)
 
-        nmap <buffer> <silent> <leader>lr <Plug>(lcn-references)
-        nmap <buffer> <silent> <leader>lR <Plug>(lcn-rename)
+        nmap <buffer> <silent> <leader>l* <Plug>(lcn-references)
+        nmap <buffer> <silent> <leader>lr <Plug>(lcn-rename)
         nmap <buffer> <silent> <leader>l/ <Plug>(lcn-symbols)
 
         nmap <buffer> <silent> <leader>la <Plug>(lcn-code-action)
@@ -485,15 +485,16 @@ function s:PlugCoc()
     nmap <silent> ]a <Plug>(coc-diagnostic-next)
 
     nmap <silent> <leader>ld <Plug>(coc-definition)
-    nmap <silent> <leader>lD <Plug>(coc-type-definition)
+    nmap <silent> <leader>lD <Plug>(coc-declaration)
+    nmap <silent> <leader>lt <Plug>(coc-type-definition)
     nmap <silent> <leader>li <Plug>(coc-implementation)
-    nmap <silent> <leader>l/ <Plug>(coc-references)
+    nmap <silent> <leader>l= <Plug>(coc-references)
 
     nnoremap <silent> <leader>lk :call <SID>CocDoc()<CR>
     nnoremap <silent> K :call <SID>CocDoc()<CR>
 
     " Symbol renaming.
-    nmap <leader>ln <Plug>(coc-rename)
+    nmap <leader>lr <Plug>(coc-rename)
 
     " Formatting selected code.
     xmap <leader>lq  <Plug>(coc-format-selected)
@@ -503,23 +504,23 @@ function s:PlugCoc()
     xmap <leader>la  <Plug>(coc-codeaction-selected)
     " nmap <leader>la  <Plug>(coc-codeaction-selected)
 
-    " Remap keys for applying codeAction to the current buffer.
     nmap <leader>la  <Plug>(coc-codeaction)
+
+    nmap <leader>lA <plug>(coc-codelens-action)
+
     " Apply AutoFix to problem on the current line.
-    nmap <leader>lA  <Plug>(coc-fix-current)
+    nmap <leader>lx  <Plug>(coc-fix-current)
 
   Plug 'antoinemadec/coc-fzf'
     " Mappings for CoCList
     " Show all diagnostics.
     nnoremap <silent><nowait> <leader>lg  :<C-u>CocFzfList diagnostics<cr>
-    " Manage extensions.
-    nnoremap <silent><nowait> <leader>lx  :<C-u>CocFzfList extensions<cr>
     " Show commands.
     nnoremap <silent><nowait> <leader>ll  :<C-u>CocFzfList commands<cr>
     " Find symbol of current document.
-    nnoremap <silent><nowait> <leader>l/  :<C-u>CocFzfList outline<cr>
+    nnoremap <silent><nowait> <leader>l.  :<C-u>CocFzfList outline<cr>
     " Search workspace symbols.
-    nnoremap <silent><nowait> <leader>l?  :<C-u>CocFzfList symbols<cr>
+    nnoremap <silent><nowait> <leader>l/  :<C-u>CocFzfList symbols<cr>
     " Do default action for next item.
     nnoremap <silent><nowait> <leader>l]  :<C-u>CocNext<CR>
     " Do default action for previous item.
@@ -577,8 +578,8 @@ function plugins#ide#setup()
   " }}}
 
   " Use with LCN or ALE/vim-lsp stack {{{
-  let l:callbacks += s:PlugUltisnips()
-  let l:callbacks += s:PlugVista()
+  " let l:callbacks += s:PlugUltisnips()
+  " let l:callbacks += s:PlugVista()
   " }}}
 
   " let l:callbacks += s:PlugCoc()
