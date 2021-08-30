@@ -511,8 +511,6 @@ function s:PlugCoc()
     " Apply AutoFix to problem on the current line.
     nmap <leader>lx  <Plug>(coc-fix-current)
 
-    imap <C-s> <Plug>(coc-snippets-expand-jump)
-
   Plug 'antoinemadec/coc-fzf'
     " Mappings for CoCList
     " Show all diagnostics.
@@ -536,6 +534,9 @@ function s:PlugCoc()
     command! -nargs=0 Fmt  :call CocAction('format')
     command! -nargs=0 Imps :call CocAction('runCommand', 'editor.action.organizeImport')
     command! -nargs=? Fold :call CocAction('fold', <f-args>)
+
+  Plug 'honza/vim-snippets'                   " Std lib for snippets
+    imap <C-s> <Plug>(coc-snippets-expand-jump)
 
   let g:coc_global_extensions = [
         \'coc-rust-analyzer',
