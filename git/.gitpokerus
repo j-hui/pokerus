@@ -20,8 +20,9 @@
     undo = reset HEAD~1 --mixed
     amend = commit --amend
     this = rev-parse --abbrev-ref HEAD
-    diff-words = diff --word-diff
-    diff-cache = diff --cached
+    d = diff
+    dw = diff --word-diff
+    dc = diff --cached
     root = rev-parse --show-toplevel
     conf = config --global -e
     hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
