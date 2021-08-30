@@ -553,6 +553,8 @@ function s:PlugCoc()
         \'coc-yank',
         \'coc-zig',
         \'coc-snippets',
+        \'coc-cmake',
+        \'coc-clangd',
         \]
 
   return []
