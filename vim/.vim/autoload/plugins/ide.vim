@@ -493,8 +493,8 @@ function s:PlugCoc()
     nnoremap <silent> <leader>lk :call <SID>CocDoc()<CR>
     nnoremap <silent> K :call <SID>CocDoc()<CR>
 
-    " Symbol renaming.
     nmap <leader>lr <Plug>(coc-rename)
+    nmap <leader>lR <Plug>(coc-refactor)
 
     " Formatting selected code.
     xmap <leader>lq  <Plug>(coc-format-selected)
@@ -510,6 +510,8 @@ function s:PlugCoc()
 
     " Apply AutoFix to problem on the current line.
     nmap <leader>lx  <Plug>(coc-fix-current)
+
+    imap <C-s> <Plug>(coc-snippets-expand-jump)
 
   Plug 'antoinemadec/coc-fzf'
     " Mappings for CoCList
@@ -538,6 +540,7 @@ function s:PlugCoc()
   let g:coc_global_extensions = [
         \'coc-rust-analyzer',
         \'coc-json',
+        \'coc-prettier',
         \'coc-go',
         \'coc-vimtex',
         \'coc-lists',
@@ -547,6 +550,7 @@ function s:PlugCoc()
         \'coc-yaml',
         \'coc-yank',
         \'coc-zig',
+        \'coc-snippets',
         \]
 
   return []
@@ -579,10 +583,10 @@ function plugins#ide#setup()
 
   " Use with LCN or ALE/vim-lsp stack {{{
   " let l:callbacks += s:PlugUltisnips()
-  " let l:callbacks += s:PlugVista()
+  let l:callbacks += s:PlugVista()
   " }}}
 
-  " let l:callbacks += s:PlugCoc()
+  let l:callbacks += s:PlugCoc()
   return l:callbacks
 endfunction
 
