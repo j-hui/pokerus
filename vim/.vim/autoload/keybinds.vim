@@ -78,6 +78,8 @@ function s:navigationMaps()
   inoremap    <C-n> <down>
   inoremap    <C-p> <up>
 
+  nnoremap <silent> = :let @/='\<'.expand('<cword>').'\>'<bar>set hlsearch<CR>
+
   function! s:i_ctrl_e()
     " If in context menu, accept selection
     if pumvisible()
