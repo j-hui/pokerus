@@ -6,8 +6,6 @@ function plugins#highlighting#setup()
   Plug 'sainnhe/sonokai'          " Monokai-like
   " sainnhe's themes
 
-    let g:gruvbox_material_enable_bold = 1
-
     function! s:mod_highlight() abort
       highlight Error    cterm=undercurl gui=undercurl
       highlight ErrorMsg cterm=undercurl gui=undercurl
@@ -17,11 +15,14 @@ function plugins#highlighting#setup()
       " highlight Pmenu ctermbg=233
     endfunction
 
-
     augroup AddUndercurl
       autocmd!
       autocmd ColorScheme everforest,edge,gruvbox-material,sonokai call s:mod_highlight()
     augroup END
+
+    " let g:gruvbox_material_enable_bold = 1
+    let g:gruvbox_material_diagnostic_text_highlight = 1
+    let g:gruvbox_material_current_word = 'bold'
 
   Plug 'guns/xterm-color-table.vim'
   " Preview all 256 xterm colors
