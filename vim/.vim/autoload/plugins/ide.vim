@@ -447,6 +447,110 @@ function s:PlugVista()
   return []
 endfunction
 
+function s:PlugCoc()
+  Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+
+    function s:CocDoc()
+      if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+      elseif (coc#rpc#ready())
+        call CocActionAsync('doHover')
+      else
+        execute '!' . &keywordprg . " " . expand('<cword>')
+      endif
+    endfunction
+
+    " Add Coc to status line
+    let g:lightline['component_function']['cocstatus'] = 'coc#status'
+    call add(g:lightline['active']['right'], ['cocstatus'])
+
+    " For some reason, Coc is using these weird highlights
+    highlight default link FgCocHintFloatBgCocFloating CocHintFloat
+    highlight default link FgCocWarnFloatBgCocFloating CocWarnFloat
+    highlight default link FgCocErrorFloatBgCocFloating CocErrorFloat
+
+    augroup coc_autocmds
+      autocmd!
+      " Allow CoC to update lightline 
+      autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
+      " Highlight word under cursor
+      autocmd CursorHold * silent call CocActionAsync('highlight')
+      " Update signature help on jump placeholder.
+      autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+    augroup end
+
+    inoremap <silent><expr> <c-x><c-x> coc#refresh()
+
+    nmap <silent> [a <Plug>(coc-diagnostic-prev)
+    nmap <silent> ]a <Plug>(coc-diagnostic-next)
+
+    nmap <silent> <leader>ld <Plug>(coc-definition)
+    nmap <silent> <leader>lD <Plug>(coc-type-definition)
+    nmap <silent> <leader>li <Plug>(coc-implementation)
+    nmap <silent> <leader>l/ <Plug>(coc-references)
+
+    nnoremap <silent> <leader>lk :call <SID>CocDoc()<CR>
+    nnoremap <silent> K :call <SID>CocDoc()<CR>
+
+    " Symbol renaming.
+    nmap <leader>ln <Plug>(coc-rename)
+
+    " Formatting selected code.
+    xmap <leader>lq  <Plug>(coc-format-selected)
+    nmap <leader>lq  <Plug>(coc-format-selected)
+
+    " Applying codeAction to the selected region.
+    xmap <leader>la  <Plug>(coc-codeaction-selected)
+    " nmap <leader>la  <Plug>(coc-codeaction-selected)
+
+    " Remap keys for applying codeAction to the current buffer.
+    nmap <leader>la  <Plug>(coc-codeaction)
+    " Apply AutoFix to problem on the current line.
+    nmap <leader>lA  <Plug>(coc-fix-current)
+
+  Plug 'antoinemadec/coc-fzf'
+    " Mappings for CoCList
+    " Show all diagnostics.
+    nnoremap <silent><nowait> <leader>lg  :<C-u>CocFzfList diagnostics<cr>
+    " Manage extensions.
+    nnoremap <silent><nowait> <leader>lx  :<C-u>CocFzfList extensions<cr>
+    " Show commands.
+    nnoremap <silent><nowait> <leader>ll  :<C-u>CocFzfList commands<cr>
+    " Find symbol of current document.
+    nnoremap <silent><nowait> <leader>l/  :<C-u>CocFzfList outline<cr>
+    " Search workspace symbols.
+    nnoremap <silent><nowait> <leader>l?  :<C-u>CocFzfList symbols<cr>
+    " Do default action for next item.
+    nnoremap <silent><nowait> <leader>l]  :<C-u>CocNext<CR>
+    " Do default action for previous item.
+    nnoremap <silent><nowait> <leader>l[  :<C-u>CocPrev<CR>
+    " Resume latest coc list.
+    nnoremap <silent><nowait> <leader>lL  :<C-u>CocFzfListResume<CR>
+
+    " Yank list
+    nnoremap <silent> <leader>ly  :<C-u>CocFzfList yank<cr>
+
+    command! -nargs=0 Fmt  :call CocAction('format')
+    command! -nargs=0 Imps :call CocAction('runCommand', 'editor.action.organizeImport')
+    command! -nargs=? Fold :call CocAction('fold', <f-args>)
+
+  let g:coc_global_extensions = [
+        \'coc-rust-analyzer',
+        \'coc-json',
+        \'coc-go',
+        \'coc-vimtex',
+        \'coc-lists',
+        \'coc-pyright',
+        \'coc-sh',
+        \'coc-vimlsp',
+        \'coc-yaml',
+        \'coc-yank',
+        \'coc-zig',
+        \]
+
+  return []
+endfunction
+
 function plugins#ide#setup()
   if !has('nvim')
     return []
@@ -454,18 +558,30 @@ function plugins#ide#setup()
   let g:which_key_map['l'] = { 'name': '+lsp' }
 
   let l:callbacks = []
-  let l:callbacks += s:PlugLCN()
-  let l:callbacks += s:PlugNcm2()
-  let l:callbacks += s:PlugNeomake()
-  let l:callbacks += s:PlugNeoformat()
 
+  " LCN + ncm2 + Neo* stack {{{
+  " let l:callbacks += s:PlugLCN()
+  " let l:callbacks += s:PlugNcm2()
+  " let l:callbacks += s:PlugNeomake()
+  " let l:callbacks += s:PlugNeoformat()
+  " }}}
+
+  " ALE + VimLsp + Asyncomplete stack {{{
   " let l:callbacks += s:PlugALE()
   " let l:callbacks += s:PlugVimLsp()
   " let l:callbacks += s:PlugAsyncomplete()
+  " }}}
 
+  " Kept around for the memories {{{
   " let l:callbacks += s:PlugDeoplete()
+  " }}}
+
+  " Use with LCN or ALE/vim-lsp stack {{{
   let l:callbacks += s:PlugUltisnips()
   let l:callbacks += s:PlugVista()
+  " }}}
+
+  " let l:callbacks += s:PlugCoc()
   return l:callbacks
 endfunction
 

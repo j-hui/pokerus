@@ -313,6 +313,7 @@ in
 
         # Javascript
         nodejs
+        yarn
         nodePackages.javascript-typescript-langserver
 
         # OCaml
