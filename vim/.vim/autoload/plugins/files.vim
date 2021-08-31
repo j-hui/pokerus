@@ -40,6 +40,12 @@ endfunction
 
 function s:PlugRooter()
   Plug 'airblade/vim-rooter'
+    let g:rooter_cd_cmd = 'lcd'
+
+    " Remember where vim was initially invoked, with cmd to move back there
+    let g:originalcwd = getcwd()
+    command Unroot execute g:rooter_cd_cmd fnameescape(g:originalcwd)
+  return []
 endfunction
 
 function plugins#files#setup()
@@ -52,5 +58,6 @@ function plugins#files#setup()
   Plug 'chrisbra/Recover.vim'         " See diff for recover
   Plug 'lervag/file-line'             " Open file:line
   let l:callbacks += s:PlugDirvish()
+  let l:callbacks += s:PlugRooter()
   return l:callbacks
 endfunction
