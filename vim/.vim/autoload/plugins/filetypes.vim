@@ -222,12 +222,13 @@ function s:PlugWiki()
 
     let g:wiki_mappings_use_defaults = 'none'
 
-    nmap <leader>wo <plug>(wiki-open)
     nmap <leader>wi <plug>(wiki-index)
     nmap <leader>wj <plug>(wiki-journal)
-    nmap <leader>fw <plug>(wiki-fzf-pages)
-    let g:which_key_map['f']['w'] = 'fzf-wiki-open'
+    nmap <leader>wo <plug>(wiki-open)
+    nmap <leader>we <plug>(wiki-fzf-pages)
+    let g:which_key_map['w']['e'] = 'fzf-wiki-open'
     " Additional wiki ft-only mappings in after/ftplugin/wiki.vim
+    let g:wiki_fzf_pages_force_create_key = 'ctrl-j'
 
     let g:wiki_map_link_create = 'WikiLinkSpaceToHyphen'
     let g:wiki_map_create_page = 'WikiLinkSpaceToHyphen'

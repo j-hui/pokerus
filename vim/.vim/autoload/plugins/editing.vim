@@ -51,14 +51,6 @@ function plugins#editing#setup()
     nmap s <plug>(SubversiveSubstitute)
     nmap ss <plug>(SubversiveSubstituteLine)
     nmap S <plug>(SubversiveSubstituteToEndOfLine)
-    " Substitute word under cursor in motion
-
-    let g:which_key_map['s'] = 'subversive-substitute-range'
-    let g:which_key_map['ss'] = 'subversive-substitute-word-range'
-
-    nmap <leader>s <plug>(SubversiveSubstituteRange)
-    xmap <leader>s <plug>(SubversiveSubstituteRange)
-    nmap <leader>ss <plug>(SubversiveSubstituteWordRange)
 
     " Paste in visual mode
     xmap p <plug>(SubversiveSubstitute)

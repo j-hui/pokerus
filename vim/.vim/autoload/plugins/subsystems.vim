@@ -21,7 +21,7 @@ function plugins#subsystems#setup()
       \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(len(<q-args>)?<q-args>:expand('<cword>')), 1,
       \   fzf#vim#with_preview(), <bang>0)
 
-    function! RipgrepFzf(query, fullscreen)
+    function! FzfRg(query, fullscreen)
       let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
       let initial_command = printf(command_fmt, shellescape(a:query))
       let reload_command = printf(command_fmt, '{q}')
@@ -29,61 +29,65 @@ function plugins#subsystems#setup()
       call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
     endfunction
 
+    function! FzfHere(fullscreen)
+      call fzf#vim#files(expand('%:h'), fzf#vim#with_preview(), a:fullscreen)
+    endfunction
+
+    function! FzfFiles(fullscreen)
+      function! s:FzfFileAccept(lines) abort
+        " a:lines is a list with three elements (two if there were no matches):
+        "   <search-query>, <expect-key>|<empty> [, <selected-items...>]
+        if len(a:lines) < 2
+          return
+        elseif len(a:lines) == 2 || !empty(a:lines[1]) |
+          execute 'edit ' . a:lines[0]
+        else
+          execute 'edit ' . split(a:lines[2], '#####')[0]
+        endif
+      endfunction
+
+      let l:spec = {
+            \'options': ['-d=#####', '--print-query', '--expect=ctrl-j'],
+            \'sink*': funcref('s:FzfFileAccept')
+            \}
+      call fzf#vim#files(getcwd(), fzf#vim#with_preview(l:spec), a:fullscreen)
+    endfunction
+
     " Insert mode completion (overriding vim mappings)
     imap <C-x><C-k> <plug>(fzf-complete-word)
     imap <C-x><C-f> <plug>(fzf-complete-path)
     imap <C-x><C-l> <plug>(fzf-complete-line)
 
-    command! FZHere call fzf#run(fzf#wrap({'dir': expand('%:h')}))
+    " Here (like Files/:FZF, but relative to directory of current file)
+    nmap <leader>. :call FzfHere(0)<CR>
+    let g:which_key_map['.'] = 'fzf-here'
 
-    " Normal mode mappings (with mnemonics)
-      let g:which_key_map['f'] = { 'name': '+fzf' }
+    " Lines (current buffer only)
+    nmap <leader>, :BLines<CR>
+    let g:which_key_map[','] = 'fzf-buffer-lines'
 
-      " Ripgrep (under cursor)
-      nmap <leader>fr :Rg<CR>
-      let g:which_key_map['f']['r'] = 'fzf-ripgrep'
+    " Line
+    nmap <leader>/ :Lines<CR>
+    let g:which_key_map['/'] = 'fzf-lines'
 
-      " Ripgrep live (starting with word under cursor)
-      nmap <leader>fR :call RipgrepFzf(expand('<cword>'), 0)<CR>
-      let g:which_key_map['f']['R'] = 'fzf-ripgrep-live'
+    " Ripgrep live (starting with word under cursor)
+    nmap <leader>? :call FzfRg(expand('<cword>'), 0)<CR>
+    let g:which_key_map['?'] = 'fzf-ripgrep'
 
-      " Files
-      nmap <leader>fe :Files<CR>
-      let g:which_key_map['f']['e'] = 'fzf-files'
+    " Files
+    nmap <leader>f :call FzfFiles(0)<CR>
+    let g:which_key_map['f'] = 'fzf-files'
 
-      " Git files
-      nmap <leader>fg :GFiles<CR>
-      let g:which_key_map['f']['g'] = 'fzf-git-files'
+    " Switch to buffer
+    nmap <leader>s :Buffers<CR>
+    let g:which_key_map['s'] = 'fzf-buffers'
 
-      " Here (like Files/:FZF, but relative to directory of current file)
-      nmap <leader>f. :call fzf#run(fzf#wrap({'dir': expand('%:h')}))<CR>
-      let g:which_key_map['f']['.'] = 'fzf-files-here'
+    " Switch to buffer + history
+    nmap <leader>S :History<CR>
+    let g:which_key_map['S'] = 'fzf-history-buffers'
 
-      " Buffers (and history)
-      nmap <leader>fh :History<CR>
-      let g:which_key_map['f']['h'] = 'fzf-history-buffers'
-
-      " Buffers
-      nmap <leader>fb :Buffers<CR>
-      let g:which_key_map['f']['b'] = 'fzf-buffers'
-
-      " Lines
-      nmap <leader>fl :Lines<CR>
-      let g:which_key_map['f']['l'] = 'fzf-lines'
-
-      " Lines (current buffer only)
-      nmap <leader>ff :BLines<CR>
-      let g:which_key_map['f']['f'] = 'fzf-buffer-lines'
-
-      " Command history
-      nmap <leader>f: :History:<CR>
-      let g:which_key_map['f'][':'] = 'fzf-history-:'
-      nmap <leader>f; :History:<CR>
-      let g:which_key_map['f'][';'] = 'fzf-history-:'
-
-      " Search history
-      nmap <leader>f/ :History/<CR>
-      let g:which_key_map['f']['/'] = 'fzf-history-/'
+    " Shortcut for History: and History/
+    command! H History
 
   Plug 'https://gitlab.com/mcepl/vim-fzfspell.git'
   " FZF for z=
@@ -95,6 +99,9 @@ function plugins#subsystems#setup()
   Plug 'tpope/vim-rhubarb'
   " Git interaction
     let g:which_key_map['g'] = { 'name': '+git' }
+
+    nmap <leader>gg :GFiles<CR>
+    let g:which_key_map['g']['e'] = 'git-fzf-files'
 
     nnoremap <leader>gd :Gdiffsplit<CR>
     let g:which_key_map['g']['d'] = 'git-diff-split'
@@ -110,25 +117,24 @@ function plugins#subsystems#setup()
     let g:which_key_map['g']['s'] = 'git-status'
     nnoremap <leader>gw :Gw<CR>
     let g:which_key_map['g']['w'] = 'git-write'
-    nnoremap <leader>gL :Gclog<CR>
-    let g:which_key_map['g']['L'] = 'git-log-classic'
+
+    " nnoremap <leader>gL :Gclog<CR>
+    " let g:which_key_map['g']['L'] = 'git-log-classic' " -- Use :Flogsplit
 
     " Browse commits with fzf
-    nmap <leader>gh :BCommits<CR>
-    let g:which_key_map['g']['h'] = 'git-fzf-buffer-log'
+    nmap <leader>g. :BCommits<CR>
+    let g:which_key_map['g']['.'] = 'git-fzf-buffer-log'
     nmap <leader>gl :Commits<CR>
     let g:which_key_map['g']['l'] = 'git-fzf-log'
 
   Plug 'rbong/vim-flog'
   " Git log
-    nnoremap <leader>gf :Flogsplit<CR>
-    let g:which_key_map['g']['f'] = 'git-flog-split'
-    nnoremap <leader>gf :Flog<CR>
-    let g:which_key_map['g']['F'] = 'git-flog'
+    nnoremap <leader>gL :Flogsplit<CR>
+    let g:which_key_map['g']['L'] = 'git-flog'
 
     augroup fugitive_maps
       autocmd!
-      autocmd Filetype fugitive,git nmap <buffer> q gq
+      autocmd Filetype fugitive,git,floggraph nmap <buffer> q gq
     augroup END
 
   Plug 'rhysd/git-messenger.vim'
