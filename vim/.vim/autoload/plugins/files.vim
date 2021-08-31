@@ -39,7 +39,7 @@ function s:PlugDirvish()
 endfunction
 
 function s:PlugRooter()
-  Plug 'airblade/vim-rooter'
+  Plug 'airblade/vim-rooter'          " Automatically move pwd for projects
     let g:rooter_cd_cmd = 'lcd'
 
     " Remember where vim was initially invoked, with cmd to move back there
@@ -57,6 +57,8 @@ function plugins#files#setup()
   Plug 'strboul/urlview.vim'          " See all URLs in buffer
   Plug 'chrisbra/Recover.vim'         " See diff for recover
   Plug 'lervag/file-line'             " Open file:line
+  Plug 'lambdalisue/suda.vim'         " Give vim sudo powers
+    let g:suda_smart_edit = 1
   let l:callbacks += s:PlugDirvish()
   let l:callbacks += s:PlugRooter()
   return l:callbacks
