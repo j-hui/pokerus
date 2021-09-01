@@ -243,17 +243,16 @@ function s:PlugALE(disable_lsp)
 
     let g:ale_sign_column_always = 1
     let g:ale_lint_delay = 100
-    let g:ale_virtualtext_cursor = 1
 
-    " Settings related to using floating window for hover
-    " let g:ale_hover_to_preview = 1
-    " let g:ale_hover_to_floating_preview = 1
-    " let g:ale_floating_preview = 1
-    " let g:ale_hover_cursor = 1
-    " let g:ale_cursor_detail = 1
+    " Use floating window for hover
+    let g:ale_cursor_detail = 1
+    let g:ale_hover_to_preview = 1
+    let g:ale_floating_preview = 1
+    let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰']
 
-    let g:ale_virtualtext_prefix = '» '
-    let g:ale_virtualtext_cursor = 1
+    " Use virtualtext for hover
+    " let g:ale_virtualtext_prefix = '» '
+    " let g:ale_virtualtext_cursor = 1
 
     let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
     let g:ale_echo_msg_error_str = 'E'
@@ -599,7 +598,7 @@ function s:StackCoc()
   let l:callbacks = []
   let l:callbacks += s:PlugVista()
   let l:callbacks += s:PlugCoc()
-  " let l:callbacks += s:PlugALE(1)
+  let l:callbacks += s:PlugALE(1)
   let l:callbacks += s:PlugSnippets()
   return l:callbacks
 endfunction

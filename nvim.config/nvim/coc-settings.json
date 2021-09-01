@@ -5,6 +5,7 @@
   "diagnostic.warningSign": "⚠",
   "diagnostic.infoSign": "ℹ",
   "diagnostic.hintSign": "»",
+  "diagnostic.displayByAle": true,
   "languageserver": {
     "haskell": {
       "command": "haskell-language-server-wrapper",
