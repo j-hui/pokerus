@@ -165,8 +165,8 @@ function s:PlugLCN()
         nmap <buffer> <silent> <leader>lA <Plug>(lcn-code-lens-action)
         nmap <buffer> <silent> <leader>lq <Plug>(lcn-format)
 
-        nmap <buffer> <silent> ]a <Plug>(lcn-diagnostics-next)
-        nmap <buffer> <silent> [a <Plug>(lcn-diagnostics-prev)
+        nmap <buffer> <silent> ]d <Plug>(lcn-diagnostics-next)
+        nmap <buffer> <silent> [d <Plug>(lcn-diagnostics-prev)
       endif
     endfunction
 
@@ -226,27 +226,39 @@ function s:PlugUltisnips()
     let g:UltiSnipsExpandTrigger='<M-n>'
     let g:UltiSnipsJumpForwardTrigger='<M-n>'
     let g:UltiSnipsJumpBackwardTrigger='<M-p>'
+  return []
+endfunction
+
+function s:PlugSnippets()
   Plug 'honza/vim-snippets'                   " Std lib for snippets
   Plug 'rbonvall/snipmate-snippets-bib'       " Snippets for .bib files
   return []
 endfunction
 
-function s:PlugALE()
+function s:PlugALE(disable_lsp)
   Plug 'dense-analysis/ale'
   " Asynchronous linting
+
+    let g:ale_disable_lsp = a:disable_lsp
 
     let g:ale_sign_column_always = 1
     let g:ale_lint_delay = 100
     let g:ale_virtualtext_cursor = 1
 
-    let g:ale_disable_lsp = 1
-    let g:ale_hover_to_preview = 1
+    " Settings related to using floating window for hover
+    " let g:ale_hover_to_preview = 1
+    " let g:ale_hover_to_floating_preview = 1
+    " let g:ale_floating_preview = 1
+    " let g:ale_hover_cursor = 1
+    " let g:ale_cursor_detail = 1
+
+    let g:ale_virtualtext_prefix = '» '
+    let g:ale_virtualtext_cursor = 1
 
     let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
     let g:ale_echo_msg_error_str = 'E'
     let g:ale_echo_msg_warning_str = 'W'
-    let g:ale_virtualtext_prefix = '» '
-    let g:ale_virtualtext_cursor = 1
+
     let g:ale_sign_error = ' ✖'
     let g:ale_sign_warning = ' ‼'
     let g:ale_sign_info = ' ℹ'
@@ -482,8 +494,8 @@ function s:PlugCoc()
 
     inoremap <silent><expr> <c-x><c-x> coc#refresh()
 
-    nmap <silent> [a <Plug>(coc-diagnostic-prev)
-    nmap <silent> ]a <Plug>(coc-diagnostic-next)
+    nmap <silent> [d <Plug>(coc-diagnostic-prev)
+    nmap <silent> ]d <Plug>(coc-diagnostic-next)
 
     nmap <silent> <leader>ld <Plug>(coc-definition)
     nmap <silent> <leader>lD <Plug>(coc-declaration)
@@ -536,7 +548,6 @@ function s:PlugCoc()
     command! -nargs=0 Imps :call CocAction('runCommand', 'editor.action.organizeImport')
     command! -nargs=? Fold :call CocAction('fold', <f-args>)
 
-  Plug 'honza/vim-snippets'                   " Std lib for snippets
     imap <C-s> <Plug>(coc-snippets-expand-jump)
 
   let g:coc_global_extensions = [
@@ -560,38 +571,46 @@ function s:PlugCoc()
   return []
 endfunction
 
+function s:StackLcn()
+  let l:callbacks = []
+  let l:callbacks += s:PlugLCN()
+  let l:callbacks += s:PlugNcm2()
+  " let l:callbacks += s:PlugDeoplete()
+  let l:callbacks += s:PlugNeomake()
+  let l:callbacks += s:PlugNeoformat()
+  let l:callbacks += s:PlugUltisnips()
+  let l:callbacks += s:PlugSnippets()
+  let l:callbacks += s:PlugVista()
+  return l:callbacks
+endfunction
+
+function s:StackVimLsp()
+  let l:callbacks = []
+  let l:callbacks += s:PlugVimLsp()
+  let l:callbacks += s:PlugALE(1)
+  let l:callbacks += s:PlugAsyncomplete()
+  let l:callbacks += s:PlugUltisnips()
+  let l:callbacks += s:PlugSnippets()
+  let l:callbacks += s:PlugVista()
+  return l:callbacks
+endfunction
+
+function s:StackCoc()
+  let l:callbacks = []
+  let l:callbacks += s:PlugVista()
+  let l:callbacks += s:PlugCoc()
+  " let l:callbacks += s:PlugALE(1)
+  let l:callbacks += s:PlugSnippets()
+  return l:callbacks
+endfunction
+
 function plugins#ide#setup()
   if !has('nvim')
     return []
   endif
   let g:which_key_map['l'] = { 'name': '+lsp' }
 
-  let l:callbacks = []
-
-  " LCN + ncm2 + Neo* stack {{{
-  " let l:callbacks += s:PlugLCN()
-  " let l:callbacks += s:PlugNcm2()
-  " let l:callbacks += s:PlugNeomake()
-  " let l:callbacks += s:PlugNeoformat()
-  " }}}
-
-  " ALE + VimLsp + Asyncomplete stack {{{
-  " let l:callbacks += s:PlugALE()
-  " let l:callbacks += s:PlugVimLsp()
-  " let l:callbacks += s:PlugAsyncomplete()
-  " }}}
-
-  " Kept around for the memories {{{
-  " let l:callbacks += s:PlugDeoplete()
-  " }}}
-
-  " Use with LCN or ALE/vim-lsp stack {{{
-  " let l:callbacks += s:PlugUltisnips()
-  let l:callbacks += s:PlugVista()
-  " }}}
-
-  let l:callbacks += s:PlugCoc()
-  return l:callbacks
+  return s:StackCoc()
 endfunction
 
 " vim: set ts=2 sw=2 tw=80 et foldlevel=0 :
