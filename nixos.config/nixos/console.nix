@@ -50,9 +50,9 @@ in
         # text editing
         ed nano
         vimHugeX
-        neovim
+        unstable.neovim
         # neovim-nightly
-        neovim-remote
+        unstable.neovim-remote
         # emacs
         # It was fun while it lasted
         # (wrapNeovim (neovim-unwrapped.overrideAttrs(old: {
