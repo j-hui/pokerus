@@ -33,6 +33,8 @@
     ui = auto
 [core]
     excludesfile = ~/.gitignore_global
+[commit]
+    verbose = true
 
 [pager]
     diff = delta
