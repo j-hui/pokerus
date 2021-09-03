@@ -41,6 +41,7 @@ endfunction
 function s:PlugRooter()
   Plug 'airblade/vim-rooter'          " Automatically move pwd for projects
     let g:rooter_cd_cmd = 'lcd'
+    let g:rooter_patterns = ['.git', '_darcs', '.hg', '.bzr', '.svn', 'Makefile', 'package.json', 'platformio.ini']
 
     " Remember where vim was initially invoked, with cmd to move back there
     let g:originalcwd = getcwd()
