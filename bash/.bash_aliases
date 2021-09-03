@@ -30,11 +30,6 @@ fi
 
 ### git
 
-if [ -f ~/.pokerus-extern/forgit/forgit.plugin.sh ]; then
-    FORGIT_COPY_CMD='xclip -selection clipboard'
-    source ~/.pokerus-extern/forgit/forgit.plugin.sh
-fi
-
 git-ignore() {
     curl -sL "https://www.toptal.com/developers/gitignore/api/$1"
 }
