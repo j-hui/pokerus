@@ -5,7 +5,6 @@
   "diagnostic.warningSign": "⚠",
   "diagnostic.infoSign": "ℹ",
   "diagnostic.hintSign": "»",
-  "diagnostic.displayByAle": true,
   "languageserver": {
     "haskell": {
       "command": "haskell-language-server-wrapper",
@@ -23,6 +22,18 @@
       "command": "rnix-lsp",
       "filetypes": ["nix"]
     }
+  },
+  "diagnostic-languageserver.mergeConfig": true,
+  "diagnostic-languageserver.linters": {
+    "vint": {
+      "args": ["--enable-neovim", "--style-problem", "-"]
+    }
+  },
+  "diagnostic-languageserver.filetypes": {
+    "markdown": ["write-good", "markdownlint"],
+    "vim": "vint",
+    "sh": "shellcheck",
+    "yaml": "yamllint"
   },
   "clangd.semanticHighlighting": true,
   "clangd.path": "~/.config/coc/extensions/coc-clangd-data/install/12.0.1/clangd_12.0.1/bin/clangd"

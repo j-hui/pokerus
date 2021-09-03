@@ -87,6 +87,10 @@ function s:PlugLatex()
     let g:vimtex_complete_enabled = 1
     " let g:vimtex_disable_recursive_main_file_detection = 1
 
+    if exists('g:coc_global_extensions')
+      let g:coc_global_extensions += ['coc-vimtex']
+    endif
+
     function! VimtexConfig()
       let g:which_key_map['c'] = { 'name': '+vimtex' }
       nmap <buffer> <leader>cc        <plug>(vimtex-compile-ss)
@@ -99,17 +103,29 @@ function s:PlugLatex()
       imap <buffer> <C-g>b            \textbf{}<left>
       imap <buffer> <C-g>i            \textit{}<left>
 
-      if g:completion_tool ==# 'ncm2'
-        call ncm2#register_source({
-            \ 'name': 'vimtex',
-            \ 'priority': 8,
-            \ 'scope': ['tex'],
-            \ 'mark': 'tex',
-            \ 'word_pattern': '\w+',
-            \ 'complete_pattern': g:vimtex#re#ncm2,
-            \ 'on_complete': ['ncm2#on_complete#omni', 'vimtex#complete#omnifunc'],
-            \ })
-      endif
+      try
+        if g:completion_tool ==# 'ncm2'
+          call ncm2#register_source({
+              \ 'name': 'vimtex',
+              \ 'priority': 8,
+              \ 'scope': ['tex'],
+              \ 'mark': 'tex',
+              \ 'word_pattern': '\w+',
+              \ 'complete_pattern': g:vimtex#re#ncm2,
+              \ 'on_complete': ['ncm2#on_complete#omni', 'vimtex#complete#omnifunc'],
+              \ })
+        elseif g:completion_tool ==# 'deoplete'
+          call deoplete#custom#var('omni', 'input_patterns', {
+                \ 'tex': g:vimtex#re#deoplete,
+                \})
+        elseif g:completion_tool ==# 'coc'
+          nmap <buffer> K <Plug>(vimtex-doc-package)
+        endif
+      catch /^Vim\%((\a\+)\)\=:E117/ " Undefined function
+        echom 'Completion tool ' . g:completion_tool . '/vimtex not yet installed'
+      catch /^Vim\%((\a\+)\)\=:E121/ " Undefined variable
+        echom 'Completion tool ' . g:completion_tool . '/vimtex not yet installed'
+      endtry
     endfunction
 
     augroup vimtex_settings
