@@ -189,6 +189,7 @@ function s:Misc()
   set modelines=5
   set timeoutlen=300
   let c_syntax_for_h = 1 " Instead of C++
+  let g:no_gitrebase_maps = 1
 endfunction
 
 function settings#setup()
