@@ -275,6 +275,8 @@ unmapAllExcept(['J', 'K', 'H', 'L'],
 unmapAllExcept(['J', 'K', 'H', 'L'],
     /drive\.google\.com/);
 unmapAllExcept(['J', 'K', 'H', 'L'],
+    /keep\.google\.com/);
+unmapAllExcept(['J', 'K', 'H', 'L'],
     /meet\.google\.com/);
 unmapAllExcept([],
     /docs\.google\.com/);
