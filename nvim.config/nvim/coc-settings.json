@@ -21,6 +21,10 @@
     "nix": {
       "command": "rnix-lsp",
       "filetypes": ["nix"]
+    },
+    "zls": {
+      "command": "zls",
+      "filetypes": ["zig"]
     }
   },
   "diagnostic-languageserver.mergeConfig": true,

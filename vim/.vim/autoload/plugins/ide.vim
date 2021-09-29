@@ -410,7 +410,6 @@ function s:PlugCoc()
         \'coc-vimlsp',
         \'coc-yaml',
         \'coc-yank',
-        \'coc-zig',
         \'coc-snippets',
         \'coc-cmake',
         \'coc-clangd',
