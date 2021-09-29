@@ -17,9 +17,8 @@ configuration {
     sorting-method: "fzf";
     scroll-method: 1;
     sidebar-mode: true;
-    window-command: "bspc node {window} -g hidden=off -f";
 
-    kb-primary-paste: "Super+v";
+    /* kb-primary-paste: "Control+v"; */
 
     kb-move-front: "Control+a";
     kb-move-end: "Control+e";
@@ -28,13 +27,13 @@ configuration {
     kb-move-char-back: "Left,Control+b";
     kb-move-char-forward: "Right,Control+f";
 
-    kb-clear-line: "Control+BackSpace";
+    kb-clear-line: "Control+l";
     kb-remove-word-back: "Alt+BackSpace,Control+Alt+h,Control+w";
     kb-remove-word-forward: "Control+Alt+d";
     kb-remove-char-forward: "Delete";
     kb-remove-char-back: "BackSpace,Control+h";
     kb-remove-to-eol: "Control+k";
-    kb-remove-to-sol: "Super+BackSpace";
+    kb-remove-to-sol: "Control+BackSpace";
 
     kb-page-prev: "Page_Up,Control+u";
     kb-page-next: "Page_Down,Control+d";
