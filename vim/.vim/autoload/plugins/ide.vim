@@ -367,7 +367,7 @@ function s:PlugCoc()
   let g:completion_tool = 'coc'
   Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
-    function s:CocDoc()
+    function! s:CocDoc()
       if (index(['vim','help'], &filetype) >= 0)
         execute 'h '.expand('<cword>')
       elseif (coc#rpc#ready())
