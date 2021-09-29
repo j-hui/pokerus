@@ -179,7 +179,7 @@ mySpawn :: String -> X ()
 mySpawn s = spawn $ myScript s
 
 myDmenu :: MonadIO m => String -> [String] -> m String
-myDmenu prompt = Dmenu.menuArgs "rofi" ["-dmenu", "-p", prompt]
+myDmenu prompt = Dmenu.menuArgs "rofi" ["-monitor", "-4", "-dmenu", "-p", prompt]
 
 -------------------------------------------------------------------------------
 -- Colors
@@ -379,8 +379,8 @@ myKeys =
   , ("M-S-l"                  , spawn "xset s activate")
 
   -- Applications
-  , ("M-;"                    , spawn "rofi -show drun")
-  , ("M-S-;"                  , spawn "rofi -show run")
+  , ("M-;"                    , spawn "rofi -monitor -4 -show drun")
+  , ("M-S-;"                  , spawn "rofi -monitor -4 -show run")
 
   , ("M-<Return>"             , spawn myTerminal)
   , ("M-g"                    , spawn myBrowser')
@@ -391,8 +391,8 @@ myKeys =
   , ("M-S-o"                  , spawn "thunar")
 
   -- Workspaces
-  , ("M-/"                    , spawn "rofi -show windowcd")
-  , ("M-S-/"                  , spawn "rofi -show window")
+  , ("M-/"                    , spawn "rofi -monitor -4 -show windowcd")
+  , ("M-S-/"                  , spawn "rofi -monitor -4 -show window")
   , ("M-s"                    , promptDesktop "Switch to" >>= switchDesktop)
   , ("M-S-s"                  , promptDesktop "Shift to" >>= shiftToDesktop)
 
