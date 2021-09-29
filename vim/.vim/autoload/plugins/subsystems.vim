@@ -34,20 +34,58 @@ function plugins#subsystems#setup()
     endfunction
 
     function! FzfFiles(fullscreen)
+      " The following commands can be used in the fzf window to select:
+      " - return: open current selection
+      " - ctrl-o: open current query (creates a file if non-existent)
+      " - ctrl-v: open current query in vertical split
+      " - ctrl-x: open current query in horizontal split
+      "
+      " The following commands can be used to interact with the fzf window:
+      " - ctrl-l: replace query with current selection
+      " - ctrl-u: scroll half page up
+      " - ctrl-d: scroll half page down
+      " - tab/ctrl-i: select
       function! s:FzfFileAccept(lines) abort
         " a:lines is a list with three elements (two if there were no matches):
         "   <search-query>, <expect-key>|<empty> [, <selected-items...>]
         if len(a:lines) < 2
+          echoerr 'FzfFiles: truncated input: ' . a:lines
           return
-        elseif len(a:lines) == 2 || !empty(a:lines[1]) |
-          execute 'edit ' . a:lines[0]
-        else
-          execute 'edit ' . split(a:lines[2], '#####')[0]
         endif
+
+        if empty(a:lines[1]) " Enter was pressed
+          if len(a:lines) == 2
+            " No matches; open query
+            execute 'edit ' . a:lines[0]
+          else
+            " Open selection
+            for l:selection in a:lines[2:]
+              execute 'edit ' . l:selection
+            endfor
+          endif
+        elseif a:lines[1] ==# 'ctrl-o'
+          " Open query
+          execute 'edit ' . a:lines[0]
+        elseif a:lines[1] ==# 'ctrl-v'
+          " Open query in vsplit
+          execute 'vsplit ' . a:lines[0]
+        elseif a:lines[1] ==# 'ctrl-x'
+          " Open query in hsplit
+          execute 'split ' . a:lines[0]
+        else
+          echoerr 'FzfFiles: unknown command ' . a:lines[1]
+        endif
+
       endfunction
 
       let l:spec = {
-            \'options': ['-d=#####', '--print-query', '--expect=ctrl-j'],
+            \'options': [
+              \'--print-query',
+              \'--expect=ctrl-o,ctrl-v,ctrl-x',
+              \'--bind=ctrl-l:replace-query',
+              \'--bind=ctrl-u:half-page-up',
+              \'--bind=ctrl-d:half-page-down',
+              \],
             \'sink*': funcref('s:FzfFileAccept')
             \}
       call fzf#vim#files(getcwd(), fzf#vim#with_preview(l:spec), a:fullscreen)
