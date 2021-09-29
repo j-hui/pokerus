@@ -8,7 +8,7 @@ nmap <leader>wb <plug>(wiki-link-return)
 nmap <leader>wB <plug>(wiki-graph-find-backlinks)
 nmap <leader>wk <plug>(wiki-link-show)
 nmap <leader>wm <plug>(wiki-link-toggle)
-vmap <leader>wm <plug>(wiki-link-toggle-visual)
+xmap <leader>wm <plug>(wiki-link-toggle-visual)
 
 nmap <leader>wx <plug>(wiki-page-delete)
 nmap <leader>wr <plug>(wiki-page-rename)
