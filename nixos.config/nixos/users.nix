@@ -20,7 +20,7 @@ in
         users."j-hui" = {
           isNormalUser = true;
           hashedPassword = cfg."j-hui".hashedPassword;
-          extraGroups = [ "wheel" "audio" "jackaudio" "networkmanager" "libvirtd" "docker" ];
+          extraGroups = [ "wheel" "audio" "jackaudio" "networkmanager" "libvirtd" "docker" "user-with-access-to-virtualbox" ];
         };
       };
     }

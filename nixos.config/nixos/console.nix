@@ -219,6 +219,11 @@ in
       # For docker
       virtualisation.docker.enable = true;
 
+      # For virtualbox
+      virtualisation.virtualbox.host.enable = true;
+      virtualisation.virtualbox.host.enableExtensionPack = true;
+      # Also remember to add user to user-with-access-to-virtualbox group
+
       # For vagrant
       environment.variables.VAGRANT_DEFAULT_PROVIDER = "libvirt";
       services.nfs.server.enable = true;
