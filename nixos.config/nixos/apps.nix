@@ -247,7 +247,7 @@ in
         "L /usr/share/dict/words - - - - ${config.system.path}/lib/aspell/en-common.wl"
       ];
 
-      services.udev.packages = [  pkgs.saleae-logic ];
+      services.udev.packages = [  unstable.pkgs.saleae-logic-2 ];
 
       environment.systemPackages = with pkgs; [
         vscode # I don't actually user this but handy to keep around
@@ -267,7 +267,7 @@ in
         proselint
         vale
 
-        pkgs.saleae-logic
+        unstable.pkgs.saleae-logic-2
         efm-langserver
 
         # Markup
