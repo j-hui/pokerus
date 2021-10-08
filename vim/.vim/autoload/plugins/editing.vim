@@ -115,6 +115,20 @@ function plugins#editing#setup()
       nmap <leader>wlt <plug>(lists-toggle)
       imap <C-g>lt <plug>(lists-toggle)
 
+    Plug 'junegunn/goyo.vim'
+      let g:goyo_linenr = 1
+
+      function! s:goyo_enter()
+        call g:ShareSetMode(1)
+      endfunction
+
+      function! s:goyo_leave()
+        call g:ShareSetMode(0)
+      endfunction
+
+      autocmd! User GoyoEnter nested call <SID>goyo_enter()
+      autocmd! User GoyoLeave nested call <SID>goyo_leave()
+
     return [function('s:SandwichCallback')]
 endfunction
 
