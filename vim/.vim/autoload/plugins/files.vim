@@ -12,6 +12,7 @@ function s:PlugDirvish()
     " Unmap all default mappings
     let g:dirvish_dovish_map_keys = 0
 
+    map g- <Plug>(dirvish_up)
     function s:ConfigDirvish()
       " unmap dirvish default preview key, replace with K
       unmap <buffer> p
