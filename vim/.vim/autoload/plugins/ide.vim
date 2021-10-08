@@ -627,9 +627,10 @@ function s:StackCoc()
   nnoremap <silent><nowait> <leader>l/  :<C-u>CocFzfList symbols<cr>
   " Resume latest coc list.
   nnoremap <silent><nowait> <leader>lL  :<C-u>CocFzfListResume<CR>
-
   " Yank list
   nnoremap <silent> <leader>ly  :<C-u>CocFzfList yank<cr>
+  " Close all pop-ups
+  nnoremap <silent><nowait> <leader>lz :call coc#float#close_all(1)
 
   imap <C-s> <Plug>(coc-snippets-expand-jump)
 
