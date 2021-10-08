@@ -18,38 +18,41 @@ import           Data.Maybe                     ( catMaybes
 import           System.Exit                    ( exitSuccess )
 import           System.IO.Unsafe               ( unsafePerformIO )
 
-import XMonad
-    ( mod4Mask,
-      io,
-      spawn,
-      (|||),
-      xmonad,
-      (-->),
-      (<&&>),
-      (<+>),
-      (=?),
-      className,
-      composeAll,
-      doF,
-      doFloat,
-      doShift,
-      liftX,
-      title,
-      sendMessage,
-      windows,
-      withFocused,
-      KeyMask,
-      Window,
-      Dimension,
-      MonadIO,
-      Default(def),
-      MonadState(get),
-      ManageHook,
-      Resize(..),
-      X,
-      XConfig(..),
-      ChangeLayout(NextLayout, FirstLayout),
-      Tall(Tall) )
+import           XMonad                         ( (-->)
+                                                , (<&&>)
+                                                , (<+>)
+                                                , (=?)
+                                                , ChangeLayout
+                                                  ( FirstLayout
+                                                  , NextLayout
+                                                  )
+                                                , Default(def)
+                                                , Dimension
+                                                , KeyMask
+                                                , ManageHook
+                                                , MonadIO
+                                                , MonadState(get)
+                                                , Resize(..)
+                                                , Tall(Tall)
+                                                , Window
+                                                , X
+                                                , XConfig(..)
+                                                , className
+                                                , composeAll
+                                                , doF
+                                                , doFloat
+                                                , doShift
+                                                , io
+                                                , liftX
+                                                , mod4Mask
+                                                , sendMessage
+                                                , spawn
+                                                , title
+                                                , windows
+                                                , withFocused
+                                                , xmonad
+                                                , (|||)
+                                                )
 import qualified XMonad.Core                   as Core
 import qualified XMonad.StackSet               as SS
 
@@ -57,12 +60,12 @@ import           XMonad.Actions.CopyWindow      ( kill1 )
 import           XMonad.Actions.CycleWS         ( WSType(..)
                                                 , nextScreen
                                                 , prevScreen
-                                                , shiftPrevScreen
                                                 , shiftNextScreen
-                                                , swapPrevScreen
+                                                , shiftPrevScreen
                                                 , swapNextScreen
+                                                , swapPrevScreen
                                                 )
-import           XMonad.Actions.Promote         ( promote )
+-- import           XMonad.Actions.Promote         ( promote )
 import           XMonad.Actions.RotSlaves       ( rotSlavesDown
                                                 , rotSlavesUp
                                                 )
@@ -179,7 +182,8 @@ mySpawn :: String -> X ()
 mySpawn s = spawn $ myScript s
 
 myDmenu :: MonadIO m => String -> [String] -> m String
-myDmenu prompt = Dmenu.menuArgs "rofi" ["-monitor", "-4", "-dmenu", "-p", prompt]
+myDmenu prompt =
+  Dmenu.menuArgs "rofi" ["-monitor", "-4", "-dmenu", "-p", prompt]
 
 -------------------------------------------------------------------------------
 -- Colors
@@ -241,7 +245,7 @@ fromXres = unsafePerformIO . getFromXres
 -- Workspaces
 --
 myWorkspaces :: [String]
-myWorkspaces = ["home", "hide", "misc"]
+myWorkspaces = ["home", "misc"]
 
 myProjects :: [Project]
 myProjects =
@@ -304,6 +308,19 @@ myProjects =
   -- zoom
   ]
   where boringProject name = Project name "~/" Nothing
+
+myWebapps :: [String]
+myWebapps = [ "https://mail.google.com/mail/u/0/"
+            , "https://mail.google.com/mail/u/1/"
+            , "https://messages.google.com/web/conversations"
+            , "https://web.whatsapp.com"
+            , "https://messenger.com"
+            , "https://keep.google.com"
+            , "https://calendar.google.com/u/1/"
+            ]
+
+promptWebapp :: X String
+promptWebapp = myDmenu "WebApp" myWebapps
 
 promptDesktop :: String -> X String
 promptDesktop prompt = do
@@ -389,6 +406,7 @@ myKeys =
   , ("M-S-d"                  , mySpawn "word-lookup")
   , ("M-o"                    , spawn "rofi-pass")
   , ("M-S-o"                  , spawn "thunar")
+  , ("M-e"                    , promptWebapp >>= spawn . myWebapp)
 
   -- Workspaces
   , ("M-/"                    , spawn "rofi -monitor -4 -show windowcd")
@@ -421,15 +439,13 @@ myKeys =
 
   , ("M-m"                    , sendMessage NextLayout)       -- Toggle layout
   , ("M-S-m"                  , sendMessage $ Toggle MIRROR)  -- Mirror layout
-  , ("M-S-u", sendMessage $ Toggle FULL)                      -- Toggle on full layout
+  , ("M-S-u"                  , sendMessage $ Toggle FULL)    -- Toggle on full layout
   , ("M-u", focusUrgent >> windows SS.swapMaster)             -- Move focus to urgent window
   -- TODO: make M-v fullscreen mode
-
-  , ("M-b",   sendMessage Shrink)
-  , ("M-f",   sendMessage Expand)
-  , ("M-S-f", increaseLimit)              -- Increase number of windows that can be shown
-  , ("M-S-b", decreaseLimit)              -- Decrease number of windows that can be shown
-
+  , ("M-b"                    , sendMessage Shrink)
+  , ("M-f"                    , sendMessage Expand)
+  , ("M-S-f"                  , increaseLimit)              -- Increase number of windows that can be shown
+  , ("M-S-b"                  , decreaseLimit)              -- Decrease number of windows that can be shown
   , ("M-'"                    , mySpawn "mediactl play-pause")
   , ("M-["                    , mySpawn "mediactl previous")
   , ("M-]"                    , mySpawn "mediactl next")
