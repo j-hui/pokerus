@@ -189,6 +189,8 @@ in
     (mkIf cfg.laptop.enable {
       networking.networkmanager.enable = true;
       hardware.bluetooth.enable = true;
+      hardware.logitech.wireless.enable = true;
+      hardware.logitech.wireless.enableGraphical = true;
       environment.systemPackages = with pkgs; [
         brightnessctl
       ];
