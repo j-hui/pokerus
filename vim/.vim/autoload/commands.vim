@@ -50,16 +50,16 @@ function commands#setup()
   " "Share" mode: get of relative line numbers, always show cursor {{{
   " Useful for screensharing
   let s:sharemode = 0
-  function! s:shareToggle()
-    if s:sharemode
-      set rnu nocursorline
-      let s:sharemode = 0
-    else
+  function! g:ShareSetMode(mode)
+    if a:mode
       set nornu cursorline
       let s:sharemode = 1
+    else
+      set rnu nocursorline
+      let s:sharemode = 0
     endif
   endfunction
-  command! Share call s:shareToggle()
+  command! Share if s:sharemode | call g:ShareSetMode(0) | else | call g:ShareSetMode(1) | endif
   " }}}
 
   " AutoFormat: format paragraph on each keystroke {{{
