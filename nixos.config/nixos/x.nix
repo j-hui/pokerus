@@ -173,12 +173,12 @@ in
           ''
             Identifier "My speedy mouse"
             MatchIsPointer "Yes"
-            Option "TransformationMatrix" "2.0 0 0 0 2.0 0 0 0 1"
+            Option "TransformationMatrix" "1.6 0 0 0 1.6 0 0 0 1"
           ''
           ''
             Identifier "My speedy touchpad"
             MatchIsTouchpad "Yes"
-            Option "TransformationMatrix" "4.0 0 0 0 4.0 0 0 0 1"
+            Option "TransformationMatrix" "2.0 0 0 0 2.0 0 0 0 1"
           ''
         ];
 
