@@ -62,6 +62,7 @@ ENC=enc
 HOST="charizard-x"
 MAIN_USER="j-hui"
 UEFI=1
+SWAP_SIZE=16GiB
 
 prog "Basic sanity checks for settings..." # {{{
 if [ $(id -u) -ne 0 ]; then
@@ -106,11 +107,11 @@ if [ "$UEFI" -eq 1 ]; then
     parted $DISK -- set 2 bios_grub on
 
     # Swap partition
-    parted $DISK -- mkpart primary linux-swap 1GiB 69GiB
+    parted $DISK -- mkpart primary linux-swap 1GiB "$SWAP_SIZE"
     SWAP_PART="${DISK}p3"
 
     # Encrypted partition
-    parted $DISK -- mkpart primary 69GiB 100%
+    parted $DISK -- mkpart primary "$SWAP_SIZE" 100%
     ENC_PART="${DISK}p4"
 
 else # BIOS (legacy) disk setup
@@ -320,7 +321,7 @@ in
   };
   boot.loader.efi.canTouchEfiVariables = true; # Don't include for BIOS boot
 
-  system.stateVersion = "20.09"; # Whatever this should be.
+  system.stateVersion = "21.05"; # Whatever this should be.
 
   #### BOOTSTRAP CONFIGS ####
 
@@ -330,10 +331,10 @@ in
 
   nixpkgs.config.allowUnfree = true;
   environment.systemPackages = with pkgs; [
-    wget vim parted cryptsetup gptfdisk btrfs-progs htop tree killall
+    wget vim neovim parted cryptsetup gptfdisk btrfs-progs htop tree killall
     fzf ag ripgrep fd bat diskus
     bind whois inetutils binutils-unwrapped pv wget curl unzip
-    pass gitAndTools.gh subversion mercurial git
+    pass git gitAndTools.gh subversion mercurial
     mkpasswd
   ];
 
@@ -360,11 +361,10 @@ in
     displayManager.startx.enable = true;
 
     # Have BSPWM available:
-    windowManager.bspwm.enable = true;
+    # windowManager.bspwm.enable = true;
 
-    # If needed, enable the KDE Desktop Environment:
-    # displayManager.sddm.enable = true;
-    # desktopManager.plasma5.enable = true;
+    # If needed, enable a Desktop Environment:
+    desktopManager.gnome.enable = true;
   };
 
   services.xserver.libinput.enable = true;
@@ -417,22 +417,14 @@ vim -O2 "$MOUNT"/etc/nixos/hardware-configuration.nix "$instructions"
 prog "Finished setting up $MOUNT/etc/nixos/hardware-configuration.nix."
 sleep 1 # }}}
 
-prog "Installing NixOS (nixos-install)..." # {{{
-sleep 3
+prog "Finished setup. To install NixOS, run:"  # {{{
+prog "    nixos-install --root '$MOUNT' --no-root-passwd"
+prog
+prog "Exiting script. Perform any manual modifications, and then install."
 
-nixos-install --root "$MOUNT" --no-root-passwd
+# nixos-install --root "$MOUNT" --no-root-passwd
 
-prog "Finished installing NixOS."
+# prog "Finished installing NixOS."
 sleep 1 # }}}
-
-prog "Backing up nixos configs to $MOUNT/persist/etc/..." # {{{
-prog "(This is to make darlings setup easier later on...)"
-sleep 1
-
-prog "Done."
-sleep 1 # }}}
-
-prog "All done."
-prog "Reboot and go from there. If setting up darlings, run ./nix-infect.sh."
 
 # vim: set ts=4 sw=0 tw=80 et foldmethod=marker:

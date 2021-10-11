@@ -9,7 +9,7 @@
 # I should be able to use this to build a live USB image with the following commands:
 #
 # nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix
-# dd if=./result/iso/nixos-20.03....-x86_64-linux.iso of=/dev/<usb device> bs=1M status=progress
+# dd if=./result/iso/nixos-....-x86_64-linux.iso of=/dev/<usb device> bs=1M status=progress
 
 { config, pkgs, ... }:
 {
@@ -24,12 +24,11 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
-    wget
-    vim neovim
-    git
-    tmux
-    gparted
-    nix-prefetch-scripts
+    wget vim neovim parted cryptsetup gptfdisk btrfs-progs htop tree killall
+    fzf ag ripgrep fd bat diskus
+    bind whois inetutils binutils-unwrapped pv wget curl unzip
+    pass git gitAndTools.gh subversion mercurial
+    mkpasswd
   ];
 
   environment.etc = {
