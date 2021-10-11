@@ -319,8 +319,11 @@ myWebapps = [ "https://mail.google.com/mail/u/0/"
             , "https://calendar.google.com/u/1/"
             ]
 
-promptWebapp :: X String
-promptWebapp = myDmenu "WebApp" myWebapps
+myScripts :: [String]
+myScripts = [ "kb-rate"
+            , "mon-preset auto"
+            , "mon-preset haunter-dock"
+            ]
 
 promptDesktop :: String -> X String
 promptDesktop prompt = do
@@ -406,7 +409,8 @@ myKeys =
   , ("M-S-d"                  , mySpawn "word-lookup")
   , ("M-o"                    , spawn "rofi-pass")
   , ("M-S-o"                  , spawn "thunar")
-  , ("M-e"                    , promptWebapp >>= spawn . myWebapp)
+  , ("M-e"                    , myDmenu "Apps" myWebapps >>= spawn . myWebapp)
+  , ("M-S-e"                  , myDmenu "Scripts" myScripts >>= spawn . myScript)
 
   -- Workspaces
   , ("M-/"                    , spawn "rofi -monitor -4 -show windowcd")
