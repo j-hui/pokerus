@@ -23,6 +23,7 @@
     d = diff
     dw = diff --word-diff
     dc = diff --cached
+    cp = cherry-pick
     root = rev-parse --show-toplevel
     conf = config --global -e
     hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
