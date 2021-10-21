@@ -75,6 +75,7 @@ set PATH ~/.ghcup/bin $PATH
 
 set PATH ~/.yarn/bin $PATH
 set PATH ~/.config/yarn/global/node_modules/.bin $PATH
+set PATH /snap/bin $PATH
 
 ## Export variables }}}
 
