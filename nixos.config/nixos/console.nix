@@ -222,8 +222,8 @@ in
       virtualisation.docker.enable = true;
 
       # For virtualbox
-      virtualisation.virtualbox.host.enable = true;
-      virtualisation.virtualbox.host.enableExtensionPack = true;
+      # virtualisation.virtualbox.host.enable = true;
+      # virtualisation.virtualbox.host.enableExtensionPack = true;
       # Also remember to add user to user-with-access-to-virtualbox group
 
       # For vagrant
