@@ -419,6 +419,60 @@ function s:PlugCoc()
   return []
 endfunction
 
+function s:PlugNvimLsp()
+  Plug 'neovim/nvim-lspconfig'
+  Plug 'nvim-lua/lsp_extensions.nvim'
+
+  " Plug 'glepnir/lspsaga.nvim'
+    " Interative UI for nvim-lsp
+
+  Plug 'gfanto/fzf-lsp.nvim'
+    " Use FZF as interactive picker
+  Plug 'josa42/nvim-lightline-lsp'
+    " Integrate with lightline
+    " Note that the more popular nvim-lua/lsp-status.nvim seems to provide more
+    " features, but there's also more configuration to be done.
+
+  Plug 'folke/trouble.nvim'
+    " Summarize diagnostics in document
+
+  Plug 'ray-x/lsp_signature.nvim'
+    " Type signature help pop-up
+
+  function s:SetupNvimLsp()
+    " lua require'lspsaga'.init_lsp_saga()
+    lua require('fzf_lsp').setup {}
+    call add(g:lightline['active']['right'], ['lsp_status'])
+    call lightline#lsp#register()
+    lua require("trouble").setup {}
+    lua require("lsp_signature").setup()
+  endfunction
+
+  return [function('s:SetupNvimLsp')]
+endfunction
+
+function s:PlugNvimCmp()
+  Plug 'hrsh7th/nvim-cmp'
+
+  " Sources
+  Plug 'hrsh7th/cmp-buffer'
+  Plug 'hrsh7th/cmp-nvim-lsp'
+  Plug 'hrsh7th/cmp-vsnip'
+  Plug 'f3fora/cmp-spell'
+
+  return []
+endfunction
+
+function s:PlugNvimVsnip()
+  Plug 'hrsh7th/vim-vsnip'
+  Plug 'hrsh7th/vim-vsnip-integ'
+
+  imap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+  smap <expr> <C-l> vsnip#available(2) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+  return []
+endfunction
+
+
 function s:StackLcn()
   let l:callbacks = []
   let l:callbacks += s:PlugLCN()
@@ -686,11 +740,114 @@ function s:StackALE()
   return l:callbacks
 endfunction
 
+function s:StackNvimLsp()
+  let l:callbacks = []
+
+  let g:which_key_map['l'] = { 'name': '+lsp' }
+
+  function s:SetupNvimLspStack()
+lua << EOF
+  local nvim_lsp = require 'lspconfig'
+  local cmp = require'cmp'
+
+  local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'hls', 'vimls', 'ocamllsp', 'rnix' }
+
+  local on_attach = function(_, bufnr)
+    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+    local opts = { noremap = true, silent = true }
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K',          '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lk', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>le', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ld', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>li', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lh', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>l=', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lj', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lr', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'v', '<leader>ca', '<cmd>lua vim.lsp.buf.range_code_action()<CR>', opts)
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>l/', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], opts)
+
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+
+    vim.cmd [[ command! Fmt execute 'lua vim.lsp.buf.formatting()' ]]
+  end
+
+  for _, lsp in ipairs(servers) do
+    nvim_lsp[lsp].setup {
+      on_attach = on_attach,
+      capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+    }
+  end
+
+  cmp.setup({
+    snippet = {
+      expand = function(args)
+        vim.fn["vsnip#anonymous"](args.body) -- vsnip
+      end,
+    },
+    mapping = {
+      ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+      ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+      ['<Down>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+      ['<Up>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+      ['<M-d>'] = cmp.mapping.scroll_docs(-4),
+      ['<M-u>'] = cmp.mapping.scroll_docs(4),
+      ['<C-x><C-x>'] = cmp.mapping.complete(), -- Force completion pop-up
+      ['<C-e>'] = cmp.mapping.close(),
+      ['<C-l>'] = cmp.mapping.confirm({
+        behavior = cmp.ConfirmBehavior.Replace,
+        select = true,
+      })
+    },
+    sources = {
+      { name = 'buffer' },
+      { name = 'nvim_lsp' },
+      { name = 'vsnip' },
+      { name = 'spell' },
+    }
+  })
+  vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+    require('lsp_extensions.workspace.diagnostic').handler, {
+      signs = {
+        severity_limit = "Error",
+      }
+    }
+  )
+  -- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  --  vim.lsp.diagnostic.on_publish_diagnostics, { signs = true, }
+  -- )
+EOF
+    set signcolumn=yes
+    sign define LspDiagnosticsSignError text=✖ texthl=LspDiagnosticsSignError
+    sign define LspDiagnosticsSignWarning text=‼' texthl=LspDiagnosticsSignWarning
+    sign define LspDiagnosticsSignInformation text=ℹ texthl=LspDiagnosticsSignInformation
+    sign define LspDiagnosticsSignHint text=» texthl=LspDiagnosticsSignHint
+
+    nnoremap <leader>li :lua require'lsp_extensions'.inlay_hints{ only_current_line = true }
+  endfunction
+
+  let l:callbacks += s:PlugNvimLsp()
+  let l:callbacks += s:PlugNvimCmp()
+  let l:callbacks += s:PlugNvimVsnip()
+  let l:callbacks += [function('s:SetupNvimLspStack')]
+  return l:callbacks
+endfunction
+
 function plugins#ide#setup()
   if !has('nvim')
     return []
   endif
-  return s:StackCoc()
+  return s:StackNvimLsp()
 endfunction
 
 " vim: set ts=2 sw=2 tw=80 et foldlevel=0 :
