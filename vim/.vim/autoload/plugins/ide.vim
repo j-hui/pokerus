@@ -329,6 +329,7 @@ function s:PlugNeoformat()
           \ 'args': ["-y=defaultIndent:\"  \""],
           \ 'stdin': 1,
           \}
+    let g:neoformat_enabled_haskell = [ 'stylish-haskell', 'brittany' ]
     nnoremap <leader>aq :Neoformat<CR>
     vnoremap <leader>aq :Neoformat<CR>
   return []
@@ -664,12 +665,17 @@ function s:StackCoc()
   xmap <leader>la  <Plug>(coc-codeaction-selected)
   " nmap <leader>la  <Plug>(coc-codeaction-selected)
 
-  nmap <leader>la  <Plug>(coc-codeaction)
+  " Code action for current cursor position
+  nmap <leader>la  <Plug>(coc-codeaction-cursor)
 
-  nmap <leader>lA <plug>(coc-codelens-action)
+  " Code action for whole file
+  nmap <leader>lA  <Plug>(coc-codeaction)
 
-  " Apply AutoFix to problem on the current line.
-  nmap <leader>lx  <Plug>(coc-fix-current)
+  " Perform codelens action for current line
+  nmap <leader>lx <plug>(coc-codelens-action)
+
+  " Apply first quickfix action to problem on the current line
+  nmap <leader>lX  <Plug>(coc-fix-current)
 
   " Do default action for next item.
   nnoremap <silent><nowait> <leader>l]  :<C-u>CocNext<CR>
