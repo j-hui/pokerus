@@ -439,6 +439,10 @@ function s:PlugNvimLsp()
   Plug 'ray-x/lsp_signature.nvim'
     " Type signature help pop-up
 
+  Plug 'kosayoda/nvim-lightbulb'
+    " Make code actions more visible
+
+
   function s:SetupNvimLsp()
     " lua require'lspsaga'.init_lsp_saga()
     lua require('fzf_lsp').setup {}
@@ -446,6 +450,7 @@ function s:PlugNvimLsp()
     call lightline#lsp#register()
     lua require("trouble").setup {}
     lua require("lsp_signature").setup()
+    autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
   endfunction
 
   return [function('s:SetupNvimLsp')]
