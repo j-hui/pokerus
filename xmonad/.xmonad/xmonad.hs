@@ -310,12 +310,12 @@ myProjects =
   where boringProject name = Project name "~/" Nothing
 
 myWebapps :: [String]
-myWebapps = [ "https://mail.google.com/mail/u/0/"
-            , "https://mail.google.com/mail/u/1/"
+myWebapps = [ "https://mail.google.com/mail/u/1/"
+            , "https://mail.google.com/mail/u/0/"
             , "https://messages.google.com/web/conversations"
             , "https://web.whatsapp.com"
             , "https://messenger.com"
-            , "https://keep.google.com"
+            , "https://keep.google.com/u/1"
             , "https://calendar.google.com/u/1/"
             ]
 
