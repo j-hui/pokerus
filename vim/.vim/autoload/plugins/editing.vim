@@ -2,6 +2,9 @@ function plugins#editing#setup()
   Plug 'tpope/vim-commentary'
   " use gcc to comment things out
 
+  Plug 'suy/vim-context-commentstring'
+  " comments for embedded syntax
+
   Plug 'tpope/vim-unimpaired'
   " ]* and [* mappings
 
