@@ -452,21 +452,65 @@ function s:PlugNvimLsp()
     lua require("trouble").setup {}
     lua require("lsp_signature").setup()
     autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
+    sign define LightBulbSign text=↯ texthl=SignColumn
   endfunction
 
   return [function('s:SetupNvimLsp')]
 endfunction
 
 function s:PlugNvimCmp()
+  let g:completion_tool = 'cmp'
   Plug 'hrsh7th/nvim-cmp'
+
+  Plug 'onsails/lspkind-nvim'
+  " Symbols for lsp kinds
 
   " Sources
   Plug 'hrsh7th/cmp-buffer'
+  Plug 'hrsh7th/cmp-path'
   Plug 'hrsh7th/cmp-nvim-lsp'
   Plug 'hrsh7th/cmp-vsnip'
+  Plug 'hrsh7th/cmp-omni'
+  Plug 'hrsh7th/cmp-path'
   Plug 'f3fora/cmp-spell'
 
-  return []
+  function s:SetupNvimCmp()
+lua << EOF
+  local cmp = require'cmp'
+  cmp.setup({
+    snippet = {
+      expand = function(args)
+        vim.fn["vsnip#anonymous"](args.body) -- vsnip
+      end,
+    },
+    mapping = {
+      ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+      ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+      ['<Down>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+      ['<Up>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+      ['<M-d>'] = cmp.mapping.scroll_docs(-4),
+      ['<M-u>'] = cmp.mapping.scroll_docs(4),
+      ['<C-x><C-x>'] = cmp.mapping.complete(), -- Force completion pop-up
+      ['<C-e>'] = cmp.mapping.close(),
+      ['<C-l>'] = cmp.mapping.confirm({
+        behavior = cmp.ConfirmBehavior.Replace,
+        select = true,
+      })
+    },
+    sources = {
+      { name = 'vsnip' },
+      { name = 'nvim_lsp' },
+      { name = 'buffer' },
+      { name = 'path' },
+      { name = 'spell' },
+    },
+    formatting = {
+      format = require'lspkind'.cmp_format({with_text = false, maxwidth = 50})
+    },
+  })
+EOF
+  endfunction
+  return [function('s:SetupNvimCmp')]
 endfunction
 
 function s:PlugNvimVsnip()
@@ -759,9 +803,17 @@ function s:StackNvimLsp()
   function s:SetupNvimLspStack()
 lua << EOF
   local nvim_lsp = require 'lspconfig'
-  local cmp = require'cmp'
 
-  local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'hls', 'vimls', 'ocamllsp', 'rnix' }
+  local servers = {
+    ['clangd'] = nil,
+    ['rust_analyzer'] = nil,
+    ['pyright'] = nil,
+    ['tsserver'] = nil,
+    ['hls'] = { haskell = { formattingProvider = 'brittany', } },
+    ['vimls'] = nil,
+    ['ocamllsp'] = nil,
+    ['rnix'] = nil,
+  }
 
   local on_attach = function(_, bufnr)
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -793,40 +845,14 @@ lua << EOF
     vim.cmd [[ command! Fmt execute 'lua vim.lsp.buf.formatting()' ]]
   end
 
-  for _, lsp in ipairs(servers) do
+  for lsp, settings in pairs(servers) do
     nvim_lsp[lsp].setup {
       on_attach = on_attach,
       capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+      settings = settings,
     }
   end
 
-  cmp.setup({
-    snippet = {
-      expand = function(args)
-        vim.fn["vsnip#anonymous"](args.body) -- vsnip
-      end,
-    },
-    mapping = {
-      ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-      ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
-      ['<Down>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
-      ['<Up>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
-      ['<M-d>'] = cmp.mapping.scroll_docs(-4),
-      ['<M-u>'] = cmp.mapping.scroll_docs(4),
-      ['<C-x><C-x>'] = cmp.mapping.complete(), -- Force completion pop-up
-      ['<C-e>'] = cmp.mapping.close(),
-      ['<C-l>'] = cmp.mapping.confirm({
-        behavior = cmp.ConfirmBehavior.Replace,
-        select = true,
-      })
-    },
-    sources = {
-      { name = 'buffer' },
-      { name = 'nvim_lsp' },
-      { name = 'vsnip' },
-      { name = 'spell' },
-    }
-  })
   vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
     require('lsp_extensions.workspace.diagnostic').handler, {
       signs = {
@@ -840,7 +866,7 @@ lua << EOF
 EOF
     set signcolumn=yes
     sign define LspDiagnosticsSignError text=✖ texthl=LspDiagnosticsSignError
-    sign define LspDiagnosticsSignWarning text=‼' texthl=LspDiagnosticsSignWarning
+    sign define LspDiagnosticsSignWarning text=‼ texthl=LspDiagnosticsSignWarning
     sign define LspDiagnosticsSignInformation text=ℹ texthl=LspDiagnosticsSignInformation
     sign define LspDiagnosticsSignHint text=» texthl=LspDiagnosticsSignHint
 
