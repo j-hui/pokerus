@@ -75,8 +75,8 @@ function s:navigationMaps()
   " inoremap   <C-X><C-A> <C-A>
   inoremap <C-A> <C-O>^
 
-  inoremap    <C-n> <down>
-  inoremap    <C-p> <up>
+  inoremap    <C-n> <C-o>gj
+  inoremap    <C-p> <C-o>gk
 
   nnoremap <silent> = :let @/='\<'.expand('<cword>').'\>'<bar>set hlsearch<CR>
 
