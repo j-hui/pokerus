@@ -1,10 +1,36 @@
+function s:StackWhichKey()
+  Plug 'liuchengxu/vim-which-key'
+    let g:which_key_display_names = {
+          \ '<CR>': '↵',
+          \ '<TAB>': '⇆',
+          \ '<BS>': '⌫',
+          \ '<Space>': '␣',
+          \}
 
-function plugins#subsystems#setup()
+    nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 
-  Plug 'mbbill/undotree'
-  " See undo history
-    nnoremap <C-w>u :UndotreeToggle<cr>:UndotreeFocus<cr>
+    function s:WhichKeyHooks()
+      call which_key#register('<Space>', "g:which_key_map")
+    endfunction
 
+    " Defined for s:leaderMaps
+    let g:which_key_map['b'] = { 'name': '+buffer-window' }
+    let g:which_key_map['b']['n'] = 'buffer-next'
+    let g:which_key_map['b']['p'] = 'buffer-previous'
+    let g:which_key_map['b']['w'] = 'buffer-wipe'
+    let g:which_key_map['b']['q'] = 'window-quit'
+    let g:which_key_map['b']['j'] = 'window-down'
+    let g:which_key_map['b']['k'] = 'window-up'
+    let g:which_key_map['b']['h'] = 'window-left'
+    let g:which_key_map['b']['l'] = 'window-right'
+    let g:which_key_map['b']['s'] = 'window-horizontal-split'
+    let g:which_key_map['b']['v'] = 'window-vertical-split'
+    let g:which_key_map['b']['c'] = 'buffer-close-lists'
+
+  return [function('s:WhichKeyHooks')]
+endfunction
+
+function s:StackFzf()
   Plug 'junegunn/fzf.vim'
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   " Fuzzy finder
@@ -130,16 +156,14 @@ function plugins#subsystems#setup()
   Plug 'https://gitlab.com/mcepl/vim-fzfspell.git'
   " FZF for z=
 
-  Plug 'junegunn/vim-peekaboo'
-  " See yank registers
+  return []
+endfunction
 
+function s:StackGit()
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-rhubarb'
   " Git interaction
     let g:which_key_map['g'] = { 'name': '+git' }
-
-    nmap <leader>gg :GFiles<CR>
-    let g:which_key_map['g']['e'] = 'git-fzf-files'
 
     nnoremap <leader>gd :Gdiffsplit<CR>
     let g:which_key_map['g']['d'] = 'git-diff-split'
@@ -162,8 +186,12 @@ function plugins#subsystems#setup()
     " Browse commits with fzf
     nmap <leader>g. :BCommits<CR>
     let g:which_key_map['g']['.'] = 'git-fzf-buffer-log'
+
     nmap <leader>gl :Commits<CR>
     let g:which_key_map['g']['l'] = 'git-fzf-log'
+
+    nmap <leader>gg :GFiles<CR>
+    let g:which_key_map['g']['g'] = 'git-fzf-files'
 
   Plug 'rbong/vim-flog'
   " Git log
@@ -180,6 +208,24 @@ function plugins#subsystems#setup()
     let g:git_messenger_no_default_mappings = v:true
     nmap <leader>gb <Plug>(git-messenger)
     let g:which_key_map['g']['b'] = 'git-blame'
+  return []
+endfunction
+
+function s:StackMiscSubsystems()
+  let l:callbacks = []
+
+  Plug 'mbbill/undotree'
+  " See undo history
+    nnoremap <leader>u :UndotreeToggle<cr>:UndotreeFocus<cr>
+    let g:which_key_map['u'] = 'undotree-toggle'
+
+  if has('nvim-0.4')
+    Plug 'tversteeg/registers.nvim', { 'branch': 'main' }
+    " See yank registers like completion pop-up
+  else
+    Plug 'junegunn/vim-peekaboo'
+    " See yank registers
+  endif
 
   Plug 'preservim/tagbar'
   " Outline by tags
@@ -190,33 +236,40 @@ function plugins#subsystems#setup()
   Plug 'itchyny/calendar.vim'
   " Calendar app in Vim
 
-  Plug 'liuchengxu/vim-which-key'
-    let g:which_key_display_names = {
-          \ '<CR>': '↵',
-          \ '<TAB>': '⇆',
-          \ '<BS>': '⌫',
-          \ '<Space>': '␣',
-          \}
+  Plug 'kassio/neoterm'
+  " Send commands to terminal
+    let g:neoterm_default_mod = 'botright' " Open new terminal in split window
 
-    nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+    let g:which_key_map['g'] = { 'name': '+git' }
 
-    function s:WhichKeyHooks()
-      call which_key#register('<Space>', "g:which_key_map")
-    endfunction
+    nmap <leader>; :T<space>
+    let g:which_key_map[';'] = 'neoterm-cmd'
+    nmap <leader>t :Ttoggle<CR>
+    let g:which_key_map['t'] = 'neoterm-toggle'
 
-    " Defined for s:leaderMaps
-    let g:which_key_map['b'] = { 'name': '+buffer-window' }
-    let g:which_key_map['b']['n'] = 'buffer-next'
-    let g:which_key_map['b']['p'] = 'buffer-previous'
-    let g:which_key_map['b']['w'] = 'buffer-wipe'
-    let g:which_key_map['b']['q'] = 'window-quit'
-    let g:which_key_map['b']['j'] = 'window-down'
-    let g:which_key_map['b']['k'] = 'window-up'
-    let g:which_key_map['b']['h'] = 'window-left'
-    let g:which_key_map['b']['l'] = 'window-right'
-    let g:which_key_map['b']['s'] = 'window-horizontal-split'
-    let g:which_key_map['b']['v'] = 'window-vertical-split'
-    let g:which_key_map['b']['c'] = 'buffer-close-lists'
+    nmap g; <Plug>(neoterm-repl-send)
+    xmap g; <Plug>(neoterm-repl-send)
+    nmap g;; <Plug>(neoterm-repl-send-line)
 
-  return [function('s:WhichKeyHooks')]
+  if has('nvim-0.5')
+    Plug 'chentau/marks.nvim'
+    " Show marks in sign column
+
+      function s:SetupMarksNvim()
+        lua require'marks'.setup {}
+      endfunction
+
+      let l:callbacks += [function('s:SetupMarksNvim')]
+  endif
+
+  return l:callbacks
+endfunction
+
+function plugins#subsystems#setup()
+  let l:callbacks = []
+  let l:callbacks += s:StackWhichKey()
+  let l:callbacks += s:StackFzf()
+  let l:callbacks += s:StackGit()
+  let l:callbacks += s:StackMiscSubsystems()
+  return l:callbacks
 endfunction
