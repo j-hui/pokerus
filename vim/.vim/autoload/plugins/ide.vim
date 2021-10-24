@@ -522,6 +522,31 @@ function s:PlugNvimVsnip()
   return []
 endfunction
 
+function s:PlugNvimCoq()
+  Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
+  " To set this up the first time, run :COQdeps
+
+  Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
+  " snippets
+
+  Plug 'ms-jpq/coq.thirdparty', {'branch': '3p'}
+  " random collection of extra sources
+
+  let g:coq_settings = {}
+  let g:coq_settings['auto_start'] = v:true
+  let g:coq_settings['display.pum.fast_close'] = v:false " Avoid flicker
+  let g:coq_settings['keymap.bigger_preview'] = '<c-j>'
+  let g:coq_settings['keymap.recommended'] = v:false
+  let g:coq_settings['keymap.jump_to_mark'] = '<c-l>'
+  " let g:coq_settings['keymap.manual_trigger'] = ''
+
+  inoremap <silent><expr> <Esc>   pumvisible() ? "\<C-e><Esc>" : "\<Esc>"
+  inoremap <silent><expr> <C-c>   pumvisible() ? "\<C-e><C-c>" : "\<C-c>"
+  inoremap <silent><expr> <BS>    pumvisible() ? "\<C-e><BS>"  : "\<BS>"
+  " inoremap <silent><expr> <CR>    pumvisible() ? (complete_info().selected == -1 ? "\<C-e><CR>" : "\<C-y>") : "\<CR>"
+
+  return []
+endfunction
 
 function s:StackLcn()
   let l:callbacks = []
@@ -846,11 +871,25 @@ lua << EOF
   end
 
   for lsp, settings in pairs(servers) do
-    nvim_lsp[lsp].setup {
-      on_attach = on_attach,
-      capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
-      settings = settings,
-    }
+    if vim.g.completion_tool == 'cmp' then
+      nvim_lsp[lsp].setup {
+        on_attach = on_attach,
+        capabilities = require'cmp_nvim_lsp'.update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+        settings = settings,
+      }
+    elseif vim.g.completion_tool == 'coq' then
+      nvim_lsp[lsp].setup (
+        require'coq'.lsp_ensure_capabilities {
+          on_attach = on_attach,
+          settings = settings,
+        }
+      )
+    else
+      nvim_lsp[lsp].setup {
+        on_attach = on_attach,
+        settings = settings,
+      }
+    end
   end
 
   vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
@@ -874,8 +913,9 @@ EOF
   endfunction
 
   let l:callbacks += s:PlugNvimLsp()
-  let l:callbacks += s:PlugNvimCmp()
-  let l:callbacks += s:PlugNvimVsnip()
+  " let l:callbacks += s:PlugNvimCmp()
+  " let l:callbacks += s:PlugNvimVsnip()
+  let l:callbacks += s:PlugNvimCoq()
   let l:callbacks += [function('s:SetupNvimLspStack')]
   return l:callbacks
 endfunction
