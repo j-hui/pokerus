@@ -923,8 +923,11 @@ endfunction
 function plugins#ide#setup()
   if !has('nvim')
     return []
+  elseif has('nvim-0.5')
+    return s:StackNvimLsp()
+  else
+    return s:StackLcn()
   endif
-  return s:StackNvimLsp()
 endfunction
 
 " vim: set ts=2 sw=2 tw=80 et foldlevel=0 :
