@@ -213,6 +213,10 @@ function s:leaderMaps()
   nnoremap <leader>bv <C-w>v
 endfunction
 
+function s:termMaps()
+  tnoremap <C-]> <C-\><C-N>
+endfunction
+
 function keybinds#setup()
 
   " Disable ex mode
@@ -224,6 +228,7 @@ function keybinds#setup()
   call s:editingMaps()
   call s:commandMaps()
   call s:leaderMaps()
+  call s:termMaps()
 
 endfunction
 
