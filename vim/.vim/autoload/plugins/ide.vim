@@ -1,5 +1,34 @@
 scriptencoding utf-8
 
+function s:LspWhichKey()
+  let g:which_key_map['l'] = { 'name': '+lsp' }
+  let g:which_key_map['l']['k'] = 'lsp-hover'
+  let g:which_key_map['l']['j'] = 'lsp-show-diagnostic'
+
+  let g:which_key_map['l']['d'] = 'lsp-goto-definition'
+  let g:which_key_map['l']['e'] = 'lsp-goto-declaration'
+  let g:which_key_map['l']['i'] = 'lsp-goto-implementation'
+  let g:which_key_map['l']['t'] = 'lsp-goto-type-definition'
+  let g:which_key_map['l']['='] = 'lsp-references'
+
+  let g:which_key_map['l']['a'] = 'lsp-code-action'
+  let g:which_key_map['l']['x'] = 'lsp-lens-code-action'
+  let g:which_key_map['l']['r'] = 'lsp-rename'
+
+  let g:which_key_map['l']['s'] = 'lsp-symbols'
+  let g:which_key_map['l']['o'] = 'lsp-outline'
+
+  let g:which_key_map['l']['-'] = 'lsp-close-preview'
+
+  " [d and ]d go to previous and next diagnostic
+  "
+  " <C-l> to jump around snippets
+  "
+  " <C-x><C-x> to force trigger completion
+  "
+  " :Fmt to format
+endfunction
+
 function s:PlugNcm2()
   let g:completion_tool = 'ncm2'
   Plug 'ncm2/ncm2' | Plug 'roxma/nvim-yarp'
@@ -344,9 +373,9 @@ endfunction
 function s:PlugUltisnips()
   Plug 'SirVer/ultisnips'
   " Snippet management
-    let g:UltiSnipsExpandTrigger='<M-n>'
-    let g:UltiSnipsJumpForwardTrigger='<M-n>'
-    let g:UltiSnipsJumpBackwardTrigger='<M-p>'
+    let g:UltiSnipsExpandTrigger='<C-l>'
+    let g:UltiSnipsJumpForwardTrigger='<C-l>'
+    let g:UltiSnipsJumpBackwardTrigger='<M-l>'
   return []
 endfunction
 
@@ -424,9 +453,6 @@ function s:PlugNvimLsp()
   Plug 'neovim/nvim-lspconfig'
   Plug 'nvim-lua/lsp_extensions.nvim'
 
-  " Plug 'glepnir/lspsaga.nvim'
-    " Interative UI for nvim-lsp
-
   Plug 'gfanto/fzf-lsp.nvim'
     " Use FZF as interactive picker
   Plug 'josa42/nvim-lightline-lsp'
@@ -443,9 +469,10 @@ function s:PlugNvimLsp()
   Plug 'kosayoda/nvim-lightbulb'
     " Make code actions more visible
 
+  Plug 'weilbith/nvim-code-action-menu'
+    " Better code action menu, no setup required
 
   function s:SetupNvimLsp()
-    " lua require'lspsaga'.init_lsp_saga()
     lua require('fzf_lsp').setup {}
     call add(g:lightline['active']['right'], ['lsp_status'])
     call lightline#lsp#register()
@@ -523,6 +550,8 @@ function s:PlugNvimVsnip()
 endfunction
 
 function s:PlugNvimCoq()
+  let g:completion_tool = 'coq'
+
   Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
   " To set this up the first time, run :COQdeps
 
@@ -535,15 +564,18 @@ function s:PlugNvimCoq()
   let g:coq_settings = {}
   let g:coq_settings['auto_start'] = v:true
   let g:coq_settings['display.pum.fast_close'] = v:false " Avoid flicker
+  let g:coq_settings['display.icons.mode'] = 'none'
   let g:coq_settings['keymap.bigger_preview'] = '<c-j>'
   let g:coq_settings['keymap.recommended'] = v:false
   let g:coq_settings['keymap.jump_to_mark'] = '<c-l>'
   " let g:coq_settings['keymap.manual_trigger'] = ''
 
+  let g:coq_settings['clients.lsp.weight_adjust'] = 1.5
+
   inoremap <silent><expr> <Esc>   pumvisible() ? "\<C-e><Esc>" : "\<Esc>"
   inoremap <silent><expr> <C-c>   pumvisible() ? "\<C-e><C-c>" : "\<C-c>"
   inoremap <silent><expr> <BS>    pumvisible() ? "\<C-e><BS>"  : "\<BS>"
-  " inoremap <silent><expr> <CR>    pumvisible() ? (complete_info().selected == -1 ? "\<C-e><CR>" : "\<C-y>") : "\<CR>"
+  inoremap <silent><expr> <CR>    pumvisible() ? (complete_info().selected == -1 ? "\<C-e><CR>" : "\<C-y>") : "\<CR>"
 
   return []
 endfunction
@@ -569,9 +601,8 @@ function s:StackLcn()
       let g:vista_executive_for[l:ft] = 'lcn'
     endfor
 
-  let g:which_key_map['l'] = { 'name': '+lsp' }
-
   function s:LC_keybinds()
+    call s:LspWhichKey()
     inoremap <C-x>x     <c-r>=ncm2#force_trigger()<cr>
     inoremap <C-x><C-x> <c-r>=ncm2#force_trigger()<cr>
 
@@ -590,17 +621,16 @@ function s:StackLcn()
       nmap <buffer> <silent> ]d <Plug>(lcn-diagnostics-next)
       nmap <buffer> <silent> [d <Plug>(lcn-diagnostics-prev)
 
-      nmap <buffer> <silent> <leader>ll <Plug>(lcn-menu)
       nmap <buffer> <silent> <leader>ld <Plug>(lcn-definition)
       nmap <buffer> <silent> <leader>lt <Plug>(lcn-type-definition)
       nmap <buffer> <silent> <leader>li <Plug>(lcn-implementation)
-
-      nmap <buffer> <silent> <leader>l* <Plug>(lcn-references)
-      nmap <buffer> <silent> <leader>lr <Plug>(lcn-rename)
-      nmap <buffer> <silent> <leader>l/ <Plug>(lcn-symbols)
+      nmap <buffer> <silent> <leader>l= <Plug>(lcn-references)
 
       nmap <buffer> <silent> <leader>la <Plug>(lcn-code-action)
-      nmap <buffer> <silent> <leader>lA <Plug>(lcn-code-lens-action)
+      nmap <buffer> <silent> <leader>lx <Plug>(lcn-code-lens-action)
+      nmap <buffer> <silent> <leader>lr <Plug>(lcn-rename)
+
+      nmap <buffer> <silent> <leader>ls <Plug>(lcn-symbols)
 
       command! LC call LanguageClient_contextMenu()
       command! Fmt call LanguageClient#textDocument_formatting()
@@ -643,43 +673,44 @@ function s:StackVimLsp()
       endfor
     endfor
 
-  let g:which_key_map['l'] = { 'name': '+lsp' }
   let g:which_key_map['a'] = { 'name': '+ale' }
     nmap <silent> [a          <Plug>(ale_previous_wrap)
     nmap <silent> ]a          <Plug>(ale_next_wrap)
     nmap <silent> <leader>ax  <Plug>(ale_fix)
 
   function s:VimLspMappings()
+    call s:LspWhichKey()
     nmap <silent> <leader>l<space> <Plug>(lsp-hover)
     nmap <silent> <leader>lk <Plug>(lsp-hover)
 
-    nmap <silent> <leader>lr <Plug>(lsp-references)
-    nmap <silent> <leader>lR <Plug>(lsp-rename)
+    " prefix of p means 'peek'
+    nmap <silent> <leader>ld  <Plug>(lsp-definition)
+    nmap <silent> <leader>lpd <Plug>(lsp-peek-definition)
+    nmap <silent> <leader>le  <Plug>(lsp-declaration)
+    nmap <silent> <leader>lpe <Plug>(lsp-peek-declaration)
+    nmap <silent> <leader>li  <Plug>(lsp-implementation)
+    nmap <silent> <leader>lpi <Plug>(lsp-peek-implementation)
+    nmap <silent> <leader>lt  <Plug>(lsp-type-definition)
+    nmap <silent> <leader>lpt <Plug>(lsp-peek-type-definition)
+    nmap <silent> <leader>l=  <Plug>(lsp-references)
+
     nmap <silent> <leader>la <Plug>(lsp-code-action)
-    nmap <silent> <leader>lA <Plug>(lsp-code-lens)
+    nmap <silent> <leader>lx <Plug>(lsp-code-lens)
+    nmap <silent> <leader>lr <Plug>(lsp-rename)
 
     nmap <silent> <leader>l/ <Plug>(lsp-document-symbol-search)
     nmap <silent> <leader>l? <Plug>(lsp-document-symbol)
     nmap <silent> <leader>ls <Plug>(lsp-workspace-symbol-search)
     nmap <silent> <leader>lS <Plug>(lsp-workspace-symbol)
 
-    nmap <silent> <leader>lq <Plug>(lsp-document-format)
+    nmap <silent> <leader>l<space>  <Plug>(lsp-preview-focus)
+    nmap <silent> <leader>l-        <Plug>(lsp-preview-close)
 
-    nmap <silent> <leader>ld <Plug>(lsp-definition)
-    nmap <silent> <leader>lD <Plug>(lsp-peek-definition)
-    nmap <silent> <leader>li <Plug>(lsp-implementation)
-    nmap <silent> <leader>lI <Plug>(lsp-peek-implementation)
-    nmap <silent> <leader>lt <Plug>(lsp-type-definition)
-    nmap <silent> <leader>lT <Plug>(lsp-peek-type-definition)
     nmap <silent> <leader>lh <Plug>(lsp-signature-help)
     nmap <silent> <leader>lH <Plug>(lsp-type-hierarchy)
-    nmap <silent> <leader>le <Plug>(lsp-declaration)
-    nmap <silent> <leader>lE <Plug>(lsp-peek-declaration)
-    nmap <silent> <leader>lw <Plug>(lsp-preview-focus)
-    nmap <silent> <leader>lW <Plug>(lsp-preview-close)
-
     nmap <silent> <leader>lc <Plug>(lsp-call-hierarchy-incoming)
     nmap <silent> <leader>lC <Plug>(lsp-call-hierarchy-outgoing)
+
     command! Fmt LspDocumentFormat
   endfunction
 
@@ -709,64 +740,46 @@ function s:StackCoc()
 
   inoremap <silent><expr> <c-x><c-x> coc#refresh()
 
-  let g:which_key_map['l'] = { 'name': '+lsp' }
+  call s:LspWhichKey()
 
-  nmap <silent> [d <Plug>(coc-diagnostic-prev)
-  nmap <silent> ]d <Plug>(coc-diagnostic-next)
+  nmap <silent> [d    <Plug>(coc-diagnostic-prev)
+  nmap <silent> ]d    <Plug>(coc-diagnostic-next)
+  imap <silent> <C-l> <Plug>(coc-snippets-expand-jump)
 
   nmap <silent> <leader>ld <Plug>(coc-definition)
-  nmap <silent> <leader>lD <Plug>(coc-declaration)
-  nmap <silent> <leader>lt <Plug>(coc-type-definition)
+  nmap <silent> <leader>le <Plug>(coc-declaration)
   nmap <silent> <leader>li <Plug>(coc-implementation)
+  nmap <silent> <leader>lt <Plug>(coc-type-definition)
   nmap <silent> <leader>l= <Plug>(coc-references)
 
   nnoremap <silent> <leader>lk :call <SID>CocDoc()<CR>
   nnoremap <silent> K :call <SID>CocDoc()<CR>
 
-  nmap <leader>lr <Plug>(coc-rename)
-  nmap <leader>lR <Plug>(coc-refactor)
-
   " Formatting selected code.
   xmap <leader>lq  <Plug>(coc-format-selected)
   nmap <leader>lq  <Plug>(coc-format-selected)
 
-  " Applying codeAction to the selected region.
-  xmap <leader>la  <Plug>(coc-codeaction-selected)
-  " nmap <leader>la  <Plug>(coc-codeaction-selected)
-
-  " Code action for current cursor position
-  nmap <leader>la  <Plug>(coc-codeaction-cursor)
-
-  " Code action for whole file
-  nmap <leader>lA  <Plug>(coc-codeaction)
-
-  " Perform codelens action for current line
+  xmap <leader>la <Plug>(coc-codeaction-selected)
+  nmap <leader>la <Plug>(coc-codeaction-cursor)
   nmap <leader>lx <plug>(coc-codelens-action)
+  nmap <leader>lr <Plug>(coc-rename)
 
-  " Apply first quickfix action to problem on the current line
-  nmap <leader>lX  <Plug>(coc-fix-current)
+  " Search workspace symbols.
+  nnoremap <silent><nowait> <leader>ls  :<C-u>CocFzfList symbols<cr>
+  " Find symbol of current document.
+  nnoremap <silent><nowait> <leader>lo  :<C-u>CocFzfList outline<cr>
 
-  " Do default action for next item.
-  nnoremap <silent><nowait> <leader>l]  :<C-u>CocNext<CR>
-  " Do default action for previous item.
-  nnoremap <silent><nowait> <leader>l[  :<C-u>CocPrev<CR>
-
+  " Show commands.
+  nnoremap <silent><nowait> <leader>l;  :<C-u>CocFzfList commands<cr>
   " Show all diagnostics.
   nnoremap <silent><nowait> <leader>lg  :<C-u>CocFzfList diagnostics<cr>
-  " Show commands.
-  nnoremap <silent><nowait> <leader>ll  :<C-u>CocFzfList commands<cr>
-  " Find symbol of current document.
-  nnoremap <silent><nowait> <leader>l.  :<C-u>CocFzfList outline<cr>
-  " Search workspace symbols.
-  nnoremap <silent><nowait> <leader>l/  :<C-u>CocFzfList symbols<cr>
   " Resume latest coc list.
-  nnoremap <silent><nowait> <leader>lL  :<C-u>CocFzfListResume<CR>
+  nnoremap <silent><nowait> <leader>ll  :<C-u>CocFzfListResume<CR>
+
   " Yank list
   nnoremap <silent> <leader>ly  :<C-u>CocFzfList yank<cr>
   " Close all pop-ups
   nnoremap <silent><nowait> <leader>lz :call coc#float#close_all(1)
-
-  imap <C-s> <Plug>(coc-snippets-expand-jump)
 
   command! -nargs=0 Fmt  :call CocAction('format')
   command! -nargs=0 Import :call CocAction('runCommand', 'editor.action.organizeImport')
@@ -791,7 +804,6 @@ function s:StackALE()
   let l:callbacks += s:PlugUltisnips()
 
   let g:which_key_map['a'] = { 'name': '+ale' }
-
   nmap <silent> [a          <Plug>(ale_previous_wrap)
   nmap <silent> ]a          <Plug>(ale_next_wrap)
 
@@ -823,21 +835,20 @@ endfunction
 function s:StackNvimLsp()
   let l:callbacks = []
 
-  let g:which_key_map['l'] = { 'name': '+lsp' }
-
   function s:SetupNvimLspStack()
+    call s:LspWhichKey()
 lua << EOF
   local nvim_lsp = require 'lspconfig'
 
   local servers = {
-    ['clangd'] = nil,
-    ['rust_analyzer'] = nil,
-    ['pyright'] = nil,
-    ['tsserver'] = nil,
+    ['clangd'] = {},
+    ['rust_analyzer'] = {},
+    ['pyright'] = {},
+    ['tsserver'] = {},
     ['hls'] = { haskell = { formattingProvider = 'brittany', } },
-    ['vimls'] = nil,
-    ['ocamllsp'] = nil,
-    ['rnix'] = nil,
+    ['vimls'] = {},
+    ['ocamllsp'] = {},
+    ['rnix'] = {},
   }
 
   local on_attach = function(_, bufnr)
@@ -846,31 +857,37 @@ lua << EOF
     local opts = { noremap = true, silent = true }
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K',          '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lk', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>le', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lj', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ld', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>le', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>li', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lh', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>l=', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lj', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>la', '<cmd>CodeActionMenu<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'v', '<leader>lx', '<cmd>lua vim.lsp.buf.range_code_action()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lr', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
 
-    -- vim.api.nvim_buf_set_keymap(bufnr, 'v', '<leader>ca', '<cmd>lua vim.lsp.buf.range_code_action()<CR>', opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>l/', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], opts)
 
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
 
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
 
     vim.cmd [[ command! Fmt execute 'lua vim.lsp.buf.formatting()' ]]
   end
 
   for lsp, settings in pairs(servers) do
+    -- local settings = {}
+    -- if next(s) then
+    --   settings = s
+    -- end
+
     if vim.g.completion_tool == 'cmp' then
       nvim_lsp[lsp].setup {
         on_attach = on_attach,
@@ -899,9 +916,6 @@ lua << EOF
       }
     }
   )
-  -- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  --  vim.lsp.diagnostic.on_publish_diagnostics, { signs = true, }
-  -- )
 EOF
     set signcolumn=yes
     sign define LspDiagnosticsSignError text=✖ texthl=LspDiagnosticsSignError
