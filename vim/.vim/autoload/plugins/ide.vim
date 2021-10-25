@@ -15,8 +15,12 @@ function s:LspWhichKey()
   let g:which_key_map['l']['x'] = 'lsp-lens-code-action'
   let g:which_key_map['l']['r'] = 'lsp-rename'
 
-  let g:which_key_map['l']['s'] = 'lsp-symbols'
+  let g:which_key_map['l']['s'] = 'lsp-document-symbols'
+  let g:which_key_map['l']['/'] = 'lsp-workspace-symbols'
   let g:which_key_map['l']['o'] = 'lsp-outline'
+
+  let g:which_key_map['l']['.'] = 'lsp-document-diagnostics'
+  let g:which_key_map['l'][','] = 'lsp-workspace-diagnostics'
 
   let g:which_key_map['l']['-'] = 'lsp-close-preview'
 
@@ -455,6 +459,7 @@ function s:PlugNvimLsp()
 
   Plug 'gfanto/fzf-lsp.nvim'
     " Use FZF as interactive picker
+
   Plug 'josa42/nvim-lightline-lsp'
     " Integrate with lightline
     " Note that the more popular nvim-lua/lsp-status.nvim seems to provide more
@@ -472,12 +477,16 @@ function s:PlugNvimLsp()
   Plug 'weilbith/nvim-code-action-menu'
     " Better code action menu, no setup required
 
+  Plug 'stevearc/aerial.nvim'
+    " Code outline viewer
+
   function s:SetupNvimLsp()
-    lua require('fzf_lsp').setup {}
-    call add(g:lightline['active']['right'], ['lsp_status'])
+    lua require'fzf_lsp'.setup {}
+    call add(g:lightline['active']['right'], ['lsp_info', 'lsp_hints', 'lsp_errors', 'lsp_warnings', 'lsp_ok'])
+    call add(g:lightline['active']['right'], ['lsp_clients', 'lsp_status'])
     call lightline#lsp#register()
-    lua require("trouble").setup {}
-    lua require("lsp_signature").setup()
+    lua require'trouble'.setup {}
+    lua require'lsp_signature'.setup()
     autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
     sign define LightBulbSign text=↯ texthl=SignColumn
   endfunction
@@ -696,10 +705,8 @@ function s:StackVimLsp()
     nmap <silent> <leader>lx <Plug>(lsp-code-lens)
     nmap <silent> <leader>lr <Plug>(lsp-rename)
 
-    nmap <silent> <leader>l/ <Plug>(lsp-document-symbol-search)
-    nmap <silent> <leader>l? <Plug>(lsp-document-symbol)
-    nmap <silent> <leader>ls <Plug>(lsp-workspace-symbol-search)
-    nmap <silent> <leader>lS <Plug>(lsp-workspace-symbol)
+    nmap <silent> <leader>ls <Plug>(lsp-document-symbol)
+    nmap <silent> <leader>l/ <Plug>(lsp-workspace-symbol-search)
 
     nmap <silent> <leader>l<space>  <Plug>(lsp-preview-focus)
     nmap <silent> <leader>l-        <Plug>(lsp-preview-close)
@@ -770,7 +777,7 @@ function s:StackCoc()
   " Show commands.
   nnoremap <silent><nowait> <leader>l;  :<C-u>CocFzfList commands<cr>
   " Show all diagnostics.
-  nnoremap <silent><nowait> <leader>lg  :<C-u>CocFzfList diagnostics<cr>
+  nnoremap <silent><nowait> <leader>l.  :<C-u>CocFzfList diagnostics<cr>
   " Resume latest coc list.
   nnoremap <silent><nowait> <leader>ll  :<C-u>CocFzfListResume<CR>
 
@@ -849,7 +856,7 @@ lua << EOF
     ['rnix'] = {},
   }
 
-  local on_attach = function(_, bufnr)
+  local on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
     local opts = { noremap = true, silent = true }
@@ -868,9 +875,11 @@ lua << EOF
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lx', '<cmd>lua vim.lsp.codelens.run()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lr', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
 
-    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
-    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>l/', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ls', '<cmd>DocumentSymbols<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>l/', '<cmd>WorkspaceSymbols<CR>', opts)
 
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>l.', '<cmd>TroubleToggle lsp_document_diagnostics<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>l,', '<cmd>TroubleToggle lsp_workspace_diagnostics<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
 
@@ -878,9 +887,18 @@ lua << EOF
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
 
-    vim.cmd [[autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
+    vim.cmd [[autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]] -- NOTE causes weird issue sometimes but that can be ignored
     vim.cmd [[autocmd CursorHold,CursorHoldI <buffer> lua require'lsp_extensions'.inlay_hints{ only_current_line = true }]]
     vim.cmd [[command! Fmt execute 'lua vim.lsp.buf.formatting()']]
+
+    require'aerial'.on_attach(client)
+
+    vim.api.nvim_buf_set_keymap(0, 'n', '<leader>lo', '<cmd>AerialToggle!<CR>', {})
+    vim.api.nvim_buf_set_keymap(0, 'n', '[a', '<cmd>AerialPrev<CR>', {})
+    vim.api.nvim_buf_set_keymap(0, 'n', ']a', '<cmd>AerialNext<CR>', {})
+    vim.api.nvim_buf_set_keymap(0, 'n', '[[', '<cmd>AerialPrevUp<CR>', {})
+    vim.api.nvim_buf_set_keymap(0, 'n', ']]', '<cmd>AerialNextUp<CR>', {})
+
   end
 
   for lsp, settings in pairs(servers) do
