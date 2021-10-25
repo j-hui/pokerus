@@ -35,7 +35,14 @@ function s:PlugDirvish()
     augroup dirvish_mappings
       autocmd FileType dirvish call s:ConfigDirvish()
     augroup END
+  return []
+endfunction
 
+function s:PlugChadtree()
+  Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
+  let g:chadtree_settings = {}
+  let g:chadtree_settings['theme.icon_glyph_set'] = 'ascii'
+  nnoremap <leader>- :CHADopen<CR>
   return []
 endfunction
 
@@ -61,6 +68,9 @@ function plugins#files#setup()
   Plug 'lervag/file-line'             " Open file:line
   Plug 'lambdalisue/suda.vim'         " Give vim sudo powers
     let g:suda_smart_edit = 1
+  if has('nvim-0.5')
+    let l:callbacks += s:PlugChadtree()
+  endif
   let l:callbacks += s:PlugDirvish()
   let l:callbacks += s:PlugRooter()
   return l:callbacks
