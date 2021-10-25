@@ -21,14 +21,14 @@ function plugins#navigation#setup()
     let g:sneak#label = 1                     " Easy-motion-like labels
     let g:sneak#s_next = 1                    " Empty search uses most recent
     let g:sneak#target_labels = ',sftunq/SFGHLTUNRMQZ?0'
-    let g:sneak#prompt = ' » '
+    let g:sneak#prompt = 'sneak » '
 
     let g:which_key_map['<Tab>'] = 'sneak-forward'
     let g:which_key_map['<BS>'] = 'sneak-backward'
 
     " 2-character Sneak
-    nmap <leader><Tab> <Plug>Sneak_s
-    nmap <leader><BS> <Plug>Sneak_S
+    nmap <Tab> <Plug>Sneak_s
+    nmap <BS> <Plug>Sneak_S
     xmap <Tab> <Plug>Sneak_s
     xmap <BS> <Plug>Sneak_S
     omap <Tab> <Plug>Sneak_s
