@@ -13,9 +13,11 @@ function plugins#highlighting#setup()
       highlight SpellBad cterm=undercurl gui=undercurl
       " Darken Pmenu background to avoid clash with Cursorline or ColorColumn
       " highlight Pmenu ctermbg=233
+
+      highlight link LspCodeLens Todo
     endfunction
 
-    augroup AddUndercurl
+    augroup ModHighlights
       autocmd!
       autocmd ColorScheme everforest,edge,gruvbox-material,sonokai call s:mod_highlight()
     augroup END

@@ -481,7 +481,6 @@ function s:PlugNvimLsp()
     autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
     sign define LightBulbSign text=↯ texthl=SignColumn
   endfunction
-
   return [function('s:SetupNvimLsp')]
 endfunction
 
@@ -575,7 +574,6 @@ function s:PlugNvimCoq()
   inoremap <silent><expr> <Esc>   pumvisible() ? "\<C-e><Esc>" : "\<Esc>"
   inoremap <silent><expr> <C-c>   pumvisible() ? "\<C-e><C-c>" : "\<C-c>"
   inoremap <silent><expr> <BS>    pumvisible() ? "\<C-e><BS>"  : "\<BS>"
-  inoremap <silent><expr> <CR>    pumvisible() ? (complete_info().selected == -1 ? "\<C-e><CR>" : "\<C-y>") : "\<CR>"
 
   return []
 endfunction
@@ -866,7 +864,8 @@ lua << EOF
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>l=', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
 
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>la', '<cmd>CodeActionMenu<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'v', '<leader>lx', '<cmd>lua vim.lsp.buf.range_code_action()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'v', '<leader>la', '<cmd>lua vim.lsp.buf.range_code_action()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lx', '<cmd>lua vim.lsp.codelens.run()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lr', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
 
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
@@ -879,15 +878,12 @@ lua << EOF
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
 
-    vim.cmd [[ command! Fmt execute 'lua vim.lsp.buf.formatting()' ]]
+    vim.cmd [[autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
+    vim.cmd [[autocmd CursorHold,CursorHoldI <buffer> lua require'lsp_extensions'.inlay_hints{ only_current_line = true }]]
+    vim.cmd [[command! Fmt execute 'lua vim.lsp.buf.formatting()']]
   end
 
   for lsp, settings in pairs(servers) do
-    -- local settings = {}
-    -- if next(s) then
-    --   settings = s
-    -- end
-
     if vim.g.completion_tool == 'cmp' then
       nvim_lsp[lsp].setup {
         on_attach = on_attach,
@@ -922,8 +918,6 @@ EOF
     sign define LspDiagnosticsSignWarning text=‼ texthl=LspDiagnosticsSignWarning
     sign define LspDiagnosticsSignInformation text=ℹ texthl=LspDiagnosticsSignInformation
     sign define LspDiagnosticsSignHint text=» texthl=LspDiagnosticsSignHint
-
-    nnoremap <leader>li :lua require'lsp_extensions'.inlay_hints{ only_current_line = true }
   endfunction
 
   let l:callbacks += s:PlugNvimLsp()
