@@ -251,6 +251,7 @@ function s:StackMiscSubsystems()
     xmap g; <Plug>(neoterm-repl-send)
     nmap g;; <Plug>(neoterm-repl-send-line)
 
+
   if has('nvim-0.5')
     Plug 'chentau/marks.nvim'
     " Show marks in sign column
@@ -260,6 +261,9 @@ function s:StackMiscSubsystems()
       endfunction
 
       let l:callbacks += [function('s:SetupMarksNvim')]
+
+    Plug 'stevearc/stickybuf.nvim'
+      " Prevent files from being opened in pop-up tray windows
   endif
 
   return l:callbacks
