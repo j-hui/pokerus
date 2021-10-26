@@ -113,7 +113,7 @@ function commands#setup()
   endfunction
   command! SyntaxGroup call <SID>show_syntax_group()
   nmap <leader>h :SyntaxGroup<CR>
-
+  call g:WhichKeyL(['h'], 'show-syntax-group')
   " }}}
 
 endfunction

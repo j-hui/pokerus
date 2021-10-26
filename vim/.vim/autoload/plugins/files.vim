@@ -43,6 +43,7 @@ function s:PlugChadtree()
   let g:chadtree_settings = {}
   let g:chadtree_settings['theme.icon_glyph_set'] = 'ascii'
   nnoremap <leader>- :CHADopen<CR>
+  call g:WhichKeyL(['-'], 'chad-open')
   return []
 endfunction
 

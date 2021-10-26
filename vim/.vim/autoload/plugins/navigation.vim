@@ -13,7 +13,7 @@ function plugins#navigation#setup()
           \ 'html,xml' : ['at', 'it'],
           \}
     nmap <leader>v <Plug>(wildfire-quick-select)
-    let g:which_key_map['v'] = 'wildfire-quick-select'
+    call g:WhichKeyL(['v'], 'wildfire-quick-select')
 
   Plug 'justinmk/vim-sneak'
   " s works like f/t but with two chars
@@ -23,8 +23,8 @@ function plugins#navigation#setup()
     let g:sneak#target_labels = ',sftunq/SFGHLTUNRMQZ?0'
     let g:sneak#prompt = 'sneak » '
 
-    let g:which_key_map['<Tab>'] = 'sneak-forward'
-    let g:which_key_map['<BS>'] = 'sneak-backward'
+    call g:WhichKeyL(['<Tab>'], 'sneak-forward')
+    call g:WhichKeyL(['<BS>'], 'sneak-backward')
 
     " 2-character Sneak
     nmap <Tab> <Plug>Sneak_s

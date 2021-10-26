@@ -61,8 +61,9 @@ function plugins#highlighting#setup()
     nnoremap <silent> <leader>m :call InterestingWords('n')<cr>
     vnoremap <silent> <leader>m :call InterestingWords('v')<cr>
     nnoremap <silent> <leader>M :Noh <cr>
-    let g:which_key_map['m'] = 'mark-interesting'
-    let g:which_key_map['M'] = 'unmark-all'
+
+    call g:WhichKeyL(['m'], 'mark-interesting')
+    call g:WhichKeyL(['M'], 'unmark-all')
 
     nnoremap <silent> ]m :call WordNavigation(1)<cr>
     nnoremap <silent> [m :call WordNavigation(0)<cr>

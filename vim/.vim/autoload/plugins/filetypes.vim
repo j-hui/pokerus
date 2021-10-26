@@ -16,7 +16,7 @@ function s:PlugCoq()
     let g:coqtail_nomap = 1
 
     function DefineCoqtailMappings()
-        let g:which_key_map['c'] = { 'name': '+coqtail' }
+        call g:WhichKeyL(['c', 'name'], '+coqtail')
 
         " Coqtail control
         nmap <buffer> <leader>cQ        <Plug>CoqStart
@@ -92,7 +92,7 @@ function s:PlugLatex()
     endif
 
     function! VimtexConfig()
-      let g:which_key_map['c'] = { 'name': '+vimtex' }
+      call g:WhichKeyL(['c', 'name'], '+vimtex')
       nmap <buffer> <leader>cc        <plug>(vimtex-compile-ss)
       nmap <buffer> <leader>c<Space>  <plug>(vimtex-view)
       nmap <buffer> <leader>ce        <plug>(vimtex-errors)
@@ -235,7 +235,7 @@ function s:PlugWiki()
 
     let g:wiki_filetypes = ['wiki']
     let g:wiki_link_extension = '.wiki'
-    let g:which_key_map['w'] = { 'name': '+wiki' }
+    call g:WhichKeyL(['w', 'name'], '+wiki')
     let g:wiki_link_target_type = 'wiki'
     let g:wiki_write_on_nav = 1
 
@@ -245,7 +245,7 @@ function s:PlugWiki()
     nmap <leader>wj <plug>(wiki-journal)
     nmap <leader>wo <plug>(wiki-open)
     nmap <leader>we <plug>(wiki-fzf-pages)
-    let g:which_key_map['w']['e'] = 'fzf-wiki-open'
+    call g:WhichKeyL(['w', 'e'], 'fzf-wiki-open')
     " Additional wiki ft-only mappings in after/ftplugin/wiki.vim
     let g:wiki_fzf_pages_force_create_key = 'ctrl-j'
 

@@ -1,28 +1,28 @@
 scriptencoding utf-8
 
 function s:LspWhichKey()
-  let g:which_key_map['l'] = { 'name': '+lsp' }
-  let g:which_key_map['l']['k'] = 'lsp-hover'
-  let g:which_key_map['l']['j'] = 'lsp-show-diagnostic'
+  call g:WhichKeyL(['l', 'name'], '+lsp')
+  call g:WhichKeyL(['l', 'k'], 'lsp-hover')
+  call g:WhichKeyL(['l', 'j'], 'lsp-show-diagnostic')
 
-  let g:which_key_map['l']['d'] = 'lsp-goto-definition'
-  let g:which_key_map['l']['e'] = 'lsp-goto-declaration'
-  let g:which_key_map['l']['i'] = 'lsp-goto-implementation'
-  let g:which_key_map['l']['t'] = 'lsp-goto-type-definition'
-  let g:which_key_map['l']['='] = 'lsp-references'
+  call g:WhichKeyL(['l', 'd'], 'lsp-goto-definition')
+  call g:WhichKeyL(['l', 'e'], 'lsp-goto-declaration')
+  call g:WhichKeyL(['l', 'i'], 'lsp-goto-implementation')
+  call g:WhichKeyL(['l', 't'], 'lsp-goto-type-definition')
+  call g:WhichKeyL(['l', '='], 'lsp-references')
 
-  let g:which_key_map['l']['a'] = 'lsp-code-action'
-  let g:which_key_map['l']['x'] = 'lsp-lens-code-action'
-  let g:which_key_map['l']['r'] = 'lsp-rename'
+  call g:WhichKeyL(['l', 'a'], 'lsp-code-action')
+  call g:WhichKeyL(['l', 'x'], 'lsp-lens-code-action')
+  call g:WhichKeyL(['l', 'r'], 'lsp-rename')
 
-  let g:which_key_map['l']['s'] = 'lsp-document-symbols'
-  let g:which_key_map['l']['/'] = 'lsp-workspace-symbols'
-  let g:which_key_map['l']['o'] = 'lsp-outline'
+  call g:WhichKeyL(['l', 's'], 'lsp-document-symbols')
+  call g:WhichKeyL(['l', '/'], 'lsp-workspace-symbols')
+  call g:WhichKeyL(['l', 'o'], 'lsp-outline')
 
-  let g:which_key_map['l']['.'] = 'lsp-document-diagnostics'
-  let g:which_key_map['l'][','] = 'lsp-workspace-diagnostics'
+  call g:WhichKeyL(['l', '.'], 'lsp-document-diagnostics')
+  call g:WhichKeyL(['l', ','], 'lsp-workspace-diagnostics')
 
-  let g:which_key_map['l']['-'] = 'lsp-close-preview'
+  call g:WhichKeyL(['l', '-'], 'lsp-close-preview')
 
   " [d and ]d go to previous and next diagnostic
   "
@@ -958,4 +958,4 @@ function plugins#ide#setup()
   endif
 endfunction
 
-" vim: set ts=2 sw=2 tw=80 et foldlevel=0 :
+" vim: set ts=2 sw=2 tw=80 et foldlevel=1 :

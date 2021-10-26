@@ -124,6 +124,7 @@ function plugins#editing#setup()
     Plug 'junegunn/goyo.vim'
       let g:goyo_linenr = 1
       nnoremap <leader>G :Goyo<CR>
+      call g:WhichKeyL(['G'], 'goyo-toggle')
 
       function! s:goyo_enter()
         call g:ShareSetMode(1)

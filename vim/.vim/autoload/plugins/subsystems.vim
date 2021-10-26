@@ -1,4 +1,34 @@
+function s:OverloadWhichKeyRegister()
+  let g:which_key_map = {}
+  function! g:WhichKeyRegister(mode, keys, mapping)
+    if len(a:keys) < 2
+      " No business handling mappings with fewer than 2 keys
+      return
+    endif
+
+    if a:mode ==# 'n'
+      let l:map = g:which_key_map
+      for l:key in a:keys[:len(a:keys)-2]
+        if l:key ==# '<leader>'
+          let l:key = g:mapleader
+        elseif l:key ==# 'name'
+          " the key 'name' should not appear anywhere before the end
+          echoerr 'Cannot use key "name" in middle of keys: ' . string(keys)
+          return
+        endif
+        if ! has_key(l:map, l:key)
+          let l:map[l:key] = {}
+        endif
+        let l:map = l:map[l:key]
+      endfor
+      let l:map[a:keys[len(a:keys)-1]] = a:mapping
+      " echo "current map" . string(g:which_key_map)
+    endif
+  endfunction
+endfunction
+
 function s:StackWhichKey()
+  call s:OverloadWhichKeyRegister()
   Plug 'liuchengxu/vim-which-key'
     let g:which_key_display_names = {
           \ '<CR>': '↵',
@@ -10,24 +40,38 @@ function s:StackWhichKey()
     nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 
     function s:WhichKeyHooks()
-      call which_key#register('<Space>', "g:which_key_map")
+      let g:which_key_map_space = g:which_key_map[' '] " i.e., <leader>
+      call which_key#register('<Space>', "g:which_key_map_space")
     endfunction
-
-    " Defined for s:leaderMaps
-    let g:which_key_map['b'] = { 'name': '+buffer-window' }
-    let g:which_key_map['b']['n'] = 'buffer-next'
-    let g:which_key_map['b']['p'] = 'buffer-previous'
-    let g:which_key_map['b']['w'] = 'buffer-wipe'
-    let g:which_key_map['b']['q'] = 'window-quit'
-    let g:which_key_map['b']['j'] = 'window-down'
-    let g:which_key_map['b']['k'] = 'window-up'
-    let g:which_key_map['b']['h'] = 'window-left'
-    let g:which_key_map['b']['l'] = 'window-right'
-    let g:which_key_map['b']['s'] = 'window-horizontal-split'
-    let g:which_key_map['b']['v'] = 'window-vertical-split'
-    let g:which_key_map['b']['c'] = 'buffer-close-lists'
-
   return [function('s:WhichKeyHooks')]
+endfunction
+
+function s:StackWhichKeyNvim()
+  call s:OverloadWhichKeyRegister()
+  Plug 'folke/which-key.nvim'
+
+  function s:SetupWhichKeyNvim()
+lua << EOF
+    local wk = require'which-key'
+    wk.setup { hidden = { -- hide mapping boilerplate
+      "<silent>",
+      "<cmd>",
+      "<Cmd>",
+      "<CR>",
+      "call",
+      "lua",
+      "^:",
+      "^ ",
+      "<Plug>",
+      "<plug>"
+    }}
+    wk.register(vim.g.which_key_map, { mode = 'n' })
+    wk.register(vim.g.which_key_map_v, { mode = 'v' })
+    wk.register(vim.g.which_key_map_i, { mode = 'i' })
+EOF
+  endfunction
+
+  return [function('s:SetupWhichKeyNvim')]
 endfunction
 
 function s:StackFzf()
@@ -118,44 +162,43 @@ function s:StackFzf()
     endfunction
 
     " Insert mode completion (overriding vim mappings)
-    imap <C-x><C-k> <plug>(fzf-complete-word)
-    imap <C-x><C-f> <plug>(fzf-complete-path)
-    imap <C-x><C-l> <plug>(fzf-complete-line)
+    imap <C-x><C-k> <Plug>(fzf-complete-word)
+    imap <C-x><C-f> <Plug>(fzf-complete-path)
+    imap <C-x><C-l> <Plug>(fzf-complete-line)
 
     " Here (like Files/:FZF, but relative to directory of current file)
     nmap <leader>. :call FzfHere(0)<CR>
-    let g:which_key_map['.'] = 'fzf-here'
+    call g:WhichKeyL(['.'], 'fzf-here')
 
     " Lines (current buffer only)
     nmap <leader>, :BLines<CR>
-    let g:which_key_map[','] = 'fzf-buffer-lines'
+    call g:WhichKeyL([','], 'fzf-buffer-lines')
 
     " Line
     nmap <leader>/ :Lines<CR>
-    let g:which_key_map['/'] = 'fzf-lines'
+    call g:WhichKeyL(['/'], 'fzf-lines')
 
     " Ripgrep live (starting with word under cursor)
     nmap <leader>? :call FzfRg(expand('<cword>'), 0)<CR>
-    let g:which_key_map['?'] = 'fzf-ripgrep'
+    call g:WhichKeyL(['?'], 'fzf-ripgrep')
 
     " Files
     nmap <leader>f :call FzfFiles(0)<CR>
-    let g:which_key_map['f'] = 'fzf-files'
+    call g:WhichKeyL(['f'], 'fzf-files')
 
     " Switch to buffer
     nmap <leader>s :Buffers<CR>
-    let g:which_key_map['s'] = 'fzf-buffers'
+    call g:WhichKeyL(['s'], 'fzf-buffers')
 
     " Switch to buffer + history
     nmap <leader>S :History<CR>
-    let g:which_key_map['S'] = 'fzf-history-buffers'
+    call g:WhichKeyL(['S'], 'fzf-history-buffers')
 
     " Shortcut for History: and History/
     command! H History
 
   Plug 'https://gitlab.com/mcepl/vim-fzfspell.git'
   " FZF for z=
-
   return []
 endfunction
 
@@ -163,40 +206,40 @@ function s:StackGit()
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-rhubarb'
   " Git interaction
-    let g:which_key_map['g'] = { 'name': '+git' }
+    call g:WhichKeyL(['g', 'name'], '+git')
 
     nnoremap <leader>gd :Gdiffsplit<CR>
-    let g:which_key_map['g']['d'] = 'git-diff-split'
+    call g:WhichKeyL(['g', 'd'], 'git-diff-split')
     nnoremap <leader>gD :Git diff --cached<CR>
-    let g:which_key_map['g']['D'] = 'git-diff-cached'
+    call g:WhichKeyL(['g', 'D'], 'git-diff-cached')
     nnoremap <leader>gp :Git pull<CR>
-    let g:which_key_map['g']['p'] = 'git-pull'
+    call g:WhichKeyL(['g', 'p'], 'git-pull')
     nnoremap <leader>gP :Git push<CR>
-    let g:which_key_map['g']['P'] = 'git-push'
+    call g:WhichKeyL(['g', 'P'], 'git-push')
     nnoremap <leader>gc :Git commit<CR>
-    let g:which_key_map['g']['c'] = 'git-commit'
+    call g:WhichKeyL(['g', 'c'], 'git-commit')
     nnoremap <leader>gs :Git<CR>
-    let g:which_key_map['g']['s'] = 'git-status'
+    call g:WhichKeyL(['g', 's'], 'git-status')
     nnoremap <leader>gw :Gw<CR>
-    let g:which_key_map['g']['w'] = 'git-write'
+    call g:WhichKeyL(['g', 'w'], 'git-write')
 
     " nnoremap <leader>gL :Gclog<CR>
-    " let g:which_key_map['g']['L'] = 'git-log-classic' " -- Use :Flogsplit
+    " " -- Use :Flogsplit instead
 
     " Browse commits with fzf
     nmap <leader>g. :BCommits<CR>
-    let g:which_key_map['g']['.'] = 'git-fzf-buffer-log'
+    call g:WhichKeyL(['g', '.'], 'git-fzf-buffer-log')
 
     nmap <leader>gl :Commits<CR>
-    let g:which_key_map['g']['l'] = 'git-fzf-log'
+    call g:WhichKeyL(['g', 'l'], 'git-fzf-log')
 
     nmap <leader>gg :GFiles<CR>
-    let g:which_key_map['g']['g'] = 'git-fzf-files'
+    call g:WhichKeyL(['g', 'g'], 'git-fzf-files')
 
   Plug 'rbong/vim-flog'
   " Git log
     nnoremap <leader>gL :Flogsplit<CR>
-    let g:which_key_map['g']['L'] = 'git-flog'
+    call g:WhichKeyL(['g', 'L'], 'git-flog')
 
     augroup fugitive_maps
       autocmd!
@@ -207,7 +250,7 @@ function s:StackGit()
   " Super-charged git blame
     let g:git_messenger_no_default_mappings = v:true
     nmap <leader>gb <Plug>(git-messenger)
-    let g:which_key_map['g']['b'] = 'git-blame'
+    call g:WhichKeyL(['g', 'b'], 'git-blame')
   return []
 endfunction
 
@@ -217,7 +260,7 @@ function s:StackMiscSubsystems()
   Plug 'mbbill/undotree'
   " See undo history
     nnoremap <leader>u :UndotreeToggle<cr>:UndotreeFocus<cr>
-    let g:which_key_map['u'] = 'undotree-toggle'
+    call g:WhichKeyL(['u'], 'undotree-toggle')
 
   if has('nvim-0.4')
     Plug 'tversteeg/registers.nvim', { 'branch': 'main' }
@@ -240,17 +283,14 @@ function s:StackMiscSubsystems()
   " Send commands to terminal
     let g:neoterm_default_mod = 'botright' " Open new terminal in split window
 
-    let g:which_key_map['g'] = { 'name': '+git' }
-
     nmap <leader>; :T<space>
-    let g:which_key_map[';'] = 'neoterm-cmd'
+    call g:WhichKeyL([';'], 'neoterm-cmd')
     nmap <leader>t :Ttoggle<CR>
-    let g:which_key_map['t'] = 'neoterm-toggle'
+    call g:WhichKeyL(['t'], 'neoterm-toggle')
 
     nmap g; <Plug>(neoterm-repl-send)
     xmap g; <Plug>(neoterm-repl-send)
     nmap g;; <Plug>(neoterm-repl-send-line)
-
 
   if has('nvim-0.5')
     Plug 'chentau/marks.nvim'
@@ -271,7 +311,11 @@ endfunction
 
 function plugins#subsystems#setup()
   let l:callbacks = []
-  let l:callbacks += s:StackWhichKey()
+  if has('nvim-0.5')
+    let l:callbacks += s:StackWhichKeyNvim()
+  else
+    let l:callbacks += s:StackWhichKey()
+  endif
   let l:callbacks += s:StackFzf()
   let l:callbacks += s:StackGit()
   let l:callbacks += s:StackMiscSubsystems()
