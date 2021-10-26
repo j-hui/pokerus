@@ -10,6 +10,9 @@ function plugins#editing#setup()
 
   Plug 'tpope/vim-endwise'
   " Write endings
+    let g:endwise_no_mappings = 1
+    " Messes up other <CR> mappings, especially from completion plugins
+    imap <C-g><CR> <CR><Plug>DiscretionaryEnd
 
   Plug 'tpope/vim-speeddating'
   " increment/decrement dates

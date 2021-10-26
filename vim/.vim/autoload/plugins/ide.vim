@@ -574,15 +574,17 @@ function s:PlugNvimCoq()
   let g:coq_settings['display.pum.fast_close'] = v:false " Avoid flicker
   let g:coq_settings['display.icons.mode'] = 'none'
   let g:coq_settings['keymap.bigger_preview'] = '<c-j>'
-  let g:coq_settings['keymap.recommended'] = v:false
   let g:coq_settings['keymap.jump_to_mark'] = '<c-l>'
   " let g:coq_settings['keymap.manual_trigger'] = ''
 
   let g:coq_settings['clients.lsp.weight_adjust'] = 1.5
 
+  let g:coq_settings['keymap.recommended'] = v:false
+
   inoremap <silent><expr> <Esc>   pumvisible() ? "\<C-e><Esc>" : "\<Esc>"
   inoremap <silent><expr> <C-c>   pumvisible() ? "\<C-e><C-c>" : "\<C-c>"
   inoremap <silent><expr> <BS>    pumvisible() ? "\<C-e><BS>"  : "\<BS>"
+  inoremap <silent><expr> <CR>    pumvisible() ? (complete_info().selected == -1 ? "\<C-e><CR>" : "\<C-y>") : "\<CR>"
 
   return []
 endfunction
