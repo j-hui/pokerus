@@ -48,19 +48,10 @@ function plugins#highlighting#setup()
       autocmd Filetype haskell call s:CssColorInit('hex', 'none', 'haskellLineComment,haskellString,haskellBlockComment')
     augroup END
 
-  Plug 'itchyny/vim-cursorword'
-  " Temporary word highlighting/* preview
-
-    let g:cursorword_delay = 369
-    let b:cursorword = 1
-    function! CursorWordToggleFn()
-      if b:cursorword
-        let b:cursorword = 0
-      else
-        let b:cursorword = 1
-      endif
-    endfunction
-    command! ToggleCursorWord call CursorWordToggleFn()
+  Plug 'RRethy/vim-illuminate'
+    let g:Illuminate_delay = 69
+    let g:Illuminate_highlightUnderCursor = 0
+    let g:Illuminate_ftblacklist = ['nerdtree']
 
   Plug 'lfv89/vim-interestingwords'
   " Persistent word highlighting
