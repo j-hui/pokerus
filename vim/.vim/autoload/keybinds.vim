@@ -132,10 +132,8 @@ function s:editingMaps()
   inoremap <C-g><C-g> <C-F>
 
   " For readline-style line deletion, we use the delete register "-
-  nnoremap <C-k> "-D
-  inoremap <C-k> <C-o>"-D
-  nnoremap <C-y> "-p
-  inoremap <C-y> <C-o>"-p
+  nnoremap <C-k> D
+  inoremap <C-k> <C-o>D
 
   " inoremap <expr> <C-D> col('.')>strlen(getline('.'))?"\<Lt>C-D>":"\<Lt>Del>"
 endfunction

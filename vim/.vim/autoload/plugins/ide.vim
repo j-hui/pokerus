@@ -485,10 +485,16 @@ function s:PlugNvimLsp()
     call add(g:lightline['active']['right'], ['lsp_info', 'lsp_hints', 'lsp_errors', 'lsp_warnings', 'lsp_ok'])
     call add(g:lightline['active']['right'], ['lsp_clients', 'lsp_status'])
     call lightline#lsp#register()
-    lua require'trouble'.setup {}
-    lua require'lsp_signature'.setup()
     autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
     sign define LightBulbSign text=↯ texthl=SignColumn
+lua <<EOF
+    require'trouble'.setup {}
+    require'lsp_signature'.setup {
+      toggle_key = '<C-s>',
+      hint_enable = false,
+      trigger_on_newline = false,
+    }
+EOF
   endfunction
   return [function('s:SetupNvimLsp')]
 endfunction
@@ -497,7 +503,7 @@ function s:PlugNvimCmp()
   let g:completion_tool = 'cmp'
   Plug 'hrsh7th/nvim-cmp'
 
-  Plug 'onsails/lspkind-nvim'
+  " Plug 'onsails/lspkind-nvim'
   " Symbols for lsp kinds
 
   " Sources
@@ -508,30 +514,37 @@ function s:PlugNvimCmp()
   Plug 'hrsh7th/cmp-omni'
   Plug 'hrsh7th/cmp-path'
   Plug 'f3fora/cmp-spell'
+  Plug 'hrsh7th/cmp-cmdline'
+  Plug 'hrsh7th/vim-vsnip'
+  Plug 'hrsh7th/vim-vsnip-integ'
 
   function s:SetupNvimCmp()
+    imap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : luaeval('require"cmp".visible()') ? '\<C-y>' : ''
+    smap <expr> <C-l> vsnip#available(2) ? '<Plug>(vsnip-expand-or-jump)' : luaeval('require"cmp".visible()') ? '\<C-y>' : ''
 lua << EOF
   local cmp = require'cmp'
-  cmp.setup({
-    snippet = {
-      expand = function(args)
-        vim.fn["vsnip#anonymous"](args.body) -- vsnip
-      end,
-    },
-    mapping = {
+  local mapping = {
       ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
       ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
       ['<Down>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
       ['<Up>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
-      ['<M-d>'] = cmp.mapping.scroll_docs(-4),
-      ['<M-u>'] = cmp.mapping.scroll_docs(4),
-      ['<C-x><C-x>'] = cmp.mapping.complete(), -- Force completion pop-up
+      ['<M-p>'] = cmp.mapping.scroll_docs(-4),
+      ['<M-n>'] = cmp.mapping.scroll_docs(4),
+      ['<C-x><C-x>'] = cmp.mapping.complete(),
       ['<C-e>'] = cmp.mapping.close(),
-      ['<C-l>'] = cmp.mapping.confirm({
+      ['<C-y>'] = cmp.mapping.confirm({
         behavior = cmp.ConfirmBehavior.Replace,
         select = true,
       })
+    }
+
+  cmp.setup({
+    snippet = {
+      expand = function(args)
+        vim.fn["vsnip#anonymous"](args.body)
+      end,
     },
+    mapping = mapping,
     sources = {
       { name = 'vsnip' },
       { name = 'nvim_lsp' },
@@ -539,9 +552,9 @@ lua << EOF
       { name = 'path' },
       { name = 'spell' },
     },
-    formatting = {
-      format = require'lspkind'.cmp_format({with_text = false, maxwidth = 50})
-    },
+    -- formatting = {
+    --   format = require'lspkind'.cmp_format({with_text = false, maxwidth = 50})
+    -- },
   })
   completion_lsp = function(obj)
     obj.capabilities = require'cmp_nvim_lsp'.update_capabilities(vim.lsp.protocol.make_client_capabilities())
@@ -549,16 +562,8 @@ lua << EOF
   end
 EOF
   endfunction
+
   return [function('s:SetupNvimCmp')]
-endfunction
-
-function s:PlugNvimVsnip()
-  Plug 'hrsh7th/vim-vsnip'
-  Plug 'hrsh7th/vim-vsnip-integ'
-
-  imap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-  smap <expr> <C-l> vsnip#available(2) ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-  return []
 endfunction
 
 function s:PlugNvimCoq()
@@ -575,7 +580,7 @@ function s:PlugNvimCoq()
 
   let g:coq_settings = {}
   let g:coq_settings['auto_start'] = v:true
-  let g:coq_settings['display.pum.fast_close'] = v:false " Avoid flicker
+  let g:coq_settings['display.pum.fast_close'] = v:true
   let g:coq_settings['display.icons.mode'] = 'none'
   let g:coq_settings['keymap.bigger_preview'] = '<c-j>'
   let g:coq_settings['keymap.jump_to_mark'] = '<c-l>'
@@ -588,13 +593,18 @@ function s:PlugNvimCoq()
 
   let g:coq_settings['keymap.recommended'] = v:false
 
-  inoremap <silent><expr> <Esc>   pumvisible() ? "\<C-e><Esc>" : "\<Esc>"
-  inoremap <silent><expr> <C-c>   pumvisible() ? "\<C-e><C-c>" : "\<C-c>"
-  inoremap <silent><expr> <BS>    pumvisible() ? "\<C-e><BS>"  : "\<BS>"
-  inoremap <silent><expr> <CR>    pumvisible() ? (complete_info().selected == -1 ? "\<C-e><CR>" : "\<C-y>") : "\<CR>"
-  function s:SetupCoq() 
+  function s:SetupCoq()
+    imap <silent><expr> <C-l>   pumvisible() ? "\<C-e><C-l>" : ""
+    imap <silent><expr> <Esc>   pumvisible() ? "\<C-e><Esc>" : "\<Esc>"
+    imap <silent><expr> <C-c>   pumvisible() ? "\<C-e><C-c>" : "\<C-c>"
+    " imap <silent><expr> <BS>    pumvisible() ? "\<C-e><BS>"  : "\<BS>"
+    inoremap <silent><expr> <CR>    pumvisible() ? (complete_info().selected == -1 ? "\<C-e><CR>" : "\<C-y>") : "\<CR>"
 lua << EOF
-  completion_lsp = require'coq'.lsp_ensure_capabilities
+  completion_lsp = function (obj)
+    local obj2 = require'coq'.lsp_ensure_capabilities(obj)
+    obj2.capabilities.textDocument.completion.completionItem.snippetSupport = false
+    return obj2
+  end
 EOF
   endfunction
 
@@ -901,7 +911,7 @@ lua << EOF
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
 
-    vim.cmd [[autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]] -- NOTE causes weird issue sometimes but that can be ignored
+    -- vim.cmd [[autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]] -- NOTE causes weird issue sometimes but that can be ignored
     vim.cmd [[autocmd CursorHold,CursorHoldI <buffer> lua require'lsp_extensions'.inlay_hints{ only_current_line = true }]]
     vim.cmd [[command! Fmt execute 'lua vim.lsp.buf.formatting()']]
 
@@ -937,9 +947,8 @@ EOF
   endfunction
 
   let l:callbacks += s:PlugNvimLsp()
-  " let l:callbacks += s:PlugNvimCmp()
-  " let l:callbacks += s:PlugNvimVsnip()
-  let l:callbacks += s:PlugNvimCoq()
+  let l:callbacks += s:PlugNvimCmp()
+  " let l:callbacks += s:PlugNvimCoq()
   let l:callbacks += [function('s:SetupNvimLspStack')]
   return l:callbacks
 endfunction
