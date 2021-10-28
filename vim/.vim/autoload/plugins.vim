@@ -58,6 +58,10 @@ function g:WhichKeyL(keys, mapping)
   call g:WhichKey('n', ['<leader>'] + a:keys, a:mapping)
 endfunction
 
+function g:WhichKeyIG(keys, mapping)
+  call g:WhichKey('i', ['<C-g>'] + a:keys, a:mapping)
+endfunction
+
 function s:ColorSchemeCb()
   try
     exec 'colorscheme ' . g:colorscheme

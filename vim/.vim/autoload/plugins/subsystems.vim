@@ -71,7 +71,12 @@ lua << EOF
 EOF
   endfunction
 
-  return [function('s:SetupWhichKeyNvim')]
+  augroup SetupWhichKey
+  autocmd!
+  autocmd VimEnter * call s:SetupWhichKeyNvim()
+  augroup END
+
+  return []
 endfunction
 
 function s:StackFzf()

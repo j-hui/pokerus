@@ -113,23 +113,31 @@ function s:editingMaps()
 
   " Current filename w/o extension
   inoremap <C-g>f <C-r>=expand('%:t:r')<CR>
+  call g:WhichKeyIG(['f'], 'filename-no-ext')
 
   " Current filename w/ extension
   inoremap <C-g>F <C-r>=expand('%:t')<CR>
+  call g:WhichKeyIG(['F'], 'filename-with-ext')
 
   " Correct spelling
   inoremap <C-g>l <c-g>u<Esc>[s1z=`]a<c-g>u
+  call g:WhichKeyIG(['l'], 'correct-spelling')
 
   " Insert date/time
   inoremap <C-g>d <C-R>=strftime("%Y-%m-%d")<CR>
   inoremap <C-g>t <C-R>=strftime("%Y-%m-%d %H:%M:%S")<CR>
+  call g:WhichKeyIG(['d'], 'date')
+  call g:WhichKeyIG(['t'], 'date-time')
 
   " Auto format
   inoremap <silent> <C-g>e <C-o>gqq<C-o>$
   inoremap <silent> <C-g>q <C-o>gqq
+  call g:WhichKeyIG(['e'], 'format-line')
+  call g:WhichKeyIG(['q'], 'format-line-stay')
 
   " Auto indentation
   inoremap <C-g><C-g> <C-F>
+  call g:WhichKeyIG(['<C-g>'], 'auto-indent')
 
   " For readline-style line deletion, we use the delete register "-
   nnoremap <C-k> D

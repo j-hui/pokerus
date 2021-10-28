@@ -13,6 +13,7 @@ function plugins#editing#setup()
     let g:endwise_no_mappings = 1
     " Messes up other <CR> mappings, especially from completion plugins
     imap <C-g><CR> <CR><Plug>DiscretionaryEnd
+    call g:WhichKeyIG(['<CR>'], 'endwise-end')
 
   Plug 'tpope/vim-speeddating'
   " increment/decrement dates
@@ -48,7 +49,9 @@ function plugins#editing#setup()
   " Manually close pairs
     let g:close_pair_key = '<C-]>'
     imap <C-g>] <C-]><Left>
+    call g:WhichKeyIG([']'], 'close-pair')
     imap <C-g>o <C-]><Left><CR><Up><C-o>o
+    call g:WhichKeyIG(['o'], 'close-pair-next-line')
 
   Plug 'svermeulen/vim-subversive'
   " Substitute from yank
