@@ -2,6 +2,7 @@ function plugins#navigation#setup()
 
   Plug 'andymass/vim-matchup'
   " %-navigate user-defined pairs
+    call g:WhichKeyIG(['%'], 'matchup-goto')
 
   Plug 'christoomey/vim-titlecase'
   " Title case w/ gt<motion>
@@ -27,17 +28,17 @@ function plugins#navigation#setup()
     call g:WhichKeyL(['<BS>'], 'sneak-backward')
 
     " 2-character Sneak
-    nmap <Tab> <Plug>Sneak_s
-    nmap <BS> <Plug>Sneak_S
-    xmap <Tab> <Plug>Sneak_s
-    xmap <BS> <Plug>Sneak_S
-    omap <Tab> <Plug>Sneak_s
-    omap <BS> <Plug>Sneak_S
+    nmap gt <Plug>Sneak_s
+    nmap gT <Plug>Sneak_S
+    xmap gt <Plug>Sneak_s
+    xmap gT <Plug>Sneak_S
+    omap gt <Plug>Sneak_s
+    omap gT <Plug>Sneak_S
 
     " Already mapped ; to :
-    map ,       <Plug>Sneak_;
-    map ]<Tab>  <Plug>Sneak_;
-    map [<Tab>  <Plug>Sneak_,
+    map ,   <Plug>Sneak_;
+    map ],  <Plug>Sneak_;
+    map [,  <Plug>Sneak_,
 
     " 1-character enhanced 'f'
     nmap f <Plug>Sneak_f
