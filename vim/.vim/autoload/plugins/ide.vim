@@ -543,6 +543,10 @@ lua << EOF
       format = require'lspkind'.cmp_format({with_text = false, maxwidth = 50})
     },
   })
+  completion_lsp = function(obj)
+    obj.capabilities = require'cmp_nvim_lsp'.update_capabilities(vim.lsp.protocol.make_client_capabilities())
+    return obj
+  end
 EOF
   endfunction
   return [function('s:SetupNvimCmp')]
@@ -575,9 +579,12 @@ function s:PlugNvimCoq()
   let g:coq_settings['display.icons.mode'] = 'none'
   let g:coq_settings['keymap.bigger_preview'] = '<c-j>'
   let g:coq_settings['keymap.jump_to_mark'] = '<c-l>'
-  " let g:coq_settings['keymap.manual_trigger'] = ''
+  let g:coq_settings['keymap.manual_complete'] = '<C-x><C-x>'
 
-  let g:coq_settings['clients.lsp.weight_adjust'] = 1.5
+  let g:coq_settings['clients.lsp.weight_adjust'] = 0.5
+  let g:coq_settings['weights.prefix_matches'] = 3.0
+  let g:coq_settings['weights.recency'] = 1.5
+  let g:coq_settings['weights.proximity'] = 0.2
 
   let g:coq_settings['keymap.recommended'] = v:false
 
@@ -585,8 +592,13 @@ function s:PlugNvimCoq()
   inoremap <silent><expr> <C-c>   pumvisible() ? "\<C-e><C-c>" : "\<C-c>"
   inoremap <silent><expr> <BS>    pumvisible() ? "\<C-e><BS>"  : "\<BS>"
   inoremap <silent><expr> <CR>    pumvisible() ? (complete_info().selected == -1 ? "\<C-e><CR>" : "\<C-y>") : "\<CR>"
+  function s:SetupCoq() 
+lua << EOF
+  completion_lsp = require'coq'.lsp_ensure_capabilities
+EOF
+  endfunction
 
-  return []
+  return [function('s:SetupCoq')]
 endfunction
 
 function s:StackLcn()
@@ -900,29 +912,13 @@ lua << EOF
     vim.api.nvim_buf_set_keymap(0, 'n', ']a', '<cmd>AerialNext<CR>', {})
     vim.api.nvim_buf_set_keymap(0, 'n', '[[', '<cmd>AerialPrevUp<CR>', {})
     vim.api.nvim_buf_set_keymap(0, 'n', ']]', '<cmd>AerialNextUp<CR>', {})
-
   end
 
   for lsp, settings in pairs(servers) do
-    if vim.g.completion_tool == 'cmp' then
-      nvim_lsp[lsp].setup {
-        on_attach = on_attach,
-        capabilities = require'cmp_nvim_lsp'.update_capabilities(vim.lsp.protocol.make_client_capabilities()),
-        settings = settings,
-      }
-    elseif vim.g.completion_tool == 'coq' then
-      nvim_lsp[lsp].setup (
-        require'coq'.lsp_ensure_capabilities {
-          on_attach = on_attach,
-          settings = settings,
-        }
-      )
-    else
-      nvim_lsp[lsp].setup {
+    nvim_lsp[lsp].setup (completion_lsp {
         on_attach = on_attach,
         settings = settings,
-      }
-    end
+    })
   end
 
   vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
