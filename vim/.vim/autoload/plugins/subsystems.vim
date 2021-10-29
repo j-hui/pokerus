@@ -1,34 +1,4 @@
-function s:OverloadWhichKeyRegister()
-  let g:which_key_map = {}
-  function! g:WhichKeyRegister(mode, keys, mapping)
-    if len(a:keys) < 2
-      " No business handling mappings with fewer than 2 keys
-      return
-    endif
-
-    if a:mode ==# 'n'
-      let l:map = g:which_key_map
-      for l:key in a:keys[:len(a:keys)-2]
-        if l:key ==# '<leader>'
-          let l:key = g:mapleader
-        elseif l:key ==# 'name'
-          " the key 'name' should not appear anywhere before the end
-          echoerr 'Cannot use key "name" in middle of keys: ' . string(keys)
-          return
-        endif
-        if ! has_key(l:map, l:key)
-          let l:map[l:key] = {}
-        endif
-        let l:map = l:map[l:key]
-      endfor
-      let l:map[a:keys[len(a:keys)-1]] = a:mapping
-      " echo "current map" . string(g:which_key_map)
-    endif
-  endfunction
-endfunction
-
 function s:StackWhichKey()
-  call s:OverloadWhichKeyRegister()
   Plug 'liuchengxu/vim-which-key'
     let g:which_key_display_names = {
           \ '<CR>': '↵',
@@ -47,7 +17,6 @@ function s:StackWhichKey()
 endfunction
 
 function s:StackWhichKeyNvim()
-  call s:OverloadWhichKeyRegister()
   Plug 'folke/which-key.nvim'
 
   function s:SetupWhichKeyNvim()
@@ -231,15 +200,14 @@ function s:StackGit()
     " nnoremap <leader>gL :Gclog<CR>
     " " -- Use :Flogsplit instead
 
-    " Browse commits with fzf
     nmap <leader>g. :BCommits<CR>
-    call g:WhichKeyL(['g', '.'], 'git-fzf-buffer-log')
+    call g:WhichKeyL(['g', '.'], 'git-buffer-log')
 
     nmap <leader>gl :Commits<CR>
-    call g:WhichKeyL(['g', 'l'], 'git-fzf-log')
+    call g:WhichKeyL(['g', 'l'], 'git-log')
 
     nmap <leader>gg :GFiles<CR>
-    call g:WhichKeyL(['g', 'g'], 'git-fzf-files')
+    call g:WhichKeyL(['g', 'g'], 'git-files')
 
   Plug 'rbong/vim-flog'
   " Git log
