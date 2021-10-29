@@ -474,9 +474,6 @@ function s:PlugNvimLsp()
   Plug 'kosayoda/nvim-lightbulb'
     " Make code actions more visible
 
-  Plug 'weilbith/nvim-code-action-menu'
-    " Better code action menu, no setup required
-
   Plug 'stevearc/aerial.nvim'
     " Code outline viewer
 
@@ -894,7 +891,7 @@ lua << EOF
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>l=', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
 
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>la', '<cmd>CodeActionMenu<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'v', '<leader>la', '<cmd>lua vim.lsp.buf.range_code_action()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lx', '<cmd>lua vim.lsp.codelens.run()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lr', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
