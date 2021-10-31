@@ -549,6 +549,7 @@ lua << EOF
       { name = 'path' },
       { name = 'spell' },
     },
+    documentation = false,
     -- formatting = {
     --   format = require'lspkind'.cmp_format({with_text = false, maxwidth = 50})
     -- },
