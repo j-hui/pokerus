@@ -176,6 +176,18 @@ function s:StackFzf()
   return []
 endfunction
 
+function s:StackTelescope()
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'nvim-telescope/telescope.nvim'
+  function s:SetupTelescope()
+lua << EOF
+    require'telescope'.setup {
+    }
+EOF
+  endfunction
+  return [function('s:SetupTelescope')]
+endfunction
+
 function s:StackGit()
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-rhubarb'
@@ -286,6 +298,7 @@ function plugins#subsystems#setup()
   let l:callbacks = []
   if has('nvim-0.5')
     let l:callbacks += s:StackWhichKeyNvim()
+    let l:callbacks += s:StackTelescope()
   else
     let l:callbacks += s:StackWhichKey()
   endif
