@@ -2,6 +2,7 @@
 " ----------------------------------------------------------------------------
 
 function plugins#window#setup()
+  let l:callbacks = []
   Plug 'itchyny/lightline.vim'
   " Lightweight status line at bottom
 
@@ -49,5 +50,13 @@ function plugins#window#setup()
   Plug 'Konfekt/FastFold'
   " Lazy folding
 
-  return []
+  if has('nvim-0.5')
+    Plug 'luukvbaal/stabilize.nvim'
+    function s:SetupStabilize()
+      lua require'stabilize'.setup()
+    endfunction
+    let l:callbacks += [function('s:SetupStabilize')]
+  endif
+
+  return l:callbacks
 endfunction
