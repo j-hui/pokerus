@@ -76,13 +76,12 @@ in
         systemPackages = with pkgs; [
 
           unstable.qutebrowser
-
-          (unstable.luakit.overrideAttrs (old: {
-          }))
           unstable.nyxt
           unstable.vieb
+
+          (unstable.luakit.overrideAttrs (old: { }))
           surf
-          firefox google-chrome chromium
+          firefox google-chrome chromium unstable.vivaldi
 
           youtube-dl
           transmission transmission-gtk
