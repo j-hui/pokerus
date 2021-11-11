@@ -549,7 +549,7 @@ lua << EOF
       { name = 'path' },
       { name = 'spell' },
     },
-    documentation = false,
+    -- documentation = false,
     -- formatting = {
     --   format = require'lspkind'.cmp_format({with_text = false, maxwidth = 50})
     -- },
@@ -868,7 +868,7 @@ lua << EOF
   local nvim_lsp = require 'lspconfig'
 
   local servers = {
-    ['clangd'] = {},
+    ['ccls'] = {},
     ['rust_analyzer'] = {},
     ['pyright'] = {},
     ['tsserver'] = {},
