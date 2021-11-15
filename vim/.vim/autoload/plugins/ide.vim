@@ -869,6 +869,7 @@ lua << EOF
 
   local servers = {
     ['ccls'] = {},
+    ['texlab'] = {},
     ['rust_analyzer'] = {},
     ['pyright'] = {},
     ['tsserver'] = {},
@@ -876,6 +877,7 @@ lua << EOF
     ['vimls'] = {},
     ['ocamllsp'] = {},
     ['rnix'] = {},
+    ['tsserver'] = {},
   }
 
   local on_attach = function(client, bufnr)
@@ -900,10 +902,11 @@ lua << EOF
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ls', '<cmd>DocumentSymbols<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>l/', '<cmd>WorkspaceSymbols<CR>', opts)
 
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>l.', '<cmd>TroubleToggle lsp_document_diagnostics<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>l,', '<cmd>TroubleToggle lsp_workspace_diagnostics<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>l.', '<cmd>TroubleToggle lsp_document_diagnostics<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>l,', '<cmd>TroubleToggle lsp_workspace_diagnostics<CR>', opts)
 
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
@@ -961,4 +964,4 @@ function plugins#ide#setup()
   endif
 endfunction
 
-" vim: set ts=2 sw=2 tw=80 et foldlevel=1 :
+" vim: set ts=2 sw=2 tw=80 et foldlevel=0 :
