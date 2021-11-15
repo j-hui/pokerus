@@ -25,8 +25,8 @@ config.source('themes/material-darker.py')
 #         'horizontal': 8
 #     }
 # })
-bg_color = "#a89984"
-c.colors.webpage.bg = bg_color
+# bg_color = "#a89984"
+# c.colors.webpage.bg = bg_color
 
 # Put kitty, gvim, etc. in Qutebrowser's PATH, at least on macOS
 os.environ['PATH'] = '/usr/local/bin' + os.pathsep + os.environ['PATH']
@@ -151,8 +151,8 @@ c.aliases['reader'] = 'spawn --userscript readability'
 c.aliases['bib'] = 'spawn --userscript getbib'
 c.aliases['pocket'] = 'spawn --userscript qutepocket'
 
-c.aliases['bg-norm'] = 'set colors.webpage.bg #ffffff'
-c.aliases['bg-dark'] = 'set colors.webpage.bg ' + bg_color
+# c.aliases['bg-norm'] = 'set colors.webpage.bg #ffffff'
+# c.aliases['bg-dark'] = 'set colors.webpage.bg ' + bg_color
 c.aliases['style'] = ('config-cycle content.user_stylesheets        ' +
         '"~/.config/qutebrowser/css/darculized-all-sites.css"       ' +
         '"~/.config/qutebrowser/css/solarized-dark-all-sites.css"   ' +
