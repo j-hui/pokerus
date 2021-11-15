@@ -1,5 +1,7 @@
 
 function plugins#highlighting#setup()
+  let l:callbacks = []
+
   Plug 'sainnhe/gruvbox-material'
   Plug 'sainnhe/everforest'       " Gruvbox-like
   Plug 'sainnhe/edge'             " Onedark-like
@@ -78,5 +80,16 @@ function plugins#highlighting#setup()
       autocmd ColorScheme * highlight link HighlightedyankRegion CursorLine
     augroup END
 
-  return []
+  if has('nvim-0.5')
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'folke/todo-comments.nvim'
+      function s:SetupTodoComments()
+lua <<EOF
+        require'todo-comments'.setup()
+EOF
+      endfunction
+      let l:callbacks += [function('s:SetupTodoComments')]
+  endif
+
+  return l:callbacks
 endfunction
