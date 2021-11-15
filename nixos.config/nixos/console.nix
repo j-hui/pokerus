@@ -107,6 +107,7 @@ in
         ruplacer
         skim
         trash-cli
+        unstable.zk
 
         # utilities
         binutils
@@ -125,6 +126,7 @@ in
         sd
         xsv
         hexyl
+        p7zip
 
         # nix utilities
         patchelf

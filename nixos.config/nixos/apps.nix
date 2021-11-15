@@ -312,7 +312,8 @@ in
         # Javascript
         nodejs
         yarn
-        nodePackages.javascript-typescript-langserver
+        # nodePackages.javascript-typescript-langserver
+        nodePackages.typescript-language-server
 
         # OCaml
         opam
