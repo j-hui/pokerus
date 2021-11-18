@@ -299,6 +299,7 @@ in
           virtualenvwrapper
           mypy pylint
           tox
+          black
         ]))
         unstable.nodePackages.pyright
 
