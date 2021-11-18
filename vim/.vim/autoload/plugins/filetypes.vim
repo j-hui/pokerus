@@ -168,6 +168,8 @@ function s:PlugMarkdown()
     " let g:markdown_enable_mappings = 0
     " let g:markdown_enable_folding = 1
     " let g:markdown_enable_input_abbreviations = 0
+  Plug 'mzlogin/vim-markdown-toc'
+
   if has('nvim-0.5')
     Plug 'ellisonleao/glow.nvim'
   endif
