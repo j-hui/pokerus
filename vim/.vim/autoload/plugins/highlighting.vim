@@ -89,6 +89,20 @@ lua <<EOF
 EOF
       endfunction
       let l:callbacks += [function('s:SetupTodoComments')]
+
+    Plug 'kyazdani42/nvim-web-devicons'
+      function s:SetupDevIcons()
+        lua require'nvim-web-devicons'.setup{}
+      endfunction
+      let l:callbacks += [function('s:SetupDevIcons')]
+
+
+    Plug 'folke/lsp-colors.nvim'
+      function s:SetupLspColors()
+        lua require'lsp-colors'.setup{}
+      endfunction
+      let l:callbacks += [function('s:SetupLspColors')]
+
   endif
 
   return l:callbacks
