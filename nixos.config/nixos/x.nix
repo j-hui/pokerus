@@ -95,6 +95,7 @@ in
       fontDir.enable = true;
       enableGhostscriptFonts = true;
       fonts = with pkgs; [
+        (nerdfonts.override { fonts = [ "Hack" "SourceCodePro" ]; })
         corefonts
         inconsolata
         terminus_font
@@ -103,18 +104,24 @@ in
         font-awesome
         font-awesome-ttf
         ubuntu_font_family
-        source-code-pro
+        # source-code-pro
         source-sans-pro
         source-serif-pro
         symbola
-        noto-fonts-cjk
         envypn-font
         unifont
         material-icons
-        noto-fonts noto-fonts-emoji noto-fonts-extra
+        noto-fonts noto-fonts-emoji noto-fonts-extra noto-fonts-cjk
         siji
         emacs-all-the-icons-fonts
       ];
+      fontconfig = {
+        defaultFonts = {
+          monospace = [ "Source Code Pro" ];
+          sansSerif = [ "Source Sans Pro" ];
+          serif     = [ "Source Serif Pro" ];
+        };
+      };
     };
 
     environment.sessionVariables = {
