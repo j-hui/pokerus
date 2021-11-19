@@ -277,6 +277,8 @@ function s:StackMiscSubsystems()
     xmap g; <Plug>(neoterm-repl-send)
     nmap g;; <Plug>(neoterm-repl-send-line)
 
+    let g:neoterm_automap_keys = 'g:'
+
   if has('nvim-0.5')
     Plug 'chentau/marks.nvim'
     " Show marks in sign column

@@ -49,6 +49,7 @@ function plugins#window#setup()
 
   Plug 'Konfekt/FastFold'
   " Lazy folding
+    let g:fastfold_fold_movement_commands = []
 
   if has('nvim-0.5')
     Plug 'luukvbaal/stabilize.nvim'
