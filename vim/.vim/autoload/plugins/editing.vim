@@ -55,11 +55,12 @@ function plugins#editing#setup()
 
   Plug 'svermeulen/vim-subversive'
   " Substitute from yank
-    let g:subversivePreserveCursorPosition = 1
+    let g:subversivePresrveCursorPosition = 1
     let g:subversivePromptWithActualCommand = 1
-    nmap s <plug>(SubversiveSubstitute)
-    nmap ss <plug>(SubversiveSubstituteLine)
-    nmap S <plug>(SubversiveSubstituteToEndOfLine)
+    nmap gs <plug>(SubversiveSubstitute)
+    nmap gss <plug>(SubversiveSubstituteLine)
+    call g:WhichKey('n', ['g', 's'], 'subversive-subs')
+    " call g:WhichKey('n', ['g', 's', 's'], 'subversive-subs-line')
 
     " Paste in visual mode
     xmap p <plug>(SubversiveSubstitute)
