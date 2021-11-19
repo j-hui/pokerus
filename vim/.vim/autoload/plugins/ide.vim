@@ -477,6 +477,9 @@ function s:PlugNvimLsp()
   Plug 'stevearc/aerial.nvim'
     " Code outline viewer
 
+  Plug 'weilbith/nvim-lsp-smag'
+    " Override tagfunc, use C-] to jump to definition
+
   function s:SetupNvimLsp()
     lua require'fzf_lsp'.setup {}
     call add(g:lightline['active']['right'], ['lsp_info', 'lsp_hints', 'lsp_errors', 'lsp_warnings', 'lsp_ok'])
