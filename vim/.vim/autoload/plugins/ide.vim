@@ -870,17 +870,28 @@ function s:StackNvimLsp()
 lua << EOF
   local nvim_lsp = require 'lspconfig'
 
+  local efm_langs = {
+    ['python'] = {{formatCommand = 'black --quiet -', formatStdin = true}},
+    -- ['markdown'] = {{lintCommand = 'markdownlint -s', lintStdin = true}},
+  }
+
   local servers = {
     ['ccls'] = {},
     ['texlab'] = {},
     ['rust_analyzer'] = {},
     ['pyright'] = {},
     ['tsserver'] = {},
-    ['hls'] = { haskell = { formattingProvider = 'brittany', } },
+    ['hls'] = { settings = { haskell = { formattingProvider = 'brittany', } } },
     ['vimls'] = {},
     ['ocamllsp'] = {},
     ['rnix'] = {},
     ['tsserver'] = {},
+    ['efm'] = {
+        root_dir = nvim_lsp.util.root_pattern('.git', '.'),
+        filetypes = vim.tbl_keys(efm_langs),
+        settings = { languages = efm_langs },
+        init_options = { documentFormatting = true },
+      },
   }
 
   local on_attach = function(client, bufnr)
@@ -928,11 +939,8 @@ lua << EOF
     vim.api.nvim_buf_set_keymap(0, 'n', ']]', '<cmd>AerialNextUp<CR>', {})
   end
 
-  for lsp, settings in pairs(servers) do
-    nvim_lsp[lsp].setup (completion_lsp {
-        on_attach = on_attach,
-        settings = settings,
-    })
+  for lsp, cfg in pairs(servers) do
+    nvim_lsp[lsp].setup (completion_lsp(vim.tbl_extend('keep', cfg, {on_attach = on_attach})))
   end
 
   vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
