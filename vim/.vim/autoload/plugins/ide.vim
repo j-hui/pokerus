@@ -457,6 +457,9 @@ function s:PlugNvimLsp()
   Plug 'neovim/nvim-lspconfig'
   Plug 'nvim-lua/lsp_extensions.nvim'
 
+  Plug 'jose-elias-alvarez/null-ls.nvim'
+    " Integrate linters and formatters into LSP
+
   Plug 'gfanto/fzf-lsp.nvim'
     " Use FZF as interactive picker
 
@@ -870,9 +873,18 @@ function s:StackNvimLsp()
 lua << EOF
   local nvim_lsp = require 'lspconfig'
 
-  local efm_langs = {
-    ['python'] = {{formatCommand = 'black --quiet -', formatStdin = true}},
-    -- ['markdown'] = {{lintCommand = 'markdownlint -s', lintStdin = true}},
+  require'null-ls'.config {
+    debug = true,
+    sources = {
+      require'null-ls'.builtins.formatting.black,
+      -- require'null-ls'.builtins.formatting.yapf,
+      require'null-ls'.builtins.formatting.prettier,
+      require'null-ls'.builtins.diagnostics.shellcheck,
+      require'null-ls'.builtins.formatting.shfmt,
+      require'null-ls'.builtins.diagnostics.vint,
+      require'null-ls'.builtins.diagnostics.statix,
+      require'null-ls'.builtins.formatting.asmfmt,
+    },
   }
 
   local servers = {
@@ -886,12 +898,7 @@ lua << EOF
     ['ocamllsp'] = {},
     ['rnix'] = {},
     ['tsserver'] = {},
-    ['efm'] = {
-        root_dir = nvim_lsp.util.root_pattern('.git', '.'),
-        filetypes = vim.tbl_keys(efm_langs),
-        settings = { languages = efm_langs },
-        init_options = { documentFormatting = true },
-      },
+    ['null-ls'] = {},
   }
 
   local on_attach = function(client, bufnr)
