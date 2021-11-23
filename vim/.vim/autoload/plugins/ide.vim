@@ -483,6 +483,18 @@ function s:PlugNvimLsp()
   Plug 'weilbith/nvim-lsp-smag'
     " Override tagfunc, use C-] to jump to definition
 
+  function s:SetupNvimLspRust()
+    augroup nvimlsp_extensions_rust
+      autocmd!
+      autocmd CursorHold,CursorHoldI <buffer> lua require'lsp_extensions'.inlay_hints{ only_current_line = true }
+    augroup END
+  endfunction
+
+  augroup nvimlsp_extensions
+    autocmd!
+    autocmd FileType rust call s:SetupNvimLspRust()
+  augroup END
+
   function s:SetupNvimLsp()
     lua require'fzf_lsp'.setup {}
     call add(g:lightline['active']['right'], ['lsp_info', 'lsp_hints', 'lsp_errors', 'lsp_warnings', 'lsp_ok'])
@@ -544,7 +556,7 @@ lua << EOF
   cmp.setup({
     snippet = {
       expand = function(args)
-        vim.fn["vsnip#anonymous"](args.body)
+        vim.fn['vsnip#anonymous'](args.body)
       end,
     },
     mapping = mapping,
@@ -555,9 +567,9 @@ lua << EOF
       { name = 'path' },
       { name = 'spell' },
     },
-    -- documentation = false,
+    documentation = false,
     -- formatting = {
-    --   format = require'lspkind'.cmp_format({with_text = false, maxwidth = 50})
+    --   format = require'lspkind'.cmp_format({with_text = true, maxwidth = 50})
     -- },
   })
   completion_lsp = function(obj)
@@ -874,11 +886,12 @@ lua << EOF
   local nvim_lsp = require 'lspconfig'
 
   require'null-ls'.config {
-    debug = true,
     sources = {
       require'null-ls'.builtins.formatting.black,
       -- require'null-ls'.builtins.formatting.yapf,
-      require'null-ls'.builtins.formatting.prettier,
+      require'null-ls'.builtins.formatting.prettier.with({
+        filetypes = { "html", "json", "yaml", "markdown" },
+      }),
       require'null-ls'.builtins.diagnostics.shellcheck,
       require'null-ls'.builtins.formatting.shfmt,
       require'null-ls'.builtins.diagnostics.vint,
@@ -934,7 +947,6 @@ lua << EOF
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
 
     -- vim.cmd [[autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]] -- NOTE causes weird issue sometimes but that can be ignored
-    vim.cmd [[autocmd CursorHold,CursorHoldI <buffer> lua require'lsp_extensions'.inlay_hints{ only_current_line = true }]]
     vim.cmd [[command! Fmt execute 'lua vim.lsp.buf.formatting()']]
 
     require'aerial'.on_attach(client)
