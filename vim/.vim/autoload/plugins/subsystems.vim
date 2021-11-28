@@ -179,11 +179,68 @@ endfunction
 function s:StackTelescope()
   Plug 'nvim-lua/plenary.nvim'
   Plug 'nvim-telescope/telescope.nvim'
+  Plug 'nvim-telescope/telescope-file-browser.nvim'
+  Plug 'tami5/sqlite.lua'
+  Plug 'ahmedkhalf/project.nvim'
+
   function s:SetupTelescope()
 lua << EOF
-    require'telescope'.setup {
+    local function action(f, ...)
+      local args = {...}
+      return function (b)
+        require'telescope.actions'[f](b, unpack(args))
+      end
+    end
+    local function action_set(f, ...)
+      local args = {...}
+      return function (b)
+        require'telescope.actions.set'[f](b, unpack(args))
+      end
+    end
+    local function fb_action(f, ...)
+      local args = {...}
+      return function (b)
+        require'telescope'.extensions.file_browser.actions[f](b, unpack(args))
+      end
+    end
+    local imaps = {
+      ['<C-a>'] = { '<Home>',   type = 'command' },
+      ['<C-e>'] = { '<End>',    type = 'command' },
+      ['<C-f>'] = { '<Right>',  type = 'command' },
+      ['<C-b>'] = { '<Left>',   type = 'command' },
+      ['<C-h>'] = { '<BS>',     type = 'command' },
+      ['<C-k>'] = function () vim.cmd 'norm! d$' end,
     }
+    local nmaps = {
+      ['<Up>']    = { 'k',      type = 'command' },
+      ['<Down>']  = { 'j',      type = 'command' },
+      ['<Left>']  = { 'h',      type = 'command' },
+      ['<Right>'] = { 'l',      type = 'command' },
+      ['q']       = action 'close',
+      ['<C-u>']   = action_set('shift_selection', -12),
+      ['<C-d>']   = action_set('shift_selection', 12),
+      ['<C-p>']   = action_set('shift_selection', -1),
+      ['<C-n>']   = action_set('shift_selection', 1),
+    }
+    require'telescope'.setup {
+      defaults = { mappings = { i = imaps, n = nmaps } },
+      extensions = {
+        file_browser = {
+          mappings = {
+            n = nmaps,
+            i = vim.tbl_extend('force', imaps, {
+              ['<C-y>'] = fb_action 'create_file',
+              ['<C-t>'] = fb_action 'toggle_browser',
+            }),
+          },
+        },
+      },
+    }
+    require'telescope'.load_extension 'file_browser'
+    require'project_nvim'.setup {}
+    require'telescope'.load_extension 'projects'
 EOF
+    nnoremap <leader>0 :lua require 'telescope'.extensions.file_browser.file_browser()<CR>
   endfunction
   return [function('s:SetupTelescope')]
 endfunction
