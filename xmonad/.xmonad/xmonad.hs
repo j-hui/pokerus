@@ -11,6 +11,7 @@ import           Data.List                      ( dropWhileEnd
                                                 , isPrefixOf
                                                 , nub
                                                 )
+import qualified Data.Map                     as M
 import           Data.Maybe                     ( catMaybes
                                                 , fromMaybe
                                                 , listToMaybe
@@ -30,10 +31,10 @@ import           XMonad                         ( (-->)
                                                 , Dimension
                                                 , KeyMask
                                                 , ManageHook
-                                                , MonadIO
                                                 , MonadState(get)
                                                 , Resize(..)
-                                                , Tall(Tall)
+                                                , Tall(..)
+                                                , Full(..)
                                                 , Window
                                                 , X
                                                 , XConfig(..)
@@ -41,7 +42,7 @@ import           XMonad                         ( (-->)
                                                 , composeAll
                                                 , doF
                                                 , doFloat
-                                                , doShift
+                                                , gets
                                                 , io
                                                 , liftX
                                                 , mod4Mask
@@ -69,6 +70,7 @@ import           XMonad.Actions.CycleWS         ( WSType(..)
 import           XMonad.Actions.RotSlaves       ( rotSlavesDown
                                                 , rotSlavesUp
                                                 )
+import           XMonad.Actions.WindowBringer   ( bringMenuArgs' )
 import           XMonad.Actions.WithAll         ( killAll )
 
 
@@ -81,6 +83,7 @@ import           XMonad.Actions.DynamicProjects ( Project(..)
                                                 )
 import           XMonad.Actions.DynamicWorkspaces
                                                 ( addHiddenWorkspace )
+import           XMonad.Hooks.DebugStack        ( debugStack )
 import qualified XMonad.Hooks.DynamicLog       as Log
 import           XMonad.Hooks.EwmhDesktops      ( ewmh )
 import           XMonad.Hooks.FadeInactive      ( fadeInactiveLogHook )
@@ -107,7 +110,6 @@ import           XMonad.Hooks.WorkspaceHistory  ( workspaceHistory
                                                 )
 
 
-import qualified XMonad.Layout.Tabbed          as Tabbed
 import qualified XMonad.Layout.BoringWindows   as Boring
 
 -- Layouts modifiers
@@ -139,12 +141,14 @@ import           XMonad.Layout.WindowNavigation ( windowNavigation )
 
 import qualified XMonad.Util.Dmenu             as Dmenu
 import           XMonad.Util.EZConfig           ( mkKeymap )
+import           XMonad.Util.NamedWindows       ( getName, unName )
 import           XMonad.Util.Run                ( runProcessWithInput )
 import           XMonad.Util.SpawnOnce          ( spawnOnce )
 
 import qualified Codec.Binary.UTF8.String      as UTF8
 import qualified DBus                          as D
 import qualified DBus.Client                   as D
+
 -------------------------------------------------------------------------------
 -- Variables
 --
@@ -156,9 +160,6 @@ myTerminal = "kitty"
 
 myTerminalAt :: String -> String
 myTerminalAt path = "kitty --directory " ++ path
-
-myEditor :: String -> String
-myEditor file = myTerminal ++ " nvim " ++ file
 
 myBrowser :: String
 myBrowser = "qutebrowser "
@@ -177,13 +178,6 @@ myBorderWidth = 2
 
 myScript :: String -> String
 myScript s = "~/bin/" ++ s
-
-mySpawn :: String -> X ()
-mySpawn s = spawn $ myScript s
-
-myDmenu :: MonadIO m => String -> [String] -> m String
-myDmenu prompt =
-  Dmenu.menuArgs "rofi" ["-monitor", "-4", "-dmenu", "-p", prompt]
 
 -------------------------------------------------------------------------------
 -- Colors
@@ -207,18 +201,6 @@ myBgColor' = fromXres "*color8"
 myAccentColor :: String
 myAccentColor = fromXres "*color6"
 
-myTabTheme :: Tabbed.Theme
-myTabTheme = def { Tabbed.activeColor         = myBgColor'
-                 , Tabbed.inactiveColor       = myBgColor
-                 , Tabbed.urgentColor         = myUrgentColor
-                 , Tabbed.activeTextColor     = myFgColor
-                 , Tabbed.inactiveTextColor   = myFgColor
-                 , Tabbed.urgentTextColor     = myFgColor
-                 , Tabbed.activeBorderColor   = myBgColor'
-                 , Tabbed.inactiveBorderColor = myBgColor
-                 , Tabbed.urgentBorderColor   = myUrgentColor
-                 }
-
 getFromXres :: String -> IO String
 getFromXres key = fromMaybe "" . findValue key <$> runProcessWithInput
   "xrdb"
@@ -235,11 +217,46 @@ getFromXres key = fromMaybe "" . findValue key <$> runProcessWithInput
   splitAtTrimming :: String -> Int -> (String, String)
   splitAtTrimming str idx = bimap trim (trim . tail) $ splitAt idx str
 
-  trim :: String -> String
-  trim = dropWhileEnd isSpace . dropWhile isSpace
-
 fromXres :: String -> String
 fromXres = unsafePerformIO . getFromXres
+
+-------------------------------------------------------------------------------
+-- Combinators and Helpers
+--
+
+nonEmptyStr :: String -> Maybe String
+nonEmptyStr s
+  | null $ trim s = Nothing
+  | otherwise     = Just s
+
+onJust :: b -> (a -> X b) -> Maybe a -> X b
+onJust b f (Just a) = f a
+onJust b _ Nothing  = return b
+
+-- | X combinator for piping around strings. Fails if empty.
+(>|=) :: X String -> (String -> X ()) -> X ()
+xs >|= f = xs >>= return . nonEmptyStr >?= f
+
+(>?=) :: X (Maybe a) -> (a -> X ()) -> X ()
+xa >?= f = xa >>= onJust () f
+
+infixl 1 >|=
+infixl 1 >?=
+
+dmenuName :: String
+dmenuName = "rofi"
+
+dmenuArgs :: String -> [String]
+dmenuArgs p = ["-monitor", "-4", "-dmenu", "-p", p]
+
+myDmenu_ :: String -> [String] -> X String
+myDmenu_ prompt = Dmenu.menuArgs dmenuName (dmenuArgs prompt)
+
+myDmenu :: String -> M.Map String a -> X (Maybe a)
+myDmenu prompt = Dmenu.menuMapArgs dmenuName (dmenuArgs prompt)
+
+trim :: String -> String
+trim = dropWhileEnd isSpace . dropWhile isSpace
 
 -------------------------------------------------------------------------------
 -- Workspaces
@@ -249,15 +266,7 @@ myWorkspaces = ["home", "misc"]
 
 myProjects :: [Project]
 myProjects =
-  [ Project { projectName      = "acuity"
-            , projectDirectory = "~/Documents/acuity"
-            , projectStartHook = Just $ spawn $ myTerminalAt "~/Documents/acuity"
-            }
-  , Project { projectName      = "valor"
-            , projectDirectory = "~/Documents/valor"
-            , projectStartHook = Just $ spawn $ myEditor "~/Documents/valor/index.md"
-            }
-  , Project
+  [ Project
     { projectName      = "www"
     , projectDirectory = "~/Downloads"
     , projectStartHook = Just $ do
@@ -271,7 +280,6 @@ myProjects =
                            sendMessage FirstLayout
                            spawn $ myWebapp "https://mail.google.com/mail/u/0/"
                            spawn $ myWebapp "https://mail.google.com/mail/u/1/"
-                           spawn myMailReader
     }
   , Project
     { projectName      = "chat"
@@ -303,9 +311,6 @@ myProjects =
             }
   , boringProject "gaming"
   , boringProject "video"
-
-  -- screenshots
-  -- zoom
   ]
   where boringProject name = Project name "~/" Nothing
 
@@ -329,7 +334,7 @@ promptDesktop :: String -> X String
 promptDesktop prompt = do
   wins    <- readUrgents
   history <- workspaceHistory
-  myDmenu prompt
+  myDmenu_ prompt
     $  nub
     $  urgent wins
     ++ tail history
@@ -354,13 +359,26 @@ shiftToDesktop name
     proj <- lookupProject name
     forM_ proj shiftToProject
 
-doShiftToDesktop :: Bool -> String -> XMonad.ManageHook
-doShiftToDesktop chase name
+doShiftToDesktop :: String -> XMonad.ManageHook
+doShiftToDesktop name
   | name `elem` myWorkspaces = shift
   | otherwise                = liftX (addHiddenWorkspace name) >> shift
- where
-  shift | chase     = doShift name
-        | otherwise = doF $ SS.shift name
+ where shift = doF $ SS.shift name
+
+promptWindow :: String -> X (Maybe Window)
+promptWindow p = do
+  winIds <- SS.index <$> gets Core.windowset
+  wins <- M.fromList . map mkPair <$> mapM getName winIds
+  fmap unName <$> myDmenu p wins
+    where mkPair w = ("(" ++ show (unName w) ++ ") " ++ show w, w)
+
+bringWin :: (Eq a, Show a) => a -> SS.Stack a -> SS.Stack a
+bringWin a s@SS.Stack { SS.focus = f, SS.up = u, SS.down = d }
+  | a == f      = s
+  | a `elem` u  = s { SS.focus = a, SS.up = u' ++  f : tail d' }
+  | a `elem` d  = s { SS.focus = a, SS.down = f : filter (/= a) d }
+  | otherwise   = s
+   where (u', d') = span (/= a) u
 
 -------------------------------------------------------------------------------
 -- Layouts
@@ -376,8 +394,7 @@ myLayoutHook :: ModifiedLayout _ _ Window
 myLayoutHook = avoidStruts
              $ mkToggle (single FULL)
              $ mkToggle (single MIRROR)
-             $ Boring.boringWindows (noBorders tabs) ||| Boring.boringAuto stack
-
+             $ Boring.boringWindows (noBorders full) ||| Boring.boringAuto stack
  where
   stack =
     renamed [Replace "stack"]
@@ -385,18 +402,29 @@ myLayoutHook = avoidStruts
       $ limitWindows 2
       $ mySpacing 2
       $ Tall 1 (3 / 100) (1 / 2)
-  tabs = renamed [Replace "tabs"] $ Tabbed.tabbed Tabbed.shrinkText myTabTheme
+  full = renamed [Replace "full"]
+          $ windowNavigation
+          $ Full
+
 -------------------------------------------------------------------------------
 -- Keybinds
 --
 myKeys :: [(String, X ())]
 myKeys =
+  -- The following keys are unbound:
+  -- - b/f
+  -- - e
+  -- - d
+  -- - v
+  -- - n/p
+  -- - o
   [ ("M-z z"                  , xmonadRecompile)
   , ("M-z r"                  , xmonadRestart)
   , ("M-z q"                  , io exitSuccess)  -- Quit XMonad
+  , ("M-z d"                  , debugStack)
 
-  , ("M-l"                    , spawn "dunstctl close-all")
-  , ("M-S-l"                  , spawn "xset s activate")
+  , ("M-q"                    , spawn "dunstctl close-all")
+  , ("M-S-q"                  , spawn "xset s activate")
 
   -- Applications
   , ("M-;"                    , spawn "rofi -monitor -4 -show drun")
@@ -405,18 +433,18 @@ myKeys =
   , ("M-<Return>"             , spawn myTerminal)
   , ("M-g"                    , spawn myBrowser')
   , ("M-S-g"                  , spawn $ myBrowser' ++ " --incognito")
-  , ("M-d"                    , mySpawn "rofi-define")
-  , ("M-S-d"                  , mySpawn "word-lookup")
-  , ("M-o"                    , spawn "rofi-pass")
-  , ("M-S-o"                  , spawn "thunar")
-  , ("M-e"                    , myDmenu "Apps" myWebapps >>= spawn . myWebapp)
-  , ("M-S-e"                  , myDmenu "Scripts" myScripts >>= spawn . myScript)
+  , ("M-i"                    , spawn "rofi-pass")
+  , ("M-S-i"                  , spawn "thunar")
+  , ("M-a"                    , myDmenu_ "Apps" myWebapps >|= spawn . myWebapp)
+  , ("M-S-a"                  , myDmenu_ "Scripts" myScripts >|= spawn . myScript)
 
   -- Workspaces
   , ("M-/"                    , spawn "rofi -monitor -4 -show windowcd")
   , ("M-S-/"                  , spawn "rofi -monitor -4 -show window")
   , ("M-s"                    , promptDesktop "Switch to" >>= switchDesktop)
   , ("M-S-s"                  , promptDesktop "Shift to" >>= shiftToDesktop)
+  , ("M-o"                    , promptWindow "Get window" >?= windows . SS.modify' . bringWin)
+  , ("M-S-o"                  , bringMenuArgs' dmenuName (dmenuArgs "bring"))
 
   , ("M-.",                     nextScreen)
   , ("M-,",                     prevScreen)
@@ -434,29 +462,29 @@ myKeys =
   -- Window navigation
   , ("M-j"                    , Boring.focusDown)       -- Move focus to the next window
   , ("M-k"                    , Boring.focusUp)         -- Move focus to the prev window
-  , ("M-S-j"                  , windows SS.swapDown)    -- Swap focused window with next window
-  , ("M-S-k"                  , windows SS.swapUp)      -- Swap focused window with prev window
-  , ("M-r"                    , rotSlavesDown)          -- Rotate all windows except master
-  , ("M-S-r"                  , rotSlavesUp)            -- Rotate all windows except master
-  , ("M-h"                    , Boring.focusMaster)     -- Move focus to the master window
-  , ("M-S-h"                  , windows SS.swapMaster)  -- Swap the focused window and the master window
+  -- , ("M-S-j"                  , windows SS.swapDown)    -- Swap focused window with next window
+  -- , ("M-S-k"                  , windows SS.swapUp)      -- Swap focused window with prev window
+  , ("M-S-j"                  , rotSlavesDown)          -- Rotate all windows except master
+  , ("M-S-k"                  , rotSlavesUp)            -- Rotate all windows except master
+  , ("M-m"                    , Boring.focusMaster)     -- Move focus to the master window
+  , ("M-S-m"                  , windows SS.swapMaster)  -- Swap the focused window and the master window
 
-  , ("M-m"                    , sendMessage NextLayout)       -- Toggle layout
-  , ("M-S-m"                  , sendMessage $ Toggle MIRROR)  -- Mirror layout
+  , ("M-y"                    , sendMessage NextLayout)       -- Toggle layout
+  , ("M-S-y"                  , sendMessage $ Toggle MIRROR)  -- Mirror layout
   , ("M-S-u"                  , sendMessage $ Toggle FULL)    -- Toggle on full layout
-  , ("M-u", focusUrgent >> windows SS.swapMaster)             -- Move focus to urgent window
-  -- TODO: make M-v fullscreen mode
-  , ("M-b"                    , sendMessage Shrink)
-  , ("M-f"                    , sendMessage Expand)
-  , ("M-S-f"                  , increaseLimit)              -- Increase number of windows that can be shown
-  , ("M-S-b"                  , decreaseLimit)              -- Decrease number of windows that can be shown
-  , ("M-'"                    , mySpawn "mediactl play-pause")
-  , ("M-["                    , mySpawn "mediactl previous")
-  , ("M-]"                    , mySpawn "mediactl next")
-  , ("M-S-'"                  , mySpawn "mediactl here")
-  , ("<XF86AudioPlay>"        , mySpawn "mediactl play-pause")
-  , ("<XF86AudioPrev>"        , mySpawn "mediactl previous")
-  , ("<XF86AudioNext>"        , mySpawn "mediactl next")
+  , ("M-u"                    , focusUrgent >> windows SS.swapMaster) -- Move focus to urgent window
+
+  , ("M-h"                    , sendMessage Shrink)
+  , ("M-l"                    , sendMessage Expand)
+  , ("M-S-h"                  , decreaseLimit)              -- Decrease number of windows that can be shown
+  , ("M-S-l"                  , increaseLimit)              -- Increase number of windows that can be shown
+  , ("M-'"                    , spawn $ myScript "mediactl play-pause")
+  , ("M-["                    , spawn $ myScript "mediactl previous")
+  , ("M-]"                    , spawn $ myScript "mediactl next")
+  , ("M-S-'"                  , spawn $ myScript "mediactl here")
+  , ("<XF86AudioPlay>"        , spawn $ myScript "mediactl play-pause")
+  , ("<XF86AudioPrev>"        , spawn $ myScript "mediactl previous")
+  , ("<XF86AudioNext>"        , spawn $ myScript "mediactl next")
   , ("M--"                    , spawn "amixer sset Master 10%-")
   , ("M-="                    , spawn "amixer sset Master 10%+")
   , ("M-S-="                  , spawn "amixer sset Master 0%")
@@ -465,16 +493,16 @@ myKeys =
   , ("<XF86AudioMute>"        , spawn "amixer sset Master 0%")
   , ("<XF86MonBrightnessUp>"  , spawn "brightnessctl set 10%+")
   , ("<XF86MonBrightnessDown>", spawn "brightnessctl set 10%-")
-  , ("<Print>"                , mySpawn "screenshot")
-  , ("S-<Print>"              , mySpawn "screenshot --fullscreen")
-  , ("M-x"                    , mySpawn "screenshot")
-  , ("M-S-x"                  , mySpawn "screenshot --fullscreen")
-  , ("M-c"                    , mySpawn "screenshot --no-delete")
-  , ("M-S-c"                  , mySpawn "screenshot --fullscreen --no-delete")
+  , ("<Print>"                , spawn $ myScript "screenshot")
+  , ("S-<Print>"              , spawn $ myScript "screenshot --fullscreen")
+  , ("M-x"                    , spawn $ myScript "screenshot")
+  , ("M-S-x"                  , spawn $ myScript "screenshot --fullscreen")
+  , ("M-c"                    , spawn $ myScript "screenshot --no-delete")
+  , ("M-S-c"                  , spawn $ myScript "screenshot --fullscreen --no-delete")
   ]
  where
   nonNSP :: WSType
-  nonNSP = WSIs (return (\ws -> SS.tag ws /= "nsp"))
+  nonNSP = WSIs $ return $ (/= "nsp") . SS.tag
 
   xmonadRecompile, xmonadRestart :: X ()
   xmonadRecompile =
@@ -523,12 +551,9 @@ polybarHook dbus = do
                  , Log.ppTitle   = const ""
                  , Log.ppLayout  = (++ " (" ++ show c ++ ")")
                  }
-  wrapper c s | s /= "NSP" = Log.wrap (" %{F" ++ c ++ "} ") " %{F-} " s
+  wrapper c s | s /= "nsp" = Log.wrap (" %{F" ++ c ++ "} ") " %{F-} " s
               | otherwise  = mempty
-
-  windowCount =
-    maybe 0 countWins . SS.stack . SS.workspace . SS.current . Core.windowset
-    where countWins s = 1 + length (SS.up s) + length (SS.down s)
+  windowCount = length . SS.index . Core.windowset
 
 -------------------------------------------------------------------------------
 -- Startup
@@ -551,28 +576,24 @@ myManageHook =
       [ isFullscreen --> doFullFloat
       , transience'
       , className =? "Gcr-prompter" --> doCenterFloat
+      , className =? "float-term"   --> doCenterFloat
 
-  -- chasing doesn't seem to work
-      , className =? "qutebrowser" --> doShiftToDesktop True "www"
+      , className =? "qutebrowser" --> doShiftToDesktop "www"
 
-  -- chasing doesn't seem to work
-      , className =? "Steam" --> doShiftToDesktop False "gaming"
-      , className =? "Slack" --> doShiftToDesktop True "chat"
-      , className =? "discord" --> doShiftToDesktop True "chat"
+      , className =? "Slack" --> doShiftToDesktop "chat"
+      , className =? "discord" --> doShiftToDesktop "chat"
 
-  -- only works with spotifywm
-      , className =? "spotify" --> doShiftToDesktop True "spt"
+      , className =? "spotify" --> doShiftToDesktop "spt"
       ]
     <+> zoomShenanigans
  where
   zoomShenanigans = composeOne
     [ -- Zoom home; chasing doesn't seem to work, but I don't care about it
       (className =? "zoom" <&&> title =? "Zoom - Free Account")
-      -?> doShiftToDesktop False "chat"
+      -?> doShiftToDesktop "chat"
 
     -- Meeting window; chasing doesn't seem to work, but Zoom will pop a floating notification
-    , (className =? "zoom" <&&> title =? "Zoom")
-      -?> doShiftToDesktop True "video"
+    , (className =? "zoom" <&&> title =? "Zoom") -?> doShiftToDesktop "video"
 
     -- Leave certain meeting windows tiled
     , (className =? "zoom" <&&> title =? "Chat") -?> mempty
