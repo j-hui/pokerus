@@ -56,10 +56,12 @@ in
       simplescreenrecorder
       xfce.thunar xfce.xfconf xfce.tumbler xfce.exo
       dragon-drop
-      unstable.devour # only added to nixpkgs in nov 2020
+      devour
+      xsel
       tabbed
       xterm st
       gnome3.gucharmap # for selecting fonts
+      river
 
       (xmonad-with-packages.override { packages = hp: [
           hp.xmonad-contrib hp.xmonad-extras hp.dbus
@@ -224,6 +226,7 @@ in
         };
         windowManager.bspwm.enable = true;
         displayManager.defaultSession = "none+xmonad";
+        displayManager.job.logToJournal = true;
         displayManager.lightdm = {
           enable = true;
           greeters.mini = {
