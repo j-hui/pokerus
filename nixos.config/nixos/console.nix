@@ -66,12 +66,6 @@ in
         #   buildInputs = old.buildInputs ++ [ unstable.tree-sitter ];
         # })) {})
 
-        # Basic language servers
-        rnix-lsp
-        nodePackages.bash-language-server
-        nodePackages.vim-language-server
-        nodePackages.yaml-language-server
-
         # version control
         gitAndTools.gitFull gitAndTools.gh gitAndTools.delta
         subversion

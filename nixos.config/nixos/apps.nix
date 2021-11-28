@@ -12,11 +12,11 @@ let
       use_mpris = true
       '';
 
-  spotifydFull = (pkgs.spotifyd.override ({
+  spotifydFull = pkgs.spotifyd.override {
           withMpris = true;
           withALSA = true;
           withPulseAudio = true;
-        }));
+        };
 
   efm-langserver = pkgs.buildGoModule rec {
     pname = "efm-langserver";
@@ -165,6 +165,7 @@ in
           unstable.kitty
           gparted
           termpdfpy
+          alacritty
         ];
       };
     })
@@ -195,7 +196,7 @@ in
     (mkIf cfg.emacs.gcc.enable {
       nixpkgs.overlays = [
         (import (builtins.fetchTarball {
-          url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
+          url = "https://github.com/nix-community/emacs-overlay/archive/master.tar.gz";
         }))
       ];
       services.emacs.package = pkgs.emacsGcc;
@@ -252,10 +253,17 @@ in
         vscode # I don't actually user this but handy to keep around
         editorconfig-core-c
         pre-commit
+        nodePackages.prettier
 
         # Debugging
         gdb
         rr # requires sysctl: kernel.perf_event_paranoid = 1
+        asmfmt
+
+        # Nix
+        rnix-lsp
+        unstable.statix
+
 
         # Writing
         libqalculate wordnet scowl
@@ -278,6 +286,8 @@ in
 
         libxml2 # not sure why this was needed?
 
+        nodePackages.yaml-language-server
+
         # random system dependencies..?
         openssl
         # dbus
@@ -299,8 +309,10 @@ in
           virtualenvwrapper
           mypy pylint
           tox
-          black
+          yapf
+          autopep8
         ]))
+        unstable.black
         unstable.nodePackages.pyright
 
         # Scala
@@ -360,8 +372,10 @@ in
 
         # Vim
         vim-vint
+        nodePackages.vim-language-server
 
         # Shell
+        nodePackages.bash-language-server
         shellcheck
         shfmt
       ];
