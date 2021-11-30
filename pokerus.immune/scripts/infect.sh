@@ -83,6 +83,9 @@ for dir in "$@"; do
         *.config)
             infect "$dir" "$HOME/.config"
             ;;
+        *.local)
+            infect "$dir" "$HOME/.local"
+            ;;
         *.local-share)
             infect "$dir" "$HOME/.local/share"
             ;;
