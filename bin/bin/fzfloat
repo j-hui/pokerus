@@ -5,24 +5,38 @@
 # Lifts fzf to run in a separate terminal application, which can be managed as
 # a standalone GUI component.
 #
-# Requires a POSIX-compliant shell, fzf, and alacritty.
+# Requires a POSIX-compliant shell, awk, fzf, and alacritty.
 #
 # References:
 # - https://gitlab.com/Seirdy/term-dmenu
 # - https://serverfault.com/questions/187182/need-script-to-redirect-stdin-stdout-to-named-pipes
+# - https://unix.stackexchange.com/a/600214
 
 class="float-term"
+
+command -v sh         >/dev/null  || die "Missing dependency: sh"
+command -v fzf        >/dev/null  || die "Missing dependency: fzf"
+command -v awk        >/dev/null  || die "Missing dependency: awk"
+command -v alacritty  >/dev/null  || die "Missing dependency: alacritty"
 
 die () {
   echo "$@" >&2
   exit 1
 }
 
-command -v sh         >/dev/null  || die "Missing dependency: sh"
-command -v fzf        >/dev/null  || die "Missing dependency: fzf"
-command -v alacritty  >/dev/null  || die "Missing dependency: alacritty"
+shquote() {
+  LC_ALL=C awk -v q="'" '
+    BEGIN{
+      for (i=1; i<ARGC; i++) {
+        gsub(q, q "\\" q q, ARGV[i])
+        printf "%s ", q ARGV[i] q
+      }
+      print ""
+    }' "$@"
+}
 
-export FZF_DEFAULT_OPTS="$* $FZF_DEFAULT_OPTS"
+# shellcheck disable=SC2086
+fzf="fzf $(shquote "$@" $FZF_DEFAULT_OPTS)"
 
 trap exit CHLD
 trap "rm -f /tmp/fzfloat-in /tmp/fzfloat-out" EXIT
@@ -32,8 +46,9 @@ trap "rm -f /tmp/fzfloat-in /tmp/fzfloat-out" EXIT
 { while read -r LINE; do printf '%s\n' "$LINE"; done } <&0 >/tmp/fzfloat-in &
 
 # shellcheck disable=SC2016
-alacritty --class "Alacritty,$class" -e sh -c 'fzf </tmp/fzfloat-in >/tmp/fzfloat-out' &
-# st -c "$class" -e sh -c 'fzf </tmp/fzfloat-in >/tmp/fzfloat-out' &
+alacritty --class "Alacritty,$class" -e \
+  sh -c "$fzf </tmp/fzfloat-in >/tmp/fzfloat-out" &
+# st -c "$class" -e sh -c "$fzf </tmp/fzfloat-in >/tmp/fzfloat-out" &
 
 # sleep 0.1
 # xdotool search --class "$class" \
