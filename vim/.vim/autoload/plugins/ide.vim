@@ -902,7 +902,6 @@ lua << EOF
 
   local servers = {
     ['ccls'] = {},
-    ['texlab'] = {},
     ['rust_analyzer'] = {},
     ['pyright'] = {},
     ['tsserver'] = {},
@@ -912,6 +911,7 @@ lua << EOF
     ['rnix'] = {},
     ['tsserver'] = {},
     ['null-ls'] = {},
+    ['texlab'] = {},
   }
 
   local on_attach = function(client, bufnr)
