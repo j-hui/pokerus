@@ -2,7 +2,6 @@
 {-# OPTIONS_GHC -Wno-partial-type-signatures #-}
 {-# OPTIONS_GHC -Wunused-imports #-}
 
-import           Control.Monad                  ( forM_ )
 import           Data.Bifunctor                 ( Bifunctor(..) )
 import           Data.Char                      ( isSpace )
 import           Data.List                      ( dropWhileEnd
@@ -14,7 +13,6 @@ import           Data.List                      ( dropWhileEnd
 import qualified Data.Map                     as M
 import           Data.Maybe                     ( catMaybes
                                                 , fromMaybe
-                                                , listToMaybe
                                                 )
 import           System.Exit                    ( exitSuccess )
 import           System.IO.Unsafe               ( unsafePerformIO )
@@ -23,10 +21,7 @@ import           XMonad                         ( (-->)
                                                 , (<&&>)
                                                 , (<+>)
                                                 , (=?)
-                                                , ChangeLayout
-                                                  ( FirstLayout
-                                                  , NextLayout
-                                                  )
+                                                , ChangeLayout (..)
                                                 , Default(def)
                                                 , Dimension
                                                 , KeyMask
@@ -40,11 +35,9 @@ import           XMonad                         ( (-->)
                                                 , XConfig(..)
                                                 , className
                                                 , composeAll
-                                                , doF
                                                 , doFloat
                                                 , gets
                                                 , io
-                                                , liftX
                                                 , mod4Mask
                                                 , sendMessage
                                                 , spawn
@@ -66,28 +59,16 @@ import           XMonad.Actions.CycleWS         ( WSType(..)
                                                 , swapNextScreen
                                                 , swapPrevScreen
                                                 )
--- import           XMonad.Actions.Promote         ( promote )
 import           XMonad.Actions.RotSlaves       ( rotSlavesDown
                                                 , rotSlavesUp
                                                 )
 import           XMonad.Actions.WindowBringer   ( bringMenuArgs' )
 import           XMonad.Actions.WithAll         ( killAll )
 
-
-import           XMonad.Actions.DynamicProjects ( Project(..)
-                                                , activateProject
-                                                , dynamicProjects
-                                                , lookupProject
-                                                , shiftToProject
-                                                , switchProject
-                                                )
-import           XMonad.Actions.DynamicWorkspaces
-                                                ( addHiddenWorkspace )
 import           XMonad.Hooks.DebugStack        ( debugStack )
 import qualified XMonad.Hooks.DynamicLog       as Log
 import           XMonad.Hooks.EwmhDesktops      ( ewmh )
 import           XMonad.Hooks.FadeInactive      ( fadeInactiveLogHook )
--- import qualified XMonad.Hooks.ManageDebug            as Debug
 import           XMonad.Hooks.ManageDocks       ( avoidStruts
                                                 , docksEventHook
                                                 , manageDocks
@@ -170,14 +151,11 @@ myBrowser' = "google-chrome-stable "
 myWebapp :: String -> String
 myWebapp url = "google-chrome-stable --new-window --app=" ++ url
 
-myMailReader :: String
-myMailReader = myTerminal ++ " neomutt"
-
 myBorderWidth :: Dimension
 myBorderWidth = 2
 
 myScript :: String -> String
-myScript s = "~/bin/" ++ s
+myScript s = "~/.local/tms/" ++ s
 
 -------------------------------------------------------------------------------
 -- Colors
@@ -262,73 +240,16 @@ trim = dropWhileEnd isSpace . dropWhile isSpace
 -- Workspaces
 --
 myWorkspaces :: [String]
-myWorkspaces = ["home", "misc"]
-
-myProjects :: [Project]
-myProjects =
-  [ Project
-    { projectName      = "www"
-    , projectDirectory = "~/Downloads"
-    , projectStartHook = Just $ do
-                           sendMessage FirstLayout
-                           spawn myBrowser
-    }
-  , Project
-    { projectName      = "mail"
-    , projectDirectory = "~/mail"
-    , projectStartHook = Just $ do
-                           sendMessage FirstLayout
-                           spawn $ myWebapp "https://mail.google.com/mail/u/0/"
-                           spawn $ myWebapp "https://mail.google.com/mail/u/1/"
-    }
-  , Project
-    { projectName      = "chat"
-    , projectDirectory = "~/"
-    , projectStartHook = Just $ do
-      sendMessage FirstLayout
-      spawn "slack"
-      spawn "Discord"
-      spawn "Signal"
-      spawn $ myWebapp "https://messages.google.com/web/conversations"
-      spawn $ myWebapp "https://web.whatsapp.com"
-      spawn $ myWebapp "https://messenger.com"
-    }
-  , Project
-    { projectName      = "spt"
-    , projectDirectory = "~/"
-    , projectStartHook = Just $ do
-                           sendMessage FirstLayout
-                           spawn $ myTerminal ++ " spt"
-                           spawn "spotify"
-    }
-  , Project { projectName      = "research"
-            , projectDirectory = "~/research"
-            , projectStartHook = Just $ spawn $ myTerminalAt "~/research"
-            }
-  , Project { projectName      = "tinker"
-            , projectDirectory = "~/"
-            , projectStartHook = Just $ spawn myTerminal
-            }
-  , boringProject "gaming"
-  , boringProject "video"
+myWorkspaces =
+  [ "dev"     -- ^ Work-related software development
+  , "doc"     -- ^ Work-related reading and writing
+  , "cfg"     -- ^ Tinkering and config file editing
+  , "fun"     -- ^ Work-unrelated software development, reading, etc.
+  , "life"    -- ^ Life management
+  , "chat"    -- ^ Ongoing conversations
+  , "media"   -- ^ Multimedia applications, e.g., Spotify, video player, etc.
+  , "idle"    -- ^ Applications that run in the background, e.g., monitoring
   ]
-  where boringProject name = Project name "~/" Nothing
-
-myWebapps :: [String]
-myWebapps = [ "https://mail.google.com/mail/u/1/"
-            , "https://mail.google.com/mail/u/0/"
-            , "https://messages.google.com/web/conversations"
-            , "https://web.whatsapp.com"
-            , "https://messenger.com"
-            , "https://keep.google.com/u/1"
-            , "https://calendar.google.com/u/1/"
-            ]
-
-myScripts :: [String]
-myScripts = [ "kb-rate"
-            , "mon-preset auto"
-            , "mon-preset haunter-dock"
-            ]
 
 promptDesktop :: String -> X String
 promptDesktop prompt = do
@@ -339,31 +260,14 @@ promptDesktop prompt = do
     $  urgent wins
     ++ tail history
     ++ myWorkspaces
-    ++ map projectName myProjects
+    -- ++ map projectName myProjects
   where urgent wins = []
 
 switchDesktop :: String -> X ()
-switchDesktop name
-  | name `elem` myWorkspaces = windows $ SS.greedyView name
-  | otherwise = do
-    history <- workspaceHistory
-    proj    <- lookupProject name
-    if listToMaybe history == Just name
-      then forM_ proj activateProject
-      else forM_ proj switchProject
+switchDesktop = windows . SS.greedyView
 
 shiftToDesktop :: String -> X ()
-shiftToDesktop name
-  | name `elem` myWorkspaces = windows $ SS.shift name
-  | otherwise = do
-    proj <- lookupProject name
-    forM_ proj shiftToProject
-
-doShiftToDesktop :: String -> XMonad.ManageHook
-doShiftToDesktop name
-  | name `elem` myWorkspaces = shift
-  | otherwise                = liftX (addHiddenWorkspace name) >> shift
- where shift = doF $ SS.shift name
+shiftToDesktop = windows . SS.shift
 
 promptWindow :: String -> X (Maybe Window)
 promptWindow p = do
@@ -433,10 +337,9 @@ myKeys =
   , ("M-<Return>"             , spawn myTerminal)
   , ("M-g"                    , spawn myBrowser')
   , ("M-S-g"                  , spawn $ myBrowser' ++ " --incognito")
-  , ("M-i"                    , spawn "rofi-pass")
+  , ("M-i"                    , spawn $ myScript "passman")
   , ("M-S-i"                  , spawn "thunar")
-  , ("M-a"                    , myDmenu_ "Apps" myWebapps >|= spawn . myWebapp)
-  , ("M-S-a"                  , myDmenu_ "Scripts" myScripts >|= spawn . myScript)
+  , ("M-S-a"                  , spawn $ myScript "cmd-launcher")
 
   -- Workspaces
   , ("M-/"                    , spawn "rofi -monitor -4 -show windowcd")
@@ -462,8 +365,6 @@ myKeys =
   -- Window navigation
   , ("M-j"                    , Boring.focusDown)       -- Move focus to the next window
   , ("M-k"                    , Boring.focusUp)         -- Move focus to the prev window
-  -- , ("M-S-j"                  , windows SS.swapDown)    -- Swap focused window with next window
-  -- , ("M-S-k"                  , windows SS.swapUp)      -- Swap focused window with prev window
   , ("M-S-j"                  , rotSlavesDown)          -- Rotate all windows except master
   , ("M-S-k"                  , rotSlavesUp)            -- Rotate all windows except master
   , ("M-m"                    , Boring.focusMaster)     -- Move focus to the master window
@@ -499,7 +400,7 @@ myKeys =
   , ("M-S-x"                  , spawn $ myScript "screenshot --fullscreen")
   , ("M-c"                    , spawn $ myScript "screenshot --no-delete")
   , ("M-S-c"                  , spawn $ myScript "screenshot --fullscreen --no-delete")
-  ]
+  ] ++ map viewWorkspace workspaceKW ++ map shiftWorkspace workspaceKW
  where
   nonNSP :: WSType
   nonNSP = WSIs $ return $ (/= "nsp") . SS.tag
@@ -514,6 +415,10 @@ myKeys =
       ++ " && sleep 1"
       ++ " && polybar-msg cmd restart"
       ++ " && notify-send XMonad 'restarted successfully'"
+
+  viewWorkspace (k, w) = ("M-" ++ show k, switchDesktop w)
+  shiftWorkspace (k, w) = ("M-S-" ++ show k, shiftToDesktop w)
+  workspaceKW = take 9 $ zip [1..] myWorkspaces
 
 -------------------------------------------------------------------------------
 -- Bar
@@ -536,24 +441,23 @@ dbusOutput dbus str = D.emit dbus $ signal { D.signalBody = body }
   body   = [D.toVariant $ UTF8.decodeString str]
 
 polybarHook :: D.Client -> X ()
-polybarHook dbus = do
-  xs <- get
-  Log.dynamicLogWithPP $ ppHook $ windowCount xs
-
+polybarHook dbus = get >>= Log.dynamicLogWithPP . ppHook
  where
-  ppHook c = def { Log.ppOutput  = dbusOutput dbus
-                 , Log.ppCurrent = wrapper myFgColor'
-                 , Log.ppVisible = wrapper myFgColor
-                 , Log.ppUrgent  = wrapper myUrgentColor
-                 , Log.ppHidden  = Log.wrap " " " "
-                 , Log.ppWsSep   = ""
-                 , Log.ppSep     = " | "
-                 , Log.ppTitle   = const ""
-                 , Log.ppLayout  = (++ " (" ++ show c ++ ")")
-                 }
-  wrapper c s | s /= "nsp" = Log.wrap (" %{F" ++ c ++ "} ") " %{F-} " s
-              | otherwise  = mempty
-  windowCount = length . SS.index . Core.windowset
+  ppHook xs = def { Log.ppOutput          = dbusOutput dbus
+                  , Log.ppCurrent         = wrapper myFgColor' " {" "} "
+                  , Log.ppVisible         = wrapper myFgColor " [" "] "
+                  , Log.ppUrgent          = wrapper myUrgentColor " <" "> "
+                  , Log.ppHidden          = Log.wrap "  " "  "
+                  , Log.ppHiddenNoWindows = wrapper myBgColor' "  " "  "
+                  , Log.ppWsSep           = ""
+                  , Log.ppSep             = " | "
+                  , Log.ppTitle           = const ""
+                  , Log.ppLayout          = (++ " (" ++ windowCount xs ++ ")")
+                  }
+  wrapper c b a s
+    | s == "nsp" = mempty
+    | otherwise  = Log.wrap (b ++ "%{F" ++ c ++ "}") ("%{F-}" ++ a) s
+  windowCount = show . length . SS.index . Core.windowset
 
 -------------------------------------------------------------------------------
 -- Startup
@@ -578,27 +482,25 @@ myManageHook =
       , className =? "Gcr-prompter" --> doCenterFloat
       , className =? "float-term"   --> doCenterFloat
 
-      , className =? "qutebrowser" --> doShiftToDesktop "www"
+      -- , className =? "qutebrowser" --> doShiftToDesktop "www"
 
-      , className =? "Slack" --> doShiftToDesktop "chat"
-      , className =? "discord" --> doShiftToDesktop "chat"
+      -- , className =? "Slack" --> doShiftToDesktop "chat"
+      -- , className =? "discord" --> doShiftToDesktop "chat"
 
-      , className =? "spotify" --> doShiftToDesktop "spt"
+      -- , className =? "spotify" --> doShiftToDesktop "spt"
       ]
     <+> zoomShenanigans
  where
   zoomShenanigans = composeOne
     [ -- Zoom home; chasing doesn't seem to work, but I don't care about it
-      (className =? "zoom" <&&> title =? "Zoom - Free Account")
-      -?> doShiftToDesktop "chat"
+      -- (className =? "zoom" <&&> title =? "Zoom - Free Account") -?> doShiftToDesktop "chat"
 
     -- Meeting window; chasing doesn't seem to work, but Zoom will pop a floating notification
-    , (className =? "zoom" <&&> title =? "Zoom") -?> doShiftToDesktop "video"
+    -- , (className =? "zoom" <&&> title =? "Zoom") -?> doShiftToDesktop "video"
 
     -- Leave certain meeting windows tiled
-    , (className =? "zoom" <&&> title =? "Chat") -?> mempty
-    , (className =? "zoom" <&&> fmap ("Participants" `isPrefixOf`) title)
-      -?> mempty
+      (className =? "zoom" <&&> title =? "Chat") -?> mempty
+    , (className =? "zoom" <&&> fmap ("Participants" `isPrefixOf`) title) -?> mempty
 
     -- Float all other Zoom windows
     , (className =? "zoom") -?> doFloat
@@ -617,8 +519,8 @@ main = do
 
  where
   cfg d =
-    dynamicProjects myProjects
-      $ withUrgencyHook NoUrgencyHook
+    -- dynamicProjects myProjects
+      withUrgencyHook NoUrgencyHook
       $ fullscreenSupport
       $ ewmh
           --  $ Debug.debugManageHook

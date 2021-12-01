@@ -1,5 +1,7 @@
+#!/usr/bin/env bash
+
 errecho() {
-    echo "Pokerus error: $@" >&2
+    echo "Pokerus error:" "$@" >&2
 }
 
 PATH_ADD() {
@@ -10,6 +12,8 @@ PATH_ADD() {
         esac
     fi
 }
+
+PATH_ADD ~/.local/tms
 
 ### fzf
 

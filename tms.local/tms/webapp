@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+runWebapp () {
+  [ $# -ne 1 ] && exit 1
+  google-chrome-stable --new-window --app="$1"
+}
+
+read -r -d '' apps <<-'EOF'
+lionmail
+gmail
+messages
+whatsapp
+keep
+calendar
+EOF
+
+webapp () {
+  case "$1" in
+    lionmail  ) echo "https://mail.google.com/mail/u/1/" ;;
+    gmail     ) echo "https://mail.google.com/mail/u/0/" ;;
+    messages  ) echo "https://messages.google.com/web/conversations" ;;
+    whatsapp  ) echo "https://web.whatsapp.com" ;;
+    messenger ) echo "https://messenger.com" ;;
+    keep      ) echo "https://keep.google.com/u/1" ;;
+    calendar  ) echo "https://calendar.google.com/u/1/" ;;
+  esac
+}
+
+if [ $# -lt 1 ] ; then
+  app="$(echo "$apps" | ./fzfloat)"
+else
+  app="$1"
+fi
+
+if ! [[ "$app" =~ ^https:// ]] ; then
+  app="$(webapp "$app")"
+fi
+
+if [[ "$app" =~ ^https:// ]] ; then
+  runWebapp "$app"
+else
+  echo "Refusing to open potentially malformed URL: $app"
+  exit 1
+fi

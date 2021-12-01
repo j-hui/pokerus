@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+set -euf
+
+read -r -d '' cmds <<'EOF' || true
+kb-rate
+mon-auto
+mon-haunter
+EOF
+
+prompt () {
+  # fzf --prompt="$1 > "
+  # ./fzfloat --prompt="$1 > "
+  rofi -p "$1 >" -dmenu
+}
+
+err () {
+    notify-send -t 3000 -u critical "$0" "$*"
+}
+
+
+if [ "$#" -ne 1 ]; then
+  cmd="$(echo "$cmds" | prompt "cmd")"
+else
+  cmd="$1"
+fi
+
+if [ -z "$cmd" ]; then
+  err "Usage: $0 [<cmd>]"
+  exit 1
+fi
+
+case "$cmd" in
+  kb-rate)
+    xset r rate 250 69
+    ;;
+  mon-auto)
+    xrandr --auto
+    ;;
+  mon-haunter)
+    xrandr --output DP-2-2 --off && \
+      xrandr --output DP-2-2 --primary --auto --output eDP-1 --right-of DP-2-2
+    ;;
+  *)
+    err "Unknown cmd: $cmd"
+    exit 1
+    ;;
+esac

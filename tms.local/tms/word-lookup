@@ -11,22 +11,22 @@ if  ! command -v xclip       >/dev/null || \
     exit 1
 fi
 
-if ! [ -n "$DISPLAY" ]; then
+if [ -z "$DISPLAY" ]; then
     echo "Cannot find X session."
     exit 1
 fi
 
 word=$(xclip -o | xargs) # Use xargs to trim off excess whitespace
-if ! [ -n "$word" ]; then
+if [ -z "$word" ]; then
     echo "No word selected."
     notify-send -u low -t 2000 "No word selected." ""
     exit 1
 fi
-url_word="$(echo $word | tr ' ' '+')"
+url_word="$(echo "$word" | tr ' ' '+')"
 
 res=$(curl -s "https://api.dictionaryapi.dev/api/v2/entries/en_US/$url_word")
 regex=$'"definition":"\K(.*?)(?=")'
-definitions=$(echo $res | grep -Po "$regex")
+definitions=$(echo "$res" | grep -Po "$regex")
 separatedDefinition=$(sed ':a;N;$!ba;s/\n/\n\n/g' <<< "$definitions")
 
 if [ -n "$separatedDefinition" ]; then

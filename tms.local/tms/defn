@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+
+set -u
+
+WORDLIST="/run/current-system/sw/lib/aspell/en-common.wl"
+PROMPT="Define"
+WN_MODE="-over -synsn -simsv -synsa -synsr"
+
+wn_cmd="wn {} $WN_MODE | fold -s -w \$COLUMNS"
+# NOTE: COLUMNS will be defined and expanded by fzf
+
+grep -vE "'s\$" < "$WORDLIST" | \
+  fzf --prompt="$PROMPT: " --preview="$wn_cmd" --preview-window=up:60%

@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+
+# passman
+#
+# Wraps gopass in a floating terminal window.
+#
+# Requires a POSIX-compliant shell, gopass, and st.
+
+class="float-term"
+
+die () {
+  echo "$@" >&2
+  exit 1
+}
+
+command -v sh         >/dev/null  || die "Missing dependency: sh"
+command -v gopass     >/dev/null  || die "Missing dependency: gopass"
+command -v alacritty  >/dev/null  || die "Missing dependency: alacritty"
+
+alacritty --class "Alacritty,$class" -e gopass
+
+# vi:ft=sh

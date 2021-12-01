@@ -66,7 +66,7 @@ set -gx EMAIL "j-hui@cs.columbia.edu"
 abbr --add o open
 
 # Note: Unlike other shells, $PATH is a list, not a colon-delimited string.
-set PATH ~/bin $PATH
+set PATH ~/.local/tms $PATH
 set PATH ~/.cargo/bin $PATH
 set PATH ~/go/bin $PATH
 set PATH ~/.local/bin $PATH
