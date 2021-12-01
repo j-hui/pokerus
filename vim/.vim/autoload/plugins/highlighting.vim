@@ -27,6 +27,7 @@ function plugins#highlighting#setup()
     " let g:gruvbox_material_enable_bold = 1
     let g:gruvbox_material_diagnostic_text_highlight = 1
     let g:gruvbox_material_current_word = 'bold'
+    let g:solarized_termcolors=256
 
   Plug 'guns/xterm-color-table.vim'
   " Preview all 256 xterm colors

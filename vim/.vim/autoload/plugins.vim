@@ -9,7 +9,8 @@ let s:env_embedded = exists('g:vscode')
 
 let g:completion_tool = 'none'
 let g:colorscheme = 'gruvbox-material'
-let g:lightline_colorscheme = substitute(g:colorscheme, '-', '_', 'g')
+" let g:lightline_colorscheme = substitute(g:colorscheme, '-', '_', 'g')
+let g:lightline_colorscheme = 'gruvbox_material'
 let g:lightline = {
       \ 'active': {
       \   'left': [],
