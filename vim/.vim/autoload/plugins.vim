@@ -76,6 +76,8 @@ function plugins#setup()
 
   call plug#begin('~/.vimplugins/plugged')
 
+  Plug 'vim-scripts/Decho' " For debugging
+
   let l:plug_callbacks += plugins#subsystems#setup()
   let l:plug_callbacks += plugins#highlighting#setup()
   let l:plug_callbacks += plugins#window#setup()
