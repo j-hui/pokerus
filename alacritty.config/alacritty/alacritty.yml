@@ -1,0 +1,139 @@
+font:
+  size: 14.0
+
+bell:
+  duration: 0
+  # duration: 200
+  animation: Linear
+  color: '#323232'
+  command:
+    program: notify-send
+    args: ["-t", "1000", "-u", "critical", "Alacritty"]
+
+background_opacity: 1.0
+
+cursor:
+  style:
+    shape: Underline
+    blinking: On
+  vi_mode_style:
+    shape: Block
+    blinking: On
+  blink_interval: 500
+
+mouse:
+  hide_when_typing: false
+
+hints:
+  alphabet: "jfkdlsahgurieowpqbvncmxz"
+  enabled:
+  - regex: "(ipfs:|ipns:|magnet:|mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)\
+            [^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩`]+"
+    command: xdg-open
+    post_processing: true
+    mouse:
+      enabled: true
+    binding:
+      key: O
+      mods: Control|Shift
+  - regex: "(ipfs:|ipns:|magnet:|mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)\
+            [^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩`]+"
+    action: Select
+    post_processing: true
+    binding:
+      key: R
+      mods: Control|Shift
+  - regex: "[[[:ascii:]]&&[[:^blank:]]]+" # Word
+    action: Select
+    binding:
+      key: I
+      mods: Control|Shift
+  - regex: "[0-9a-f]{6,127}" # Hash
+    action: Select
+    binding:
+      key: H
+      mods: Control|Shift
+  - regex: "[[[:ascii:]]]{8,}" # Line
+    action: Select
+    binding:
+      key: L
+      mods: Control|Shift
+  - regex: "(?:\\S*?/[\\S]+)|(?:\\S[\\S]*\\.[a-zA-Z0-9]{2,7})" # Path
+    action: Select
+    binding:
+      key: T
+      mods: Control|Shift
+  - regex: "[[[:ascii:]]&&[[:^blank:]]]{2,}" # Jump
+    action: MoveViModeCursor
+    binding:
+      key: J
+      mods: Control|Shift
+  - regex: "[[:digit:]][[[:ascii:]]&&[[:^blank:]]]*" # Digit
+    action: MoveViModeCursor
+    binding:
+      key: G
+      mods: Control|Shift
+
+# Key bindings
+key_bindings:
+  - { key: S,         mods: Shift|Control,  mode: ~Alt,        action: Copy           }
+  - { key: S,         mods: Shift|Control,  mode: ~Alt,        action: Paste          }
+  - { key: K,         mods: Shift|Control,                     action: ClearLogNotice }
+  - { key: K,         mods: Shift|Control,  mode: ~Vi|~Search, chars: "\x0c"          }
+  - { key: LBracket,  mods: Shift|Control,                     action: ToggleViMode   }
+  - { key: 26,        mods: Shift|Control,                     action: ToggleViMode   }
+  - { key: V,         mods: Control|Shift,                     action: Paste          }
+  - { key: C,         mods: Control|Shift,                     action: Copy           }
+
+  # Readline navigation
+  - { key: U,         mods: Shift|Control,  mode: ~Alt,        action: ScrollHalfPageUp    }
+  - { key: D,         mods: Shift|Control,  mode: ~Alt,        action: ScrollHalfPageDown  }
+  - { key: P,         mods: Shift|Control,  mode: ~Alt,        action: ScrollLineUp        }
+  - { key: N,         mods: Shift|Control,  mode: ~Alt,        action: ScrollLineDown      }
+  - { key: A,         mods: Shift|Control,  mode: ~Alt,        action: ScrollToTop         }
+  - { key: E,         mods: Shift|Control,  mode: ~Alt,        action: ScrollToBottom      }
+
+  # Vi Mode
+  - { key: LBracket,  mods: Control,        mode: Vi,          action: ToggleViMode    }
+  - { key: LBracket,  mods: Control,        mode: Vi|~Search,  action: ClearSelection  }
+  - { key: 26,        mods: Control,        mode: Vi|~Search,  action: ClearSelection  }
+  - { key: Escape,                          mode: Vi|~Search,  action: ClearSelection  }
+  - { key: I,                               mode: Vi|~Search,  action: ToggleViMode    }
+  - { key: A,         mods: Control,        mode: Vi|~Search,  action: FirstOccupied   }
+  - { key: E,         mods: Control,        mode: Vi|~Search,  action: Last            }
+  - { key: Y,                               mode: Vi|~Search,  action: Copy            }
+
+  # Search Mode
+  - { key: LBracket,  mods: Control,        mode: Search,      action: SearchCancel }
+  - { key: LBracket,  mods: Shift|Control,  mode: Search,      action: SearchCancel }
+  - { key: 26,        mods: Control,        mode: Search,      action: SearchCancel }
+  - { key: 26,        mods: Shift|Control,  mode: Search,      action: SearchCancel }
+
+  # Size adjustment
+  - { key: Key0,      mods: Control|Shift,                     action: ResetFontSize    }
+  - { key: Equals,    mods: Control|Shift,                     action: IncreaseFontSize }
+  - { key: Plus,      mods: Control|Shift,                     action: IncreaseFontSize }
+  - { key: Minus,     mods: Control|Shift,                     action: DecreaseFontSize }
+  - { key: Underline, mods: Control|Shift,                     action: DecreaseFontSize }
+  - { key: 12,        mods: Control|Shift,                     action: DecreaseFontSize }
+
+#debug:
+  # Display the time it takes to redraw each frame.
+  #render_timer: false
+
+  # Keep the log file after quitting Alacritty.
+  #persistent_logging: false
+
+  # Log level
+  #
+  # Values for `log_level`:
+  #   - Off
+  #   - Error
+  #   - Warn
+  #   - Info
+  #   - Debug
+  #   - Trace
+  #log_level: Warn
+
+  # Print all received window events.
+  #print_events: false

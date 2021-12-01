@@ -160,7 +160,7 @@ in
 
     (mkIf cfg.util.enable {
       environment = {
-        variables.TERMINAL = "kitty";
+        variables.TERMINAL = "alacritty";
         systemPackages = with pkgs; [
           unstable.kitty
           gparted
