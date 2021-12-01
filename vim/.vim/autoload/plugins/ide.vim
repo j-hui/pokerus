@@ -909,7 +909,8 @@ lua << EOF
   }
 
   local servers = {
-    ['ccls'] = {},
+    ['clangd'] = {},
+    ['texlab'] = {},
     ['rust_analyzer'] = {},
     ['pyright'] = {},
     ['tsserver'] = {},
