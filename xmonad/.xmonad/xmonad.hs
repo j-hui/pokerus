@@ -1,7 +1,7 @@
 {-# LANGUAGE PartialTypeSignatures #-}
 {-# OPTIONS_GHC -Wno-partial-type-signatures #-}
 {-# OPTIONS_GHC -Wunused-imports #-}
-
+{-# OPTIONS_GHC -Wunused-top-binds #-}
 import           Data.Bifunctor                 ( Bifunctor(..) )
 import           Data.Char                      ( isSpace )
 import           Data.List                      ( dropWhileEnd
@@ -137,19 +137,13 @@ myModMask :: KeyMask
 myModMask = mod4Mask -- super/windows key
 
 myTerminal :: String
-myTerminal = "kitty"
-
-myTerminalAt :: String -> String
-myTerminalAt path = "kitty --directory " ++ path
+myTerminal = "alacritty"
 
 myBrowser :: String
 myBrowser = "qutebrowser "
 
 myBrowser' :: String
 myBrowser' = "google-chrome-stable "
-
-myWebapp :: String -> String
-myWebapp url = "google-chrome-stable --new-window --app=" ++ url
 
 myBorderWidth :: Dimension
 myBorderWidth = 2
@@ -203,12 +197,11 @@ fromXres = unsafePerformIO . getFromXres
 --
 
 nonEmptyStr :: String -> Maybe String
-nonEmptyStr s
-  | null $ trim s = Nothing
-  | otherwise     = Just s
+nonEmptyStr s | null $ trim s = Nothing
+              | otherwise     = Just s
 
 onJust :: b -> (a -> X b) -> Maybe a -> X b
-onJust b f (Just a) = f a
+onJust _ f (Just a) = f a
 onJust b _ Nothing  = return b
 
 -- | X combinator for piping around strings. Fails if empty.
@@ -240,7 +233,7 @@ trim = dropWhileEnd isSpace . dropWhile isSpace
 -- Workspaces
 --
 myWorkspaces :: [String]
-myWorkspaces = zipWith (\i n -> show i ++ ":" ++ n) [1..]
+myWorkspaces = zipWith (\i n -> show i ++ ":" ++ n) ([1..]::[Int])
   [ "dev"     -- ^ Work-related software development
   , "doc"     -- ^ Work-related reading and writing
   , "cfg"     -- ^ Tinkering and config file editing
@@ -253,15 +246,8 @@ myWorkspaces = zipWith (\i n -> show i ++ ":" ++ n) [1..]
 
 promptDesktop :: String -> X String
 promptDesktop prompt = do
-  wins    <- readUrgents
   history <- workspaceHistory
-  myDmenu_ prompt
-    $  nub
-    $  urgent wins
-    ++ tail history
-    ++ myWorkspaces
-    -- ++ map projectName myProjects
-  where urgent wins = []
+  myDmenu_ prompt $ nub $ tail history ++ myWorkspaces
 
 switchDesktop :: String -> X ()
 switchDesktop = windows . SS.greedyView
@@ -402,8 +388,8 @@ myKeys =
   , ("M-S-c"                  , spawn $ myScript "screenshot --fullscreen --no-delete")
   ] ++ map viewWorkspace workspaceKW ++ map shiftWorkspace workspaceKW
  where
-  nonNSP :: WSType
-  nonNSP = WSIs $ return $ (/= "nsp") . SS.tag
+  -- nonNSP :: WSType
+  -- nonNSP = WSIs $ return $ (/= "nsp") . SS.tag
 
   xmonadRecompile, xmonadRestart :: X ()
   xmonadRecompile =
@@ -418,7 +404,7 @@ myKeys =
 
   viewWorkspace (k, w) = ("M-" ++ show k, switchDesktop w)
   shiftWorkspace (k, w) = ("M-S-" ++ show k, shiftToDesktop w)
-  workspaceKW = take 9 $ zip [1..] myWorkspaces
+  workspaceKW = take 9 $ zip ([1..]::[Int]) myWorkspaces
 
 -------------------------------------------------------------------------------
 -- Bar
@@ -481,25 +467,14 @@ myManageHook =
       , transience'
       , className =? "Gcr-prompter" --> doCenterFloat
       , className =? "float-term"   --> doCenterFloat
-
-      -- , className =? "qutebrowser" --> doShiftToDesktop "www"
-
-      -- , className =? "Slack" --> doShiftToDesktop "chat"
-      -- , className =? "discord" --> doShiftToDesktop "chat"
-
-      -- , className =? "spotify" --> doShiftToDesktop "spt"
       ]
     <+> zoomShenanigans
  where
   zoomShenanigans = composeOne
-    [ -- Zoom home; chasing doesn't seem to work, but I don't care about it
-      -- (className =? "zoom" <&&> title =? "Zoom - Free Account") -?> doShiftToDesktop "chat"
-
-    -- Meeting window; chasing doesn't seem to work, but Zoom will pop a floating notification
-    -- , (className =? "zoom" <&&> title =? "Zoom") -?> doShiftToDesktop "video"
-
+    [
     -- Leave certain meeting windows tiled
-      (className =? "zoom" <&&> title =? "Chat") -?> mempty
+      (className =? "zoom" <&&> title =? "Zoom Meeting") -?> mempty
+    , (className =? "zoom" <&&> title =? "Chat") -?> mempty
     , (className =? "zoom" <&&> fmap ("Participants" `isPrefixOf`) title) -?> mempty
 
     -- Float all other Zoom windows
@@ -519,11 +494,9 @@ main = do
 
  where
   cfg d =
-    -- dynamicProjects myProjects
       withUrgencyHook NoUrgencyHook
       $ fullscreenSupport
       $ ewmh
-          --  $ Debug.debugManageHook
       $ def { manageHook         = manageDocks <+> fullscreenManageHook <+> myManageHook
             , handleEventHook    = docksEventHook <+> fullscreenEventHook
             , modMask            = myModMask
