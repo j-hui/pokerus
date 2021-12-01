@@ -3,24 +3,21 @@
 # pgrep ibus-daemon > /dev/null || ibus-daemon &
 pgrep sxhkd > /dev/null || sxhkd &
 
-dunst &
+pkill polybar
 
+dunst &
 polybar top &
 polybar bottom &
-# test -z "$(acpi --battery 2>/dev/null)" && polybar bottom &
-# acpi --battery 2>/dev/null | grep Battery >/dev/null && polybar bottom-laptop &
 
 amixer sset Master 69%
 
 xsetroot -cursor_name left_ptr &
-
 xset r rate 250 69
 
 bspc monitor -d I II III IV V VI VII VIII
 
 bspc config borderless_monocle true
 bspc config gapless_monocle true
-# bspc config gapless_monocle false
 
 bspc config border_width 1
 bspc config window_gap 0
@@ -63,6 +60,4 @@ bspc rule -a firefox desktop='^3' follow=on
 bspc rule -a zoom desktop='^6' follow=on
 bspc rule -a slack desktop='^7' follow=on
 bspc rule -a discord desktop='^7' follow=on
-
 bspc rule -a spotify desktop='^8' follow=on
-
