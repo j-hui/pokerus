@@ -240,7 +240,7 @@ trim = dropWhileEnd isSpace . dropWhile isSpace
 -- Workspaces
 --
 myWorkspaces :: [String]
-myWorkspaces =
+myWorkspaces = zipWith (\i n -> show i ++ ":" ++ n) [1..]
   [ "dev"     -- ^ Work-related software development
   , "doc"     -- ^ Work-related reading and writing
   , "cfg"     -- ^ Tinkering and config file editing
