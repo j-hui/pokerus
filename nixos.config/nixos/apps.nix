@@ -161,6 +161,7 @@ in
     (mkIf cfg.util.enable {
       environment = {
         variables.TERMINAL = "alacritty";
+        variables.WINIT_X11_SCALE_FACTOR = "1";
         systemPackages = with pkgs; [
           unstable.kitty
           gparted
