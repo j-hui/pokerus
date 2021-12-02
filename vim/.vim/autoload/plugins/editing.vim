@@ -15,6 +15,9 @@ function plugins#editing#setup()
     imap <C-g><CR> <CR><Plug>DiscretionaryEnd
     call g:WhichKeyIG(['<CR>'], 'endwise-end')
 
+  Plug 'tpope/vim-abolish'
+  " Smarter subtitutions
+
   Plug 'tpope/vim-speeddating'
   " increment/decrement dates
 
