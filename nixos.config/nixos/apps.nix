@@ -296,6 +296,8 @@ in
 
         # C
         gcc gnumake automake cmake autoconf pkg-config m4 libtool dpkg
+        gcc-unwrapped gcovr
+        doxygen
         clang clang-tools
         bear pythonPackages.compiledb
         cdecl
