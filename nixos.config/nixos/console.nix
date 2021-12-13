@@ -68,6 +68,7 @@ in
 
         # version control
         gitAndTools.gitFull gitAndTools.gh gitAndTools.delta
+        git-subrepo
         subversion
         mercurial
 
