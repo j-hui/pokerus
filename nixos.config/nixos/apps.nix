@@ -93,7 +93,7 @@ in
       environment.systemPackages = with pkgs; [
         slack
         unstable.discord
-        zoom-us
+        unstable.zoom-us
         skypeforlinux
         zulip
         signal-desktop signal-cli
