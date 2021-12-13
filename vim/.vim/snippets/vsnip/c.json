@@ -1,0 +1,12 @@
+{
+  "header_guard": {
+    "prefix": "header",
+    "body": [
+      "#ifndef ${1:HEADER_H}",
+      "#define $1",
+      "$0",
+      "#endif /* $1 */"
+    ],
+    "description": "Header guard #ifndef"
+  }
+}

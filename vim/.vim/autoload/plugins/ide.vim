@@ -530,8 +530,12 @@ function s:PlugNvimCmp()
   Plug 'hrsh7th/cmp-path'
   Plug 'f3fora/cmp-spell'
   Plug 'hrsh7th/cmp-cmdline'
+  Plug 'hrsh7th/cmp-nvim-lua'
+
   Plug 'hrsh7th/vim-vsnip'
   Plug 'hrsh7th/vim-vsnip-integ'
+  Plug 'rafamadriz/friendly-snippets'
+    let g:vsnip_snippet_dir = expand('~/.vim/snippets/vsnip')
 
   function s:SetupNvimCmp()
     imap <expr> <C-l> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : luaeval('require"cmp".visible()') ? '\<C-y>' : ''
@@ -562,15 +566,19 @@ lua << EOF
     mapping = mapping,
     sources = {
       { name = 'vsnip' },
+      { name = 'nvim_lua' },
       { name = 'nvim_lsp' },
-      { name = 'buffer' },
       { name = 'path' },
-      { name = 'spell' },
+      { name = 'buffer', option = { keyword_length = 4 } },
+      -- { name = 'spell', keyword_length = 5 },
     },
     documentation = false,
     -- formatting = {
     --   format = require'lspkind'.cmp_format({with_text = true, maxwidth = 50})
     -- },
+    experimental = {
+      ghost_text = true,
+    },
   })
   completion_lsp = function(obj)
     obj.capabilities = require'cmp_nvim_lsp'.update_capabilities(vim.lsp.protocol.make_client_capabilities())
