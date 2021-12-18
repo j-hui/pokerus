@@ -893,7 +893,7 @@ function s:StackNvimLsp()
 lua << EOF
   local nvim_lsp = require 'lspconfig'
 
-  require'null-ls'.config {
+  require'null-ls'.setup {
     sources = {
       require'null-ls'.builtins.formatting.black,
       -- require'null-ls'.builtins.formatting.yapf,
@@ -919,7 +919,6 @@ lua << EOF
     ['ocamllsp'] = {},
     ['rnix'] = {},
     ['tsserver'] = {},
-    ['null-ls'] = {},
     ['texlab'] = {},
   }
 
