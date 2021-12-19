@@ -357,10 +357,14 @@ function plugins#subsystems#setup()
   let l:callbacks = []
   if has('nvim-0.5')
     let l:callbacks += s:StackWhichKeyNvim()
-    let l:callbacks += s:StackTelescope()
   else
     let l:callbacks += s:StackWhichKey()
   endif
+
+  if has('nvim-0.6')
+    let l:callbacks += s:StackTelescope()
+  endif
+
   let l:callbacks += s:StackFzf()
   let l:callbacks += s:StackGit()
   let l:callbacks += s:StackMiscSubsystems()
