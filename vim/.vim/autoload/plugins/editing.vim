@@ -1,9 +1,21 @@
 function plugins#editing#setup()
-  Plug 'tpope/vim-commentary'
-  " use gcc to comment things out
+  let l:callbacks = []
 
-  Plug 'suy/vim-context-commentstring'
-  " comments for embedded syntax
+  if has('nvim-0.5.0')
+    Plug 'numToStr/Comment.nvim'
+
+    function s:SetupCommentNvim()
+      lua require('Comment').setup()
+    endfunction
+
+    let l:callbacks += [function('s:SetupCommentNvim')]
+  else
+    Plug 'tpope/vim-commentary'
+    " use gcc to comment things out
+
+    Plug 'suy/vim-context-commentstring'
+    " comments for embedded syntax
+  endif
 
   Plug 'tpope/vim-unimpaired'
   " ]* and [* mappings
@@ -78,7 +90,7 @@ function plugins#editing#setup()
   Plug 'machakann/vim-sandwich'
   " Fancier vim-surround + d
 
-    function s:SandwichCallback()
+    function s:SetupSandwich()
       " Use vim-surround bindings
       runtime macros/sandwich/keymap/surround.vim
 
@@ -120,6 +132,8 @@ function plugins#editing#setup()
       augroup END
     endfunction
 
+    let l:callbacks += [function('s:SetupSandwich')]
+
     Plug 'matze/vim-move'
 
     Plug 'lervag/lists.vim'
@@ -144,7 +158,7 @@ function plugins#editing#setup()
       autocmd! User GoyoEnter nested call <SID>goyo_enter()
       autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
-    return [function('s:SandwichCallback')]
+    return l:callbacks
 endfunction
 
 " vim: set ts=2 sw=2 tw=80 et :
