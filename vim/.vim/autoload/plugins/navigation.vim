@@ -7,15 +7,6 @@ function plugins#navigation#setup()
   Plug 'christoomey/vim-titlecase'
   " Title case w/ gt<motion>
 
-  Plug 'gcmt/wildfire.vim'
-  " Smart text object selection
-    let g:wildfire_objects = {
-          \ '*' : ["i'", "i'", 'i)', 'i]', 'i}'],
-          \ 'html,xml' : ['at', 'it'],
-          \}
-    nmap <leader>v <Plug>(wildfire-quick-select)
-    call g:WhichKeyL(['v'], 'wildfire-quick-select')
-
   if has('nvim-0.5.0')
     Plug 'ggandor/lightspeed.nvim'
     " Fancier (and more opinionated) sneak
