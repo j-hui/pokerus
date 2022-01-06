@@ -337,6 +337,21 @@ function s:StackMiscSubsystems()
 
   Plug 'itchyny/calendar.vim'
   " Calendar app in Vim
+    function s:SetupCalendar()
+      if filereadable(expand('~/.local/share/vim/calendar.vim'))
+        source ~/.local/share/vim/calendar.vim
+      endif
+    endfunction
+    let l:callbacks += [function('s:SetupCalendar')]
+
+  Plug 'Shougo/vimproc', { 'do': 'make' }
+  Plug 'yuratomo/gmail.vim'
+    function s:SetupGmail()
+      if filereadable(expand('~/.local/share/vim/gmail.vim'))
+        source ~/.local/share/vim/gmail.vim
+      endif
+    endfunction
+    let l:callbacks += [function('s:SetupGmail')]
 
   Plug 'kassio/neoterm'
   " Send commands to terminal
@@ -355,7 +370,7 @@ function s:StackMiscSubsystems()
 
   Plug 'mhinz/vim-startify'
   " Start screen for vim
-  
+
   let g:startify_padding_left = max([16, &columns / 4])
   let g:vim_logo = [
         \ '  ##############..... ##############   ',
