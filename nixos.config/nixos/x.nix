@@ -30,6 +30,8 @@ in
     nixpkgs.config.allowUnfree = true;
     console.useXkbConfig = true;
     hardware.pulseaudio.enable = true;
+    hardware.logitech.wireless.enable = true;
+    hardware.logitech.wireless.enableGraphical = true;
 
     i18n.inputMethod = mkIf cfg.ibus.enable {
       enabled = "ibus";
