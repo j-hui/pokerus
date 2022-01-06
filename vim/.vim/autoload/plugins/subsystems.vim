@@ -304,7 +304,16 @@ function s:StackGit()
     " Yank link to web-hosted git page
 
     function s:SetupGitLinker()
-      lua require'gitlinker'.setup{}
+lua <<EOF
+      require'gitlinker'.setup{
+        opts = {
+          action_callback = function(url)
+            vim.api.nvim_command('let @" = \'' .. url .. '\'')
+            vim.fn.OSCYankString(url)
+          end,
+        },
+      }
+EOF
       call g:WhichKeyL(['g', 'y'], 'git-url')
     endfunction
     let l:callbacks += [function('s:SetupGitLinker')]
