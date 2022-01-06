@@ -1,11 +1,70 @@
 function plugins#navigation#setup()
   let l:callbacks = []
 
+  Plug 'kana/vim-textobj-user'
+  " User-defined motions beginning with {a,i}
+  " NOTE: double check against text objects given by treesitter
+
+  Plug 'thinca/vim-textobj-between'
+  " {a,i} f<char> motions for region between <char>
+
+  Plug 'Julian/vim-textobj-variable-segment'
+  " {a,i} v motions for portions of variables
+
+  Plug 'kana/vim-textobj-indent'
+  " {a,i} i motions for indented blocks of text
+
+  Plug 'rhysd/vim-textobj-continuous-line'
+  " motions for navigating line continuations
+    let g:textobj_continuous_line_no_default_key_mappings = 1
+    let g:textobj_continuous_line_no_default_mappings = 1
+    omap <buffer>a\ <Plug>(textobj-continuous-vim-a)
+    vmap <buffer>a\ <Plug>(textobj-continuous-vim-a)
+    omap <buffer>i\ <Plug>(textobj-continuous-vim-i)
+    vmap <buffer>i\ <Plug>(textobj-continuous-vim-i)
+
+  Plug 'saihoooooooo/vim-textobj-space'
+  " motions for continuous stretches of space
+    let g:textobj_space_no_default_key_mappings = 1
+    omap <buffer>a<space> <Plug>(textobj-space-a)
+    vmap <buffer>a<space> <Plug>(textobj-space-a)
+    omap <buffer>i<space> <Plug>(textobj-space-i)
+    vmap <buffer>i<space> <Plug>(textobj-space-i)
+
+  Plug 'kana/vim-textobj-syntax'
+  " {a,i} y motions for syntax items
+
+  Plug 'kana/vim-textobj-datetime'
+  " {a,i} da, dd, df, dt, dz motions for date/time
+
+  Plug 'rbonvall/vim-textobj-latex'
+  " {a,i} $, q/Q, and e motions for latex math, quotes, and environments
+
+  Plug 'preservim/vim-textobj-sentence'
+  " {a,s} motions for modern prose sentences
+    augroup textobj_sentence
+      autocmd!
+      autocmd FileType markdown call textobj#sentence#init()
+      autocmd FileType textile call textobj#sentence#init()
+      autocmd FileType tex call textobj#sentence#init()
+    augroup END
+
+  Plug 'paulhybryant/vim-textobj-path'
+  " {a,i} {p,P} for path names
+
+  Plug 'adriaanzon/vim-textobj-matchit'
+  " {a,i} m for matchit pairs
+    let g:textobj_matchit_no_default_key_mappings = 1
+    xmap a%  <Plug>(textobj-matchit-a)
+    omap a%  <Plug>(textobj-matchit-a)
+    xmap i%  <Plug>(textobj-matchit-i)
+    omap i%  <Plug>(textobj-matchit-i)
+
   Plug 'andymass/vim-matchup'
   " %-navigate user-defined pairs
 
   Plug 'christoomey/vim-titlecase'
-  " Title case w/ gt<motion>
+  " Title case w/ gz<motion>
 
   if has('nvim-0.5.0')
     Plug 'ggandor/lightspeed.nvim'
