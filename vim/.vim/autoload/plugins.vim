@@ -8,9 +8,14 @@ let s:env_embedded = exists('g:vscode')
 " TODO: currently unused
 
 let g:completion_tool = 'none'
-let g:colorscheme = 'gruvbox-material'
+if has('nvim')
+  let g:colorscheme = 'edge'
+  let g:lightline_colorscheme = 'edge'
+else
+  let g:colorscheme = 'gruvbox-material'
+  let g:lightline_colorscheme = 'gruvbox_material'
+endif
 " let g:lightline_colorscheme = substitute(g:colorscheme, '-', '_', 'g')
-let g:lightline_colorscheme = 'gruvbox_material'
 let g:lightline = {
       \ 'active': {
       \   'left': [],
