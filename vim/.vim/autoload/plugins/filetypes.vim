@@ -326,6 +326,8 @@ function s:PlugMisc()
   Plug 'liuchengxu/graphviz.vim'
   Plug 'editorconfig/editorconfig-vim'
   Plug 'mboughaba/i3config.vim'
+  Plug 'Einenlum/yaml-revealer'
+  " Show yaml path under cursor
 endfunction
 
 function s:PlugTreesitter()
