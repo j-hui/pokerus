@@ -8,28 +8,44 @@
     rebase = false
 [alias]
     co = checkout
-    br = branch
-    ci = commit
     st = status
-    rem = remote -v
-    unstage = reset HEAD --
-    last = log -l HEAD
-    visual = !gitk
+    br = branch
+    ps = push
+    pl = pull
+    cp = cherry-pick
+
+    ci = commit
+    ca = commit --amend
     cm = !git add -u && git commit -m
-    up = !git pull --rebase --prune $@ && git submodule update --init --recursive
-    undo = reset HEAD~1 --mixed
-    amend = commit --amend
+
     this = rev-parse --abbrev-ref HEAD
-    d = diff
+    root = rev-parse --show-toplevel
+
+    last = log -1 --oneline --color
+    hist = log --graph --date=short --color
+    unpushed = log @{u}..
+    ups      = log @{u}..
+    branches = "!git for-each-ref --sort='-authordate' --format='%(authordate)%09%(objectname:short)%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"
+    brs      = "!git for-each-ref --sort='-authordate' --format='%(authordate)%09%(objectname:short)%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"
+
+    rs      = restore
+    us      = restore --staged
+    unstage = restore --staged
+
+    d  = diff
+    df = diff
     dw = diff --word-diff
     dc = diff --cached
-    cp = cherry-pick
-    root = rev-parse --show-toplevel
-    conf = config --global -e
-    hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
-    branches = "!git for-each-ref --sort='-authordate' --format='%(authordate)%09%(objectname:short)%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"
-    last = --no-pager log -1 --oneline --color
-    unpushed = log @{u}..
+
+    m  = merge
+    mg = merge
+    mc = merge --continue
+    ma = merge --abort
+
+    r  = rebase
+    rb = rebase
+    rc = rebase --continue
+    ra = rebase --abort
 [color]
     ui = auto
 [core]
@@ -60,3 +76,4 @@
     hunk-header-file-style = red
     hunk-header-line-number-style = "#067a00"
     hunk-header-style = file line-number syntax
+;  vim: set ts=4 sw=0 tw=80 et ft=gitconfig :
