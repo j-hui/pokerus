@@ -327,6 +327,7 @@ function s:PlugMisc()
   Plug 'editorconfig/editorconfig-vim'
   Plug 'mboughaba/i3config.vim'
   Plug 'Einenlum/yaml-revealer'
+  Plug 'vim-scripts/DoxygenToolkit.vim'
   " Show yaml path under cursor
 endfunction
 
@@ -448,9 +449,9 @@ function plugins#filetypes#setup()
   call s:PlugGo()
   call s:PlugValgrind()
   call s:PlugZig()
-  call s:PlugMisc()
   call s:PlugMail()
   call s:PlugWiki()
+  call s:PlugMisc()
 
   return l:callbacks
 endfunction
