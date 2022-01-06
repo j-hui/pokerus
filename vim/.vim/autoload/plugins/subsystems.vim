@@ -246,6 +246,8 @@ EOF
 endfunction
 
 function s:StackGit()
+  let l:callbacks = []
+
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-rhubarb'
   " Git interaction
@@ -278,6 +280,9 @@ function s:StackGit()
     nmap <leader>gg :GFiles<CR>
     call g:WhichKeyL(['g', 'g'], 'git-files')
 
+    nmap <leader>gb :GBrowse<CR>
+    call g:WhichKeyL(['g', 'b'], 'git-browse')
+
   Plug 'rbong/vim-flog'
   " Git log
     nnoremap <leader>gL :Flogsplit<CR>
@@ -293,7 +298,19 @@ function s:StackGit()
     let g:git_messenger_no_default_mappings = v:true
     nmap <leader>gb <Plug>(git-messenger)
     call g:WhichKeyL(['g', 'b'], 'git-blame')
-  return []
+
+  if has('nvim-0.5')
+    Plug 'ruifm/gitlinker.nvim'
+    " Yank link to web-hosted git page
+
+    function s:SetupGitLinker()
+      lua require'gitlinker'.setup{}
+      call g:WhichKeyL(['g', 'y'], 'git-url')
+    endfunction
+    let l:callbacks += [function('s:SetupGitLinker')]
+  endif
+
+  return l:callbacks
 endfunction
 
 function s:StackMiscSubsystems()
@@ -341,7 +358,9 @@ function s:StackMiscSubsystems()
     " Show marks in sign column
 
       function s:SetupMarksNvim()
-        lua require'marks'.setup {}
+lua <<EOF
+        require'marks'.setup {}
+EOF
       endfunction
 
       let l:callbacks += [function('s:SetupMarksNvim')]
