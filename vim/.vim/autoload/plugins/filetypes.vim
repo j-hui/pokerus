@@ -335,43 +335,48 @@ function s:PlugTreesitter()
   Plug 'nvim-treesitter/nvim-treesitter-refactor'
   Plug 'nvim-treesitter/nvim-treesitter-textobjects'
   Plug 'nvim-treesitter/playground'
+  let g:treesitter_langs = [
+        \ 'bash',
+        \ 'bibtex',
+        \ 'c',
+        \ 'cpp',
+        \ 'css',
+        \ 'dot',
+        \ 'fish',
+        \ 'go',
+        \ 'haskell',
+        \ 'html',
+        \ 'java',
+        \ 'javascript',
+        \ 'json',
+        \ 'latex',
+        \ 'llvm',
+        \ 'lua',
+        \ 'make',
+        \ 'markdown',
+        \ 'nix',
+        \ 'ocaml',
+        \ 'ocaml_interface',
+        \ 'python',
+        \ 'rst',
+        \ 'rust',
+        \ 'toml',
+        \ 'typescript',
+        \ 'vim',
+        \ 'yaml',
+        \ 'zig',
+        \]
+  if executable('tree-sitter')
+    let g:treesitter_langs += [
+          \ 'devicetree',
+          \ 'ocamllex',
+          \]
+  endif
 
   function s:SetupTreesitter()
 lua <<EOF
     require'nvim-treesitter.configs'.setup {
-      ensure_installed = {
-        'bash',
-        'bibtex',
-        'c',
-        'cpp',
-        'css',
-        'devicetree',
-        'dot',
-        'fish',
-        'go',
-        'haskell',
-        'html',
-        'java',
-        'javascript',
-        'json',
-        'latex',
-        'llvm',
-        'lua',
-        'make',
-        'markdown',
-        'nix',
-        'ocaml',
-        'ocaml_interface',
-        'ocamllex',
-        'python',
-        'rst',
-        'rust',
-        'toml',
-        'typescript',
-        'vim',
-        'yaml',
-        'zig'
-      },
+      ensure_installed = vim.g.treesitter_langs,
       playground = {
         enable = true,
       },
