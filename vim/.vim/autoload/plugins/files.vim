@@ -87,12 +87,19 @@ function s:PlugFern()
   Plug 'lambdalisue/fern-mapping-project-top.vim'
     " Open the git project directory
 
-  nnoremap g=     :Fern -drawer .<CR>
+  nnoremap g=     :Fern -drawer -reveal=% .<CR>
+    " Open current working directory in drawer
+  nnoremap g+     :Fern -drawer -reveal=% %:h<CR>
+    " Open current file's parent directory in drawer
+  nnoremap g-     :Fern -reveal=% .<CR>
     " Open current working directory
-  nnoremap g-     :Fern .<CR>
-    " Open current working directory
-  nnoremap g<BS>  :Fern %:h<CR>
+  nnoremap g<BS>  :Fern -reveal=% %:h<CR>
     " Open current file's parent directory
+
+  call g:WhichKey('n', ['g', '='],    'fern-drawer-cwd')
+  call g:WhichKey('n', ['g', '+'],    'fern-drawer-parent')
+  call g:WhichKey('n', ['g', '-'],    'fern-open-cwd')
+  call g:WhichKey('n', ['g', '<BS>'], 'fern-open-parent')
 
   function! s:SetupFern() abort
     nmap <buffer>
