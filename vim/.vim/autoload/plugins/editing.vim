@@ -3,9 +3,10 @@ function plugins#editing#setup()
 
   if has('nvim-0.5.0')
     Plug 'numToStr/Comment.nvim'
-
     function s:SetupCommentNvim()
-      lua require('Comment').setup()
+lua <<EOF
+      require'Comment'.setup {}
+EOF
     endfunction
 
     let l:callbacks += [function('s:SetupCommentNvim')]
@@ -22,10 +23,13 @@ function plugins#editing#setup()
 
   Plug 'tpope/vim-endwise'
   " Write endings
-    let g:endwise_no_mappings = 1
-    " Messes up other <CR> mappings, especially from completion plugins
-    imap <C-g><CR> <CR><Plug>DiscretionaryEnd
-    call g:WhichKeyIG(['<CR>'], 'endwise-end')
+    " let g:endwise_no_mappings = 1
+    " Can mess up other <CR> mappings, especially from completion plugins
+    " imap <C-g><CR> <CR><Plug>DiscretionaryEnd
+    " call g:WhichKeyIG(['<CR>'], 'endwise-end')
+
+  Plug 'rstacruz/vim-closer'
+  " Auto-insert endings on <CR>
 
   Plug 'tpope/vim-abolish'
   " Smarter subtitutions
