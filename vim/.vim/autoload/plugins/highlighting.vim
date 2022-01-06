@@ -28,10 +28,15 @@ function plugins#highlighting#setup()
       autocmd ColorScheme everforest,edge,gruvbox-material,sonokai call s:mod_highlight()
     augroup END
 
+    let g:solarized_termcolors=256
+
     " let g:gruvbox_material_enable_bold = 1
     let g:gruvbox_material_diagnostic_text_highlight = 1
     let g:gruvbox_material_current_word = 'bold'
-    let g:solarized_termcolors=256
+
+    let g:sonokai_style = 'atlantis'
+
+    let g:edge_style = 'aura'
 
     command! ConcealDark call s:ConcealColor(1)
     command! ConcealBright call s:ConcealColor(0)
