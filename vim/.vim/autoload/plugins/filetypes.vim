@@ -63,8 +63,8 @@ function s:PlugCoq()
     augroup END
 endfunction
 
-function s:PlugLatex()
-  Plug 'lervag/vimtex',   { 'for': 'tex' }
+function s:StackVimtex()
+  Plug 'lervag/vimtex'
     let g:tex_flavor = 'latex'
     let g:vimtex_compiler_latexmk = {
       \ 'continuous' : 0,
@@ -98,10 +98,6 @@ function s:PlugLatex()
       nmap <buffer> <leader>ce        <plug>(vimtex-errors)
 
       imap <buffer> <C-g>]            <plug>(vimtex-delim-close)
-      imap <buffer> <C-g>/            \emph{}<left>
-      imap <buffer> <C-g>t            \texttt{}<left>
-      imap <buffer> <C-g>b            \textbf{}<left>
-      imap <buffer> <C-g>i            \textit{}<left>
 
       try
         if g:completion_tool ==# 'ncm2'
@@ -132,6 +128,33 @@ function s:PlugLatex()
       autocmd!
       autocmd Filetype tex call VimtexConfig()
     augroup END
+endfunction
+
+function s:PlugLatex()
+  " Note: I've mostly replaced vimtex with texlab via LSP
+  " call s:StackVimtex()
+  " If reenabling vimtex, comment out tex-conceal, since those conflict
+  Plug 'KeitaNakamura/tex-conceal.vim', { 'for': 'tex' }
+
+  function s:SetupLatex()
+    ConcealBright
+
+    let b:endwise_addition = '\="\\end" . matchstr(submatch(0), "{.\\{-}}")'
+    let b:endwise_words = 'begin'
+    let b:endwise_pattern = '\\begin{.\{-}}'
+    let b:endwise_syngroups = 'texSection,texBeginEnd,texBeginEndName,texStatement'
+
+    imap <buffer> <C-g>/            \emph{}<left>
+    imap <buffer> <C-g>t            \texttt{}<left>
+    imap <buffer> <C-g>b            \textbf{}<left>
+    imap <buffer> <C-g>i            \textit{}<left>
+  endfunction
+
+  augroup tex-settings
+    autocmd!
+    autocmd Filetype tex call s:SetupLatex()
+  augroup END
+
 endfunction
 
 function s:PlugMarkdown()
