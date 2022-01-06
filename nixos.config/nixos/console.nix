@@ -38,6 +38,7 @@ in
         vimHugeX
         unstable.neovim
         unstable.neovim-remote
+        unstable.tree-sitter
         # emacs
         # It was fun while it lasted
         # (wrapNeovim (neovim-unwrapped.overrideAttrs(old: {
