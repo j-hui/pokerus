@@ -353,6 +353,32 @@ function s:StackMiscSubsystems()
 
     let g:neoterm_automap_keys = 'g:'
 
+  Plug 'mhinz/vim-startify'
+  " Start screen for vim
+  
+  let g:startify_padding_left = max([16, &columns / 4])
+  let g:vim_logo = [
+        \ '  ##############..... ##############   ',
+        \ '  ##############......##############   ',
+        \ '    ##########..........##########     ',
+        \ '    ##########........##########       ',
+        \ '    ##########.......##########        ',
+        \ '    ##########.....##########..        ',
+        \ '    ##########....##########.....      ',
+        \ '  ..##########..##########.........    ',
+        \ '....##########.#########.............  ',
+        \ '  ..################JJJ............    ',
+        \ '    ################.............      ',
+        \ '    ##############.JJJ.JJJJJJJJJJ      ',
+        \ '    ############...JJ...JJ..JJ  JJ     ',
+        \ '    ##########....JJ...JJ..JJ  JJ      ',
+        \ '    ########......JJJ..JJJ JJJ JJJ     ',
+        \ '    ######    .........                ',
+        \ '                .....                  ',
+        \ '                  .                    ',
+        \]
+  let g:startify_custom_header = 'startify#center(g:vim_logo)'
+
   if has('nvim-0.5')
     Plug 'chentau/marks.nvim'
     " Show marks in sign column
