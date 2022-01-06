@@ -188,7 +188,30 @@ function s:Misc()
   set modeline
   set modelines=5
   set timeoutlen=300
+
   let c_syntax_for_h = 1 " Instead of C++
+
+  let g:load_doxygen_syntax = 1 " Highlight Doxygen comments
+  let doxygen_javadoc_autobrief = 0
+  let g:doxygen_enhanced_color = 1
+  highlight! link doxygenComment        cComment
+  highlight! link doxygenBrief          cComment
+  highlight! link doxygenBody           cComment
+  highlight! link doxygenSpecial        cDefine
+  highlight! link doxygenPrev           cDefine
+  highlight! link doxygenHtmlCh         cDefine
+  highlight! link doxygenHtmlCmd        cDefine
+  highlight! link doxygenGroupDefine    cDefine
+  highlight! link doxygenParam          cFunction
+  highlight! link doxygenOther          cFunction
+  highlight! link doxygenParamName      cType
+  highlight! link doxygenHashLink       cInclude
+  highlight! link doxygenEmphasisedWord htmlItalic
+  highlight! link doxygenBoldWord       htmlBold
+  highlight! link doxygenBriefLine      CLEAR
+  highlight! link doxygenSpecialOnelineDesc   cString
+  highlight! link doxygenSpecialMultilineDesc cComment
+
   let g:no_gitrebase_maps = 1
 endfunction
 
