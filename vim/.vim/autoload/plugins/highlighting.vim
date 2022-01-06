@@ -1,4 +1,3 @@
-
 function plugins#highlighting#setup()
   let l:callbacks = []
 
@@ -16,6 +15,11 @@ function plugins#highlighting#setup()
       " Darken Pmenu background to avoid clash with Cursorline or ColorColumn
       " highlight Pmenu ctermbg=233
 
+      highlight link ConcealDark NonText
+      highlight link ConcealBright Question
+
+      highlight! link Conceal ConcealDark
+
       highlight link LspCodeLens Todo
     endfunction
 
@@ -28,6 +32,17 @@ function plugins#highlighting#setup()
     let g:gruvbox_material_diagnostic_text_highlight = 1
     let g:gruvbox_material_current_word = 'bold'
     let g:solarized_termcolors=256
+
+    command! ConcealDark call s:ConcealColor(1)
+    command! ConcealBright call s:ConcealColor(0)
+
+    function! s:ConcealColor(dark)
+      if a:dark
+        highlight! link Conceal ConcealDark
+      else
+        highlight! link Conceal ConcealBright
+      endif
+    endfunction
 
   Plug 'guns/xterm-color-table.vim'
   " Preview all 256 xterm colors
