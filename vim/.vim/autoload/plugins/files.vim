@@ -207,6 +207,10 @@ endfunction
 function s:PlugMisc()
   Plug 'tpope/vim-eunuch'             " UNIX-like functionality in Vim
   Plug 'ojroques/vim-oscyank'         " Yank across the terminal
+    augroup osc-yank
+      autocmd!
+      autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
+    augroup END
   Plug 'farmergreg/vim-lastplace'     " Open where last opened
   Plug 'duggiefresh/vim-easydir'      " Create directories when non-existent
   Plug 'strboul/urlview.vim'          " See all URLs in buffer
