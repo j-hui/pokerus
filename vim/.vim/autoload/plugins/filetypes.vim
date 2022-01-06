@@ -328,7 +328,109 @@ function s:PlugMisc()
   Plug 'mboughaba/i3config.vim'
 endfunction
 
+function s:PlugTreesitter()
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+  Plug 'nvim-treesitter/nvim-treesitter-refactor'
+  Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+  Plug 'nvim-treesitter/playground'
+
+  function s:SetupTreesitter()
+lua <<EOF
+    require'nvim-treesitter.configs'.setup {
+      ensure_installed = {
+        'bash',
+        'bibtex',
+        'c',
+        'cpp',
+        'css',
+        'devicetree',
+        'dot',
+        'fish',
+        'go',
+        'haskell',
+        'html',
+        'java',
+        'javascript',
+        'json',
+        'latex',
+        'llvm',
+        'lua',
+        'make',
+        'markdown',
+        'nix',
+        'ocaml',
+        'ocaml_interface',
+        'ocamllex',
+        'python',
+        'rst',
+        'rust',
+        'toml',
+        'typescript',
+        'vim',
+        'yaml',
+        'zig'
+      },
+      playground = {
+        enable = true,
+      },
+      highlight = {
+        enable = false, -- I won't have this until conceal via TS is supported
+      },
+      incremental_selection = {
+        enable = true,
+        keymaps = {
+          init_selection = '<leader>o',
+          node_incremental = '<leader>o',
+          node_decremental = '<leader>i',
+          scope_incremental = '<leader>O',
+        },
+      },
+      refactor = {
+        smart_rename = {
+          enable = true,
+          highlight_definitions = { enable = true },
+          highlight_current_scope = { enable = true },
+          keymaps = {
+            smart_rename = 'grr',
+          },
+        },
+      },
+      textobjects = {
+        select = {
+          enable = true,
+          lookahead = true,
+          keymaps = {
+            ['a.'] = '@function.outer',
+            ['i.'] = '@function.inner',
+            ['cc'] = '@comment.inner',
+            ['ac'] = '@class.outer',
+            ['ic'] = '@class.inner',
+            ['ab'] = '@block.outer',
+            ['ib'] = '@block.inner',
+          },
+        },
+        swap = {
+          enable = true,
+          swap_next = {
+            ['gl'] = '@parameter.inner',
+          },
+          swap_previous = {
+            ['gh'] = '@parameter.inner',
+          },
+        },
+      },
+    }
+EOF
+    nnoremap <silent> <leader>i <nop>
+  endfunction
+  return [function('s:SetupTreesitter')]
+endfunction
+
 function plugins#filetypes#setup()
+  let l:callbacks = []
+  if has('nvim-0.5')
+    let l:callbacks += s:PlugTreesitter()
+  endif
   call s:PlugCoq()
   call s:PlugLatex()
   call s:PlugMarkdown()
@@ -340,7 +442,8 @@ function plugins#filetypes#setup()
   call s:PlugMisc()
   call s:PlugMail()
   call s:PlugWiki()
-  return []
+
+  return l:callbacks
 endfunction
 
 " vim: set ts=2 sw=2 tw=80 et :

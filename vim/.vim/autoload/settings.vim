@@ -120,7 +120,7 @@ function s:Appearance()
 
   set foldlevelstart=10
   set foldnestmax=10
-  set foldmethod=manual
+  set foldmethod=syntax
 
   set shortmess+=c                        " Don't show information about pop-up menu
 endfunction

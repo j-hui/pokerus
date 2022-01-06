@@ -471,7 +471,7 @@ function s:PlugNvimLsp()
   Plug 'folke/trouble.nvim'
     " Summarize diagnostics in document
 
-  Plug 'ray-x/lsp_signature.nvim'
+  " Plug 'ray-x/lsp_signature.nvim'
     " Type signature help pop-up
 
   Plug 'kosayoda/nvim-lightbulb'
@@ -500,15 +500,26 @@ function s:PlugNvimLsp()
     call add(g:lightline['active']['right'], ['lsp_info', 'lsp_hints', 'lsp_errors', 'lsp_warnings', 'lsp_ok'])
     call add(g:lightline['active']['right'], ['lsp_clients', 'lsp_status'])
     call lightline#lsp#register()
-    autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
+    augroup NvimLightbulb
+      autocmd!
+      autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
+    augroup END
     sign define LightBulbSign text=↯ texthl=SignColumn
 lua <<EOF
-    require'trouble'.setup {}
-    require'lsp_signature'.setup {
-      toggle_key = '<C-s>',
-      hint_enable = false,
-      trigger_on_newline = false,
+  require 'aerial'.setup {
+    manage_folds = false,
+    backends = {
+        ['_'] = {'lsp', 'treesitter'},
+        ['bib'] = {'treesitter'},
+      },
     }
+    require'trouble'.setup {}
+    -- require'lsp_signature'.setup {
+      -- always_trigger = false,
+      -- toggle_key = '<C-s>',
+      -- hint_enable = false,
+      -- trigger_on_newline = false,
+    -- }
 EOF
   endfunction
   return [function('s:SetupNvimLsp')]
@@ -910,7 +921,14 @@ lua << EOF
 
   local servers = {
     ['clangd'] = {},
-    ['texlab'] = {},
+    ['texlab'] = { settings = { texlab = {
+      build = { onSave = true },
+      chkTex = { onOpenAndSave = true },
+      forwardSearch = {
+        executable = "zathura",
+        args = { "--synctex-forward", "%l:1:%f", "%p" },
+      },
+    } } },
     ['rust_analyzer'] = {},
     ['pyright'] = {},
     ['tsserver'] = {},
@@ -919,7 +937,6 @@ lua << EOF
     ['ocamllsp'] = {},
     ['rnix'] = {},
     ['tsserver'] = {},
-    ['texlab'] = {},
   }
 
   local on_attach = function(client, bufnr)
@@ -958,12 +975,16 @@ lua << EOF
     vim.cmd [[command! Fmt execute 'lua vim.lsp.buf.formatting()']]
 
     require'aerial'.on_attach(client)
-
     vim.api.nvim_buf_set_keymap(0, 'n', '<leader>lo', '<cmd>AerialToggle!<CR>', {})
     vim.api.nvim_buf_set_keymap(0, 'n', '[a', '<cmd>AerialPrev<CR>', {})
     vim.api.nvim_buf_set_keymap(0, 'n', ']a', '<cmd>AerialNext<CR>', {})
     vim.api.nvim_buf_set_keymap(0, 'n', '[[', '<cmd>AerialPrevUp<CR>', {})
     vim.api.nvim_buf_set_keymap(0, 'n', ']]', '<cmd>AerialNextUp<CR>', {})
+
+    if vim.bo.filetype == 'tex' then
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lc', '<cmd>TexlabBuild<CR>', opts)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lf', '<cmd>TexlabForward<CR>', opts)
+    end
   end
 
   for lsp, cfg in pairs(servers) do
