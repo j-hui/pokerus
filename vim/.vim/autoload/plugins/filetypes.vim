@@ -381,10 +381,9 @@ lua <<EOF
       incremental_selection = {
         enable = true,
         keymaps = {
-          init_selection = '<leader>o',
-          node_incremental = '<leader>o',
-          node_decremental = '<leader>i',
-          scope_incremental = '<leader>O',
+          init_selection = '<leader>v',
+          node_incremental = '<leader>v',
+          node_decremental = '<leader>V',
         },
       },
       refactor = {
@@ -393,7 +392,7 @@ lua <<EOF
           highlight_definitions = { enable = true },
           highlight_current_scope = { enable = true },
           keymaps = {
-            smart_rename = 'grr',
+            smart_rename = 'gr',
           },
         },
       },
@@ -423,7 +422,10 @@ lua <<EOF
       },
     }
 EOF
-    nnoremap <silent> <leader>i <nop>
+    call g:WhichKey('n', ['g', 'r'], 'treesitter-refactor')
+    call g:WhichKey('n', ['g', 'l'], 'treesitter-swap-next-param')
+    call g:WhichKey('n', ['g', 'h'], 'treesitter-swap-prev-param')
+    call g:WhichKeyL(['v'], 'treesitter-select')
   endfunction
   return [function('s:SetupTreesitter')]
 endfunction
