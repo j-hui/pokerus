@@ -133,6 +133,15 @@ EOF
       noremap # #<Cmd>lua require('hlslens').start()<CR>
       noremap g* g*<Cmd>lua require('hlslens').start()<CR>
       noremap g# g#<Cmd>lua require('hlslens').start()<CR>
+
+      function s:SetupHlsLens()
+lua <<EOF
+        require'hlslens'.setup{
+          nearest_only = true,
+        }
+EOF
+      endfunction
+      let l:callbacks += [function('s:SetupHlsLens')]
   endif
 
   return l:callbacks
