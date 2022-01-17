@@ -51,12 +51,26 @@ function plugins#window#setup()
   " Lazy folding
     let g:fastfold_fold_movement_commands = []
 
-  if has('nvim-0.5')
+  if has('nvim-0.5.1')
     Plug 'luukvbaal/stabilize.nvim'
+    " Prevent stabilize buffer focus during splits
     function s:SetupStabilize()
       lua require'stabilize'.setup()
     endfunction
     let l:callbacks += [function('s:SetupStabilize')]
+
+    Plug 'petertriho/nvim-scrollbar'
+    " Side scrollbar
+      augroup scrollbar-highlights
+        autocmd!
+        autocmd Colorscheme * highlight! link ScrollbarHandle StatusLine
+      augroup END
+    function s:SetupScrollbar()
+lua <<EOF
+      require'scrollbar'.setup{}
+EOF
+    endfunction
+    let l:callbacks += [function('s:SetupScrollbar')]
   endif
 
   return l:callbacks
