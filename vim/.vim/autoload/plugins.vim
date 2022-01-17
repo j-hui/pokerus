@@ -23,6 +23,8 @@ let g:lightline = {
       \ },
       \ 'component': {},
       \ 'component_function': {},
+      \ 'component_expand': {},
+      \ 'component_visible_condition': {},
       \}
 
 let g:which_key_map = {}

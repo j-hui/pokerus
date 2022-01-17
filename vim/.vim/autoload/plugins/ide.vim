@@ -468,6 +468,9 @@ function s:PlugNvimLsp()
     " Note that the more popular nvim-lua/lsp-status.nvim seems to provide more
     " features, but there's also more configuration to be done.
 
+  Plug 'nvim-lua/lsp-status.nvim'
+    " LSP status line
+
   Plug 'folke/trouble.nvim'
     " Summarize diagnostics in document
 
@@ -903,6 +906,8 @@ function s:StackNvimLsp()
     call s:LspWhichKey()
 lua << EOF
   local nvim_lsp = require 'lspconfig'
+  local lsp_status = require'lsp-status'
+  lsp_status.register_progress()
 
   require'null-ls'.setup {
     sources = {
@@ -941,6 +946,8 @@ lua << EOF
 
   local on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+    lsp_status.on_attach(client)
 
     local opts = { noremap = true, silent = true }
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K',          '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
@@ -988,7 +995,10 @@ lua << EOF
   end
 
   for lsp, cfg in pairs(servers) do
-    nvim_lsp[lsp].setup (completion_lsp(vim.tbl_extend('keep', cfg, {on_attach = on_attach})))
+    nvim_lsp[lsp].setup (completion_lsp(vim.tbl_extend('keep', cfg, {
+      on_attach = on_attach,
+      capabilities = lsp_status.capabilities,
+    })))
   end
 
   vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
@@ -1004,6 +1014,28 @@ EOF
     sign define LspDiagnosticsSignWarning text=‼ texthl=LspDiagnosticsSignWarning
     sign define LspDiagnosticsSignInformation text=ℹ texthl=LspDiagnosticsSignInformation
     sign define LspDiagnosticsSignHint text=» texthl=LspDiagnosticsSignHint
+
+    " function! LspStatus() abort
+    "   if luaeval('#vim.lsp.buf_get_clients() > 0')
+    "     return luaeval('require"lsp-status".status()')
+    "   endif
+    "   return ''
+    " endfunction
+
+    " let g:lightline['component_expand']['lsp_status'] = 'LspStatus'
+    " " let g:lightline['component_visible_condition']['lsp_status'] =
+    " "         \ 'not vim.tbl_isempty(vim.lsp.buf_get_clients(0))'
+    " call add(g:lightline['active']['right'], ['lsp_status'])
+
+    augroup lsp_diagnostics
+      autocmd!
+      autocmd DiagnosticChanged *     call lightline#update()
+      autocmd User LspProgressUpdate  call lightline#update()
+      autocmd User LspRequest         call lightline#update()
+    augroup END
+
+    " call add(g:lightline['active']['right'], ['lsp_info', 'lsp_hints', 'lsp_errors', 'lsp_warnings', 'lsp_ok'])
+    " call lightline#lsp#register()
   endfunction
 
   let l:callbacks += s:PlugNvimLsp()

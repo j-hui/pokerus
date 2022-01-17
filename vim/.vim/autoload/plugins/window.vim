@@ -11,27 +11,26 @@ function plugins#window#setup()
     let g:lightline['active']['left'] = [
       \ [ 'mode', 'paste' ],
       \ [ 'gitbranch', 'readonly', 'relativepath', 'modified' ],
-      \ [ 'textwidth', 'formatoptions' ],
+      \ [ 'filetype', 'textwidth', 'spell' ],
       \]
     let g:lightline['active']['right'] = [
       \ [ 'lineinfo' ],
       \ [ 'percent' ],
-      \ [ 'scrollbar'],
-      \ [ 'spell', 'fileformat', 'fileencoding', 'filetype' ],
       \]
-    let g:lightline['separator'] = {'left': '▓▒░', 'right': '░▒▓' }
     let g:lightline['subseparator'] =  { 'left': '·', 'right': '·' }
 
-    let g:lightline['component']['scrollbar'] = '%{ScrollStatus()}'
     let g:lightline['component']['formatoptions'] = '%{&formatoptions}'
     let g:lightline['component']['textwidth'] = '%{&textwidth}'
+    let g:lightline['component_function']['gitbranch'] = 'LightlineGitBranch'
 
-    " NOTE: depends on tpope/vim-fugutive
-    let g:lightline['component_function']['gitbranch'] = 'FugitiveHead'
-
-  Plug 'ojroques/vim-scrollstatus'
-  " Scroll bar on status line
-    let g:scrollstatus_size = 20
+    Plug 'tpope/vim-fugitive'
+      function! LightlineGitBranch()
+        if g:loaded_fugitive
+          let branch = fugitive#head()
+          return branch !=# '' ? ' '.branch : ''
+        endif
+        return ''
+      endfunction
 
   Plug 'ap/vim-buftabline'
   " Tab bar at top
