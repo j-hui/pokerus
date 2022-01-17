@@ -3,7 +3,7 @@
 ## Common packages
 
     curl wget tree htop gnupg openssh-server \
-    fzf silversearcher-ag ripgrep thefuck exa \
+    fzf silversearcher-ag ripgrep exa \
     python3-pip opam golang
 
 

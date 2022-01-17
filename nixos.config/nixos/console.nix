@@ -27,7 +27,6 @@ in
         bash fish zsh
         sudo tmux screen
         neofetch
-        thefuck
         asciinema
         tealdeer
         doge

@@ -90,11 +90,6 @@ fi
 ### ripgrep
 export RIPGREP_CONFIG_PATH=~/.config/ripgrep/ripgreprc
 
-### thefuck
-if which thefuck &> /dev/null; then
-    eval "$(thefuck --alias)"
-fi
-
 ### kitty
 if which kitty &> /dev/null; then
     alias ssh='kitty +kitten ssh'
