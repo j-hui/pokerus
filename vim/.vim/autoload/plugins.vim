@@ -83,7 +83,12 @@ function plugins#setup()
 
   call plug#begin('~/.vimplugins/plugged')
 
-  Plug 'vim-scripts/Decho' " For debugging
+  Plug 'vim-scripts/Decho'
+  " Plugin debugging
+  Plug 'dstein64/vim-startuptime'
+  " Startup time profiling
+  Plug 'norcalli/profiler.nvim'
+  " Lua code profiling
 
   let l:plug_callbacks += plugins#subsystems#setup()
   let l:plug_callbacks += plugins#highlighting#setup()
