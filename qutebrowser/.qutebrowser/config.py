@@ -26,7 +26,10 @@ config.source('themes/material-darker.py')
 #     }
 # })
 # bg_color = "#a89984"
-# c.colors.webpage.bg = bg_color
+c.colors.webpage.bg = '#000000'
+
+# c.colors.webpage.darkmode.enabled = True
+# c.colors.webpage.darkmode.policy.images = 'smart'
 
 # Put kitty, gvim, etc. in Qutebrowser's PATH, at least on macOS
 os.environ['PATH'] = '/usr/local/bin' + os.pathsep + os.environ['PATH']
@@ -157,6 +160,9 @@ c.aliases['style'] = ('config-cycle content.user_stylesheets        ' +
         '"~/.config/qutebrowser/css/darculized-all-sites.css"       ' +
         '"~/.config/qutebrowser/css/solarized-dark-all-sites.css"   ' +
         '""')
+
+c.aliases['dg-enable'] = 'jseval --quiet --world main DarkReader.enable()'
+c.aliases['dg-disable'] = 'jseval --quiet --world main DarkReader.disable()'
 
 ### Aliases }}}
 
@@ -345,6 +351,8 @@ nmap('cS', 'navigate --tab strip')
 nmap('<Ctrl+Shift+l>', 'spawn --userscript qute-pass')
 imap('<Ctrl+Shift+l>', 'spawn --userscript qute-pass')
 nmap('yc', 'hint code userscript ' + userscript('code_select'))
+nmap('<Ctrl+g>', c.aliases['dg-enable'])
+nmap('<Ctrl+Shift+g>', c.aliases['dg-disable'])
 ## Userscript/externally-dependent bindings }}}
 
 ## Readline-/macOS-style bindings {{{
