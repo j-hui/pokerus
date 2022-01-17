@@ -334,8 +334,16 @@ endfunction
 function s:PlugTreesitter()
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   Plug 'nvim-treesitter/nvim-treesitter-refactor'
+  " Use treesitter to refactor identifiers
   Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+  " Use treesitter to find motion text objects
   Plug 'nvim-treesitter/playground'
+  " Show treesitter state in split pane
+  Plug 'romgrk/nvim-treesitter-context'
+  " Use treesitter to show function context
+  Plug 'SmiteshP/nvim-gps'
+  " Use treesitter to show syntactic context
+
   let g:treesitter_langs = [
         \ 'bash',
         \ 'bibtex',
@@ -427,6 +435,8 @@ lua <<EOF
         },
       },
     }
+    require'treesitter-context'.setup{}
+    require'nvim-gps'.setup{}
 EOF
     call g:WhichKey('n', ['g', 'r'], 'treesitter-refactor')
     call g:WhichKey('n', ['g', 'l'], 'treesitter-swap-next-param')
