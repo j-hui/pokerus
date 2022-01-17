@@ -124,10 +124,10 @@ EOF
       omap T <Plug>Sneak_T
   endif
 
-  if has('nvim-0.4.4')
+  if has('nvim-0.5')
     Plug 'nacro90/numb.nvim'
     function s:SetupNumb()
-      lua require'numb'.setup()
+      lua require'numb'.setup{}
     endfunction
     let l:callbacks += [function('s:SetupNumb')]
   endif
