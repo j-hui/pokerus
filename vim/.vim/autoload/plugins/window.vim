@@ -5,6 +5,13 @@ function plugins#window#setup()
   let l:callbacks = []
   if has('nvim-0.5')
     Plug 'nvim-lualine/lualine.nvim'
+    " Status line for neovim
+
+    Plug 'akinsho/bufferline.nvim'
+    " Buffer line for neovim
+
+    Plug 'kyazdani42/nvim-web-devicons'
+    " Dependency for bufferline
 
     function s:SetupLualine()
 lua <<EOF
@@ -13,15 +20,22 @@ lua <<EOF
           section_separators = '',
           component_separators = '',
         },
-        tabline = {
-          lualine_a = { { 'buffers', mode = 2, } },
-          lualine_z = { 'tabs' },
-        },
         extensions = {
           'fugitive',
           'fzf',
           'fern',
         }
+      }
+      require'bufferline'.setup {
+        options = {
+          diagnostics = 'nvim_lsp',
+          diagnostics_indicator = function(count, level, diagnostics_dict, context)
+            if not level:match('error') then
+              return ''
+            end
+            return ' ' .. ' ' .. count
+          end,
+        },
       }
 EOF
     endfunction
