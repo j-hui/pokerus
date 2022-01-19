@@ -23,14 +23,6 @@ function plugins#navigation#setup()
     omap <buffer>i\ <Plug>(textobj-continuous-vim-i)
     vmap <buffer>i\ <Plug>(textobj-continuous-vim-i)
 
-  Plug 'saihoooooooo/vim-textobj-space'
-  " motions for continuous stretches of space
-    let g:textobj_space_no_default_key_mappings = 1
-    omap <buffer>a<space> <Plug>(textobj-space-a)
-    vmap <buffer>a<space> <Plug>(textobj-space-a)
-    omap <buffer>i<space> <Plug>(textobj-space-i)
-    vmap <buffer>i<space> <Plug>(textobj-space-i)
-
   Plug 'kana/vim-textobj-syntax'
   " {a,i} y motions for syntax items
 
