@@ -26,7 +26,8 @@ config.source('themes/material-darker.py')
 #     }
 # })
 # bg_color = "#a89984"
-c.colors.webpage.bg = '#000000'
+bg_color = '#000000'
+c.colors.webpage.bg = bg_color
 
 # c.colors.webpage.darkmode.enabled = True
 # c.colors.webpage.darkmode.policy.images = 'smart'
@@ -154,15 +155,14 @@ c.aliases['reader'] = 'spawn --userscript readability'
 c.aliases['bib'] = 'spawn --userscript getbib'
 c.aliases['pocket'] = 'spawn --userscript qutepocket'
 
-# c.aliases['bg-norm'] = 'set colors.webpage.bg #ffffff'
-# c.aliases['bg-dark'] = 'set colors.webpage.bg ' + bg_color
+c.aliases['bg-norm'] = 'set colors.webpage.bg #ffffff'
+c.aliases['bg-dark'] = 'set colors.webpage.bg ' + bg_color
+c.aliases['dg-toggle'] = 'jseval --quiet --world main DarkReader.toggle()'
+
 c.aliases['style'] = ('config-cycle content.user_stylesheets        ' +
         '"~/.config/qutebrowser/css/darculized-all-sites.css"       ' +
         '"~/.config/qutebrowser/css/solarized-dark-all-sites.css"   ' +
         '""')
-
-c.aliases['dg-enable'] = 'jseval --quiet --world main DarkReader.enable()'
-c.aliases['dg-disable'] = 'jseval --quiet --world main DarkReader.disable()'
 
 ### Aliases }}}
 
@@ -351,8 +351,7 @@ nmap('cS', 'navigate --tab strip')
 nmap('<Ctrl+Shift+l>', 'spawn --userscript qute-pass')
 imap('<Ctrl+Shift+l>', 'spawn --userscript qute-pass')
 nmap('yc', 'hint code userscript ' + userscript('code_select'))
-nmap('<Ctrl+g>', c.aliases['dg-enable'])
-nmap('<Ctrl+Shift+g>', c.aliases['dg-disable'])
+nmap('<Ctrl+g>',       c.aliases['dg-toggle'])
 ## Userscript/externally-dependent bindings }}}
 
 ## Readline-/macOS-style bindings {{{

@@ -18,14 +18,14 @@
 //   contrast: 100,
 //   sepia: 0
 // });
-// DarkReader.stateIsOn = false
-// DarkReader.toggle = function () {
-//   if (DarkReader.stateIsOn) {
-//     DarkReader.stateIsOn = false
-//     DarkReader.disable()
-//   } else {
-//     DarkReader.stateIsOn = true
-//     DarkReader.enable()
-//   }
-// }
+DarkReader.stateIsOn = false
+DarkReader.toggle = function () {
+  if (DarkReader.stateIsOn) {
+    DarkReader.stateIsOn = false
+    DarkReader.disable()
+  } else {
+    DarkReader.stateIsOn = true
+    DarkReader.enable()
+  }
+}
 // DarkReader.toggle()
