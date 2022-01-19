@@ -343,6 +343,10 @@ function s:PlugTreesitter()
   " Use treesitter to show function context
   Plug 'SmiteshP/nvim-gps'
   " Use treesitter to show syntactic context
+  Plug 'lewis6991/spellsitter.nvim'
+  " Show spelling errors
+  Plug 'folke/twilight.nvim'
+  " Dim inactive regions of code
 
   let g:treesitter_langs = [
         \ 'bash',
@@ -437,6 +441,8 @@ lua <<EOF
     }
     require'treesitter-context'.setup{}
     require'nvim-gps'.setup{}
+    require'spellsitter'.setup{}
+    require'twilight'.setup{}
 EOF
     call g:WhichKey('n', ['g', 'r'], 'treesitter-refactor')
     call g:WhichKey('n', ['g', 'l'], 'treesitter-swap-next-param')
