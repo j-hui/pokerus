@@ -3,17 +3,42 @@
 
 function plugins#window#setup()
   let l:callbacks = []
-  Plug 'ourigen/skyline.vim'
-  " Lightweight status line that takes the guesswork out of configuration
-    let g:skyline_fugitive = 1
-    let g:skyline_wordcount = 1
-    let g:skyline_linecount = 1
-    let g:skyline_bufnum = 0
+  if has('nvim-0.5')
+    Plug 'nvim-lualine/lualine.nvim'
 
-  Plug 'ap/vim-buftabline'
-  " Tab bar at top
-    let g:buftabline_indicators = 1 " Show whether modified
-    let g:buftabline_numbers  = 1   " Show buffer numbers
+    function s:SetupLualine()
+lua <<EOF
+      require'lualine'.setup {
+        options = {
+          section_separators = '',
+          component_separators = '',
+        },
+        tabline = {
+          lualine_a = { { 'buffers', mode = 2, } },
+          lualine_z = { 'tabs' },
+        },
+        extensions = {
+          'fugitive',
+          'fzf',
+          'fern',
+        }
+      }
+EOF
+    endfunction
+    let l:callbacks += [function('s:SetupLualine')]
+  else
+    Plug 'ourigen/skyline.vim'
+    " Lightweight status line that takes the guesswork out of configuration
+      let g:skyline_fugitive = 1
+      let g:skyline_wordcount = 1
+      let g:skyline_linecount = 1
+      let g:skyline_bufnum = 0
+
+    Plug 'ap/vim-buftabline'
+    " Tab bar at top
+      let g:buftabline_indicators = 1 " Show whether modified
+      let g:buftabline_numbers  = 1   " Show buffer numbers
+  endif
 
   Plug 'moll/vim-bbye'
   " Delete buffers without messing up buffer layout
