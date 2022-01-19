@@ -34,10 +34,6 @@ function plugins#highlighting#setup()
     let g:gruvbox_material_diagnostic_text_highlight = 1
     let g:gruvbox_material_current_word = 'bold'
 
-    let g:sonokai_style = 'atlantis'
-
-    let g:edge_style = 'aura'
-
     command! ConcealDark call s:ConcealColor(1)
     command! ConcealBright call s:ConcealColor(0)
 
