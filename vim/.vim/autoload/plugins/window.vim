@@ -3,34 +3,12 @@
 
 function plugins#window#setup()
   let l:callbacks = []
-  Plug 'itchyny/lightline.vim'
-  " Lightweight status line at bottom
-
-    let g:lightline['colorscheme'] = g:lightline_colorscheme
-
-    let g:lightline['active']['left'] = [
-      \ [ 'mode', 'paste' ],
-      \ [ 'gitbranch', 'readonly', 'relativepath', 'modified' ],
-      \ [ 'filetype', 'textwidth', 'spell' ],
-      \]
-    let g:lightline['active']['right'] = [
-      \ [ 'lineinfo' ],
-      \ [ 'percent' ],
-      \]
-    let g:lightline['subseparator'] =  { 'left': '·', 'right': '·' }
-
-    let g:lightline['component']['formatoptions'] = '%{&formatoptions}'
-    let g:lightline['component']['textwidth'] = '%{&textwidth}'
-    let g:lightline['component_function']['gitbranch'] = 'LightlineGitBranch'
-
-    Plug 'tpope/vim-fugitive'
-      function! LightlineGitBranch()
-        if g:loaded_fugitive
-          let branch = fugitive#head()
-          return branch !=# '' ? ' '.branch : ''
-        endif
-        return ''
-      endfunction
+  Plug 'ourigen/skyline.vim'
+  " Lightweight status line that takes the guesswork out of configuration
+    let g:skyline_fugitive = 1
+    let g:skyline_wordcount = 1
+    let g:skyline_linecount = 1
+    let g:skyline_bufnum = 0
 
   Plug 'ap/vim-buftabline'
   " Tab bar at top

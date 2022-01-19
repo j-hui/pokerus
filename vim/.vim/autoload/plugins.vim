@@ -10,22 +10,9 @@ let s:env_embedded = exists('g:vscode')
 let g:completion_tool = 'none'
 if has('nvim')
   let g:colorscheme = 'edge'
-  let g:lightline_colorscheme = 'edge'
 else
   let g:colorscheme = 'gruvbox-material'
-  let g:lightline_colorscheme = 'gruvbox_material'
 endif
-" let g:lightline_colorscheme = substitute(g:colorscheme, '-', '_', 'g')
-let g:lightline = {
-      \ 'active': {
-      \   'left': [],
-      \   'right': [],
-      \ },
-      \ 'component': {},
-      \ 'component_function': {},
-      \ 'component_expand': {},
-      \ 'component_visible_condition': {},
-      \}
 
 let g:which_key_map = {}
 let g:which_key_map_v = {}

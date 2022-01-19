@@ -411,10 +411,6 @@ function s:PlugCoc()
       endif
     endfunction
 
-    " Add Coc to status line
-    let g:lightline['component_function']['cocstatus'] = 'coc#status'
-    call add(g:lightline['active']['right'], ['cocstatus'])
-
     " For some reason, Coc is using these weird highlights
     highlight default link FgCocHintFloatBgCocFloating CocHintFloat
     highlight default link FgCocInfoFloatBgCocFloating CocHintFloat
@@ -423,8 +419,6 @@ function s:PlugCoc()
 
     augroup coc_autocmds
       autocmd!
-      " Allow CoC to update lightline 
-      autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
       " Highlight word under cursor
       autocmd CursorHold * silent call CocActionAsync('highlight')
       " Update signature help on jump placeholder.
@@ -463,11 +457,6 @@ function s:PlugNvimLsp()
   Plug 'gfanto/fzf-lsp.nvim'
     " Use FZF as interactive picker
 
-  Plug 'josa42/nvim-lightline-lsp'
-    " Integrate with lightline
-    " Note that the more popular nvim-lua/lsp-status.nvim seems to provide more
-    " features, but there's also more configuration to be done.
-
   Plug 'nvim-lua/lsp-status.nvim'
     " LSP status line
 
@@ -500,9 +489,6 @@ function s:PlugNvimLsp()
 
   function s:SetupNvimLsp()
     lua require'fzf_lsp'.setup {}
-    call add(g:lightline['active']['right'], ['lsp_info', 'lsp_hints', 'lsp_errors', 'lsp_warnings', 'lsp_ok'])
-    call add(g:lightline['active']['right'], ['lsp_clients', 'lsp_status'])
-    call lightline#lsp#register()
     augroup NvimLightbulb
       autocmd!
       autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
@@ -1014,28 +1000,6 @@ EOF
     sign define LspDiagnosticsSignWarning text=‼ texthl=LspDiagnosticsSignWarning
     sign define LspDiagnosticsSignInformation text=ℹ texthl=LspDiagnosticsSignInformation
     sign define LspDiagnosticsSignHint text=» texthl=LspDiagnosticsSignHint
-
-    " function! LspStatus() abort
-    "   if luaeval('#vim.lsp.buf_get_clients() > 0')
-    "     return luaeval('require"lsp-status".status()')
-    "   endif
-    "   return ''
-    " endfunction
-
-    " let g:lightline['component_expand']['lsp_status'] = 'LspStatus'
-    " " let g:lightline['component_visible_condition']['lsp_status'] =
-    " "         \ 'not vim.tbl_isempty(vim.lsp.buf_get_clients(0))'
-    " call add(g:lightline['active']['right'], ['lsp_status'])
-
-    augroup lsp_diagnostics
-      autocmd!
-      autocmd DiagnosticChanged *     call lightline#update()
-      autocmd User LspProgressUpdate  call lightline#update()
-      autocmd User LspRequest         call lightline#update()
-    augroup END
-
-    " call add(g:lightline['active']['right'], ['lsp_info', 'lsp_hints', 'lsp_errors', 'lsp_warnings', 'lsp_ok'])
-    " call lightline#lsp#register()
   endfunction
 
   let l:callbacks += s:PlugNvimLsp()
