@@ -1,7 +1,7 @@
 function s:readlineMaps()
   " NOTE: some readline-style bindings cherrypicked/simplified from tpope/vim-rsi
 
-  if &encoding ==# 'latin1' && has('gui_running') && !empty(findfile('plugin/sensible.vim', escape(&rtp, ' ')))
+  if &encoding ==# 'latin1' && has('gui_running') && !empty(findfile('plugin/sensible.vim', escape(&runtimepath, ' ')))
     set encoding=utf-8
   endif
 
@@ -16,7 +16,7 @@ function s:readlineMaps()
     noremap!    <M-C-h> <C-W>
   endfunction
 
-  if has("gui_running") || has('nvim')
+  if has('gui_running') || has('nvim')
     call s:MapMeta()
   else
     silent! exe "set <F29>=\<Esc>b"

@@ -1,6 +1,7 @@
 " ============================================================================
 " Pokerus .vimrc (by j-hui)
 " ============================================================================
+" vint: -ProhibitSetNoCompatible
 
 if 0
  " Change to 1 if doing a minimal .vimrc test

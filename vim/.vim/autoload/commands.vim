@@ -12,7 +12,7 @@ function commands#setup()
 
   " Refresh {{{
   function! s:refresh()
-    silent! call mkdir(fnamemodify(tempname(), ":p:h"), "", 0700)
+    silent! call mkdir(fnamemodify(tempname(), ':p:h'), '', 0700)
     set nohlsearch
     redraw
     redrawstatus
@@ -52,10 +52,10 @@ function commands#setup()
   let s:sharemode = 0
   function! g:ShareSetMode(mode)
     if a:mode
-      set nornu cursorline
+      set norelativenumber cursorline
       let s:sharemode = 1
     else
-      set rnu nocursorline
+      set relativenumber nocursorline
       let s:sharemode = 0
     endif
   endfunction
@@ -72,10 +72,10 @@ function commands#setup()
 
   " Modeline {{{
   function! AppendModeline()
-    let l:modeline = printf(" vim: set ts=%d sw=%d tw=%d %set :",
+    let l:modeline = printf(' vim: set ts=%d sw=%d tw=%d %set :',
       \ &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
-    let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
-    call append(line("$"), l:modeline)
+    let l:modeline = substitute(&commentstring, '%s', l:modeline, '')
+    call append(line('$'), l:modeline)
   endfunction
 
   command! Modeline call AppendModeline() | normal! G
@@ -107,9 +107,9 @@ function commands#setup()
 
   " SyntaxGroup: add missing commas to BibTeX file {{{
   function s:show_syntax_group()
-    echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
-          \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
-          \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"
+    echo 'hi<' . synIDattr(synID(line('.'),col('.'),1),'name') . '> trans<'
+          \ . synIDattr(synID(line('.'),col('.'),0),'name') . '> lo<'
+          \ . synIDattr(synIDtrans(synID(line('.'),col('.'),1)),'name') . '>'
   endfunction
   command! SyntaxGroup call <SID>show_syntax_group()
   nmap <leader>h :SyntaxGroup<CR>
