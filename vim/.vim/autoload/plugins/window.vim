@@ -13,12 +13,32 @@ function plugins#window#setup()
     Plug 'kyazdani42/nvim-web-devicons'
     " Dependency for bufferline
 
+    Plug 'SmiteshP/nvim-gps'
+    " NOTE: Requires treesitter
+
+    " Plug 'arkav/lualine-lsp-progress'
+    " " Show lsp progress
+    " Too verbose
+
     function s:SetupLualine()
 lua <<EOF
+      local gps_component = nil
+      if vim.g.treesitter_langs then
+        local gps = require'nvim-gps'
+        gps_component = { gps.get_location, cond = gps.is_available }
+      end
+
       require'lualine'.setup {
         options = {
           section_separators = '',
           component_separators = '',
+        },
+        sections = {
+          lualine_b = {'branch', 'diff', {'diagnostics', colored = false}},
+          lualine_c = {
+            'filename',
+            gps_component,
+          },
         },
         extensions = {
           'fugitive',
@@ -30,14 +50,16 @@ lua <<EOF
         options = {
           diagnostics = 'nvim_lsp',
           diagnostics_indicator = function(count, level, diagnostics_dict, context)
-            if not level:match('error') then
-              return ''
+            if level:match('error') then
+              return '  ' .. count
             end
-            return ' ' .. ' ' .. count
+            return ''
           end,
         },
       }
 EOF
+    nnoremap <silent>[b :BufferLineCycleNext<CR>
+    nnoremap <silent>b] :BufferLineCyclePrev<CR>
     endfunction
     let l:callbacks += [function('s:SetupLualine')]
   else
