@@ -57,6 +57,7 @@ function s:TerminalIO()
   let &t_ut=''
 
   set lazyredraw
+  set termguicolors
 endfunction
 
 function s:Clipboard()
