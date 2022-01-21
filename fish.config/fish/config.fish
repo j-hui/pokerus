@@ -161,6 +161,7 @@ set -gx LESS_TERMCAP_us \e'[04;38;5;146m' # begin underline
 set -gx RIPGREP_CONFIG_PATH ~/.config/ripgrep/ripgreprc
 source ~/.opam/opam-init/init.fish > /dev/null 2> /dev/null; or true
 if command -v prettyping >/dev/null; abbr --add pping 'prettyping --nolegend'; end
+source ~/.local/share/git-subrepo/.fish.rc; or true
 
 ## Misc Utilities }}}
 
