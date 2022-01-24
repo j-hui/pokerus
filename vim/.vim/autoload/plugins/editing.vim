@@ -159,8 +159,39 @@ EOF
         call g:ShareSetMode(0)
       endfunction
 
-      autocmd! User GoyoEnter nested call <SID>goyo_enter()
-      autocmd! User GoyoLeave nested call <SID>goyo_leave()
+      augroup goyo-settings
+        autocmd!
+        autocmd User GoyoEnter nested call <SID>goyo_enter()
+        autocmd User GoyoLeave nested call <SID>goyo_leave()
+      augroup END
+
+    if has('nvim-0.6')
+      Plug 'jbyuki/venn.nvim'
+      " Draw diagrams using visual mode
+      function s:ToggleVenn()
+        if exists('g:venn_enabled') && g:venn_enabled
+          let g:venn_enabled = v:false
+          let &virtualedit = g:venn_ve
+          nunmap <Down>
+          nunmap <Up>
+          nunmap <Left>
+          nunmap <Right>
+          vunmap <CR>
+          echom 'Disabled Venn mode'
+        else
+          let g:venn_enabled = v:true
+          let g:venn_ve = &virtualedit
+          setlocal virtualedit=all
+          nnoremap <Down>   <C-v>j:VBox<CR>
+          nnoremap <Up>     <C-v>k:VBox<CR>
+          nnoremap <Left>   <C-v>h:VBox<CR>
+          nnoremap <Right>  <C-v>l:VBox<CR>
+          vnoremap <CR> :VBox<CR>
+          echom 'Enabled Venn mode'
+        endif
+      endfunction
+      command Venn call s:ToggleVenn()
+    endif
 
     return l:callbacks
 endfunction
