@@ -7,11 +7,12 @@ set -euf
 
 if [ "$#" -ne "1" ]; then
     echo "Usage: $0 [play|prev|next|here|like]"
+    return 1
 fi
 
 case "$1" in
     play|play-pause|pause)
-        playerctl --player=spotify,spotifyd,%d play-pause
+        playerctl --player=spotify,spotifyd,%d "$1"
         ;;
     prev|previous|p)
         playerctl --player=spotify,spotifyd,%d previous
