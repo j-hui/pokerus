@@ -70,8 +70,9 @@ function plugins#setup()
 
   call plug#begin('~/.vimplugins/plugged')
 
-  Plug 'vim-scripts/Decho'
+  " Plug 'vim-scripts/Decho'
   " Plugin debugging
+  " Commented out because this defines the mapping <leader>rwp for some reason
   Plug 'dstein64/vim-startuptime'
   " Startup time profiling
   Plug 'norcalli/profiler.nvim'
