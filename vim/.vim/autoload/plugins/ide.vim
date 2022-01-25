@@ -457,9 +457,6 @@ function s:PlugNvimLsp()
   Plug 'gfanto/fzf-lsp.nvim'
     " Use FZF as interactive picker
 
-  Plug 'nvim-lua/lsp-status.nvim'
-    " LSP status line
-
   Plug 'folke/trouble.nvim'
     " Summarize diagnostics in document
 
@@ -477,6 +474,9 @@ function s:PlugNvimLsp()
 
   Plug 'folke/lua-dev.nvim'
     " Nvim lua development
+
+  Plug 'j-hui/fidget.nvim'
+    " Progress handler UI
 
   function s:SetupNvimLspRust()
     augroup nvimlsp_extensions_rust
@@ -512,6 +512,7 @@ lua <<EOF
       -- hint_enable = false,
       -- trigger_on_newline = false,
     -- }
+    require"fidget".setup{}
 EOF
   endfunction
   return [function('s:SetupNvimLsp')]
@@ -895,8 +896,6 @@ function s:StackNvimLsp()
     call s:LspWhichKey()
 lua << EOF
   local nvim_lsp = require 'lspconfig'
-  local lsp_status = require'lsp-status'
-  lsp_status.register_progress()
 
   require'null-ls'.setup {
     sources = {
@@ -937,8 +936,6 @@ lua << EOF
 
   local on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-    lsp_status.on_attach(client)
 
     local opts = { noremap = true, silent = true }
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K',          '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
@@ -988,7 +985,6 @@ lua << EOF
   for lsp, cfg in pairs(servers) do
     nvim_lsp[lsp].setup (completion_lsp(vim.tbl_extend('keep', cfg, {
       on_attach = on_attach,
-      capabilities = lsp_status.capabilities,
     })))
   end
 
