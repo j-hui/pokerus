@@ -224,11 +224,17 @@ EOF
     nnoremap <leader>* <cmd>lua require"telescope.builtin".grep_string{}<CR>
     call g:WhichKeyL(['*'], 'telescope-grep-word')
 
-    nnoremap <leader>/ <cmd>lua require"telescope.builtin".live_grep{}<CR>
+    nnoremap <leader>/ <cmd>lua require"telescope.builtin".live_grep{cwd = vim.fn.getcwd() }<CR>
     call g:WhichKeyL(['/'], 'telescope-search')
 
-    nnoremap <leader>s <cmd>lua require"telescope.builtin".live_grep{grep_open_files = true}<CR>
+    nnoremap <leader>s <cmd>lua require"telescope.builtin".live_grep{grep_open_files = true, cwd = vim.fn.getcwd() }<CR>
     call g:WhichKeyL(['s'], 'telescope-sneak')
+
+    nnoremap <leader>h <cmd>lua require"telescope.builtin".help_tags{}<CR>
+    call g:WhichKeyL(['h'], 'telescope-help')
+
+    nnoremap <leader>c <cmd>lua require"telescope.builtin".commands{}<CR>
+    call g:WhichKeyL(['c'], 'telescope-commands')
 
     nnoremap <leader>g. <cmd>lua require"telescope.builtin".git_bcommits{}<CR>
     call g:WhichKeyL(['g', '.'], 'git-buffer-log')
@@ -239,14 +245,14 @@ EOF
     nnoremap <leader>gg <cmd>lua require"telescope.builtin".git_files{}<CR>
     call g:WhichKeyL(['g', 'g'], 'git-files')
 
-    command! H           :Telescope help_tags<CR>
-    command! Help        :Telescope help_tags<CR>
+    command! H           :Telescope help_tags
+    command! Help        :Telescope help_tags
 
-    command! Hi          :Telescope highlights<CR>
-    command! Highlights  :Telescope highlights<CR>
+    command! Hi          :Telescope highlights
+    command! Highlights  :Telescope highlights
 
-    command! M           :Telescope man_pages<CR>
-    command! Manpages    :Telescope man_pages<CR>
+    command! M           :Telescope man_pages
+    command! Manpages    :Telescope man_pages
   endfunction
   return [function('s:SetupTelescope')]
 endfunction
