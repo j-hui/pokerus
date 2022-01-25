@@ -204,32 +204,6 @@ function s:commandMaps()
   cnoremap <C-Y> <C-R>-
 endfunction
 
-function s:leaderMaps()
-  call g:WhichKeyL(['b', 'name'], '+buffer')
-  nnoremap <leader>bn :bn<CR>
-  call g:WhichKeyL(['b', 'n'], 'buffer-next')
-  nnoremap <leader>bp :bp<CR>
-  call g:WhichKeyL(['b', 'p'], 'buffer-prev')
-  nnoremap <leader>bw :bw<CR>
-  call g:WhichKeyL(['b', 'w'], 'buffer-wipe')
-  nnoremap <leader>bq :q<CR>
-  call g:WhichKeyL(['b', 'q'], 'buffer-quit')
-  nnoremap <leader>bc :cclose\|lclose<CR>
-  call g:WhichKeyL(['b', 'c'], 'buffer-close-lists')
-  nnoremap <leader>bj <C-w>j
-  call g:WhichKeyL(['b', 'j'], 'buffer-down')
-  nnoremap <leader>bk <C-w>k
-  call g:WhichKeyL(['b', 'k'], 'buffer-up')
-  nnoremap <leader>bh <C-w>h
-  call g:WhichKeyL(['b', 'h'], 'buffer-left')
-  nnoremap <leader>bl <C-w>l
-  call g:WhichKeyL(['b', 'l'], 'buffer-right')
-  nnoremap <leader>bs <C-w>s
-  call g:WhichKeyL(['b', 'x'], 'buffer-hsplit')
-  nnoremap <leader>bv <C-w>v
-  call g:WhichKeyL(['b', 'v'], 'buffer-vsplit')
-endfunction
-
 function s:termMaps()
   tnoremap <C-]> <C-\><C-N>
 endfunction
@@ -244,7 +218,6 @@ function keybinds#setup()
   call s:navigationMaps()
   call s:editingMaps()
   call s:commandMaps()
-  call s:leaderMaps()
   call s:termMaps()
 
 endfunction
