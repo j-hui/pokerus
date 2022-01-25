@@ -11,7 +11,7 @@ function s:StackWhichKey()
 
     function s:WhichKeyHooks()
       let g:which_key_map_space = g:which_key_map[' '] " i.e., <leader>
-      call which_key#register('<Space>', "g:which_key_map_space")
+      call which_key#register('<Space>', 'g:which_key_map_space')
     endfunction
   return [function('s:WhichKeyHooks')]
 endfunction
@@ -21,7 +21,7 @@ function s:StackWhichKeyNvim()
 
   function s:SetupWhichKeyNvim()
 lua << EOF
-    local wk = require'which-key'
+    local wk = require"which-key"
     wk.setup { hidden = { -- hide mapping boilerplate
       "<silent>",
       "<cmd>",
@@ -34,9 +34,9 @@ lua << EOF
       "<Plug>",
       "<plug>"
     }}
-    wk.register(vim.g.which_key_map, { mode = 'n' })
-    wk.register(vim.g.which_key_map_v, { mode = 'v' })
-    wk.register(vim.g.which_key_map_i, { mode = 'i' })
+    wk.register(vim.g.which_key_map, { mode = "n" })
+    wk.register(vim.g.which_key_map_v, { mode = "v" })
+    wk.register(vim.g.which_key_map_i, { mode = "i" })
 EOF
   endfunction
 
@@ -48,12 +48,20 @@ EOF
   return []
 endfunction
 
-function s:StackFzf()
+function s:PlugFzf()
   Plug 'junegunn/fzf.vim'
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   " Fuzzy finder
-
     let g:fzf_preview_window = 'right:60%'
+  Plug 'https://gitlab.com/mcepl/vim-fzfspell.git'
+  " FZF for z=
+
+  " Shortcut for History: and History/
+  command! H History
+endfunction
+
+function s:StackFzf()
+  call s:PlugFzf()
 
     " Redefine :Rg, but using word under cursor if no args are given
     command! -bang -nargs=* Rg
@@ -75,64 +83,6 @@ function s:StackFzf()
 
     function! FzfHere(fullscreen)
       call fzf#vim#files(expand('%:h'), fzf#vim#with_preview(), a:fullscreen)
-    endfunction
-
-    function! FzfFiles(fullscreen)
-      " The following commands can be used in the fzf window to select:
-      " - return: open current selection
-      " - ctrl-o: open current query (creates a file if non-existent)
-      " - ctrl-v: open current query in vertical split
-      " - ctrl-x: open current query in horizontal split
-      "
-      " The following commands can be used to interact with the fzf window:
-      " - ctrl-l: replace query with current selection
-      " - ctrl-u: scroll half page up
-      " - ctrl-d: scroll half page down
-      " - tab/ctrl-i: select
-      function! s:FzfFileAccept(lines) abort
-        " a:lines is a list with three elements (two if there were no matches):
-        "   <search-query>, <expect-key>|<empty> [, <selected-items...>]
-        if len(a:lines) < 2
-          echoerr 'FzfFiles: truncated input: ' . a:lines
-          return
-        endif
-
-        if empty(a:lines[1]) " Enter was pressed
-          if len(a:lines) == 2
-            " No matches; open query
-            execute 'edit ' . a:lines[0]
-          else
-            " Open selection
-            for l:selection in a:lines[2:]
-              execute 'edit ' . l:selection
-            endfor
-          endif
-        elseif a:lines[1] ==# 'ctrl-o'
-          " Open query
-          execute 'edit ' . a:lines[0]
-        elseif a:lines[1] ==# 'ctrl-v'
-          " Open query in vsplit
-          execute 'vsplit ' . a:lines[0]
-        elseif a:lines[1] ==# 'ctrl-x'
-          " Open query in hsplit
-          execute 'split ' . a:lines[0]
-        else
-          echoerr 'FzfFiles: unknown command ' . a:lines[1]
-        endif
-
-      endfunction
-
-      let l:spec = {
-            \'options': [
-              \'--print-query',
-              \'--expect=ctrl-o,ctrl-v,ctrl-x',
-              \'--bind=ctrl-l:replace-query',
-              \'--bind=ctrl-u:half-page-up',
-              \'--bind=ctrl-d:half-page-down',
-              \],
-            \'sink*': funcref('s:FzfFileAccept')
-            \}
-      call fzf#vim#files(getcwd(), fzf#vim#with_preview(l:spec), a:fullscreen)
     endfunction
 
     " Insert mode completion (overriding vim mappings)
@@ -157,7 +107,7 @@ function s:StackFzf()
     call g:WhichKeyL(['?'], 'fzf-ripgrep')
 
     " Files
-    nmap <leader>f :call FzfFiles(0)<CR>
+    nmap <leader>f :Files<CR>
     call g:WhichKeyL(['f'], 'fzf-files')
 
     " Switch to buffer
@@ -167,12 +117,6 @@ function s:StackFzf()
     " Switch to buffer + history
     nmap <leader>S :History<CR>
     call g:WhichKeyL(['S'], 'fzf-history-buffers')
-
-    " Shortcut for History: and History/
-    command! H History
-
-  Plug 'https://gitlab.com/mcepl/vim-fzfspell.git'
-  " FZF for z=
   return []
 endfunction
 
@@ -432,9 +376,10 @@ function plugins#subsystems#setup()
 
   if has('nvim-0.6')
     let l:callbacks += s:StackTelescope()
+  else
+    let l:callbacks += s:StackFzf()
   endif
 
-  let l:callbacks += s:StackFzf()
   let l:callbacks += s:StackGit()
   let l:callbacks += s:StackMiscSubsystems()
   return l:callbacks
