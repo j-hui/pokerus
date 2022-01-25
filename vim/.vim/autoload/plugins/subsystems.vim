@@ -58,133 +58,195 @@ function s:PlugFzf()
 
   " Shortcut for History: and History/
   command! H History
+  return []
 endfunction
 
 function s:StackFzf()
   call s:PlugFzf()
 
-    " Redefine :Rg, but using word under cursor if no args are given
-    command! -bang -nargs=* Rg
-      \ call fzf#vim#grep(
-      \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(len(<q-args>)?<q-args>:expand('<cword>')), 1,
-      \   fzf#vim#with_preview(), <bang>0)
-    command! -bang -nargs=* RG
-      \ call fzf#vim#grep(
-      \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(len(<q-args>)?<q-args>:expand('<cword>')), 1,
-      \   fzf#vim#with_preview(), <bang>0)
+  " Redefine :Rg, but using word under cursor if no args are given
+  command! -bang -nargs=* Rg
+    \ call fzf#vim#grep(
+    \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(len(<q-args>)?<q-args>:expand('<cword>')), 1,
+    \   fzf#vim#with_preview(), <bang>0)
+  command! -bang -nargs=* RG
+    \ call fzf#vim#grep(
+    \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(len(<q-args>)?<q-args>:expand('<cword>')), 1,
+    \   fzf#vim#with_preview(), <bang>0)
 
-    function! FzfRg(query, fullscreen)
-      let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
-      let initial_command = printf(command_fmt, shellescape(a:query))
-      let reload_command = printf(command_fmt, '{q}')
-      let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
-      call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
-    endfunction
+  function! FzfRg(query, fullscreen)
+    let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
+    let initial_command = printf(command_fmt, shellescape(a:query))
+    let reload_command = printf(command_fmt, '{q}')
+    let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+    call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+  endfunction
 
-    function! FzfHere(fullscreen)
-      call fzf#vim#files(expand('%:h'), fzf#vim#with_preview(), a:fullscreen)
-    endfunction
+  function! FzfHere(fullscreen)
+    call fzf#vim#files(expand('%:h'), fzf#vim#with_preview(), a:fullscreen)
+  endfunction
 
-    " Insert mode completion (overriding vim mappings)
-    imap <C-x><C-k> <Plug>(fzf-complete-word)
-    imap <C-x><C-f> <Plug>(fzf-complete-path)
-    imap <C-x><C-l> <Plug>(fzf-complete-line)
+  " Insert mode completion (overriding vim mappings)
+  imap <C-x><C-k> <Plug>(fzf-complete-word)
+  imap <C-x><C-f> <Plug>(fzf-complete-path)
+  imap <C-x><C-l> <Plug>(fzf-complete-line)
 
-    " Here (like Files/:FZF, but relative to directory of current file)
-    nmap <leader>. :call FzfHere(0)<CR>
-    call g:WhichKeyL(['.'], 'fzf-here')
+  " Here (like Files/:FZF, but relative to directory of current file)
+  nmap <leader>. :call FzfHere(0)<CR>
+  call g:WhichKeyL(['.'], 'fzf-here')
 
-    " Lines (current buffer only)
-    nmap <leader>, :BLines<CR>
-    call g:WhichKeyL([','], 'fzf-buffer-lines')
+  " Lines (current buffer only)
+  nmap <leader>, :BLines<CR>
+  call g:WhichKeyL([','], 'fzf-buffer-lines')
 
-    " Line
-    nmap <leader>/ :Lines<CR>
-    call g:WhichKeyL(['/'], 'fzf-lines')
+  " Line
+  nmap <leader>s :Lines<CR>
+  call g:WhichKeyL(['/'], 'fzf-lines')
 
-    " Ripgrep live (starting with word under cursor)
-    nmap <leader>? :call FzfRg(expand('<cword>'), 0)<CR>
-    call g:WhichKeyL(['?'], 'fzf-ripgrep')
+  " Ripgrep live (starting with word under cursor)
+  nmap <leader>/ :call FzfRg(expand('<cword>'), 0)<CR>
+  call g:WhichKeyL(['?'], 'fzf-ripgrep')
 
-    " Files
-    nmap <leader>f :Files<CR>
-    call g:WhichKeyL(['f'], 'fzf-files')
+  " Files
+  nmap <leader>f :Files<CR>
+  call g:WhichKeyL(['f'], 'fzf-files')
 
-    " Switch to buffer
-    nmap <leader>s :Buffers<CR>
-    call g:WhichKeyL(['s'], 'fzf-buffers')
+  " Switch to buffer
+  nmap <leader>b :Buffers<CR>
+  call g:WhichKeyL(['b'], 'fzf-buffers')
 
-    " Switch to buffer + history
-    nmap <leader>S :History<CR>
-    call g:WhichKeyL(['S'], 'fzf-history-buffers')
+  " Switch to buffer + history
+  nmap <leader>o :History<CR>
+  call g:WhichKeyL(['s'], 'fzf-history-buffers')
+
+  nmap <leader>g. :BCommits<CR>
+  call g:WhichKeyL(['g', '.'], 'git-buffer-log')
+
+  nmap <leader>gl :Commits<CR>
+  call g:WhichKeyL(['g', 'l'], 'git-log')
+
+  nmap <leader>gg :GFiles<CR>
+  call g:WhichKeyL(['g', 'g'], 'git-files')
+
   return []
 endfunction
 
-function s:StackTelescope()
+function s:PlugTelescope()
   Plug 'nvim-lua/plenary.nvim'
   Plug 'nvim-telescope/telescope.nvim'
   Plug 'nvim-telescope/telescope-file-browser.nvim'
   Plug 'tami5/sqlite.lua'
   Plug 'ahmedkhalf/project.nvim'
+  Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+  return []
+endfunction
+
+function s:StackTelescope()
+  call s:PlugTelescope()
 
   function s:SetupTelescope()
 lua << EOF
     local function action(f, ...)
       local args = {...}
       return function (b)
-        require'telescope.actions'[f](b, unpack(args))
+        require"telescope.actions"[f](b, unpack(args))
       end
     end
     local function action_set(f, ...)
       local args = {...}
       return function (b)
-        require'telescope.actions.set'[f](b, unpack(args))
+        require"telescope.actions.set"[f](b, unpack(args))
       end
     end
     local function fb_action(f, ...)
       local args = {...}
       return function (b)
-        require'telescope'.extensions.file_browser.actions[f](b, unpack(args))
+        require"telescope".extensions.file_browser.actions[f](b, unpack(args))
       end
     end
     local imaps = {
-      ['<C-a>'] = { '<Home>',   type = 'command' },
-      ['<C-e>'] = { '<End>',    type = 'command' },
-      ['<C-f>'] = { '<Right>',  type = 'command' },
-      ['<C-b>'] = { '<Left>',   type = 'command' },
-      ['<C-h>'] = { '<BS>',     type = 'command' },
-      ['<C-k>'] = function () vim.cmd 'norm! d$' end,
+      ["<C-a>"] = { "<Home>",   type = "command" },
+      ["<C-e>"] = { "<End>",    type = "command" },
+      ["<C-f>"] = { "<Right>",  type = "command" },
+      ["<C-b>"] = { "<Left>",   type = "command" },
+      ["<C-h>"] = { "<BS>",     type = "command" },
+      ["<C-k>"] = function () vim.cmd "norm! d$" end,
+      ["<Esc>"] = action "close",
     }
     local nmaps = {
-      ['<Up>']    = { 'k',      type = 'command' },
-      ['<Down>']  = { 'j',      type = 'command' },
-      ['<Left>']  = { 'h',      type = 'command' },
-      ['<Right>'] = { 'l',      type = 'command' },
-      ['q']       = action 'close',
-      ['<C-u>']   = action_set('shift_selection', -12),
-      ['<C-d>']   = action_set('shift_selection', 12),
-      ['<C-p>']   = action_set('shift_selection', -1),
-      ['<C-n>']   = action_set('shift_selection', 1),
+      ["<Up>"]    = { "k",      type = "command" },
+      ["<Down>"]  = { "j",      type = "command" },
+      ["<Left>"]  = { "h",      type = "command" },
+      ["<Right>"] = { "l",      type = "command" },
+      ["q"]       = action "close",
+      ["<C-u>"]   = action_set("shift_selection", -12),
+      ["<C-d>"]   = action_set("shift_selection", 12),
+      ["<C-p>"]   = action_set("shift_selection", -1),
+      ["<C-n>"]   = action_set("shift_selection", 1),
     }
-    require'telescope'.setup {
-      defaults = { mappings = { i = imaps, n = nmaps } },
+    require"telescope".setup {
+      defaults = require "telescope.themes".get_ivy {
+        winblend = 20,
+        mappings = { i = imaps, n = nmaps },
+      },
       extensions = {
         file_browser = {
           mappings = {
             n = nmaps,
-            i = vim.tbl_extend('force', imaps, {
-              ['<C-y>'] = fb_action 'create_file',
-              ['<C-t>'] = fb_action 'toggle_browser',
+            i = vim.tbl_extend("force", imaps, {
+              ["<C-y>"] = fb_action "create",
+              ["<C-t>"] = fb_action "toggle_browser",
             }),
           },
         },
       },
     }
-    require'telescope'.load_extension 'file_browser'
-    require'project_nvim'.setup {}
-    require'telescope'.load_extension 'projects'
+    require"project_nvim".setup {}
+    require"telescope".load_extension "file_browser"
+    require"telescope".load_extension "projects"
+    require"telescope".load_extension "fzf"
+
 EOF
-    nnoremap <leader>0 :lua require 'telescope'.extensions.file_browser.file_browser()<CR>
+
+    nnoremap <leader>f <cmd>lua require"telescope.builtin".find_files{}<CR>
+    call g:WhichKeyL(['f'], 'telescope-files')
+
+    nnoremap <leader>. <cmd>lua require"telescope.builtin".find_files{cwd = require"telescope.utils".buffer_dir()}<CR>
+    call g:WhichKeyL(['.'], 'telescope-here')
+
+    " nnoremap <leader>. <cmd>lua require"telescope".extensions.file_browser.file_browser{}<CR>
+    " call g:WhichKeyL(['.'], 'telescope-file-browser')
+    " I have other file browser plugins for this
+
+    nnoremap <leader>b <cmd>lua require"telescope.builtin".buffers{}<CR>
+    call g:WhichKeyL(['b'], 'telescope-buffers')
+
+    nnoremap <leader>* <cmd>lua require"telescope.builtin".grep_string{}<CR>
+    call g:WhichKeyL(['*'], 'telescope-grep-word')
+
+    nnoremap <leader>/ <cmd>lua require"telescope.builtin".live_grep{}<CR>
+    call g:WhichKeyL(['/'], 'telescope-search')
+
+    nnoremap <leader>s <cmd>lua require"telescope.builtin".live_grep{grep_open_files = true}<CR>
+    call g:WhichKeyL(['s'], 'telescope-sneak')
+
+    nnoremap <leader>g. <cmd>lua require"telescope.builtin".git_bcommits{}<CR>
+    call g:WhichKeyL(['g', '.'], 'git-buffer-log')
+
+    nnoremap <leader>gl <cmd>lua require"telescope.builtin".git_commits{}<CR>
+    call g:WhichKeyL(['g', 'l'], 'git-log')
+
+    nnoremap <leader>gg <cmd>lua require"telescope.builtin".git_files{}<CR>
+    call g:WhichKeyL(['g', 'g'], 'git-files')
+
+    command! H           :Telescope help_tags<CR>
+    command! Help        :Telescope help_tags<CR>
+
+    command! Hi          :Telescope highlights<CR>
+    command! Highlights  :Telescope highlights<CR>
+
+    command! M           :Telescope man_pages<CR>
+    command! Manpages    :Telescope man_pages<CR>
   endfunction
   return [function('s:SetupTelescope')]
 endfunction
@@ -214,15 +276,6 @@ function s:StackGit()
 
     " nnoremap <leader>gL :Gclog<CR>
     " " -- Use :Flogsplit instead
-
-    nmap <leader>g. :BCommits<CR>
-    call g:WhichKeyL(['g', '.'], 'git-buffer-log')
-
-    nmap <leader>gl :Commits<CR>
-    call g:WhichKeyL(['g', 'l'], 'git-log')
-
-    nmap <leader>gg :GFiles<CR>
-    call g:WhichKeyL(['g', 'g'], 'git-files')
 
     nmap <leader>gb :GBrowse<CR>
     call g:WhichKeyL(['g', 'b'], 'git-browse')
@@ -366,6 +419,12 @@ EOF
   return l:callbacks
 endfunction
 
+function s:StackDressing()
+  Plug 'stevearc/dressing.nvim'
+    " Extend vim.ui hooks
+  return []
+endfunction
+
 function plugins#subsystems#setup()
   let l:callbacks = []
   if has('nvim-0.5')
@@ -375,9 +434,14 @@ function plugins#subsystems#setup()
   endif
 
   if has('nvim-0.6')
+    let l:callbacks += s:PlugFzf()
     let l:callbacks += s:StackTelescope()
   else
     let l:callbacks += s:StackFzf()
+  endif
+
+  if has('nvim-0.6')
+    let l:callbacks += s:StackDressing()
   endif
 
   let l:callbacks += s:StackGit()
