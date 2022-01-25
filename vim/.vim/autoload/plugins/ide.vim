@@ -475,6 +475,9 @@ function s:PlugNvimLsp()
   Plug 'weilbith/nvim-lsp-smag'
     " Override tagfunc, use C-] to jump to definition
 
+  Plug 'folke/lua-dev.nvim'
+    " Nvim lua development
+
   function s:SetupNvimLspRust()
     augroup nvimlsp_extensions_rust
       autocmd!
@@ -572,7 +575,7 @@ lua << EOF
       { name = 'buffer', option = { keyword_length = 4 } },
       -- { name = 'spell', keyword_length = 5 },
     },
-    documentation = false,
+    documentation = true,
     -- formatting = {
     --   format = require'lspkind'.cmp_format({with_text = true, maxwidth = 50})
     -- },
@@ -907,6 +910,7 @@ lua << EOF
       require'null-ls'.builtins.diagnostics.vint,
       require'null-ls'.builtins.diagnostics.statix,
       require'null-ls'.builtins.formatting.asmfmt,
+      require'null-ls'.builtins.formatting.stylua,
     },
   }
 
@@ -928,6 +932,7 @@ lua << EOF
     ['ocamllsp'] = {},
     ['rnix'] = {},
     ['tsserver'] = {},
+    ['sumneko_lua'] = require("lua-dev").setup{},
   }
 
   local on_attach = function(client, bufnr)

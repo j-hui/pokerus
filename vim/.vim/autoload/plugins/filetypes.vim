@@ -251,6 +251,18 @@ endfunction
 function s:PlugZig()
   Plug 'ziglang/zig.vim'
     let g:zig_fmt_autosave = 0
+  return []
+endfunction
+
+function s:PlugLua()
+  Plug 'bfredl/nvim-luadev'
+  Plug 'euclidianAce/BetterLua.vim'
+    augroup lua_settings
+      autocmd!
+      autocmd FileType lua nmap <leader>lll <Plug>(Luadev-RunLine)
+      autocmd FileType lua nmap <leader>ll <Plug>(Luadev-Run)
+    augroup END
+  return []
 endfunction
 
 function s:PlugWiki()
@@ -454,7 +466,7 @@ endfunction
 
 function plugins#filetypes#setup()
   let l:callbacks = []
-  if has('nvim-0.5')
+  if has('nvim-0.6')
     let l:callbacks += s:PlugTreesitter()
   endif
   call s:PlugCoq()
@@ -465,6 +477,7 @@ function plugins#filetypes#setup()
   call s:PlugGo()
   call s:PlugValgrind()
   call s:PlugZig()
+  call s:PlugLua()
   call s:PlugMail()
   call s:PlugWiki()
   call s:PlugMisc()
