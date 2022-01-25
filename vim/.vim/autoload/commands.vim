@@ -112,8 +112,8 @@ function commands#setup()
           \ . synIDattr(synIDtrans(synID(line('.'),col('.'),1)),'name') . '>'
   endfunction
   command! SyntaxGroup call <SID>show_syntax_group()
-  nmap <leader>h :SyntaxGroup<CR>
-  call g:WhichKeyL(['h'], 'show-syntax-group')
+  nmap <leader>x :SyntaxGroup<CR>
+  call g:WhichKeyL(['x'], 'show-syntax-group')
   " }}}
 
 endfunction
