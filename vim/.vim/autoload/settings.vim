@@ -158,7 +158,7 @@ function s:Navigation()
 
   let g:netrw_liststyle = 3
   let g:netrw_preview = 1
-
+  let g:netrw_bufsettings = 'noma nomod nonu nowrap ro buflisted'
 endfunction
 
 function s:Editing()
