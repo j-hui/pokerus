@@ -454,9 +454,6 @@ function s:PlugNvimLsp()
   Plug 'jose-elias-alvarez/null-ls.nvim'
     " Integrate linters and formatters into LSP
 
-  Plug 'gfanto/fzf-lsp.nvim'
-    " Use FZF as interactive picker
-
   Plug 'folke/trouble.nvim'
     " Summarize diagnostics in document
 
@@ -491,7 +488,6 @@ function s:PlugNvimLsp()
   augroup END
 
   function s:SetupNvimLsp()
-    lua require'fzf_lsp'.setup {}
     augroup NvimLightbulb
       autocmd!
       autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
