@@ -1,0 +1,149 @@
+#!/usr/bin/env bash
+
+set -euf
+tms="$(dirname "$0")"
+
+insert_node () {
+  local src
+  local dst
+  src="$1"
+  dst="$2"
+
+  # TODO: consider preselected nodes
+
+  # Rotate the destination first, so that the insertion produces a spiral.
+  bspc node "$dst" -R 90
+  bspc node "$src" -n "$dst"
+}
+
+hide () {
+  bspc node focused -g hidden=on
+}
+
+unhide () {
+  local opt_local
+  opt_local=""
+  local opt_swap
+  opt_swap=""
+  local opt_focus
+  opt_focus=""
+  local opt_inplace
+  opt_inplace=""
+
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --local|-l)
+        opt_local="y"
+        ;;
+      --swap|-s)
+        opt_swap="y"
+        ;;
+      --focus|-f)
+        opt_focus="y"
+        ;;
+      --in-place|-i)
+        opt_inplace="y"
+        ;;
+      *)
+        echo "Unrecognized argument: '$1'"
+        exit 1
+        ;;
+    esac
+    shift
+  done
+
+  local query
+  query=".window.hidden"
+  if [ "$opt_local" = "y" ]; then
+    query="${query}.local"
+  fi
+
+  # Obtain hidden nodes, and construct regex query from IDs.
+  local hidden_nodes
+  hidden_nodes="$(bspc query -N -n "$query" | paste -sd '|')"
+  if [ -z "$hidden_nodes" ]; then
+    # No hidden nodes
+    return
+  fi
+  hidden_nodes="^($hidden_nodes)"
+
+  # Use wmctrl to obtain a human-readable list of all windows, only pick out the
+  # hidden ones, prompt the user to select one, and obtain its ID.
+  local node
+  node="$(wmctrl -l -x | grep -i -E "$hidden_nodes" | "$tms"/picker | cut -f 1 -d ' ')"
+
+  # Figure out whether the select hidden node is on the current focused desktop.
+  local is_local
+  is_local=""
+  if [ "$opt_local" = y ] || bspc query -N -n "${node}.local" >/dev/null ; then
+    is_local="y"
+  fi
+
+  local is_float
+  is_float=""
+  if bspc query -N -n "${node}.float" >/dev/null ; then
+    is_float="y"
+  fi
+
+  # Identify the currently focused node, if any.
+  local cur_node
+  cur_node="$(bspc query -n -N focused || echo "")"
+
+  if [ "$opt_inplace" = y ]; then
+    # Nothing to do here; just unhide the node where it is.
+    :
+  else
+    if [ "$is_float" = y ]; then
+      # If the selected node is floating, we don't need to worry about where in
+      # the tree it is, as long as it is moved to the current desktop.
+      if [ "$is_local" != y ]; then
+        bspc node "$node" -n @/
+      fi
+    else
+      # Move the selected node to a sane location before it is unhidden.
+      if [ "$is_local" = y ]; then
+        # First, temporarily push the node to some unfocused desktop, removing
+        # it from the current tree (assumes there are at least two desktops).
+        bspc node "$node" -d any.!focused
+      fi
+
+      if [ "$opt_swap" = y ]; then
+        insert_node "$node" "$cur_node"
+      else
+        # Default: insert at the root
+        insert_node "$node" "@/"
+      fi
+    fi
+  fi
+
+  # Unhide the selected node.
+  bspc node "$node" -g hidden=off
+
+  # Switch focus to it (only if specified)
+  if [ "$opt_focus" = y ]; then
+    bspc node "$node" -f
+  fi
+}
+
+usage () {
+  echo "usage: TODO:"
+}
+
+cmd="$1"
+shift
+
+case "$cmd" in
+  hide)
+    hide "$@"
+    ;;
+  unhide)
+    unhide "$@"
+    ;;
+  usage)
+    usage "$@"
+    ;;
+  *)
+    echo "Unknown command: $cmd"
+    usage "$@"
+    ;;
+esac
