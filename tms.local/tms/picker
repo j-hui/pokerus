@@ -50,14 +50,6 @@ alacritty --class "Alacritty,$class" -e \
   sh -c "$fzf </tmp/fzfloat-in >/tmp/fzfloat-out" &
 # st -c "$class" -e sh -c "$fzf </tmp/fzfloat-in >/tmp/fzfloat-out" &
 
-# sleep 0.1
-# xdotool search --class "$class" \
-#   set_window --overrideredirect 1 \
-#   windowunmap \
-#   windowmap \
-#   windowmove 50% 100 \
-#   windowfocus --sync
-
 cat /tmp/fzfloat-out
 wait
 

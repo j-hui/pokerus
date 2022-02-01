@@ -2,6 +2,8 @@
 
 set -euf
 
+tms="$(dirname "$0")"
+
 read -r -d '' cmds <<'EOF' || true
 kb-rate
 mon-auto
@@ -9,9 +11,8 @@ mon-haunter
 EOF
 
 prompt () {
-  # fzf --prompt="$1 > "
-  # ./fzfloat --prompt="$1 > "
-  rofi -p "$1 >" -dmenu
+  # rofi -p "$1 >" -dmenu
+  "$tms"/picker --prompt="$1 > "
 }
 
 err () {

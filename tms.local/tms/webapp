@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+tms="$(dirname "$0")"
+
 runWebapp () {
   [ $# -ne 1 ] && exit 1
   google-chrome-stable --new-window --app="$1"
@@ -27,9 +29,13 @@ webapp () {
 }
 
 if [ $# -lt 1 ] ; then
-  app="$(echo "$apps" | ./fzfloat)"
+  app="$(echo "$apps" | "$tms"/picker)"
 else
   app="$1"
+fi
+
+if [ -z "$apps" ]; then
+  exit 1
 fi
 
 if ! [[ "$app" =~ ^https:// ]] ; then
