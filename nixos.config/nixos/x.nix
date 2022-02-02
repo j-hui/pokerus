@@ -42,7 +42,7 @@ in
       gtk3 glib xorg.xf86inputsynaptics
       lxappearance
       bspwm sxhkd
-      xdo xdotool wmctrl xorg.xev
+      xdo xdotool wmctrl xorg.xev xtitle
       xss-lock xsecurelock
       polybarFull
       (rofi.override { plugins = [ rofi-file-browser rofi-emoji rofi-systemd rofi-calc ]; })
@@ -227,6 +227,7 @@ in
           ];
         };
         windowManager.bspwm.enable = true;
+        # displayManager.defaultSession = "none+bspwm";
         displayManager.defaultSession = "none+xmonad";
         displayManager.job.logToJournal = true;
         displayManager.lightdm = {
@@ -274,7 +275,8 @@ in
         inactiveOpacity = 0.96;
 
         fade = true;
-        fadeSteps = [ 0.05 0.2 ];
+        fadeSteps = [ 0.05 0.05 ];
+        fadeDelta = 1;
 
         # blur-background-exclude = [
         #   "window_type = 'dock'"
