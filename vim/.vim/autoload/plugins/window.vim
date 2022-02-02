@@ -66,12 +66,13 @@ lua <<EOF
       }
       require'bufferline'.setup {
         options = {
-          diagnostics = 'nvim_lsp',
+          diagnostics = "nvim_lsp",
+          numbers = "buffer_id",
           diagnostics_indicator = function(count, level, diagnostics_dict, context)
-            if level:match('error') then
-              return '  ' .. count
+            if level:match("error") then
+              return "  " .. count
             end
-            return ''
+            return ""
           end,
         },
       }
