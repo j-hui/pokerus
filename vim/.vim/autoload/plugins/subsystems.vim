@@ -135,9 +135,9 @@ function s:PlugTelescope()
   Plug 'nvim-lua/plenary.nvim'
   Plug 'nvim-telescope/telescope.nvim'
   Plug 'nvim-telescope/telescope-file-browser.nvim'
+  Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
   Plug 'tami5/sqlite.lua'
   Plug 'ahmedkhalf/project.nvim'
-  Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
   return []
 endfunction
 
@@ -205,7 +205,6 @@ lua << EOF
     require"telescope".load_extension "file_browser"
     require"telescope".load_extension "projects"
     require"telescope".load_extension "fzf"
-
 EOF
 
     nnoremap <leader>f <cmd>lua require"telescope.builtin".find_files{}<CR>
@@ -242,8 +241,14 @@ EOF
     nnoremap <leader>gl <cmd>lua require"telescope.builtin".git_commits{}<CR>
     call g:WhichKeyL(['g', 'l'], 'git-log')
 
-    nnoremap <leader>gg <cmd>lua require"telescope.builtin".git_files{}<CR>
-    call g:WhichKeyL(['g', 'g'], 'git-files')
+    nnoremap <leader>gb <cmd>lua require"telescope.builtin".git_branches{}<CR>
+    call g:WhichKeyL(['g', 'b'], 'git-branches')
+
+    nnoremap <leader>gg <cmd>lua require"telescope.builtin".git_status{}<CR>
+    call g:WhichKeyL(['g', 't'], 'git-touched')
+
+    nnoremap <leader>gf <cmd>lua require"telescope.builtin".git_files{}<CR>
+    call g:WhichKeyL(['g', 'f'], 'git-files')
 
     command! H           :Telescope help_tags
     command! Help        :Telescope help_tags
@@ -283,8 +288,9 @@ function s:StackGit()
     " nnoremap <leader>gL :Gclog<CR>
     " " -- Use :Flogsplit instead
 
-    nmap <leader>gb :GBrowse<CR>
-    call g:WhichKeyL(['g', 'b'], 'git-browse')
+    " nmap <leader>gb :GBrowse<CR>
+    " call g:WhichKeyL(['g', 'b'], 'git-browse')
+    " " -- Use git linker instead
 
   Plug 'rbong/vim-flog'
   " Git log
@@ -294,13 +300,14 @@ function s:StackGit()
     augroup fugitive_maps
       autocmd!
       autocmd Filetype fugitive,git,floggraph nmap <buffer> q gq
+      autocmd User FugitiveStageBlob          nmap <buffer> q :q<CR>
     augroup END
 
   Plug 'rhysd/git-messenger.vim'
   " Super-charged git blame
     let g:git_messenger_no_default_mappings = v:true
-    nmap <leader>gb <Plug>(git-messenger)
-    call g:WhichKeyL(['g', 'b'], 'git-blame')
+    nmap <leader>gm <Plug>(git-messenger)
+    call g:WhichKeyL(['g', 'm'], 'git-blame')
 
   if has('nvim-0.5')
     Plug 'ruifm/gitlinker.nvim'
@@ -308,10 +315,11 @@ function s:StackGit()
 
     function s:SetupGitLinker()
 lua <<EOF
-      require'gitlinker'.setup{
+      require"gitlinker".setup{
         opts = {
+          mappings = "<leader>gy",
           action_callback = function(url)
-            vim.api.nvim_command('let @" = \'' .. url .. '\'')
+            vim.api.nvim_command("let @\" = '" .. url .. "'")
             vim.fn.OSCYankString(url)
           end,
         },
