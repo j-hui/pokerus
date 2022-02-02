@@ -200,6 +200,15 @@ function s:PlugFern()
   return []
 endfunction
 
+function s:PlugNvimTree()
+  Plug 'kyazdani42/nvim-web-devicons'
+  Plug 'kyazdani42/nvim-tree.lua'
+  function s:SetupNvimTree()
+    lua require"nvim-tree".setup{}
+  endfunction
+  return [function('s:SetupNvimTree')]
+endfunction
+
 function s:PlugRooter()
   Plug 'airblade/vim-rooter'          " Automatically move pwd for projects
     let g:rooter_cd_cmd = 'lcd'
@@ -233,6 +242,7 @@ function plugins#files#setup()
   let l:callbacks += s:PlugMisc()
   " let l:callbacks += s:PlugVinegar()
   " let l:callbacks += s:PlugDirvish()
+  " let l:callbacks += s:PlugNvimTree()
   let l:callbacks += s:PlugFern()
   let l:callbacks += s:PlugRooter()
   return l:callbacks
