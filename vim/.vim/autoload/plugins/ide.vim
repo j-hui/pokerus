@@ -508,7 +508,11 @@ lua <<EOF
       -- hint_enable = false,
       -- trigger_on_newline = false,
     -- }
-    require"fidget".setup{}
+    require"fidget".setup{
+      debug = {
+        logging = true
+      }
+    }
 EOF
   endfunction
   return [function('s:SetupNvimLsp')]
@@ -926,6 +930,7 @@ lua << EOF
     ['vimls'] = {},
     ['ocamllsp'] = {},
     ['rnix'] = {},
+    ['gopls'] = {},
     ['tsserver'] = {},
     ['sumneko_lua'] = require("lua-dev").setup{},
   }
