@@ -7,75 +7,75 @@ super + slash
     sed 's/--/\n/g' | \
     rofi -dmenu
 
-## kitty:
-super + Return
-    bspc desktop -f '^1' && xdo activate -N kitty || kitty
+## reload sxhkd:
+super + z
+    pkill -USR1 -x sxhkd && notify-send 'sxhkd' 'Reloaded config'
 
-super + shift + Return
-    kitty
+## restart bspwm:
+super + shift + z
+    pkill -USR1 -x sxhkd ; \
+    bspc wm --restart ; \
+    polybar-msg cmd restart ; \
+    notify-send 'bspwm' 'Restarted bpwm'
+
+## clear notifications:
+super + q
+    dunstctl close-all
+
+## lock:
+super + shift + q
+    xset s activate
+
+## app launcher:
+super + {_, shift +} semicolon
+    rofi -show {drun,run}
+
+## password manager:
+super + i
+    ~/.local/tms/passman
+
+## file manager:
+super + shift + i
+    thunar
+
+## terminal:
+super + Return
+    alacritty
 
 ## qutebrowser:
 super + o
     xdo activate -N qutebrowser || qutebrowser
 
-## google-chrome-stable:
+## google chrome:
+super + g
+    google-chrome-stable
+
+## incognito chrome:
 super + shift + o
-    bspc desktop -f '^3' && xdo activate -n google-chrome || google-chrome-stable
-
-## clear notifications:
-super + BackSpace
-    dunstctl close-all
-
-## sleep:
-super + shift + BackSpace
-    xset s activate
-
-## rofi-pass:
-super + i
-    rofi-pass
-
-## rofi-define:
-super + shift + i
-    ~/bin/rofi-define
+    google-chrome-stable --incognito
 
 ## define selected text:
 super + d
-    ~/bin/word-lookup.sh
+    ~/.local/tms/word-lookup
 
-## rofi run:
-{super, super + ctrl} + space
-    rofi -show {drun,run}
-
-## rofi window:
-super {+ Tab, + grave}
-    rofi -show {window,windowcd}
-
-## rofi greenclip:
-super + b
+## clipboard:
+super + v
     rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'
 
-## screenshot fullscreen:
-shift + Print
-    ~/bin/screenshot-take --fullscreen
+## take screenshot:
+{_,shift +} Print
+    ~/.local/tms/screenshot {,--fullscreen}
 
-## scrot select:
-Print
-    ~/bin/screenshot-take
+## take screenshot:
+super + {_,shift +} x
+    ~/.local/tms/screenshot {,--fullscreen}
 
-## copy + delete most recent screenshot:
-super + Print
-    ~/bin/screenshot-copy
-
-## copy most recent screenshot:
-super + shift + Print
-    ~/bin/screenshot-copy --no-delete
-
-## delete most recent screenshot:
-ctrl + super + Print
-    ~/bin/screenshot-copy --no-copy
+## take and save screenshot:
+super + {_,shift +} c
+    ~/.local/tms/screenshot --no-delete {,--fullscreen}
 
 ## volume +/-:
-super {+equal, +minus}
+super + {equal,minus}
     amixer sset Master 10%{+,-}
 
 ## XF86 volume control:
@@ -84,31 +84,31 @@ super {+equal, +minus}
 
 ## XF86 brightness control:
 {XF86MonBrightnessUp,XF86MonBrightnessDown}
-    brightnessctl set {+10%,10%-}
+    brightnessctl set {10%+,10%-}
 
 ## playerctl play/prev/next:
-super {+ backslash, + bracketleft, + bracketright}
+super + {apostrophe,bracketleft,bracketright}
     playerctl --player=spotifyd,spotify,%any {play-pause,previous,next}
 
-# ## toggle dvorak:
-# super + grave
-#     ~/bin/toggle-kbmap
+## launch spotify:
+super + shift + apostrophe
+    spotify
 
 #
-# bspwm hotkeys
+# bspwm hotkeys/window management
 #
 
-## sxhkd source/bspc quit:
-super {_, + shift} + Escape
-    {pkill -USR1 -x sxhkd,bspc quit}
+## window switcher:
+super + s
+    rofi -show window
 
 ## bspc close/kill window:
-super {_, + shift} + w
+super + {_, shift +} w
     bspc node -{c,k}
 
 ## bspc focus/swap toward direction:
-super {_, + shift}{+ h, + j, + k, + l}
-  bspc node -{f,s} {west, south, north, east}
+super + {_, shift +} {h, j, k, l}
+    bspc node -{f,s} {west, south, north, east}
 
 ## bspc previous/next desktop:
 super {+ p, + n}
@@ -116,55 +116,58 @@ super {+ p, + n}
 
 ## bspc send to previous/next desktop:
 super + shift {+ p, + n}
-    bspc node -d {prev,next}.local --follow
+    bspc node -d {prev,next}.local
+
+## bspc switch/swap monitor:
+super + {_, shift +} {comma, period}
+    bspc monitor {-f,-s} {prev, next}
 
 ## bspc go/send to desktop:
-super {_, + shift} + {1-9,0}
+super + {_, shift +} {1-9,0}
     bspc {desktop -f,node -d} '^{1-9,10}'
 
+## bspc goto urgent/floating:
+super + {_, shift +} u
+    n="$(bspc query -N -n newest.{urgent,floating})" && bspc node $n -f
+
 ## bspc rotate desktop:
-super {_, + shift} + r
-    bspc node @/ -R {90,270}
+super + {_, shift +} r
+    bspc node @parent -R {90,270}
+
+# super + {Left, Down, Up, Right}
+#     bspc node {@first, @second, @parent, @brother}.local.leaf -f
+
+super + {b, f}
+    bspc node {prev, next}.local.leaf -f
+    # bspc node '{@brother,@parent/parent}#biggest.descendant_of.local.leaf' -f
+    # bspc node 'focused.!floating.!fullscreen.window#@/' -C {backward,forward}
+
+super + y
+    ~/.local/tms/bspctl hide
+
+super + shift + y
+    ~/.local/tms/bspctl unhide --focus
+
+super + grave
+    bspc node next.same_class -f
 
 ## bspc set fullscreen
-super {_, + shift} + f
-  bspc node -t {fullscreen,floating}
+super + {_, shift +} a
+  bspc node -t {floating,fullscreen}
 
 ## bspc set tiled/pseudo-tiled
-super {_, + shift} + t
+super + {_, shift +} t
     bspc node -t {tiled,pseudo_tiled}
 
-## bspc toggle monocle:
-super + m
-    bspc desktop -l next
+## bspc toggle monocle/sticky:
+super + {_, shift +} m
+    bspc {desktop -l next,node -g sticky}
 
-## bspc toggle sticky:
-super + shift + m
-    bspc node -g sticky
+## bspc move floating window:
+# super + {Left, Down, Up, Right}
+    # bspc node -v {-20 0,0 20,0 -20,20 0}
+    # bspc node -{f,s} {west, south, north, east}
 
-# # bspc toggle node flag:
-# super + g ; {h,s,p,l,m}
-#     bspc node -g {hidden,sticky,private,locked,mark}
-
-# # focus the node for the given path jump
-# super + {p,b,comma,period}
-#   bspc node -f @{parent,brother,first,second}
-
-# focus the older or newer node in the focus history
-# super + {o,i}
-#   bspc wm -h off; \
-#   bspc node {older,newer} -f; \
-#   bspc wm -h on
-
-
-## floating window move:
-super {+ Left, + Down, + Up, + Right}
-    bspc node -v {-20 0,0 20,0 -20,20 0}
-
-## floating window expand side (outward):
-super + alt {+ Left, + Down, + Up, + Right}
-    bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
-
-## floating window contract side:
-shift + super + alt {+ Left, + Down, + Up, + Right}
-    bspc node -z {left 20 0,bottom 0 -20,top 0 20,right -20 0}
+## bspc move floating window:
+# super + shift + {Left, Down, Up, Right}
+    # bspc node -v {-20 0,0 20,0 -20,20 0}
