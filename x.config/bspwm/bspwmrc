@@ -46,6 +46,8 @@ bspc config pointer_action3 resize_side
 bspc config click_to_focus any
 bspc config pointer_follows_monitor true
 
+bspc config external_rules_command ~/.config/bspwm/bspwm-rules
+
 bspc rule -a Pinentry state=floating center=on follow=on
 bspc rule -a float-term state=floating center=on follow=on
 

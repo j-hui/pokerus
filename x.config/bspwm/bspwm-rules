@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+log=~/.local/share/bspwm/bspwm-rules.log
+mkdir -p "$(dirname log)"
+echo "bspwm external rules received: '$1' '$2' '$3' '$4'" >> "$log"
+
+# window="$1"
+# class="$2"
+# instance="$3"
+# consequences="$4"
