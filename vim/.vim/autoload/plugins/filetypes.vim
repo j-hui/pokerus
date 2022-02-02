@@ -395,11 +395,22 @@ function s:PlugTreesitter()
     let g:treesitter_langs += [
           \ 'devicetree',
           \ 'ocamllex',
+          \ 'org',
           \]
   endif
 
   function s:SetupTreesitter()
 lua <<EOF
+    local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+      parser_config.org = {
+        install_info = {
+          url = 'https://github.com/milisims/tree-sitter-org',
+          revision = 'f110024d539e676f25b72b7c80b0fd43c34264ef',
+          files = {'src/parser.c', 'src/scanner.cc'},
+        },
+        filetype = 'org',
+    }
+
     require'nvim-treesitter.configs'.setup {
       ensure_installed = vim.g.treesitter_langs,
       playground = {
@@ -464,11 +475,24 @@ EOF
   return [function('s:SetupTreesitter')]
 endfunction
 
+function s:PlugOrg()
+  Plug 'nvim-treesitter/nvim-treesitter'
+  Plug 'nvim-orgmode/orgmode'
+
+  function s:SetupOrg()
+    lua require"orgmode".setup{}
+  endfunction
+
+  return [function('s:SetupOrg')]
+endfunction
+
 function plugins#filetypes#setup()
   let l:callbacks = []
   if has('nvim-0.6')
     let l:callbacks += s:PlugTreesitter()
+    let l:callbacks += s:PlugOrg()
   endif
+
   call s:PlugCoq()
   call s:PlugLatex()
   call s:PlugMarkdown()
