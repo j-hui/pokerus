@@ -2,8 +2,14 @@
 
 ## Adapted from Aditya Shakya
 
-MENU="$(rofi slate -sep "|" -dmenu -i -p 'System' -location 1 -yoffset 32 -xoffset 5 -width 12 -hide-scrollbar -line-padding 4 -padding 20 -lines 4 -font "Misc Termsyn 12" <<< " Lock| Reboot| Shutdown| Cancel")"
+MENU="$(rofi slate -sep "|" -dmenu -i -p 'System' -location 1 -yoffset 32 -xoffset 5 -width 12 -hide-scrollbar -line-padding 4 -padding 20 -lines 6 -font "Misc Termsyn 12" <<< "Kick | Logout |  Lock| Reboot| Shutdown| Cancel")"
 case "$MENU" in
+    *Kick)      pkill -USR1 -x sxhkd
+                bspc wm --restart
+                polybar-msg cmd restart
+                notify-send 'bspwm' 'Restarted bspwm'
+                ;;
+    *Logout)    pkill polybar ; pkill bspwm ; pkill sxhkd ;;
     *Lock)      xset s activate ;;
     *Reboot)    systemctl reboot ;;
     *Shutdown)  systemctl -i poweroff ;;
