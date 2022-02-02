@@ -45,11 +45,12 @@ function s:PlugVinegar()
 endfunction
 
 function s:PlugFern()
-  Plug 'lambdalisue/fern.vim'
+  Plug 'j-hui/fern.vim', { 'branch': 'buflisted' }
     " Modern filetree plugin
     let g:fern#disable_default_mappings = 1
     let g:fern#hide_cursor = 1
     let g:fern#mark_symbol = '>>'
+    let g:fern#window_buflisted = 1
 
   Plug 'antoinemadec/FixCursorHold.nvim'
     " Fix CursorHold performance bug
