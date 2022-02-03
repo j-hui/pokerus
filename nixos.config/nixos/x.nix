@@ -150,9 +150,8 @@ in
 
     services = {
       greenclip.enable = true;
-      dbus = {
-        enable = true;
-      };
+      dbus.enable = true;
+      autorandr.enable = true;
       xserver = {
         enable = true;
         exportConfiguration = true;
