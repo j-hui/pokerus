@@ -42,7 +42,7 @@ in
       gtk3 glib xorg.xf86inputsynaptics
       lxappearance
       bspwm sxhkd
-      xdo xdotool wmctrl xorg.xev xtitle
+      xdo xdotool wmctrl xorg.xev xtitle xorg.xwininfo
       xss-lock xsecurelock
       polybarFull
       (rofi.override { plugins = [ rofi-file-browser rofi-emoji rofi-systemd rofi-calc ]; })
@@ -121,7 +121,7 @@ in
       ];
       fontconfig = {
         defaultFonts = {
-          monospace = [ "Source Code Pro" ];
+          monospace = [ "Source Code Pro" "SauceCodePro Nerd Font Mono" ];
           sansSerif = [ "Source Sans Pro" ];
           serif     = [ "Source Serif Pro" ];
         };
@@ -227,8 +227,8 @@ in
           ];
         };
         windowManager.bspwm.enable = true;
-        # displayManager.defaultSession = "none+bspwm";
-        displayManager.defaultSession = "none+xmonad";
+        displayManager.defaultSession = "none+bspwm";
+        # displayManager.defaultSession = "none+xmonad";
         displayManager.job.logToJournal = true;
         displayManager.lightdm = {
           enable = true;
@@ -315,6 +315,7 @@ in
           "100:class_g = 'mpv'"
           "100:class_g = 'Rofi'"
           "100:class_g = 'Peek'"
+          "80:class_g = 'float-term'"
           "99:_NET_WM_STATE@:32a = '_NET_WM_STATE_FULLSCREEN'"
         ];
       };

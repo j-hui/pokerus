@@ -30,6 +30,10 @@ super + shift + q
 super + {_, shift +} semicolon
     rofi -show {drun,run}
 
+## command launcher:
+super + shift + a
+    ~/.local/tms/cmd-launcher
+
 ## password manager:
 super + i
     ~/.local/tms/passman
@@ -123,8 +127,8 @@ super + {_, shift +} {comma, period}
     bspc monitor {-f,-s} {prev, next}
 
 ## bspc go/send to desktop:
-super + {_, shift +} {1-9,0}
-    bspc {desktop -f,node -d} '^{1-9,10}'
+super + {_, shift +} {1,2,3,4,5,6,7,8,9}
+    bspc {desktop -f,node -d} '{1-dev,2-doc,3-cfg,4-fun,5-life,6-chat,7-media,8-idle,9-hide}'
 
 ## bspc goto urgent/floating:
 super + {_, shift +} u
@@ -137,10 +141,11 @@ super + {_, shift +} r
 # super + {Left, Down, Up, Right}
 #     bspc node {@first, @second, @parent, @brother}.local.leaf -f
 
-super + {b, f}
-    bspc node {prev, next}.local.leaf -f
-    # bspc node '{@brother,@parent/parent}#biggest.descendant_of.local.leaf' -f
-    # bspc node 'focused.!floating.!fullscreen.window#@/' -C {backward,forward}
+super + f
+    ~/.local/tms/bspctl focus-node
+
+super + b
+    ~/.local/tms/bspctl focus-desktop
 
 super + y
     ~/.local/tms/bspctl hide

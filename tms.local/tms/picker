@@ -13,6 +13,7 @@
 # - https://unix.stackexchange.com/a/600214
 
 class="float-term"
+st_font="SauceCodePro Nerd Font Mono:size=14"
 
 command -v sh         >/dev/null  || die "Missing dependency: sh"
 command -v fzf        >/dev/null  || die "Missing dependency: fzf"
@@ -46,9 +47,9 @@ trap "rm -f /tmp/fzfloat-in /tmp/fzfloat-out" EXIT
 { while read -r LINE; do printf '%s\n' "$LINE"; done } <&0 >/tmp/fzfloat-in &
 
 # shellcheck disable=SC2016
-alacritty --class "Alacritty,$class" -e \
-  sh -c "$fzf </tmp/fzfloat-in >/tmp/fzfloat-out" &
-# st -c "$class" -e sh -c "$fzf </tmp/fzfloat-in >/tmp/fzfloat-out" &
+# alacritty --class "Alacritty,$class" -e \
+#   sh -c "$fzf </tmp/fzfloat-in >/tmp/fzfloat-out" &
+st -f "$st_font" -c "$class" -e sh -c "$fzf </tmp/fzfloat-in >/tmp/fzfloat-out" &
 
 cat /tmp/fzfloat-out
 wait

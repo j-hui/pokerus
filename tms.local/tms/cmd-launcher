@@ -8,6 +8,7 @@ read -r -d '' cmds <<'EOF' || true
 kb-rate
 mon-auto
 mon-haunter
+mon-mirror
 EOF
 
 prompt () {
@@ -41,6 +42,10 @@ case "$cmd" in
   mon-haunter)
     xrandr --output DP-2-2 --off && \
       xrandr --output DP-2-2 --primary --auto --output eDP-1 --right-of DP-2-2
+    ;;
+  mon-mirror)
+    xrandr --output DP-2-2 --off && \
+      xrandr --output eDP-1 --primary --auto --output DP-2-2 --auto --same-as eDP-1
     ;;
   *)
     err "Unknown cmd: $cmd"

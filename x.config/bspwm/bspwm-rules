@@ -1,10 +1,141 @@
 #!/usr/bin/env bash
+#
+# external_rules_command
+#
+#   Absolute path to the command used to retrieve rule consequences. The command
+#   will receive the following arguments: window ID, class name, instance name,
+#   and intermediate consequences. The output of that command must have the
+#   following format: key1=value1 key2=value2 ... (the valid key/value pairs are
+#   given in the description of the rule command).
+#
+#
+# Rule
+#   General Syntax
+#     rule COMMANDS
+#
+#   Commands
+#     -a, --add (<class_name>|*)[:(<instance_name>|*)[:(<name>|*)]]
+#               [-o|--one-shot]
+#               [monitor=MONITOR_SEL|desktop=DESKTOP_SEL|node=NODE_SEL]
+#               [state=STATE] [layer=LAYER] [split_dir=DIR] [split_ratio=RATIO]
+#               [(hidden|sticky|private|locked|marked|center|follow|manage|focus|border)=(on|off)]
+#               [rectangle=WxH+X+Y]
+#
+#       Create a new rule.
+#
+#     -r, --remove ^<n>|head|tail|(<class_name>|*)[:(<instance_name>|*)[:(<name>|\*)]]...
+#
+#       Remove the given rules.
+#
+#     -l, --list
+#
+#       List the rules.
 
-log=~/.local/share/bspwm/bspwm-rules.log
-mkdir -p "$(dirname log)"
-echo "bspwm external rules received: '$1' '$2' '$3' '$4'" >> "$log"
+log="$HOME/.local/share/bspwm/bspwm-rules.log"
+mkdir -p "$(dirname "$log")"
 
-# window="$1"
-# class="$2"
-# instance="$3"
-# consequences="$4"
+dbg () {
+  # echo "$@" >> "$log"
+  :
+}
+# dbg "bspwm external rules received: '$1' '$2' '$3' '$4'"
+
+# Profiling:
+# PS4='+ $(date "+%s.%N")\011 '
+# exec 3>&2 2>"$log.profile"
+# set -x
+# :
+
+window_limit=3
+
+border=
+center=
+desktop=
+focus=
+follow=
+hidden=
+layer=
+locked=
+manage=
+marked=
+monitor=
+node=
+private=
+rectangle=
+split_dir=
+split_ratio=
+state=
+sticky=
+urgent=
+
+window="$1"
+class="$2"
+instance="$3"
+eval "$4" # this seems fucking dangerous
+
+case "$class.$instance" in
+  zoom.zoom)
+    if [[ "$layer" == "above" ]]; then
+      state=floating border=off
+    fi
+    ;;
+  qutebrowser.*)
+    ;;
+  slack.*)
+    ;;
+  discord.*)
+    ;;
+  Pinentry.*)
+    state=floating center=on follow=on
+    ;;
+  float-term.*)
+    state=floating follow=on
+    monitor_geo="$(xrandr --current | grep "$(bspc query -M -m --names)" | cut -d ' ' -f 4)"
+
+    x_begin=${monitor_geo#*+}
+    x_begin=${x_begin%+*}
+    y_begin=${monitor_geo##*+}
+    x_width=${monitor_geo%x*}
+    y_height=${monitor_geo#*x}
+    y_height=${y_height%%+*}
+
+    half_height="$((y_height / 2))"
+    y_begin="$((half_height + y_begin))"
+    y_height="$((half_height - 30))"
+
+    rectangle="${x_width}x${y_height}+${x_begin}+${y_begin}"
+    ;;
+esac
+
+if [[ "$state" != floating && "$state" != fullscreen ]]; then
+  node=@/
+  bspc node @/ -R 90
+fi
+
+if [[ "$(bspc query -N -n .local.!hidden.!floating.!fullscreen | wc -l)" -ge "$window_limit" ]]; then 
+  bspc node smallest.local.!hidden.!floating.!fullscreen -g hidden=on
+fi
+
+echo \
+    ${border:+"border=$border"} \
+    ${center:+"center=$center"} \
+    ${desktop:+"desktop=$desktop"} \
+    ${focus:+"focus=$focus"} \
+    ${follow:+"follow=$follow"} \
+    ${hidden:+"hidden=$hidden"} \
+    ${layer:+"layer=$layer"} \
+    ${locked:+"locked=$locked"} \
+    ${manage:+"manage=$manage"} \
+    ${marked:+"marked=$marked"} \
+    ${monitor:+"monitor=$monitor"} \
+    ${node:+"node=$node"} \
+    ${private:+"private=$private"} \
+    ${rectangle:+"rectangle=$rectangle"} \
+    ${split_dir:+"split_dir=$split_dir"} \
+    ${split_ratio:+"split_ratio=$split_ratio"} \
+    ${state:+"state=$state"} \
+    ${sticky:+"sticky=$sticky"} \
+    ${urgent:+"urgent=$urgent"}
+
+# set +x
+# exec 2>&3 3>&-

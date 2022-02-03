@@ -48,13 +48,13 @@ bspc config pointer_follows_monitor true
 
 bspc config external_rules_command ~/.config/bspwm/bspwm-rules
 
-bspc rule -a Pinentry state=floating center=on follow=on
-bspc rule -a float-term state=floating center=on follow=on
-
-bspc rule -a zoom desktop='6-chat' follow=on
-bspc rule -a zoom:zoom:zoom state=floating follow=off
-
-bspc rule -a slack desktop='6-chat' follow=on
-bspc rule -a discord desktop='6-chat' follow=on
-
-bspc rule -a spotify desktop='7-media' follow=on
+# bspc rule -a Pinentry state=floating center=on follow=on
+# bspc rule -a float-term state=floating center=on follow=on
+#
+# bspc rule -a zoom desktop='6-chat' follow=on
+# bspc rule -a zoom:zoom:zoom state=floating follow=off
+#
+# bspc rule -a slack desktop='6-chat' follow=on
+# bspc rule -a discord desktop='6-chat' follow=on
+#
+# bspc rule -a spotify desktop='7-media' follow=on

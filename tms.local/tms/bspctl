@@ -16,7 +16,20 @@ insert_node () {
   bspc node "$src" -n "$dst"
 }
 
+focus-node () {
+  local node
+  node="$(wmctrl -l -x | "$tms"/picker | cut -f 1 -d ' ')"
+  bspc node "$node" -f
+}
+
+focus-desktop () {
+  local desktop
+  desktop="$(bspc query -D --names | "$tms"/picker)"
+  bspc desktop "$desktop" -f
+}
+
 hide () {
+  bspc node @parent -R 270
   bspc node focused -g hidden=on
 }
 
@@ -138,6 +151,12 @@ case "$cmd" in
     ;;
   unhide)
     unhide "$@"
+    ;;
+  focus-node)
+    focus-node "$@"
+    ;;
+  focus-desktop)
+    focus-desktop "$@"
     ;;
   usage)
     usage "$@"
