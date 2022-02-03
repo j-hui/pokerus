@@ -76,7 +76,7 @@ eval "$4" # this seems fucking dangerous
 case "$class.$instance" in
   zoom.zoom)
     if [[ "$layer" == "above" ]]; then
-      state=floating border=off
+      state=floating border=off sticky=on
     fi
     ;;
   qutebrowser.*)
@@ -86,10 +86,10 @@ case "$class.$instance" in
   discord.*)
     ;;
   Pinentry.*)
-    state=floating center=on follow=on
+    state=floating center=on follow=on sticky=on
     ;;
   float-term.*)
-    state=floating follow=on
+    state=floating follow=on sticky=on
     monitor_geo="$(xrandr --current | grep "$(bspc query -M -m --names)" | cut -d ' ' -f 4)"
 
     x_begin=${monitor_geo#*+}
@@ -105,15 +105,22 @@ case "$class.$instance" in
 
     rectangle="${x_width}x${y_height}+${x_begin}+${y_begin}"
     ;;
+  polybar.*|Polybar.*)
+    # Ignore these altogether
+    exit
+    ;;
+  Dunst.*)
+    exit
+    ;;
 esac
 
 if [[ "$state" != floating && "$state" != fullscreen ]]; then
   node=@/
   bspc node @/ -R 90
-fi
 
-if [[ "$(bspc query -N -n .local.!hidden.!floating.!fullscreen | wc -l)" -ge "$window_limit" ]]; then 
-  bspc node smallest.local.!hidden.!floating.!fullscreen -g hidden=on
+  if [[ "$(bspc query -N -n .local.!hidden.!floating.!fullscreen | wc -l)" -ge "$window_limit" ]]; then 
+    bspc node smallest.local.!hidden.!floating.!fullscreen -g hidden=on
+  fi
 fi
 
 echo \

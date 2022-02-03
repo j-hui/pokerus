@@ -4,16 +4,14 @@
 pgrep sxhkd > /dev/null || sxhkd &
 dunst &
 
-pkill polybar
-polybar top &
-polybar bottom &
+~/.config/polybar/launch.sh
 
 amixer sset Master 50%
 
 xsetroot -cursor_name left_ptr &
 xset r rate 250 69
 
-bspc monitor -d 1-dev 2-doc 3-cfg 4-fun 5-life 6-chat 7-media 8-idle 9-hide
+bspc monitor -d 1-dev 2-doc 3-cfg 4-fun 5-life 6-chat 7-media 8-idle
 
 bspc config borderless_monocle true
 bspc config gapless_monocle true

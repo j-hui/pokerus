@@ -55,7 +55,8 @@ font-1 = ${fonts.font-1}
 font-2 = ${fonts.font-2}
 font-3 = ${fonts.font-3}
 
-; monitor = eDP-1
+monitor = ${env:MONITOR:}
+monitor-strict = false
 
 [bar/top]
 inherit = bar/base

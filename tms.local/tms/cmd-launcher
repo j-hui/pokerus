@@ -6,6 +6,7 @@ tms="$(dirname "$0")"
 
 read -r -d '' cmds <<'EOF' || true
 kb-rate
+polybar-launch
 mon-auto
 mon-haunter
 mon-mirror
@@ -35,6 +36,9 @@ fi
 case "$cmd" in
   kb-rate)
     xset r rate 250 69
+    ;;
+  polybar-launch)
+    ~/.config/polybar/launch.sh
     ;;
   mon-auto)
     xrandr --auto

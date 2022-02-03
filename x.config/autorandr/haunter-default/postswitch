@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+if pgrep bspwm >/dev/null ; then
+  # echo haunter-default > ~/.config/autorandr/state
+
+  bspc wm -O eDP-1
+  bspc monitor eDP-1 -d 1-dev 2-doc 3-cfg 4-fun 5-life 6-chat 7-media 8-idle
+  bspc monitor DP-2-2 -r
+  bspc wm -o
+
+  ~/.config/polybar/launch.sh
+fi
