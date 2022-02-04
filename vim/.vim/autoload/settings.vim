@@ -192,9 +192,9 @@ function s:Misc()
 
   let c_syntax_for_h = 1 " Instead of C++
 
-  let g:load_doxygen_syntax = 1 " Highlight Doxygen comments
-  let doxygen_javadoc_autobrief = 0
-  let g:doxygen_enhanced_color = 1
+  " let g:load_doxygen_syntax = 1 " Highlight Doxygen comments
+  " let doxygen_javadoc_autobrief = 0
+  " let g:doxygen_enhanced_color = 1
   highlight! link doxygenComment        cComment
   highlight! link doxygenBrief          cComment
   highlight! link doxygenBody           cComment
