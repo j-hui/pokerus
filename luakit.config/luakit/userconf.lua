@@ -10,7 +10,7 @@ settings.application.prefer_dark_mode = true
 settings.session.always_save = true
 -- settings.tablist.visibility = "always"
 settings.webview.javascript_can_access_clipboard = true
-settings.webview.hardware_acceleration_policy = "never"
+settings.webview.hardware_acceleration_policy = "always"
 settings.window.home_page = "https://duckduckgo.com"
 
 local newtab = require("newtab_chrome")
@@ -33,7 +33,7 @@ end
 local follow = require("follow")
 follow.ignore_delay = 269
 follow.pattern_maker = function(s)
-  if s:sub(-1) == "$" then
+  if s:sub(-1) == "=" then
     return follow.pattern_styles.match_label(s:sub(1, -2))
   else
     return follow.pattern_styles.match_label_re_text(s)
