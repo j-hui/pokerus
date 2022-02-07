@@ -24,15 +24,21 @@ newtab.new_tab_src = ([==[
 local editor = require("editor")
 editor.editor_cmd = "alacritty --class floatterm -e nvim {file} +{line}"
 
--- local select = require("select")
--- select.label_maker = function()
---   local chars = charset("sdfqwrzxcvtgb")
---   return trim(sort(reverse(chars)))
--- end
+local select = require("select")
+select.label_maker = function()
+  local chars = charset("sdfqwrzxcvtgb")
+  return trim(sort(reverse(chars)))
+end
 
 local follow = require("follow")
 follow.ignore_delay = 269
-follow.pattern_maker = follow.pattern_styles.match_label_re_text
+follow.pattern_maker = function(s)
+  if s:sub(-1) == "$" then
+    return follow.pattern_styles.match_label(s:sub(1, -2))
+  else
+    return follow.pattern_styles.match_label_re_text(s)
+  end
+end
 -- NOTE: to escape -, type %-
 
 local modes = require("modes")
@@ -73,7 +79,12 @@ modes.remap_binds("completion", {
 })
 
 local function mpv(uri)
-  luakit.spawn(string.format("mpv --autofit=100%%x100%% --force-window=immediate --keep-open=yes --ytdl-format=bestvideo[height<=?720]+bestaudio/best %s", uri))
+  luakit.spawn(
+    string.format(
+      "mpv --autofit=100%%x100%% --force-window=immediate --keep-open=yes --ytdl-format=bestvideo[height<=?720]+bestaudio/best %s",
+      uri
+    )
+  )
 end
 
 modes.add_binds("ex-follow", {
@@ -101,15 +112,15 @@ modes.add_binds("ex-follow", {
           elseif string.match(uri, "vine") then
             mpv(uri)
             w:notify("trying to play file on mpv " .. uri)
-          -- elseif string.match(uri, "pdf" or "PDF") then
-          --   luakit.spawn(string.format("~/.config/scripts/pdfFromURL %s", uri))
+            -- elseif string.match(uri, "pdf" or "PDF") then
+            --   luakit.spawn(string.format("~/.config/scripts/pdfFromURL %s", uri))
             -- w:notify("trying to read file via zathura ")
-          -- elseif string.match(uri, "jpg") then
-          --   luakit.spawn(string.format("feh -x %s", uri))
-          --   w:notify("file contains jpg ")
-          -- else
-          --   luakit.spawn(string.format("feh -x %s.jpg", uri))
-          --   w:notify("no jpg extension | unrecognized")
+            -- elseif string.match(uri, "jpg") then
+            --   luakit.spawn(string.format("feh -x %s", uri))
+            --   w:notify("file contains jpg ")
+            -- else
+            --   luakit.spawn(string.format("feh -x %s.jpg", uri))
+            --   w:notify("no jpg extension | unrecognized")
           end
         end,
       })
