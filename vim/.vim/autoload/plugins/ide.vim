@@ -896,6 +896,7 @@ function s:StackNvimLsp()
     call s:LspWhichKey()
 lua << EOF
   local nvim_lsp = require 'lspconfig'
+  local util = require 'lspconfig.util'
 
   require'null-ls'.setup {
     sources = {
@@ -932,7 +933,15 @@ lua << EOF
     ['rnix'] = {},
     ['gopls'] = {},
     ['tsserver'] = {},
-    ['sumneko_lua'] = require("lua-dev").setup{},
+    ['sumneko_lua'] = require("lua-dev").setup{
+      lspconfig = {
+        root_dir = function (filename, bufnr) 
+          local primary = util.root_pattern(".luarc.json")(filename)
+          local backup  = util.find_git_ancestor(filename)
+          return primary or backup
+        end,
+      },
+    },
   }
 
   local on_attach = function(client, bufnr)
