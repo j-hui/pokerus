@@ -207,10 +207,10 @@ lua << EOF
     require"telescope".load_extension "fzf"
 EOF
 
-    nnoremap <leader>f <cmd>lua require"telescope.builtin".find_files{}<CR>
+    nnoremap <leader>f <cmd>lua require"telescope.builtin".find_files{no_ignore = true}<CR>
     call g:WhichKeyL(['f'], 'telescope-files')
 
-    nnoremap <leader>. <cmd>lua require"telescope.builtin".find_files{cwd = require"telescope.utils".buffer_dir()}<CR>
+    nnoremap <leader>. <cmd>lua require"telescope.builtin".find_files{cwd = require"telescope.utils".buffer_dir(), no_ignore = true}<CR>
     call g:WhichKeyL(['.'], 'telescope-here')
 
     " nnoremap <leader>. <cmd>lua require"telescope".extensions.file_browser.file_browser{}<CR>
@@ -220,8 +220,8 @@ EOF
     nnoremap <leader>b <cmd>lua require"telescope.builtin".buffers{}<CR>
     call g:WhichKeyL(['b'], 'telescope-buffers')
 
-    nnoremap <leader>* <cmd>lua require"telescope.builtin".grep_string{}<CR>
-    call g:WhichKeyL(['*'], 'telescope-grep-word')
+    " nnoremap <leader>* <cmd>lua require"telescope.builtin".grep_string{}<CR>
+    " call g:WhichKeyL(['*'], 'telescope-grep-word')
 
     nnoremap <leader>/ <cmd>lua require"telescope.builtin".live_grep{cwd = vim.fn.getcwd() }<CR>
     call g:WhichKeyL(['/'], 'telescope-search')
