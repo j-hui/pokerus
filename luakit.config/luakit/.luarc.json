@@ -1,0 +1,14 @@
+{
+  "diagnostics.globals": [
+    "luakit",
+    "utf8",
+    "trim",
+    "charset",
+    "sort",
+    "reverse"
+  ],
+  "workspace.library": [
+    "luakit/doc/luadoc",
+    "luakit/lib"
+  ]
+}
