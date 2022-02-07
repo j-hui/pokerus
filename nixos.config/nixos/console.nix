@@ -88,6 +88,8 @@ in
         skim
         trash-cli
         unstable.zk
+        unstable.taskwarrior
+        unstable.taskwarrior-tui
 
         # utilities
         binutils
