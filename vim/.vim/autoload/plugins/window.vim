@@ -116,6 +116,16 @@ EOF
     endfunction
     let l:callbacks += [function('s:SetupStabilize')]
 
+    Plug 'lukas-reineke/virt-column.nvim'
+
+      highlight link VirtColumn VirtualTextInfo
+      function s:SetupVirtColumn()
+lua <<EOF
+        require"virt-column".setup{}
+EOF
+      endfunction
+      let l:callbacks += [function('s:SetupVirtColumn')]
+
     Plug 'petertriho/nvim-scrollbar'
     " Side scrollbar
       augroup scrollbar-highlights
