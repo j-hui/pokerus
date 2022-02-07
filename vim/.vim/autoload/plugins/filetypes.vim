@@ -326,6 +326,7 @@ function s:PlugMisc()
   Plug 'leanprover/lean.vim'
   Plug 'idris-hackers/idris-vim'
   Plug 'LnL7/vim-nix'
+  Plug 'baskerville/vim-sxhkdrc'
   Plug 'blyoa/vim-promela-syntax'
   Plug 'chrisbra/csv.vim'
   Plug 'rust-lang/rust.vim'
@@ -480,10 +481,33 @@ function s:PlugOrg()
   Plug 'nvim-orgmode/orgmode'
 
   function s:SetupOrg()
-    lua require"orgmode".setup{}
+lua <<EOF
+    require"orgmode".setup{
+      org_agenda_file = {'~/valor/org/*'},
+      org_default_notes_file = "~/valor/org/refile.org",
+      mappings = {
+        org = {
+          org_timestamp_up = "+",
+          org_timestamp_down = "-"
+        }
+      }
+    }
+EOF
   endfunction
 
   return [function('s:SetupOrg')]
+endfunction
+
+function s:PlugZk()
+  Plug 'mickael-menu/zk-nvim'
+
+  function s:SetupZk()
+lua <<EOF
+    require"zk".setup {}
+EOF
+  endfunction
+
+  return [function('s:SetupZk')]
 endfunction
 
 function plugins#filetypes#setup()
@@ -491,6 +515,7 @@ function plugins#filetypes#setup()
   if has('nvim-0.6')
     let l:callbacks += s:PlugTreesitter()
     let l:callbacks += s:PlugOrg()
+    let l:callbacks += s:PlugZk()
   endif
 
   call s:PlugCoq()
