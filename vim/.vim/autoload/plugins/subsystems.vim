@@ -433,10 +433,15 @@ EOF
   return l:callbacks
 endfunction
 
-function s:StackDressing()
+function s:PlugDressing()
   Plug 'stevearc/dressing.nvim'
     " Extend vim.ui hooks
-  return []
+    function s:SetupDressing()
+lua <<EOF
+      require"dressing".setup{}
+EOF
+    endfunction
+  return [function('s:SetupDressing')]
 endfunction
 
 function plugins#subsystems#setup()
@@ -455,7 +460,7 @@ function plugins#subsystems#setup()
   endif
 
   if has('nvim-0.6')
-    let l:callbacks += s:StackDressing()
+    let l:callbacks += s:PlugDressing()
   endif
 
   let l:callbacks += s:StackGit()
