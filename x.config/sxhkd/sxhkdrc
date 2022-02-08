@@ -68,15 +68,15 @@ super + v
 
 ## take screenshot:
 {_,shift +} Print
-    ~/.local/tms/screenshot {,--fullscreen}
+    ~/.local/tms/screenshot {_,--fullscreen}
 
 ## take screenshot:
 super + {_,shift +} x
-    ~/.local/tms/screenshot {,--fullscreen}
+    ~/.local/tms/screenshot {_,--fullscreen}
 
 ## take and save screenshot:
 super + {_,shift +} c
-    ~/.local/tms/screenshot --no-delete {,--fullscreen}
+    ~/.local/tms/screenshot --no-delete {_,--fullscreen}
 
 ## volume +/-:
 super + {equal,minus}
