@@ -15,7 +15,11 @@ updatelist () {
   local listname
   local listurl
   listurl="$1"
-  listname="$(basename "${listurl}")"
+  if [ $# -gt 1 ]; then
+    listname="$2"
+  else
+    listname="$(basename "${listurl}")"
+  fi
 
   if [[ -f ${listname} ]]; then
     cp -p "${listname}" "${listname}.b"
@@ -46,3 +50,4 @@ updatelist "https://easylist.to/easylist/easyprivacy.txt"
 #https://easylist-downloads.adblockplus.org/easylist_noelemhide.txt
 updatelist "https://secure.fanboy.co.nz/fanboy-annoyance.txt"
 updatelist "https://easylist-downloads.adblockplus.org/antiadblockfilters.txt"
+updatelist "http://www.floppymoose.com/userContent.css" "floppymoose.css"

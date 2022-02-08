@@ -1,5 +1,9 @@
-local adblock = require("adblock")
-local adblock_chrome = require("adblock_chrome")
+local luakit = require("luakit")
+local stylesheet = require("stylesheet")
+
+-- local adblock = require("adblock")
+-- local adblock_chrome = require("adblock_chrome")
+stylesheet.source = luakit.data_dir .. "/floppymoose.css"
 
 local theme = require("theme")
 
@@ -69,6 +73,9 @@ modes.add_binds("normal", {
   },
 })
 
+modes.remap_binds("all", { { "<Mouse2>", "<Control-Mouse1>", true } })
+modes.remove_binds("all", { "<Control-Scroll>" })
+
 modes.remap_binds("insert", {
   { "<Control-o>", "<Control-e>", false },
 })
@@ -79,12 +86,7 @@ modes.remap_binds("completion", {
 })
 
 local function mpv(uri)
-  luakit.spawn(
-    string.format(
-      "mpv --autofit=100%%x100%% --force-window=immediate --keep-open=yes --ytdl-format=bestvideo[height<=?720]+bestaudio/best %s",
-      uri
-    )
-  )
+  luakit.spawn(string.format("mpv --autofit=100%%x100%% %s", uri))
 end
 
 modes.add_binds("ex-follow", {
@@ -118,9 +120,8 @@ modes.add_binds("ex-follow", {
             -- elseif string.match(uri, "jpg") then
             --   luakit.spawn(string.format("feh -x %s", uri))
             --   w:notify("file contains jpg ")
-            -- else
-            --   luakit.spawn(string.format("feh -x %s.jpg", uri))
-            --   w:notify("no jpg extension | unrecognized")
+          else
+            w:notify("unrecognized format")
           end
         end,
       })
