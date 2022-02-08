@@ -118,11 +118,11 @@ EOF
 
     Plug 'lukas-reineke/virt-column.nvim'
 
-      highlight link VirtColumn VirtualTextInfo
       function s:SetupVirtColumn()
 lua <<EOF
         require"virt-column".setup{}
 EOF
+        highlight! default link VirtColumn EndOfBuffer
       endfunction
       let l:callbacks += [function('s:SetupVirtColumn')]
 

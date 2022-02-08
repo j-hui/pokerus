@@ -108,7 +108,7 @@ function s:Appearance()
   let &showbreak=' ↪'                     " ... and this nice symbol
   set cpoptions+=n                        " ... shown in the line number column
 
-  set colorcolumn=81,120,121,+1,+2        " Columns at 80, 120, and textwidth
+  set colorcolumn=81,121,+1,+2           " Columns at 80, 120, and textwidth
 
   set list                                " That mysterious, poorly named option
                                           " that changes how things are displayed,
