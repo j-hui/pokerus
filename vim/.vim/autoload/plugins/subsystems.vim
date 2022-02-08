@@ -202,7 +202,7 @@ lua << EOF
         },
       },
       pickers = {
-        find_files {
+        find_files = {
           hidden = true,
         },
       },
