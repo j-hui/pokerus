@@ -27,7 +27,7 @@ config.source('themes/material-darker.py')
 # })
 # bg_color = "#a89984"
 bg_color = '#000000'
-c.colors.webpage.bg = bg_color
+# c.colors.webpage.bg = bg_color
 
 # c.colors.webpage.darkmode.enabled = True
 # c.colors.webpage.darkmode.policy.images = 'smart'
