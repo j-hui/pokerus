@@ -244,7 +244,7 @@ EOF
     nnoremap <leader>gb <cmd>lua require"telescope.builtin".git_branches{}<CR>
     call g:WhichKeyL(['g', 'b'], 'git-branches')
 
-    nnoremap <leader>gg <cmd>lua require"telescope.builtin".git_status{}<CR>
+    nnoremap <leader>gt <cmd>lua require"telescope.builtin".git_status{}<CR>
     call g:WhichKeyL(['g', 't'], 'git-touched')
 
     nnoremap <leader>gf <cmd>lua require"telescope.builtin".git_files{}<CR>
@@ -268,53 +268,60 @@ function s:StackGit()
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-rhubarb'
   " Git interaction
-    call g:WhichKeyL(['g', 'name'], '+git')
-
-    nnoremap <leader>gd :Gdiffsplit<CR>
-    call g:WhichKeyL(['g', 'd'], 'git-diff-split')
-    nnoremap <leader>gD :Git diff --cached<CR>
-    call g:WhichKeyL(['g', 'D'], 'git-diff-cached')
-    nnoremap <leader>gp :Git pull<CR>
-    call g:WhichKeyL(['g', 'p'], 'git-pull')
-    nnoremap <leader>gP :Git push<CR>
-    call g:WhichKeyL(['g', 'P'], 'git-push')
-    nnoremap <leader>gc :Git commit<CR>
-    call g:WhichKeyL(['g', 'c'], 'git-commit')
-    nnoremap <leader>gs :Git<CR>
-    call g:WhichKeyL(['g', 's'], 'git-status')
-    nnoremap <leader>gw :Gw<CR>
-    call g:WhichKeyL(['g', 'w'], 'git-write')
-
-    " nnoremap <leader>gL :Gclog<CR>
-    " " -- Use :Flogsplit instead
-
-    " nmap <leader>gb :GBrowse<CR>
-    " call g:WhichKeyL(['g', 'b'], 'git-browse')
-    " " -- Use git linker instead
-
   Plug 'rbong/vim-flog'
   " Git log
-    nnoremap <leader>gL :Flogsplit<CR>
-    call g:WhichKeyL(['g', 'L'], 'git-flog')
-
-    augroup fugitive_maps
-      autocmd!
-      autocmd Filetype fugitive,git,floggraph nmap <buffer> q gq
-      autocmd User FugitiveStageBlob          nmap <buffer> q :q<CR>
-    augroup END
-
   Plug 'rhysd/git-messenger.vim'
-  " Super-charged git blame
+  " Git blame in a pop-up
     let g:git_messenger_no_default_mappings = v:true
-    nmap <leader>gm <Plug>(git-messenger)
-    call g:WhichKeyL(['g', 'm'], 'git-blame')
 
-  if has('nvim-0.5')
+  augroup fugitive_maps
+    autocmd!
+    autocmd Filetype fugitive,git,floggraph nmap <buffer> q gq
+    autocmd User FugitiveStageBlob          nmap <buffer> q :q<CR>
+  augroup END
+
+  call g:WhichKeyL(['g', 'name'], '+git')
+
+  nnoremap <leader>gd :Gdiffsplit<CR>
+  call g:WhichKeyL(['g', 'd'], 'git-diff-split')
+  nnoremap <leader>gD :Git diff --cached<CR>
+  call g:WhichKeyL(['g', 'D'], 'git-diff-cached')
+
+  nnoremap <leader>gp :Git pull<CR>
+  call g:WhichKeyL(['g', 'p'], 'git-pull')
+  nnoremap <leader>gP :Git push<CR>
+  call g:WhichKeyL(['g', 'P'], 'git-push')
+
+  nnoremap <leader>gc :Git commit<CR>
+  call g:WhichKeyL(['g', 'c'], 'git-commit')
+  nnoremap <leader>gs :Git<CR>
+  call g:WhichKeyL(['g', 's'], 'git-status')
+
+  " nnoremap <leader>gL :Gclog<CR>
+  " " -- Use :Flogsplit instead
+
+  " nmap <leader>gb :GBrowse<CR>
+  " call g:WhichKeyL(['g', 'b'], 'git-browse')
+  " " -- Use git linker instead
+
+  nnoremap <leader>gL :Flogsplit<CR>
+  call g:WhichKeyL(['g', 'L'], 'git-flog')
+
+  nmap <leader>gk <Plug>(git-messenger)
+  call g:WhichKeyL(['g', 'k'], 'git-blame')
+
+  if has('nvim-0.5.1')
     Plug 'ruifm/gitlinker.nvim'
-    " Yank link to web-hosted git page
+    " Yank GitHub permalinks
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'lewis6991/gitsigns.nvim'
+    " See git diff inline
 
-    function s:SetupGitLinker()
+    function s:SetupGit()
 lua <<EOF
+      require"gitsigns".setup {
+        on_attach = vim.fn["g:SetupGitsignsMaps"],
+      }
       require"gitlinker".setup{
         opts = {
           mappings = "<leader>gy",
@@ -325,9 +332,41 @@ lua <<EOF
         },
       }
 EOF
-      call g:WhichKeyL(['g', 'y'], 'git-url')
     endfunction
-    let l:callbacks += [function('s:SetupGitLinker')]
+    call g:WhichKeyL(['g', 'y'], 'git-url')
+
+    function g:SetupGitsignsMaps(bufnr)
+      nmap <buffer> <expr>  ]c &diff ? ']c' : ':Gitsigns next_hunk<CR>'
+      nmap <buffer> <expr>  [c &diff ? '[c' : ':Gitsigns next_hunk<CR>'
+
+      nmap <buffer> <leader>ga :Gitsigns stage_hunk<CR>
+      call g:WhichKeyL(['g', 'a'], 'git-stage')
+      vmap <buffer> <leader>ga :Gitsigns stage_hunk<CR>
+      nmap <buffer> <leader>gr :Gitsigns reset_hunk<CR>
+      call g:WhichKeyL(['g', 'r'], 'git-reset')
+      vmap <buffer> <leader>gr :Gitsigns reset_hunk<CR>
+      nmap <buffer> <leader>gu :Gitsigns undo_stage_hunk<CR>
+      call g:WhichKeyL(['g', 'u'], 'git-undo-stage')
+
+      nmap <buffer> <leader>gh :lua require"gitsigns".blame_line{full=true}<CR>
+      call g:WhichKeyL(['g', 'h'], 'git-hunk')
+      nmap <buffer> <leader>gK :Gitsigns toggle_current_line_blame<CR>
+      call g:WhichKeyL(['g', 'K'], 'git-toggle-virt-blame')
+      nmap <buffer> <leader>gH :Gitsigns toggle_deleted<CR>
+      call g:WhichKeyL(['g', 'H'], 'git-toggle-virt-deleted')
+
+      " nmap <buffer> <leader>gw :Gitsigns stage_buffer<CR>
+      " nmap <buffer> <leader>gr :Gitsigns reset_buffer<CR>
+      " nmap <buffer> <leader>hd :Gitsigns diffthis<CR>
+      " nmap <buffer> <leader>hd :lua require"gitsigns".diffthis("~")<CR>
+      " Just rely on Fugitive for this, which has :Gw, :Gw, and :Gdiffsplit,
+      " all of which work well enough for me.
+
+      omap ih :<C-u>Gitsigns select_hunk<CR>
+      xmap ih :<C-u>Gitsigns select_hunk<CR>
+    endfunction
+
+    let l:callbacks += [function('s:SetupGit')]
   endif
 
   return l:callbacks
