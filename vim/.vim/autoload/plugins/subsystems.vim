@@ -188,6 +188,23 @@ lua << EOF
       defaults = require "telescope.themes".get_ivy {
         winblend = 20,
         mappings = { i = imaps, n = nmaps },
+        file_ignore_patterns = { 'node_modules', '.git' },
+        vimgrep_arguments = {
+          "rg",
+          "--color=never",
+          "--no-heading",
+          "--with-filename",
+          "--line-number",
+          "--column",
+          "--smart-case",
+          "-u",
+          "-u",
+        },
+      },
+      pickers = {
+        find_files {
+          hidden = true,
+        },
       },
       extensions = {
         file_browser = {
@@ -207,11 +224,17 @@ lua << EOF
     require"telescope".load_extension "fzf"
 EOF
 
-    nnoremap <leader>f <cmd>lua require"telescope.builtin".find_files{no_ignore = true}<CR>
+    nnoremap <leader>f <cmd>lua require"telescope.builtin".find_files{}<CR>
     call g:WhichKeyL(['f'], 'telescope-files')
 
-    nnoremap <leader>. <cmd>lua require"telescope.builtin".find_files{cwd = require"telescope.utils".buffer_dir(), no_ignore = true}<CR>
-    call g:WhichKeyL(['.'], 'telescope-here')
+    nnoremap <leader>F <cmd>lua require"telescope.builtin".find_files{no_ignore = true}<CR>
+    call g:WhichKeyL(['F'], 'telescope-files')
+
+    nnoremap <leader>e <cmd>lua require"telescope.builtin".find_files{cwd = require"telescope.utils".buffer_dir()}<CR>
+    call g:WhichKeyL(['e'], 'telescope-edit')
+
+    nnoremap <leader>E <cmd>lua require"telescope.builtin".find_files{cwd = require"telescope.utils".buffer_dir(), no_ignore = true}<CR>
+    call g:WhichKeyL(['E'], 'telescope-edit')
 
     " nnoremap <leader>. <cmd>lua require"telescope".extensions.file_browser.file_browser{}<CR>
     " call g:WhichKeyL(['.'], 'telescope-file-browser')
@@ -220,11 +243,11 @@ EOF
     nnoremap <leader>b <cmd>lua require"telescope.builtin".buffers{}<CR>
     call g:WhichKeyL(['b'], 'telescope-buffers')
 
-    " nnoremap <leader>* <cmd>lua require"telescope.builtin".grep_string{}<CR>
-    " call g:WhichKeyL(['*'], 'telescope-grep-word')
+    nnoremap <leader>* <cmd>lua require"telescope.builtin".grep_string{}<CR>
+    call g:WhichKeyL(['*'], 'telescope-grep-word')
 
-    nnoremap <leader>/ <cmd>lua require"telescope.builtin".live_grep{cwd = vim.fn.getcwd() }<CR>
-    call g:WhichKeyL(['/'], 'telescope-search')
+    nnoremap <leader>r <cmd>lua require"telescope.builtin".live_grep{cwd = vim.fn.getcwd()}<CR>
+    call g:WhichKeyL(['r'], 'telescope-search')
 
     nnoremap <leader>s <cmd>lua require"telescope.builtin".live_grep{grep_open_files = true, cwd = vim.fn.getcwd() }<CR>
     call g:WhichKeyL(['s'], 'telescope-sneak')
@@ -235,8 +258,8 @@ EOF
     nnoremap <leader>c <cmd>lua require"telescope.builtin".commands{}<CR>
     call g:WhichKeyL(['c'], 'telescope-commands')
 
-    nnoremap <leader>g. <cmd>lua require"telescope.builtin".git_bcommits{}<CR>
-    call g:WhichKeyL(['g', '.'], 'git-buffer-log')
+    nnoremap <leader>gL <cmd>lua require"telescope.builtin".git_bcommits{}<CR>
+    call g:WhichKeyL(['g', 'L'], 'git-buffer-log')
 
     nnoremap <leader>gl <cmd>lua require"telescope.builtin".git_commits{}<CR>
     call g:WhichKeyL(['g', 'l'], 'git-log')
@@ -258,6 +281,8 @@ EOF
 
     command! M           :Telescope man_pages
     command! Manpages    :Telescope man_pages
+
+    command! -nargs=+ -bang Rg :lua require'telescope.builtin'.grep_string{search=<q-args>}
   endfunction
   return [function('s:SetupTelescope')]
 endfunction
