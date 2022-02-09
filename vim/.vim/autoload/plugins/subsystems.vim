@@ -338,9 +338,14 @@ function s:StackGit()
   if has('nvim-0.5.1')
     Plug 'ruifm/gitlinker.nvim'
     " Yank GitHub permalinks
-    Plug 'nvim-lua/plenary.nvim'
     Plug 'lewis6991/gitsigns.nvim'
     " See git diff inline
+    Plug 'pwntester/octo.nvim'
+
+    Plug 'nvim-telescope/telescope.nvim'
+    Plug 'kyazdani42/nvim-web-devicons'
+    Plug 'nvim-lua/plenary.nvim'
+    " Dependencies
 
     function s:SetupGit()
 lua <<EOF
@@ -356,6 +361,7 @@ lua <<EOF
           end,
         },
       }
+      require"octo".setup{}
 EOF
     endfunction
     call g:WhichKeyL(['g', 'y'], 'git-url')
