@@ -104,9 +104,11 @@ EOF
   Plug 'AndrewRadev/linediff.vim'
   " Vimdiff line ranges
 
-  Plug 'Konfekt/FastFold'
-  " Lazy folding
-    let g:fastfold_fold_movement_commands = []
+  if !has('nvim')
+    Plug 'Konfekt/FastFold'
+    " Lazy folding
+      let g:fastfold_fold_movement_commands = []
+  endif
 
   if has('nvim-0.5.1')
     Plug 'luukvbaal/stabilize.nvim'
