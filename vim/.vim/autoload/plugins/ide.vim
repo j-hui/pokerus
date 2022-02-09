@@ -457,9 +457,6 @@ function s:PlugNvimLsp()
   Plug 'folke/trouble.nvim'
     " Summarize diagnostics in document
 
-  " Plug 'ray-x/lsp_signature.nvim'
-    " Type signature help pop-up
-
   Plug 'kosayoda/nvim-lightbulb'
     " Make code actions more visible
 
@@ -502,12 +499,6 @@ lua <<EOF
       },
     }
     require'trouble'.setup {}
-    -- require'lsp_signature'.setup {
-      -- always_trigger = false,
-      -- toggle_key = '<C-s>',
-      -- hint_enable = false,
-      -- trigger_on_newline = false,
-    -- }
     require"fidget".setup{
       debug = {
         logging = true
@@ -535,6 +526,7 @@ function s:PlugNvimCmp()
   Plug 'f3fora/cmp-spell'
   Plug 'hrsh7th/cmp-cmdline'
   Plug 'hrsh7th/cmp-nvim-lua'
+  Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
 
   Plug 'hrsh7th/vim-vsnip'
   Plug 'hrsh7th/vim-vsnip-integ'
@@ -572,6 +564,7 @@ lua << EOF
       { name = 'vsnip' },
       { name = 'nvim_lua' },
       { name = 'nvim_lsp' },
+      { name = "nvim_lsp_signature_help" },
       { name = 'path' },
       { name = 'buffer', option = { keyword_length = 4 } },
       -- { name = 'spell', keyword_length = 5 },
