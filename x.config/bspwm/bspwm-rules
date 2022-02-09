@@ -90,8 +90,11 @@ case "$class.$instance" in
     ;;
   float-term.*)
     state=floating follow=on sticky=on
-    monitor_geo="$(xrandr --current | grep "$(bspc query -M -m --names)" | cut -d ' ' -f 4)"
-
+    monitor_info="$(xrandr --current | grep "$(bspc query -M -m --names)")"
+    monitor_geo="$(echo "$monitor_info" | cut -d ' ' -f 3)"
+    if [[ "$monitor_geo" = "primary" ]]; then
+      monitor_geo="$(echo "$monitor_info" | cut -d ' ' -f 4)"
+    fi
     x_begin=${monitor_geo#*+}
     x_begin=${x_begin%+*}
     y_begin=${monitor_geo##*+}
