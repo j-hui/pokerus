@@ -29,7 +29,7 @@ focus-desktop () {
 }
 
 hide () {
-  bspc node @parent -R 270
+  bspc node @parent -R 270 || true
   bspc node focused -g hidden=on
 }
 
@@ -113,18 +113,26 @@ unhide () {
         bspc node "$node" -n @/
       fi
     else
-      # Move the selected node to a sane location before it is unhidden.
-      if [ "$is_local" = y ]; then
-        # First, temporarily push the node to some unfocused desktop, removing
-        # it from the current tree (assumes there are at least two desktops).
-        bspc node "$node" -d any.!focused
-      fi
-
-      if [ "$opt_swap" = y ]; then
-        insert_node "$node" "$cur_node"
+      if [ -z "$cur_node" ]; then
+        # No node is currently focused
+        if ! [ "$is_local" = y ]; then
+          # Just move the node to the current desktop
+          bspc node "$node" -d focused
+        fi
       else
-        # Default: insert at the root
-        insert_node "$node" "@/"
+        # Move the selected node to a sane location before it is unhidden.
+        if [ "$is_local" = y ]; then
+          # First, temporarily push the node to some unfocused desktop, removing
+          # it from the current tree (assumes there are at least two desktops).
+          bspc node "$node" -d any.!focused
+        fi
+
+        if [ "$opt_swap" = y ]; then
+          insert_node "$node" "$cur_node"
+        else
+          # Default: insert at the root
+          insert_node "$node" "@/"
+        fi
       fi
     fi
   fi
