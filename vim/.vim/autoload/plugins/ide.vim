@@ -560,15 +560,16 @@ lua << EOF
       end,
     },
     mapping = mapping,
-    sources = {
+    sources = cmp.config.sources({
       { name = 'vsnip' },
       { name = 'nvim_lua' },
       { name = 'nvim_lsp' },
       { name = "nvim_lsp_signature_help" },
       { name = 'path' },
-      { name = 'buffer', option = { keyword_length = 4 } },
-      -- { name = 'spell', keyword_length = 5 },
-    },
+    }, {
+      { name = 'buffer', keyword_length = 4 },
+      { name = 'spell', keyword_length = 5 },
+    }),
     documentation = true,
     -- formatting = {
     --   format = require'lspkind'.cmp_format({with_text = true, maxwidth = 50})
@@ -584,10 +585,10 @@ lua << EOF
   })
   cmp.setup.cmdline(':', {
     sources = cmp.config.sources({
-      { name = 'path' }
+      { name = 'path', keyword_length = 2, max_item_count = 16 },
     }, {
-      { name = 'cmdline' }
-    })
+      { name = 'cmdline', keyword_length = 3, max_item_count = 16 },
+    }),
   })
 
   completion_lsp = function(obj)
