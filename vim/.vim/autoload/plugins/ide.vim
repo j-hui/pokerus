@@ -983,7 +983,7 @@ lua << EOF
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
 
     -- vim.cmd [[autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]] -- NOTE causes weird issue sometimes but that can be ignored
-    vim.cmd [[command! Fmt execute 'lua vim.lsp.buf.formatting()']]
+    vim.cmd [[command! Fmt lua vim.lsp.buf.formatting()]]
 
     require'aerial'.on_attach(client)
     vim.api.nvim_buf_set_keymap(0, 'n', '<leader>lo', '<cmd>AerialToggle!<CR>', {})
