@@ -360,6 +360,8 @@ function s:PlugTreesitter()
   " Show spelling errors
   Plug 'folke/twilight.nvim'
   " Dim inactive regions of code
+  Plug 'danymat/neogen'
+  " Treesitter-powered doc-comment generator
 
   let g:treesitter_langs = [
         \ 'bash',
@@ -467,6 +469,7 @@ lua <<EOF
     require'nvim-gps'.setup{}
     require'spellsitter'.setup{}
     require'twilight'.setup{}
+    require'neogen'.setup{}
 EOF
     call g:WhichKey('n', ['g', 'r'], 'treesitter-refactor')
     call g:WhichKey('n', ['g', 'l'], 'treesitter-swap-next-param')
