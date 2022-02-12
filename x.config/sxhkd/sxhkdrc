@@ -55,7 +55,7 @@ super + g
     google-chrome-stable
 
 ## incognito chrome:
-super + shift + o
+super + shift + g
     google-chrome-stable --incognito
 
 ## define selected text:

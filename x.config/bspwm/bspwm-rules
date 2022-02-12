@@ -75,7 +75,10 @@ eval "$4" # this seems fucking dangerous
 
 case "$class.$instance" in
   zoom.zoom)
-    if [[ "$layer" == "above" ]]; then
+    if [[ "$(xtitle "$window")" == "Zoom Cloud Meetings" ]]; then
+      # Login screen
+      layer=above state=floating border=off sticky=on center=on
+    elif [[ "$layer" == "above" ]]; then
       state=floating border=off sticky=on
     fi
     ;;
@@ -84,6 +87,12 @@ case "$class.$instance" in
   slack.*)
     ;;
   discord.*)
+    ;;
+  Steam.*)
+    if [[ "$(xtitle "$window")" = "Steam - News"* ]]; then
+      # News window
+      layer=above state=floating border=off sticky=on center=on
+    fi
     ;;
   Pinentry.*)
     state=floating center=on follow=on sticky=on
