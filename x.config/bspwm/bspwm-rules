@@ -88,6 +88,10 @@ case "$class.$instance" in
     ;;
   discord.*)
     ;;
+  *.zathura)
+    # For some reasons Zathura requests the windows be started in floating mode
+    state=tiled
+    ;;
   Steam.*)
     if [[ "$(xtitle "$window")" = "Steam - News"* ]]; then
       # News window
