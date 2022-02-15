@@ -35,8 +35,7 @@ log="$HOME/.local/share/bspwm/bspwm-rules.log"
 mkdir -p "$(dirname "$log")"
 
 dbg () {
-  # echo "$@" >> "$log"
-  :
+  echo "$@" >> "$log"
 }
 # dbg "bspwm external rules received: '$1' '$2' '$3' '$4'"
 
