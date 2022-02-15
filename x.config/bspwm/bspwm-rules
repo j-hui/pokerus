@@ -127,6 +127,14 @@ case "$class.$instance" in
   Dunst.*)
     exit
     ;;
+  .)
+    # Some kind of janky non-compliant X11 window...
+    sleep 0.1 # Make sure the program gets a chance to set its own title
+    if [[ "$(xtitle "$window")" = "Spotify" ]]; then
+      # This doesn't seem to actually send Spotify to the desktop though..
+      desktop="7-media"
+    fi
+    ;;
 esac
 
 if [[ "$state" != floating && "$state" != fullscreen ]]; then
