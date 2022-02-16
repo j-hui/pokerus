@@ -81,7 +81,8 @@ in
 
           (unstable.luakit.overrideAttrs (old: { }))
           surf
-          firefox google-chrome chromium unstable.vivaldi
+          unstable.firefox
+          unstable.google-chrome unstable.chromium unstable.vivaldi
 
           youtube-dl
           transmission transmission-gtk
