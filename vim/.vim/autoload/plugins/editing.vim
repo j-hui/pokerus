@@ -114,18 +114,18 @@ EOF
             \ ]
 
       " We also add text object targets for interacting with inner surroundings:
-      xmap is   <Plug>(textobj-sandwich-query-i)
-      xmap as   <Plug>(textobj-sandwich-query-a)
-      omap is   <Plug>(textobj-sandwich-query-i)
-      omap as   <Plug>(textobj-sandwich-query-a)
-      xmap iss  <Plug>(textobj-sandwich-auto-i)
-      xmap ass  <Plug>(textobj-sandwich-auto-a)
-      omap iss  <Plug>(textobj-sandwich-auto-i)
-      omap ass  <Plug>(textobj-sandwich-auto-a)
-      xmap im   <Plug>(textobj-sandwich-literal-query-i)
-      xmap am   <Plug>(textobj-sandwich-literal-query-a)
-      omap im   <Plug>(textobj-sandwich-literal-query-i)
-      omap am   <Plug>(textobj-sandwich-literal-query-a)
+      xmap ib   <Plug>(textobj-sandwich-query-i)
+      xmap ab   <Plug>(textobj-sandwich-query-a)
+      omap ib   <Plug>(textobj-sandwich-query-i)
+      omap ab   <Plug>(textobj-sandwich-query-a)
+      xmap ibb  <Plug>(textobj-sandwich-auto-i)
+      xmap abb  <Plug>(textobj-sandwich-auto-a)
+      omap ibb  <Plug>(textobj-sandwich-auto-i)
+      omap abb  <Plug>(textobj-sandwich-auto-a)
+      xmap ic   <Plug>(textobj-sandwich-literal-query-i)
+      xmap ac   <Plug>(textobj-sandwich-literal-query-a)
+      omap ic   <Plug>(textobj-sandwich-literal-query-i)
+      omap ac   <Plug>(textobj-sandwich-literal-query-a)
 
       augroup SandwichFiletypes
         autocmd!
