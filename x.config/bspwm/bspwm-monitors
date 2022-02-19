@@ -1,0 +1,99 @@
+#!/usr/bin/env bash
+
+if [ $# -lt 1 ]; then
+  echo "Need at least one argument."
+  echo "Usage: $0 <monitor-id> [<monitor-id>...]"
+  exit 1
+fi
+
+dbg() {
+  echo "$@" >>~/.local/share/bspwm/monitors.log
+}
+
+dbg "=====BEFORE====="
+dbg "nodes:"
+dbg "$(bspc query -N)"
+dbg
+dbg "monitors:"
+dbg "$(bspc query -M --names)"
+dbg
+for m in $(bspc query -M --names); do
+  dbg "$(
+    echo "in $m:"
+    bspc query -D --names -m "$m"
+    echo
+  )"
+done
+dbg
+
+# Adopt any orphaned windows
+bspc wm -o
+
+case "$#" in
+  1) # Single monitor setup
+    declare -a desktops=(1-dev 2-doc 3-cfg 4-fun 5-life 6-chat 7-media 8-idle)
+
+    # Move desktops to the corresponding monitors
+    for d in "${desktops[@]}"; do
+      bspc desktop "$d" -m "$1"
+    done
+
+    # Make sure desktops are in order + prune out unnecessary ones
+    bspc monitor "$1" -o "${desktops[@]}"
+    bspc monitor "$1" -d "${desktops[@]}"
+
+    # Delete other monitors
+    for m in $(bspc query -M --names); do
+      if [[ "$m" != "$1" ]]; then
+        bspc monitor "$m" -r
+      fi
+    done
+    bspc wm -O "$1"
+    ;;
+  2) # Dual monitor setup
+    declare -a primary_desktops=(1-dev 2-doc 3-cfg 4-fun 5-life 6-chat)
+    declare -a secondary_desktops=(7-media 8-idle)
+
+    # Move desktops to the corresponding monitors
+    for d in "${primary_desktops[@]}"; do
+      bspc desktop "$d" -m "$1"
+    done
+    for d in "${secondary_desktops[@]}"; do
+      bspc desktop "$d" -m "$2"
+    done
+
+    # Make sure desktops are in order + prune out unnecessary ones
+    bspc monitor "$1" -o "${primary_desktops[@]}"
+    bspc monitor "$2" -o "${secondary_desktops[@]}"
+    bspc monitor "$1" -d "${primary_desktops[@]}"
+    bspc monitor "$2" -d "${secondary_desktops[@]}"
+
+    # Delete other monitors
+    for m in $(bspc query -M --names); do
+      if [[ "$m" != "$1" && "$m" != "$2" ]]; then
+        bspc monitor "$m" -r
+      fi
+    done
+
+    # bspc wm -O DP-2-2 eDP-1
+    # bspc monitor DP-2-2 -d 1-dev 2-doc 3-cfg 4-fun 5-life
+    # bspc monitor eDP-1 -d 6-chat 7-media 8-idle
+    # bspc wm -o
+    bspc wm -O "$1" "$2"
+    ;;
+  3) ;;
+  4) ;;
+esac
+
+dbg "=====AFTER====="
+dbg "monitors:"
+dbg "$(bspc query -M --names)"
+dbg
+for m in $(bspc query -M --names); do
+  dbg "$(
+    echo "in $m:"
+    bspc query -D --names -m "$m"
+    echo
+  )"
+done
+dbg
