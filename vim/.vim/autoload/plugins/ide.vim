@@ -905,22 +905,6 @@ lua << EOF
   local nvim_lsp = require 'lspconfig'
   local util = require 'lspconfig.util'
 
-  require'null-ls'.setup {
-    sources = {
-      require'null-ls'.builtins.formatting.black,
-      -- require'null-ls'.builtins.formatting.yapf,
-      require'null-ls'.builtins.formatting.prettier.with({
-        filetypes = { "html", "json", "yaml", "markdown" },
-      }),
-      require'null-ls'.builtins.diagnostics.shellcheck,
-      require'null-ls'.builtins.formatting.shfmt,
-      require'null-ls'.builtins.diagnostics.vint,
-      require'null-ls'.builtins.diagnostics.statix,
-      require'null-ls'.builtins.formatting.asmfmt,
-      require'null-ls'.builtins.formatting.stylua,
-    },
-  }
-
   local servers = {
     ['clangd'] = {},
     ['texlab'] = { settings = { texlab = {
@@ -1004,6 +988,28 @@ lua << EOF
       on_attach = on_attach,
     })))
   end
+
+  local null_ls = require'null-ls'
+  null_ls.setup {
+    on_attach = on_attach,
+    sources = {
+      null_ls.builtins.formatting.black,
+      -- null_ls.builtins.formatting.yapf,
+      null_ls.builtins.formatting.prettier.with({
+        filetypes = { "html", "json", "yaml", "markdown" },
+      }),
+      null_ls.builtins.diagnostics.shellcheck,
+      null_ls.builtins.formatting.shfmt.with({
+        extra_args = { "-i", "2", "-ci" }
+      }),
+      null_ls.builtins.diagnostics.vint,
+      null_ls.builtins.diagnostics.statix,
+      null_ls.builtins.formatting.asmfmt,
+      null_ls.builtins.formatting.stylua,
+    },
+  }
+
+
 EOF
     set signcolumn=yes
     sign define LspDiagnosticsSignError text=✖ texthl=LspDiagnosticsSignError
