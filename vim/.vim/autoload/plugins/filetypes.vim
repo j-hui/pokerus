@@ -168,6 +168,8 @@ function s:PlugMarkdown()
           \ 'ocaml',
           \ 'haskell',
           \ 'rust',
+          \ 'lua',
+          \ 'vim',
           \ ]
     let g:markdown_folding = 1
     let g:markdown_syntax_conceal = 1
