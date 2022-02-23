@@ -519,7 +519,7 @@ function plugins#filetypes#setup()
   let l:callbacks = []
   if has('nvim-0.6')
     let l:callbacks += s:PlugTreesitter()
-    let l:callbacks += s:PlugOrg()
+    " let l:callbacks += s:PlugOrg()
     let l:callbacks += s:PlugZk()
   endif
 
