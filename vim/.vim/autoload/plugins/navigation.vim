@@ -32,15 +32,6 @@ function plugins#navigation#setup()
   Plug 'rbonvall/vim-textobj-latex'
   " {a,i} $, q/Q, and e motions for latex math, quotes, and environments
 
-  Plug 'preservim/vim-textobj-sentence'
-  " {a,s} motions for modern prose sentences
-    augroup textobj_sentence
-      autocmd!
-      autocmd FileType markdown call textobj#sentence#init()
-      autocmd FileType textile call textobj#sentence#init()
-      autocmd FileType tex call textobj#sentence#init()
-    augroup END
-
   Plug 'paulhybryant/vim-textobj-path'
   " {a,i} {p,P} for path names
 
