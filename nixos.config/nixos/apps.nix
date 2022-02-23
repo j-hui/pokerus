@@ -97,7 +97,7 @@ in
         unstable.zoom-us
         skypeforlinux
         zulip
-        signal-desktop signal-cli
+        unstable.signal-desktop unstable.signal-cli
         mattermost-desktop matterhorn
       ];
     })
