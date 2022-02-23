@@ -158,7 +158,7 @@ function s:PlugLatex()
 endfunction
 
 function s:PlugMarkdown()
-  Plug 'tpope/vim-markdown',                { 'as': 'tpope-vim-markdown' }
+  " Plug 'tpope/vim-markdown',                { 'as': 'tpope-vim-markdown' }
     let g:markdown_fenced_languages = [
           \ 'html',
           \ 'python',
@@ -174,20 +174,20 @@ function s:PlugMarkdown()
     let g:markdown_folding = 1
     let g:markdown_syntax_conceal = 1
 
-  " Plug 'plasticboy/vim-markdown', { 'as': 'plasticboy-vim-markdown' }
+  Plug 'preservim/vim-markdown', { 'as': 'preservim-vim-markdown' }
     let g:vim_markdown_fenced_languages = g:markdown_fenced_languages
-  "   let g:vim_markdown_auto_insert_bullets = 0
-  "   let g:vim_markdown_folding_style_pythonic = 1
-  "   " let g:vim_markdown_math = 1
-  "   function MarkdownHook()
-  "     nmap g] <Plug>Markdown_MoveToCurHeader
-  "     nmap g[ <Plug>Markdown_MoveToParentHeader
-  "   endfunction
+    let g:vim_markdown_auto_insert_bullets = 0
+    let g:vim_markdown_folding_style_pythonic = 1
+    " let g:vim_markdown_math = 1
+    function MarkdownHook()
+      nmap g] <Plug>Markdown_MoveToCurHeader
+      nmap g[ <Plug>Markdown_MoveToParentHeader
+    endfunction
 
-  "   augroup markdown_mappings
-  "     autocmd!
-  "     autocmd Filetype markdown call MarkdownHook()
-  "   augroup END
+    augroup markdown_mappings
+      autocmd!
+      autocmd Filetype markdown call MarkdownHook()
+    augroup END
 
   " Plug 'gabrielelana/vim-markdown',         { 'as': 'gabrielelana-vim-markdown'}
     " let g:markdown_enable_mappings = 0
