@@ -50,7 +50,7 @@ function plugins#navigation#setup()
   " Title case w/ gz<motion>
 
   if has('nvim-0.5.0')
-    Plug 'ggandor/lightspeed.nvim'
+    Plug 'ggandor/lightspeed.nvim', { 'commit': '4d8359a30b26ee5316d0e7c79af08b10cb17a57b' }
     " Fancier (and more opinionated) sneak
       xmap s <Plug>Lightspeed_s
       xmap S <Plug>Lightspeed_S

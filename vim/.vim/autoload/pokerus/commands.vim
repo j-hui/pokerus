@@ -1,5 +1,5 @@
-
-function commands#setup()
+scriptencoding utf-8
+function pokerus#commands#setup()
 
   " :Qa (quality assurance for my typos) {{{
   command! Qa qa

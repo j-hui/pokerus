@@ -23,11 +23,10 @@ syntax on
 let g:mapleader = "\<Space>"
 
 " These are defined in .vim/autoload/
-call plugins#setup()
-call settings#setup()
-call keybinds#setup()
-call commands#setup()
-call spelling#setup()
+call pokerus#plugins#setup()
+call pokerus#settings#setup()
+call pokerus#keybinds#setup()
+call pokerus#commands#setup()
 
 " Avoid E173 (vim refuses to close with unvisited buffers)
 if argc() > 1

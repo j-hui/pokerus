@@ -419,9 +419,6 @@ function s:StackMiscSubsystems()
     " See yank registers
   endif
 
-  Plug 'preservim/tagbar'
-  " Outline by tags
-
   Plug 'cosminadrianpopescu/vim-tail'
   " Make vim behave like tail -f
 

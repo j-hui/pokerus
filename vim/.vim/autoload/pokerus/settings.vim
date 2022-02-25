@@ -184,6 +184,11 @@ function s:Editing()
   " Add to filetype-specific hooks below if misbehaving.
 endfunction
 
+function s:Spelling()
+  setlocal spelllang=en_us
+  set spellfile=~/.vim/spell/en.utf-8.add
+endfunction
+
 function s:Misc()
   set shell=bash
   set modeline
@@ -216,12 +221,13 @@ function s:Misc()
   let g:no_gitrebase_maps = 1
 endfunction
 
-function settings#setup()
+function pokerus#settings#setup()
   call s:BackupFiles()
   call s:TerminalIO()
   call s:Clipboard()
   call s:Appearance()
   call s:Navigation()
   call s:Editing()
+  call s:Spelling()
   call s:Misc()
 endfunction

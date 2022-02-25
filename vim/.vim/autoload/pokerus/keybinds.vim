@@ -208,7 +208,7 @@ function s:termMaps()
   tnoremap <C-]> <C-\><C-N>
 endfunction
 
-function keybinds#setup()
+function pokerus#keybinds#setup()
 
   " Disable ex mode
   nnoremap Q <nop>

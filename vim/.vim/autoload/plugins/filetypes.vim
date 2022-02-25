@@ -251,7 +251,7 @@ function s:PlugValgrind()
 endfunction
 
 function s:PlugZig()
-  Plug 'ziglang/zig.vim'
+  " Plug 'ziglang/zig.vim'
     let g:zig_fmt_autosave = 0
   return []
 endfunction
