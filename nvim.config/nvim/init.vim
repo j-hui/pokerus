@@ -1,7 +1,22 @@
 set runtimepath^=~/.vim runtimepath+=~/.vim/after
 let &packpath = &runtimepath
-source ~/.vimrc
-
 if !has('nvim-0.5')
+  source ~/.vimrc
   finish
+else
+  let g:mapleader = "\<Space>"
+  " luafile /home/j-hui/extern/profiler.nvim/lua/profiler.lua
+lua <<EOF
+  require "pokerus.config"
+  require "pokerus.packer"
+EOF
+  call pokerus#settings#setup()
+  call pokerus#keybinds#setup()
+  call pokerus#commands#setup()
+endif
+
+" Avoid E173 (n more file(s) to edit)
+if argc() > 1
+ silent blast   " load last buffer
+ silent bfirst  " switch back to the first
 endif
