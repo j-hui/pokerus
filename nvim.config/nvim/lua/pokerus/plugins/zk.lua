@@ -1,9 +1,9 @@
 return {
   plug = function(use)
     use {
-      "numToStr/Comment.nvim",
+      "mickael-menu/zk-nvim",
       config = function()
-        require("Comment").setup {}
+        require("zk").setup {}
       end,
     }
   end,

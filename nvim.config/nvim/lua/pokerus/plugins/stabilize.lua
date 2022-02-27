@@ -1,9 +1,9 @@
 return {
   plug = function(use)
     use {
-      "numToStr/Comment.nvim",
+      "luukvbaal/stabilize.nvim",
       config = function()
-        require("Comment").setup {}
+        require("stabilize").setup {}
       end,
     }
   end,

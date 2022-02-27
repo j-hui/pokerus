@@ -123,6 +123,18 @@ function s:SetupVimPlugins()
     Plug 'cosminadrianpopescu/vim-tail'
     " Make vim behave like tail -f
 
+    Plug 'guns/xterm-color-table.vim'
+    " Preview all 256 xterm colors
+
+    Plug 'moll/vim-bbye'
+    " Delete buffers without messing up buffer layout
+
+    Plug 'AndrewRadev/bufferize.vim'
+    " Command contents in buffer
+
+    Plug 'AndrewRadev/linediff.vim'
+    " Vimdiff line ranges
+
   " Vim + Neovim (no setup) }}}
 
   " Vim + Neovim (w/ setup) {{{
@@ -176,6 +188,7 @@ function s:SetupVimPlugins()
     Plug 'andy-morris/happy.vim'
     Plug 'andy-morris/alex.vim'
     Plug 'preservim/vim-markdown', { 'as': 'preservim-vim-markdown' }
+    Plug 'euclidianAce/BetterLua.vim'
     Plug 'whonore/coqtail'
   " Filetype }}}
   call plug#end()

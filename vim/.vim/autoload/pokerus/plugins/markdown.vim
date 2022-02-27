@@ -17,7 +17,7 @@ function pokerus#plugins#markdown#setup()
   " let g:vim_markdown_math = 1
   augroup markdown_mappings
     autocmd!
-    autocmd Filetype markdown nmap g] <Plug>Markdown_MoveToCurHeader
-    autocmd Filetype markdown nmap g[ <Plug>Markdown_MoveToParentHeader
+    autocmd Filetype markdown nmap <buffer> ]h <Plug>Markdown_MoveToCurHeader
+    autocmd Filetype markdown nmap <buffer> [h <Plug>Markdown_MoveToParentHeader
   augroup END
 endfunction

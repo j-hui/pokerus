@@ -1,9 +1,10 @@
 return {
   plug = function(use)
     use {
-      "numToStr/Comment.nvim",
+      "stevearc/dressing.nvim",
+      requires = { },
       config = function()
-        require("Comment").setup {}
+        require("dressing").setup {}
       end,
     }
   end,

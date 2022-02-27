@@ -1,9 +1,9 @@
 return {
   plug = function(use)
     use {
-      "numToStr/Comment.nvim",
+      "chentau/marks.nvim",
       config = function()
-        require("Comment").setup {}
+        require("marks").setup {}
       end,
     }
   end,

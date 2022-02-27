@@ -1,9 +1,9 @@
 return {
   plug = function(use)
     use {
-      "numToStr/Comment.nvim",
+      "nacro90/numb.nvim",
       config = function()
-        require("Comment").setup {}
+        require("numb").setup {}
       end,
     }
   end,
