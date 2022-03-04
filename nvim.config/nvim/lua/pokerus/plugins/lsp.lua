@@ -1,4 +1,3 @@
--- don't forget about the lsp-colors thing
 local M = {}
 
 M.servers = {
@@ -146,6 +145,8 @@ function M.plug(use)
       -- Code outline viewer
       "nvim-treesitter/nvim-treesitter",
       -- Required for Aerial
+      "folke/lsp-colors.nvim",
+      -- Creates missing LSP diagnostics highlight groups
     },
     config = function()
       local nvim_lsp = require "lspconfig"
