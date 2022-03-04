@@ -133,12 +133,28 @@ function M.plug(use)
       }, { prefix = "<leader>" })
 
       require("pokerus").nmap({
+        name = "git",
         f = { builtin "git_files", "git-files" },
         m = { builtin "git_status", "git-modified" },
         l = { builtin "git_commits", "git-log" },
         L = { builtin "git_bcommits", "git-buffer-log" },
         b = { builtin "git_branches", "git-branches" },
       }, { prefix = "<leader>g" })
+
+      require("pokerus").nmap({
+        name = "git",
+        f = { builtin "git_files", "git-files" },
+        m = { builtin "git_status", "git-modified" },
+        l = { builtin "git_commits", "git-log" },
+        L = { builtin "git_bcommits", "git-buffer-log" },
+        b = { builtin "git_branches", "git-branches" },
+      }, { prefix = "<leader>g" })
+
+      require("pokerus").nmap({
+        name = "lsp",
+        ["/"] = { builtin "lsp_workspace_symbols", "lsp-workspace-symbols" },
+        s = { builtin "lsp_document_symbols", "lsp-document-symbols" },
+      }, { prefix = "<leader>l" })
 
       vim.cmd [[
         command! H                  :Telescope help_tags

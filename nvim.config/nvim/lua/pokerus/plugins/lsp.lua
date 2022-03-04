@@ -34,144 +34,58 @@ M.servers = {
 }
 
 function M.on_attach(client, bufnr)
-  -- WIP: use my own nmap for this
+  require("pokerus").nmap({
+    name = "lsp",
+    k = { "lsp-hover", "<cmd>lua vim.lsp.buf.hover()<CR>" },
+    j = {
+      "lsp-show-diagnostic",
+      "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>",
+    },
+    d = { "lsp-goto-definition", "<cmd>lua vim.lsp.buf.definition()<CR>" },
+    e = { "lsp-goto-declaration", "<cmd>lua vim.lsp.buf.declaration()<CR>" },
+    i = {
+      "lsp-goto-implementation",
+      "<cmd>lua vim.lsp.buf.implementation()<CR>",
+    },
+    t = { "lsp-goto-typedef", "<cmd>lua vim.lsp.buf.type_definition()<CR>" },
+    ["="] = { "lsp-references", "<cmd>lua vim.lsp.buf.references()<CR>" },
+    a = { "lsp-code-action", "<cmd>lua vim.lsp.buf.code_action()<CR>" },
+    x = { "lsp-lens-code-action", "<cmd>lua vim.lsp.buf.codelens.run()<CR>" },
+    r = { "lsp-rename", "<cmd>lua vim.lsp.buf.rename()<CR>" },
+  }, { prefix = "<leader>l", noremap = true, silent = true, buffer = bufnr })
 
-  local opts = { noremap = true, silent = true }
-  vim.api.nvim_buf_set_keymap(
-    bufnr,
-    "n",
-    "K",
-    "<cmd>lua vim.lsp.buf.hover()<CR>",
-    opts
-  )
-  vim.api.nvim_buf_set_keymap(
-    bufnr,
-    "n",
-    "<leader>lk",
-    "<cmd>lua vim.lsp.buf.hover()<CR>",
-    opts
-  )
-  vim.api.nvim_buf_set_keymap(
-    bufnr,
-    "n",
-    "<leader>lj",
-    "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>",
-    opts
-  )
+  require("pokerus").nmap({
+    K = { "lsp-hover", "<cmd>lua vim.lsp.buf.hover()<CR>" },
 
-  vim.api.nvim_buf_set_keymap(
-    bufnr,
-    "n",
-    "<leader>ld",
-    "<cmd>lua vim.lsp.buf.definition()<CR>",
-    opts
-  )
-  vim.api.nvim_buf_set_keymap(
-    bufnr,
-    "n",
-    "<leader>le",
-    "<cmd>lua vim.lsp.buf.declaration()<CR>",
-    opts
-  )
-  vim.api.nvim_buf_set_keymap(
-    bufnr,
-    "n",
-    "<leader>li",
-    "<cmd>lua vim.lsp.buf.implementation()<CR>",
-    opts
-  )
-  vim.api.nvim_buf_set_keymap(
-    bufnr,
-    "n",
-    "<leader>lt",
-    "<cmd>lua vim.lsp.buf.type_definition()<CR>",
-    opts
-  )
-  vim.api.nvim_buf_set_keymap(
-    bufnr,
-    "n",
-    "<leader>l=",
-    "<cmd>lua vim.lsp.buf.references()<CR>",
-    opts
-  )
+    ["]d"] = {
+      "lsp-diagnostic-next",
+      "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>",
+    },
+    ["[d"] = {
+      "lsp-diagnostic-prev",
+      "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>",
+    },
+  }, { noremap = true, silent = true, buffer = bufnr })
 
-  vim.api.nvim_buf_set_keymap(
-    bufnr,
-    "n",
-    "<leader>la",
-    "<cmd>lua vim.lsp.buf.code_action()<CR>",
-    opts
-  )
-  vim.api.nvim_buf_set_keymap(
-    bufnr,
-    "v",
-    "<leader>la",
-    "<cmd>lua vim.lsp.buf.range_code_action()<CR>",
-    opts
-  )
-  vim.api.nvim_buf_set_keymap(
-    bufnr,
-    "n",
-    "<leader>lx",
-    "<cmd>lua vim.lsp.codelens.run()<CR>",
-    opts
-  )
-  vim.api.nvim_buf_set_keymap(
-    bufnr,
-    "n",
-    "<leader>lr",
-    "<cmd>lua vim.lsp.buf.rename()<CR>",
-    opts
-  )
+  require("pokerus").vmap {
+    ["<leader>la"] = {
+      "lsp-code-action",
+      "<cmd>lua vim.lsp.buf.code_action()<CR>",
+      noremap = true,
+      silent = true,
+      buffer = bufnr,
+    },
+  }
 
-  vim.api.nvim_buf_set_keymap(
-    bufnr,
-    "n",
-    "<leader>ls",
-    "<cmd>DocumentSymbols<CR>",
-    opts
-  )
-  vim.api.nvim_buf_set_keymap(
-    bufnr,
-    "n",
-    "<leader>l/",
-    "<cmd>WorkspaceSymbols<CR>",
-    opts
-  )
-
-  vim.api.nvim_buf_set_keymap(
-    bufnr,
-    "n",
-    "[d",
-    "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>",
-    opts
-  )
-  vim.api.nvim_buf_set_keymap(
-    bufnr,
-    "n",
-    "]d",
-    "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>",
-    opts
-  )
-
-  vim.api.nvim_buf_set_keymap(
-    bufnr,
-    "n",
-    "<leader>l.",
-    "<cmd>TroubleToggle lsp_document_diagnostics<CR>",
-    opts
-  )
-  vim.api.nvim_buf_set_keymap(
-    bufnr,
-    "n",
-    "<leader>l,",
-    "<cmd>TroubleToggle lsp_workspace_diagnostics<CR>",
-    opts
-  )
-
-  -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-  -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-  -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  require("pokerus").vmap {
+    ["<leader>lf"] = {
+      "lsp-outline",
+      "<cmd>AerialToggle<CR>",
+      noremap = true,
+      silent = true,
+      buffer = bufnr,
+    },
+  }
 
   -- vim.cmd [[autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]] -- NOTE causes weird issue sometimes but that can be ignored
   vim.cmd [[command! Fmt lua vim.lsp.buf.formatting()]]
