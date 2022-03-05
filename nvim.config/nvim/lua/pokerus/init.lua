@@ -31,8 +31,18 @@ M.xmap = function(mappings, opt)
   M.map(mappings, opt, { mode = "x" })
 end
 
+M.setup_vim_maps = function()
+  M.map {
+    g = {
+      ["-"] = "open-parent-dir",
+      ["="]= "open-cwd",
+    }
+  }
+end
+
 M.vimsetup = function(name)
   vim.fn["pokerus#plugins#" .. name .. "#setup"]()
 end
+
 
 return M

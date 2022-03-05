@@ -103,6 +103,12 @@ function s:navigationMaps()
 
   " Wrangle folds from jumping
   nnoremap Q za
+
+  " Open parent directory of current buffer
+  nmap <silent> g- :edit %:h<CR>
+
+  " Open current working directory
+  nmap <silent> g= :edit .<CR>
 endfunction
 
 function s:editingMaps()

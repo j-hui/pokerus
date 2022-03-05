@@ -9,12 +9,12 @@ return {
 
         require("pokerus").nmap({
           ["."] = {
-            "lsp-document-diagnostics",
             "<cmd>TroubleToggle lsp_document_diagnostics<CR>",
+            "lsp-document-diagnostics",
           },
           [","] = {
-            "lsp-workspace-diagnostics",
             "<cmd>TroubleToggle lsp_workspace_diagnostics<CR>",
+            "lsp-workspace-diagnostics",
           },
         }, { prefix = "<leader>l", noremap = true, silent = true })
       end,

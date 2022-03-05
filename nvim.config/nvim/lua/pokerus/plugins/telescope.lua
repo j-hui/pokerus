@@ -53,7 +53,7 @@ local imaps = {
   ["<C-b>"] = { "<Left>", type = "command" },
   ["<C-h>"] = { "<BS>", type = "command" },
   ["<C-k>"] = function()
-    vim.cmd "norm! d$"
+    vim.cmd [[norm! d$]]
   end,
   ["<Esc>"] = action "close",
 }
@@ -97,8 +97,14 @@ function M.config()
         mappings = {
           n = nmaps,
           i = vim.tbl_extend("force", imaps, {
-            ["<C-y>"] = fb_action "create",
-            ["<C-t>"] = fb_action "toggle_browser",
+            ["<C-o>"] = fb_action "create",
+            ["<C-t>"] = fb_action "toggle_hidden",
+            ["<C-]>"] = fb_action "goto_cwd",
+            ["<C-l>"] = fb_action "change_cwd",
+            ["~"] = fb_action "goto_home_dir",
+            ["<C-w>"] = function()
+              vim.cmd [[norm! db]]
+            end,
           }),
         },
       },

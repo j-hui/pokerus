@@ -20,6 +20,7 @@ return {
             "<plug>",
           },
         }
+        require("pokerus").setup_vim_maps()
       end,
     }
   end,
