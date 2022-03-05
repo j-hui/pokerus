@@ -5,7 +5,7 @@ return {
       config = function()
         vim.g.close_pair_key = 1
 
-        require("pokerus").lmap { ["G"] = { "<cmd>Goyo<cr>", "close-pair" } }
+        require("pokerus").nmap { ["<leader>G"] = { "<cmd>Goyo<CR>", "close-pair" } }
 
         vim.cmd [[
           augroup goyo-settings

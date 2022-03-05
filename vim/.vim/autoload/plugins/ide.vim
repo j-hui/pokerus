@@ -917,7 +917,6 @@ lua << EOF
     } } },
     ['rust_analyzer'] = {},
     ['pyright'] = {},
-    ['tsserver'] = {},
     ['hls'] = { settings = { haskell = { formattingProvider = 'brittany', } } },
     ['vimls'] = {},
     ['ocamllsp'] = {},

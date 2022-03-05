@@ -113,7 +113,6 @@ function pokerus#commands#setup()
   endfunction
   command! SyntaxGroup call <SID>show_syntax_group()
   nmap <leader>x :SyntaxGroup<CR>
-  call g:WhichKeyL(['x'], 'show-syntax-group')
   " }}}
 
 endfunction

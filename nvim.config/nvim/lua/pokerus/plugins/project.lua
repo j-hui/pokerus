@@ -2,6 +2,8 @@ return {
   plug = function(use)
     use {
       "ahmedkhalf/project.nvim",
+      opt = true,
+      cmd = { "ProjectRoot" },
       requires = { "nvim-telescope/telescope.nvim" },
       config = function()
         require("project_nvim").setup {

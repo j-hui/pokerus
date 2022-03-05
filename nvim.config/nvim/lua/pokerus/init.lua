@@ -1,6 +1,8 @@
 local M = {}
 
 M.map = function(mappings, opt, override_opt)
+  opt = opt or {}
+  override_opt = override_opt or {}
   -- Thin wrapper around folke/which-key.nvim
   require("which-key").register(
     mappings,
@@ -8,12 +10,9 @@ M.map = function(mappings, opt, override_opt)
   )
 end
 
-M.lmap = function(mappings, opt)
-  M.map(mappings, opt, { prefix = "<leader>" })
-end
-
 M.nmap = function(mappings, opt)
-  M.map(mappings, opt, { mode = "n" })
+  -- M.map(mappings, opt, { mode = "n" })
+  M.map(mappings, opt, {})
 end
 
 M.imap = function(mappings, opt)
@@ -30,6 +29,10 @@ end
 
 M.xmap = function(mappings, opt)
   M.map(mappings, opt, { mode = "x" })
+end
+
+M.vimsetup = function(name)
+  vim.fn["pokerus#plugins#" .. name .. "#setup"]()
 end
 
 return M

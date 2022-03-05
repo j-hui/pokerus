@@ -1,7 +1,7 @@
 return {
   plug = function(use)
     use {
-      "AndrewRadev/sideways.nvim",
+      "AndrewRadev/sideways.vim",
       -- Move things sideways in lists
       config = function()
         require("pokerus").nmap {

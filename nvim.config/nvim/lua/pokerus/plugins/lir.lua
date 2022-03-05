@@ -8,8 +8,6 @@ return {
         "tamago324/lir-git-status.nvim",
       },
       config = function()
-        vim.g.loaded_netrw = 1
-        vim.g.loaded_netrwPlugin = 1
         require("lir").setup {}
         require("lir.git_status").setup { show_ignored = false }
       end,

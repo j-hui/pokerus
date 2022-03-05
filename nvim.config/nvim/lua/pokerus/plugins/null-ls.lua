@@ -7,7 +7,7 @@ return {
       config = function()
         local null_ls = require "null-ls"
         null_ls.setup {
-          on_attach = require("pokerus.lsp").on_attach,
+          on_attach = require("pokerus.plugins.lsp").on_attach,
           sources = {
             null_ls.builtins.formatting.black,
             null_ls.builtins.formatting.prettier.with {

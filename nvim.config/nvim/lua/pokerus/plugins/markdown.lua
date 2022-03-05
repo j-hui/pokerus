@@ -2,7 +2,9 @@ return {
   plug = function(use)
     use {
       "preservim/vim-markdown",
-      config = require("pokerus.plugins.vimbridge").vimsetup "markdown",
+      config = function()
+        require("pokerus").vimsetup("markdown")
+      end,
     }
     use "ellisonleao/glow.nvim"
   end,

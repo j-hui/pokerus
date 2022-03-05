@@ -1,5 +1,5 @@
 return {
-  use = function(use)
+  plug = function(use)
     use {
       "kana/vim-textobj-user",
       -- User-defined motions beginning with {a,i}

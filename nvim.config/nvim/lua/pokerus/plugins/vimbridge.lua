@@ -1,9 +1,5 @@
 local M = {}
 
-function M.vimsetup(name)
-  return vim.fn["pokerus#plugins#" .. name .. "#setup"]
-end
-
 function M.plug(use)
   -- No setup {{{
   use "tpope/vim-unimpaired"
@@ -57,36 +53,48 @@ function M.plug(use)
   use {
     "lambdalisue/suda.vim",
     -- Give vim sudo powers
-    config = M.vimsetup "suda",
+    config = function()
+      require("pokerus").vimsetup "suda"
+    end,
   }
 
   use {
     "svermeulen/vim-subversive",
     -- Substitute from yank
-    config = M.vimsetup "subversive",
+    config = function()
+      require("pokerus").vimsetup "subversive"
+    end,
   }
 
   use {
     "tpope/vim-speeddating",
     -- increment/decrement dates
-    config = M.vimsetup "speeddating",
+    config = function()
+      require("pokerus").vimsetup "speeddating"
+    end,
   }
   use {
     "svermeulen/vim-cutlass",
     -- x and D only delete, no yank/cut but retain cut behavior for d
-    config = M.vimsetup "cutlass",
+    config = function()
+      require("pokerus").vimsetup "cutlass"
+    end,
   }
 
   use {
     "machakann/vim-sandwich",
     -- Fancier vim-surround + d
-    config = M.vimsetup "sandwich",
+    config = function()
+      require("pokerus").vimsetup "sandwich"
+    end,
   }
 
   use {
     "ojroques/vim-oscyank",
     -- Yank across the terminal
-    config = M.vimsetup "oscyank",
+    config = function()
+      require("pokerus").vimsetup "oscyank"
+    end,
   }
 
   use {
@@ -95,7 +103,9 @@ function M.plug(use)
     run = function()
       vim.fn["fzf#install"]()
     end,
-    config = M.vimsetup "fzf",
+    config = function()
+      require("pokerus").vimsetup "fzf"
+    end,
   }
   -- Vim setup }}}
 
@@ -123,22 +133,30 @@ function M.plug(use)
   -- Filetypes w/ setup {{{
   use {
     "fatih/vim-go",
-    config = M.vimsetup "go",
+    config = function()
+      require("pokerus").vimsetup "go"
+    end,
   }
 
   use {
     "octol/vim-cpp-enhanced-highlight",
-    config = M.vimsetup "cpp_enhanced",
+    config = function()
+      require("pokerus").vimsetup "cpp_enhanced"
+    end,
   }
 
   use {
     "neovimhaskell/haskell-vim",
-    config = M.vimsetup "haskell",
+    config = function()
+      require("pokerus").vimsetup "haskell"
+    end,
   }
 
   use {
     "ziglang/zig.vim",
-    config = M.vimsetup "zig",
+    config = function()
+      require("pokerus").vimsetup "zig"
+    end,
   }
   -- Filetypes w/ setup }}}
 

@@ -45,7 +45,7 @@ M.plug = function(use)
     config = function()
       vim.g.venn_ve = nil
       vim.g.venn_enabled = false
-      vim.cmd [[command Venn lua require"pokerus.plugins.venn".toggle()]]
+      vim.cmd [[command! Venn lua require"pokerus.plugins.venn".toggle()]]
     end,
   }
 end

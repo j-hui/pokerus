@@ -4,7 +4,7 @@ function M.plug(use)
   use {
     "tpope/vim-fugitive",
     config = function()
-      require("pokerus.plugins.vimbridge").vimsetup "fugitive"
+      require("pokerus").vimsetup("fugitive")
       require("pokerus").nmap({
         name = "git",
         d = { "<cmd>Gdiffsplit<CR>", "git-diff-split" },
