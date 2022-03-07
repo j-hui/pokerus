@@ -365,7 +365,7 @@ in
 
         # Lua
         lua
-        unstable.sumneko-lua-language-server
+        unstable.sumneko-lua-language-server unstable.stylua
 
         # TLA
         tlaps
