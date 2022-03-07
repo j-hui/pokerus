@@ -5,16 +5,19 @@ M.servers = {
   ["texlab"] = {
     on_attach = function(client, bufnr)
       require("pokerus.plugins.lsp").on_attach(client, bufnr)
-      require("pokerus").nmap({
-        c = {
-          "<cmd>TexlabBuild<CR>",
-          "tex-build",
+      require("pokerus").nmap(
+        {
+          c = {
+            "<cmd>TexlabBuild<CR>",
+            "tex-build",
+          },
+          f = {
+            "<cmd>TexlabForward<CR>",
+            "tex-goto-line",
+          },
         },
-        f = {
-          "<cmd>TexlabForward<CR>",
-          "tex-goto-line",
-        },
-      }, { noremap = true, silent = true, buffer = bufnr })
+        { prefix = "<leader>l", noremap = true, silent = true, buffer = bufnr }
+      )
     end,
     settings = {
       texlab = {

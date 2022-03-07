@@ -1,7 +1,5 @@
 local M = {}
 function M.setup()
-  vim.cmd [[ConcealBright]]
-
   -- I could do this in Lua but there's the stupid escapes to fuss with
   vim.cmd [[
     let b:endwise_addition = '\="\\end" . matchstr(submatch(0), "{.\\{-}}")'
