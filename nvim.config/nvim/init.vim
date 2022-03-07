@@ -5,7 +5,7 @@ if !has('nvim-0.5')
   finish
 else
   let g:mapleader = "\<Space>"
-  luafile /home/j-hui/extern/profiler.nvim/lua/profiler.lua
+  " luafile /home/j-hui/extern/profiler.nvim/lua/profiler.lua
 lua <<EOF
   require "pokerus.config"
   require "pokerus.packer"
