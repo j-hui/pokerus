@@ -128,7 +128,7 @@ function M.config()
     b = { builtin "buffers", "telescope-buffers" },
     ["*"] = { builtin "grep_string", "telescope-grep-word" },
     r = { builtin_cwd "live_grep", "telescope-grep-live" },
-    s = {
+    ["/"] = {
       builtin_cwd("live_grep", { grep_open_files = true }),
       "telescope-sneak",
     },
