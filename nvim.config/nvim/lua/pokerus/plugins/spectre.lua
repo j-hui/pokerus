@@ -39,6 +39,8 @@ function M.plug(use)
   use {
     "windwp/nvim-spectre",
     requires = { "nvim-lua/plenary.nvim" },
+    opt = true,
+    event = "VimEnter",
     config = function()
       require("pokerus.plugins.spectre").config()
     end,

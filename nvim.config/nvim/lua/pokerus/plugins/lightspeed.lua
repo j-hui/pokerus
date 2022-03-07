@@ -2,6 +2,8 @@ return {
   plug = function(use)
     use {
       "ggandor/lightspeed.nvim",
+      opt = true,
+      event = "VimEnter",
       config = function()
         require("lightspeed").setup {
           exit_after_idle_msecs = { labeled = 2500, unlabled = 1000 },

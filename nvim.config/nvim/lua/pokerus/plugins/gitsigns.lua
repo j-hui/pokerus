@@ -6,6 +6,8 @@ function M.plug(use)
     requires = {
       "nvim-lua/plenary.nvim",
     },
+    opt = true,
+    event = "VimEnter",
     config = function()
       require("gitsigns").setup {
         on_attach = function()
