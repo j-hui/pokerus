@@ -14,3 +14,9 @@ EOF
   call pokerus#keybinds#setup()
   call pokerus#commands#setup()
 endif
+
+" Avoid E173 (n more file(s) to edit)
+if argc() > 1
+ silent blast   " load last buffer
+ silent bfirst  " switch back to the first
+endif
