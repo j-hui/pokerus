@@ -64,14 +64,6 @@ function M.plug(use)
   }
 
   use {
-    "tpope/vim-speeddating",
-    -- increment/decrement dates
-    config = function()
-      require("pokerus").vimsetup "speeddating"
-    end,
-  }
-
-  use {
     "svermeulen/vim-cutlass",
     -- x and D only delete, no yank/cut but retain cut behavior for d
     config = function()
