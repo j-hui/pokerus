@@ -20,9 +20,14 @@ return require("packer").startup {
   function(use)
     -- "Use" packer so that it doesn't get marked for deletion
     use { "wbthomason/packer.nvim", opt = true }
+    use { "lewis6991/impatient.nvim" }
 
     -- Automatically require any plugin module in ~/.config/nvim/lua/pokerus/plugins/
-    for _, p in ipairs(fn.split(fn.glob((fn.stdpath "config") .. "/lua/pokerus/plugins/*"))) do
+    for _, p in
+      ipairs(
+        fn.split(fn.glob((fn.stdpath "config") .. "/lua/pokerus/plugins/*"))
+      )
+    do
       p = fn.substitute(p, "^.*/", "", "")
       p = fn.substitute(p, "\\.lua$", "", "")
       require("pokerus.plugins." .. p).plug(use)

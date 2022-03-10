@@ -5,7 +5,9 @@ if !has('nvim-0.5')
   finish
 else
   let g:mapleader = "\<Space>"
-  " luafile /home/j-hui/extern/profiler.nvim/lua/profiler.lua
+  if empty(glob(stdpath('data') . '/site/pack/packer/start/impatient.nvim')) == 0
+     lua require('impatient').enable_profile()
+  endif
 lua <<EOF
   require "pokerus.config"
   require "pokerus.packer"
