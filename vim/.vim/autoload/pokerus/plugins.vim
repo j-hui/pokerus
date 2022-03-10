@@ -86,6 +86,12 @@ function s:SetupVimPlugins()
     Plug 'tpope/vim-vinegar'
     " Make netrw usable
 
+    Plug 'farmergreg/vim-lastplace'
+    " Open where last opened
+
+    Plug 'tpope/vim-speeddating'
+    " increment/decrement dates
+
   " Vim-specific }}}
 
   " Vim + Neovim (no setup) {{{
@@ -107,9 +113,6 @@ function s:SetupVimPlugins()
 
     Plug 'duggiefresh/vim-easydir'
     " Create directories when non-existent
-
-    Plug 'farmergreg/vim-lastplace'
-    " Open where last opened
 
     Plug 'lervag/file-line'
     " Open file:line
@@ -143,9 +146,6 @@ function s:SetupVimPlugins()
 
     Plug 'svermeulen/vim-subversive'
     " Substitute from yank
-
-    Plug 'tpope/vim-speeddating'
-    " increment/decrement dates
 
     Plug 'svermeulen/vim-cutlass'
     " x and D only delete, no yank/cut but retain cut behavior for d

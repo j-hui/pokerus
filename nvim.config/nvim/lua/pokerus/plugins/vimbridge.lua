@@ -20,9 +20,6 @@ function M.plug(use)
   use "duggiefresh/vim-easydir"
   -- Create directories when non-existent
 
-  use "farmergreg/vim-lastplace"
-  -- Open where last opened
-
   use "lervag/file-line"
   -- Open file:line
 
@@ -66,13 +63,6 @@ function M.plug(use)
     end,
   }
 
-  -- use {
-  --   "tpope/vim-speeddating",
-  --   -- increment/decrement dates
-  --   config = function()
-  --     require("pokerus").vimsetup "speeddating"
-  --   end,
-  -- }
   use {
     "svermeulen/vim-cutlass",
     -- x and D only delete, no yank/cut but retain cut behavior for d
