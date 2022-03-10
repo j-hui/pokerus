@@ -3,10 +3,7 @@ return {
     use {
       "junegunn/goyo.vim",
       config = function()
-        vim.g.close_pair_key = 1
-
-        require("pokerus").nmap { ["<leader>G"] = { "<cmd>Goyo<CR>", "close-pair" } }
-
+        require("pokerus").nmap { ["<leader>G"] = { "<cmd>Goyo<CR>", "goyo-toggle" } }
         vim.cmd [[
           augroup goyo-settings
             autocmd!
