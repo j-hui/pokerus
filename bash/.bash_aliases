@@ -175,11 +175,19 @@ alias :w="echo You\'re not in vim, dingus."
 config() {
     if [ "$1" = "ssh" ]; then
         mkdir -p "$HOME/.ssh"
-        $EDITOR "$HOME/.ssh/config"
+        $EDITOR ~/.ssh/config
     elif [ "$1" = "bash" ]; then
-        $EDITOR "$HOME/.bash_local" "$HOME/.bash_aliases" "$HOME/.bashrc" "$HOME/.bash_profile"
-    elif [ -e "$HOME/.config/$1" ]; then
-        $EDITOR "$HOME/.config/$1/"*
+        $EDITOR ~/.bash_local ~/.bash_aliases ~/.bashrc ~/.bash_profile
+    elif [ "$1" = "vim" ]; then
+        pushd ~/.vim && \
+        $EDITOR ~/.vimrc autoload/pokerus/*.vim autoload/pokerus/plugins/*.vim after/ftplugin/*.vim && \
+        popd || echo "config: ~/.vim not found"
+    elif [ "$1" = "nvim" ]; then
+        pushd ~/.config/nvim && \
+        $EDITOR init.vim lua/pokerus/*.lua lua/pokerus/plugins/*.lua && \
+        popd || echo "config: ~/.config/nvim not found"
+    elif [ -e ~/.config/"$1" ]; then
+        $EDITOR ~/.config/"$1"/*
     else
         echo "Usage:"
         echo "    config <config>"

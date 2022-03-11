@@ -9,7 +9,13 @@ function config --description "Edit files in ~/.config"
     else if test $argv[1] = "bash"
         $EDITOR ~/.bash_aliases ~/.bash_local ~/.bashrc ~/.bash_profile
     else if test $argv[1] = "vim"
-        $EDITOR ~/.vimrc ~/.vim/autoload/pokerus/* ~/.vim/autoload/pokerus/plugins/* ~/.vim/after/ftplugin/
+        pushd ~/.vim
+        $EDITOR ~/.vimrc autoload/pokerus/*.vim autoload/pokerus/plugins/*.vim after/ftplugin/*.vim
+        popd
+    else if test $argv[1] = "nvim"
+        pushd ~/.config/nvim
+        $EDITOR init.vim lua/pokerus/*.lua lua/pokerus/plugins/*.lua
+        popd
     else if test $argv[1] = "git"
         $EDITOR ~/.gitpokerus ~/.gitconfig
     else if test $argv[1] = "xmonad"
