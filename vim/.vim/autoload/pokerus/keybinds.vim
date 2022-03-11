@@ -124,7 +124,7 @@ function s:editingMaps()
   inoremap <C-g>F <C-r>=expand('%:t')<CR>
 
   " Correct spelling
-  inoremap <C-g>l <c-g>u<Esc>[s1z=`]a<c-g>u
+  inoremap <C-g>s <c-g>u<Esc>[s1z=`]a<c-g>u
 
   " Insert date/time
   inoremap <C-g>d <C-R>=strftime("%Y-%m-%d")<CR>
