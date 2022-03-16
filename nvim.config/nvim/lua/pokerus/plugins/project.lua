@@ -3,7 +3,7 @@ return {
     use {
       "ahmedkhalf/project.nvim",
       opt = true,
-      cmd = { "ProjectRoot" },
+      cmd = { "ProjectRoot", "Projects" },
       requires = { "nvim-telescope/telescope.nvim" },
       config = function()
         require("project_nvim").setup {
@@ -11,6 +11,7 @@ return {
           silent_chdir = false,
         }
         require("telescope").load_extension "projects"
+        vim.cmd [[command! Projects Telescope projects]]
       end,
     }
   end,
