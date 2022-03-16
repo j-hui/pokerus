@@ -112,7 +112,6 @@ function pokerus#commands#setup()
           \ . synIDattr(synIDtrans(synID(line('.'),col('.'),1)),'name') . '>'
   endfunction
   command! SyntaxGroup call <SID>show_syntax_group()
-  nmap <leader>x :SyntaxGroup<CR>
   " }}}
 
 endfunction
