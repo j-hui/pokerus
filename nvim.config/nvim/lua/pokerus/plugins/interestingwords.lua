@@ -6,26 +6,26 @@ return {
         vim.g.interestingWordsDefaultMappings = 0
 
         require("pokerus").nmap {
-          ["<leader>m"] = {
+          ["<leader>i"] = {
             function()
               vim.fn.InterestingWords "n"
             end,
             "mark-interesting",
           },
-          ["<leader>M"] = {
+          ["<leader>I"] = {
             function()
               vim.cmd [[noh]]
               vim.fn.UncolorAllWords()
             end,
             "unmark-all",
           },
-          ["]m"] = {
+          ["]i"] = {
             function()
               vim.fn.WordNavigation(1)
             end,
             "next-interesting",
           },
-          ["[m"] = {
+          ["[i"] = {
             function()
               vim.fn.WordNavigation(0)
             end,
@@ -34,7 +34,7 @@ return {
         }
 
         require("pokerus").vmap {
-          ["<leader>m"] = {
+          ["<leader>i"] = {
             function()
               vim.fn.InterestingWords "n"
             end,
