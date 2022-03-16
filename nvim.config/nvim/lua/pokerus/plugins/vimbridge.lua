@@ -64,14 +64,6 @@ function M.plug(use)
   }
 
   use {
-    "svermeulen/vim-cutlass",
-    -- x and D only delete, no yank/cut but retain cut behavior for d
-    config = function()
-      require("pokerus").vimsetup "cutlass"
-    end,
-  }
-
-  use {
     "machakann/vim-sandwich",
     -- Fancier vim-surround + d
     config = function()

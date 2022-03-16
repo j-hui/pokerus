@@ -7,14 +7,14 @@ return {
 
         require("pokerus").nmap({
           ["+"] = { dial.inc_normal(), "dial-increment" },
-          ["_"] = { dial.dec_normal(), "dial-decrement" },
+          ["-"] = { dial.dec_normal(), "dial-decrement" },
         }, { noremap = true })
 
         require("pokerus").vmap({
           ["+"] = { dial.inc_visual(), "dial-increment" },
-          ["_"] = { dial.dec_visual(), "dial-decrement" },
+          ["-"] = { dial.dec_visual(), "dial-decrement" },
           ["g+"] = { dial.inc_gvisual(), "dial-g-increment" },
-          ["g_"] = { dial.dec_gvisual(), "dial-g-decrement" },
+          ["g-"] = { dial.dec_gvisual(), "dial-g-decrement" },
         }, { noremap = true })
       end,
     }

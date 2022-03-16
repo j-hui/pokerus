@@ -147,9 +147,6 @@ function s:SetupVimPlugins()
     Plug 'svermeulen/vim-subversive'
     " Substitute from yank
 
-    Plug 'svermeulen/vim-cutlass'
-    " x and D only delete, no yank/cut but retain cut behavior for d
-
     Plug 'machakann/vim-sandwich'
     " Fancier vim-surround + d
 
@@ -198,7 +195,6 @@ function s:SetupVimPlugins()
   call pokerus#plugins#buftabline#setup()
   call pokerus#plugins#skyline#setup()
 
-  call pokerus#plugins#cutlass#setup()
   call pokerus#plugins#fugitive#setup()
   call pokerus#plugins#fzf#setup()
   call pokerus#plugins#oscyank#setup()

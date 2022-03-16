@@ -142,6 +142,16 @@ function s:editingMaps()
   inoremap <C-k> <C-o>D
 
   " inoremap <expr> <C-D> col('.')>strlen(getline('.'))?"\<Lt>C-D>":"\<Lt>Del>"
+
+  nnoremap _ "_
+
+  nnoremap x "_x
+  nnoremap X "_X
+  nnoremap D "_D
+
+  nnoremap c "_c
+  nnoremap cc "_cc
+  nnoremap C "_C
 endfunction
 
 function s:commandMaps()
