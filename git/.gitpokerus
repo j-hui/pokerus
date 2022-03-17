@@ -9,7 +9,7 @@
 [alias]
     co = checkout
     st = status
-    br = branch
+    br = branch --sort=committerdate
     ps = push
     pl = pull
     cp = cherry-pick
