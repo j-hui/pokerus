@@ -24,7 +24,7 @@ return {
           ["],"] = { "<Plug>Lightspeed_,_ft", "lightspeed-;" },
         }
 
-        require("pokerus").vmap {
+        require("pokerus").xmap {
           c = { "<Plug>Lightspeed_s", "lightspeed-s" },
           C = { "<Plug>Lightspeed_S", "lightspeed-S" },
         }

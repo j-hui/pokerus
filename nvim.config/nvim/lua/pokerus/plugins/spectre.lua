@@ -25,7 +25,7 @@ function M.config()
     },
   }, { prefix = "<leader>s" })
 
-  require("pokerus").vmap {
+  require("pokerus").xmap {
     ["<leader>s"] = {
       function()
         require("spectre").open_visual()

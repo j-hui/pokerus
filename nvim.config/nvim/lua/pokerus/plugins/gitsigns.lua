@@ -26,7 +26,7 @@ function M.plug(use)
             z = { gs.toggle_deleted, "git-show-deleted" },
           }, { prefix = "<leader>g" })
 
-          m.vmap({
+          m.xmap({
             name = "git",
             a = { gs.stage_hunk, "git-stage-hunk" },
             r = { gs.reset_hunk, "git-reset-hunk" },

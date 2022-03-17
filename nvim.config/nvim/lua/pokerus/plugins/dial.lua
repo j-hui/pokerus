@@ -10,7 +10,7 @@ return {
           ["-"] = { dial.dec_normal(), "dial-decrement" },
         }, { noremap = true })
 
-        require("pokerus").vmap({
+        require("pokerus").xmap({
           ["+"] = { dial.inc_visual(), "dial-increment" },
           ["-"] = { dial.dec_visual(), "dial-decrement" },
           ["g+"] = { dial.inc_gvisual(), "dial-g-increment" },

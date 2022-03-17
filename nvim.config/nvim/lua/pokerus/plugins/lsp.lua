@@ -126,7 +126,7 @@ function M.on_attach(client, bufnr)
     },
   }, { noremap = true, silent = true, buffer = bufnr })
 
-  require("pokerus").vmap {
+  require("pokerus").xmap {
     ["<leader>la"] = {
       "<cmd>lua vim.lsp.buf.code_action()<CR>",
       "lsp-code-action",
@@ -136,7 +136,7 @@ function M.on_attach(client, bufnr)
     },
   }
 
-  require("pokerus").vmap {
+  require("pokerus").xmap {
     ["<leader>lo"] = {
       "<cmd>AerialToggle!<CR>",
       "lsp-outline",

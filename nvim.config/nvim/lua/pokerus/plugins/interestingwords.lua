@@ -33,7 +33,7 @@ return {
           },
         }
 
-        require("pokerus").vmap {
+        require("pokerus").xmap {
           ["<leader>i"] = {
             function()
               vim.fn.InterestingWords "n"
