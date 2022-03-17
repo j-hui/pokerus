@@ -6,6 +6,7 @@ function M.config()
   npairs.setup {
     disable_in_macro = true,
     disable_in_visualblock = true,
+    disable_filetype = { "TelescopePrompt", "markdown", "txt" },
     map_c_w = true,
     fast_wrap = {
       map = "<C-j>",
