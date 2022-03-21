@@ -179,13 +179,21 @@ config() {
     elif [ "$1" = "bash" ]; then
         $EDITOR ~/.bash_local ~/.bash_aliases ~/.bashrc ~/.bash_profile
     elif [ "$1" = "vim" ]; then
-        pushd ~/.vim && \
-        $EDITOR ~/.vimrc autoload/pokerus/*.vim autoload/pokerus/plugins/*.vim after/ftplugin/*.vim && \
-        popd || echo "config: ~/.vim not found"
+        pushd ~/.vim
+        if [ $? -ne 0 ]; then
+          echo "config: ~/.vim not found"
+          return 1
+        fi
+        $EDITOR ~/.vimrc autoload/pokerus/*.vim autoload/pokerus/plugins/*.vim after/ftplugin/*.vim
+        popd
     elif [ "$1" = "nvim" ]; then
-        pushd ~/.config/nvim && \
-        $EDITOR init.vim lua/pokerus/*.lua lua/pokerus/plugins/*.lua && \
-        popd || echo "config: ~/.config/nvim not found"
+        pushd ~/.config/nvim
+        if [ $? -ne 0 ]; then
+          echo "config: ~/.config/nvim not found"
+          return 1
+        fi
+        $EDITOR init.vim lua/pokerus/*.lua lua/pokerus/plugins/*.lua
+        popd
     elif [ -e ~/.config/"$1" ]; then
         $EDITOR ~/.config/"$1"/*
     else
