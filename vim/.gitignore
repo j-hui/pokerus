@@ -1,3 +1,4 @@
 *.spl
 .vim/autoload/local
 .vim/sessions
+.vim/.netrwhist
