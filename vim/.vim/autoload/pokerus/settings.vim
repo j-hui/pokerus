@@ -194,6 +194,7 @@ function s:Misc()
   set modeline
   set modelines=5
   set timeoutlen=300
+  set ttimeoutlen=10
 
   let c_syntax_for_h = 1 " Instead of C++
 
