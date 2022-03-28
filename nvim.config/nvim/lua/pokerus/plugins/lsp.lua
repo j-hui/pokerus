@@ -187,7 +187,8 @@ function M.config()
   vim.cmd [[
     augroup nvimlsp_extensions
       autocmd!
-      autocmd FileType rust lua require("pokerus.lsp").rust_setup()
+      autocmd FileType rust lua require("pokerus.plugins.lsp").rust_setup()
+
     augroup END
 
     sign define LspDiagnosticsSignError text=✖ texthl=LspDiagnosticsSignError
