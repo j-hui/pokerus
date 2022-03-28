@@ -85,6 +85,11 @@ key_bindings:
   - { key: V,         mods: Control|Shift,                     action: Paste          }
   - { key: C,         mods: Control|Shift,                     action: Copy           }
 
+  # New instance in cwd
+  - { key: Period,    mods: Control|Shift,                     action: SpawnNewInstance }
+  - { key: 52,        mods: Control|Shift,                     action: SpawnNewInstance }
+  - { key: M,         mods: Control|Shift,                     action: SpawnNewInstance }
+
   # Readline navigation
   - { key: U,         mods: Shift|Control,  mode: ~Alt,        action: ScrollHalfPageUp    }
   - { key: D,         mods: Shift|Control,  mode: ~Alt,        action: ScrollHalfPageDown  }
