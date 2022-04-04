@@ -98,7 +98,7 @@ function M.config()
           n = nmaps,
           i = vim.tbl_extend("force", imaps, {
             ["<C-o>"] = fb_action "create",
-            ["<C-t>"] = fb_action "toggle_hidden",
+            ["<C-g>"] = fb_action "toggle_hidden",
             ["<C-]>"] = fb_action "goto_cwd",
             ["<C-l>"] = fb_action "change_cwd",
             ["~"] = fb_action "goto_home_dir",
