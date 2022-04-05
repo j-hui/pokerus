@@ -6,26 +6,40 @@
 set -euf
 
 if [ "$#" -ne "1" ]; then
-    echo "Usage: $0 [play|prev|next|here|like]"
-    return 1
+  echo "Need to specify command"
+  return 1
 fi
 
 case "$1" in
-    play|play-pause|pause)
-        playerctl --player=spotify,spotifyd,%d "$1"
-        ;;
-    prev|previous|p)
-        playerctl --player=spotify,spotifyd,%d previous
-        ;;
-    next|n)
-        playerctl --player=spotify,spotifyd,%d next
-        ;;
-    here)
-        # NOTE: very flaky
-        systemctl --user restart spotifyd
-        sleep 1
-        spt playback --tranfer "$(hostname)-spotifyd)"
-        ;;
-    like)
-        ;;
+  brightness-up)
+    brightnessctl set 10%+
+    ;;
+  brightness-down)
+    brightnessctl set 10%-
+    ;;
+  vol-up)
+    amixer sset Master 10%+
+    ;;
+  vol-down)
+    amixer sset Master 10%-
+    ;;
+  vol-mute)
+    amixer sset Master 0%
+    ;;
+  play | play-pause | pause)
+    playerctl --player=spotify,spotifyd,%d "$1"
+    ;;
+  prev | previous | p)
+    playerctl --player=spotify,spotifyd,%d previous
+    ;;
+  next | n)
+    playerctl --player=spotify,spotifyd,%d next
+    ;;
+  here)
+    # NOTE: very flaky
+    systemctl --user restart spotifyd
+    sleep 1
+    spt playback --tranfer "$(hostname)-spotifyd)"
+    ;;
+  like) ;;
 esac
