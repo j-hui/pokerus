@@ -2,6 +2,7 @@ return {
   plug = function(use)
     use {
       "nvim-lualine/lualine.nvim",
+      after = { "theme" },
       requires = {
         "kyazdani42/nvim-web-devicons",
         "SmiteshP/nvim-gps",

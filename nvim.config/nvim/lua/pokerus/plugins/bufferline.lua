@@ -22,6 +22,7 @@ end
 function M.plug(use)
   use {
     "akinsho/bufferline.nvim",
+    after = { "theme" },
     requires = {
       "kyazdani42/nvim-web-devicons",
     },

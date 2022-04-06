@@ -1,6 +1,8 @@
 return {
   plug = function(use)
     use {
+      disable = true,
+      -- as = "theme",
       "folke/tokyonight.nvim",
       config = function()
         vim.g.tokyonight_style = "night"
