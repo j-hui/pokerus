@@ -31,6 +31,10 @@ M.xmap = function(mappings, opt)
   M.map(mappings, opt, { mode = "x" })
 end
 
+M.smap = function(mappings, opt)
+  M.map(mappings, opt, { mode = "s" })
+end
+
 M.setup_vim_maps = function()
   M.map {
     g = {
