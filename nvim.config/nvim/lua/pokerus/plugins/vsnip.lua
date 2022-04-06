@@ -1,6 +1,7 @@
 return {
   plug = function(use)
     use {
+      disable = true,
       "hrsh7th/vim-vsnip",
       requires = { "rafamadriz/friendly-snippets" },
       config = function()
