@@ -7,7 +7,24 @@ if ! command -v wmctrl >/dev/null 2>/dev/null; then
   exit 1
 fi
 
+cur=
+
+while [[ "$#" -gt 0 ]]; do
+  case "$1" in
+    --current|-c)
+      cur="$(wmctrl -d | grep -F " * " | awk '{print $1}' )"
+      ;;
+  esac
+  shift
+done
+
 wmctrl -x -l | while read -r w; do
+  if [[ -n "$cur" ]]; then
+    desktop="$(echo "$w" | awk '{print $2}')"
+    if [[ "$desktop" != "$cur" ]]; then
+      continue
+    fi
+  fi
   title="$(echo "$w" | awk '{ for(i=5; i<=NF; ++i) printf $i""FS; print "" }')"
   winnum="$(echo "$w" | awk '{ print $1}')"
   class="$(echo "$w" | awk '{ print $3 }' | cut -f 2 -d .)"

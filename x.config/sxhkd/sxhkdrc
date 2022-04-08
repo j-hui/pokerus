@@ -1,5 +1,9 @@
 # Keycode names: https://github.com/baskerville/sxhkd/blob/master/src/parse.c
 
+#
+# Self-management
+#
+
 ## help:
 super + slash
     grep -E '^##' -A1 ~/.config/sxhkd/sxhkdrc | \
@@ -11,12 +15,57 @@ super + slash
 super + z
     pkill -USR1 -x sxhkd && notify-send 'sxhkd' 'Reloaded config'
 
-## restart bspwm:
-super + shift + z
-    pkill -USR1 -x sxhkd ; \
-    bspc wm --restart ; \
-    polybar-msg cmd restart ; \
-    notify-send 'bspwm' 'Restarted bpwm'
+#
+# Root applications
+#
+
+## app launcher:
+super + shift + a
+    ~/.local/tms/app-launcher
+
+## command launcher:
+super + a ; space
+    ~/.local/tms/cmd-launcher
+
+## terminal:
+super + a ; a
+    alacritty
+
+## qutebrowser:
+super + a ; o
+    xdo activate -N qutebrowser || qutebrowser
+
+## google chrome:
+super + a ; g
+    google-chrome-stable
+
+## incognito chrome:
+super + a ; i
+    google-chrome-stable --incognito
+
+## define selected text:
+super + a ; d
+    ~/.local/tms/word-lookup
+
+## launch spotify:
+super + a ; apostrophe
+    spotify
+
+## password manager:
+super + a ; p
+    ~/.local/tms/passman
+
+## file manager:
+super + a ; f
+    thunar
+
+## clipboard:
+super + a ; v
+    rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'
+
+#
+# Top binds
+#
 
 ## clear notifications:
 super + q
@@ -26,45 +75,17 @@ super + q
 super + shift + q
     xset s activate
 
-## app launcher:
-super + {_, shift +} semicolon
-    rofi -show {drun,run}
-
-## command launcher:
-super + shift + a
-    ~/.local/tms/cmd-launcher
-
-## password manager:
-super + i
-    ~/.local/tms/passman
-
-## file manager:
-super + shift + i
-    thunar
-
-## terminal:
-super + Return
-    alacritty
-
-## qutebrowser:
-super + o
-    xdo activate -N qutebrowser || qutebrowser
-
-## google chrome:
-super + g
-    google-chrome-stable
-
-## incognito chrome:
-super + shift + g
-    google-chrome-stable --incognito
-
-## define selected text:
+## desktop switcher:
 super + d
-    ~/.local/tms/word-lookup
+    ~/.local/tms/desktop-switcher
 
-## clipboard:
-super + v
-    rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'
+## window switcher:
+super + {_, + shift} s
+    ~/.local/tms/window-switcher {--current,_}
+
+## scratchpad terminal:
+super + semicolon
+    ~/.local/tms/scratch-term
 
 ## take screenshot:
 {_,shift +} Print
@@ -94,17 +115,16 @@ super + {equal,minus}
 super + {apostrophe,bracketleft,bracketright}
     playerctl --player=spotifyd,spotify,%any {play-pause,previous,next}
 
-## launch spotify:
-super + shift + apostrophe
-    spotify
-
 #
 # bspwm hotkeys/window management
 #
 
-## window switcher:
-super + s
-    rofi -show window
+## restart bspwm:
+super + shift + z
+    pkill -USR1 -x sxhkd ; \
+    bspc wm --restart ; \
+    polybar-msg cmd restart ; \
+    notify-send 'bspwm' 'Restarted bpwm'
 
 ## bspc close/kill window:
 super + {_, shift +} w
@@ -141,12 +161,6 @@ super + {_, shift +} r
 # super + {Left, Down, Up, Right}
 #     bspc node {@first, @second, @parent, @brother}.local.leaf -f
 
-super + f
-    ~/.local/tms/bspctl focus-node
-
-super + b
-    ~/.local/tms/bspctl focus-desktop
-
 super + y
     ~/.local/tms/bspctl hide
 
@@ -157,7 +171,7 @@ super + grave
     bspc node next.same_class -f
 
 ## bspc set fullscreen
-super + {_, shift +} a
+super + {_, shift +} e
   bspc node -t {floating,fullscreen}
 
 ## bspc set tiled/pseudo-tiled

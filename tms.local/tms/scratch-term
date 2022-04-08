@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+class="float-term"
+st_font="SauceCodePro Nerd Font Mono:size=14"
+
+st -f "$st_font" -c "$class"
+
+# vi:ft=sh
