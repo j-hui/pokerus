@@ -2,8 +2,8 @@
 
 set -euf
 
-if ! command -v gtk-launch >/dev/null 2>/dev/null ; then
-  notify-send -u critical -t 3000 "App launcher" "Missing dependency: gtk-launch"
+if ! command -v gio >/dev/null 2>/dev/null ; then
+  notify-send -u critical -t 3000 "App launcher" "Missing dependency: gio"
   exit 1
 fi
 
@@ -22,7 +22,6 @@ fi
 echo "$XDG_DATA_DIRS" | tr ':' '\n' | while read -r data_dir; do
   app_dir="$data_dir/applications"
   if [[ -d "$app_dir" ]]; then
-    # find "$app_dir" -name '*.desktop'
     fd --glob '*.desktop' "$app_dir"
   fi
 done | while read -r app; do
@@ -32,7 +31,7 @@ done | while read -r app; do
   if [[ -n "$gname" ]]; then
     gname=" ($gname)"
   fi
-  echo "$name$gname $app"
-done | ~/.local/tms/picker --with-nth=..-2 --preview='cat {-1}' | while read -r app; do
-  gtk-launch "$app"
+  echo "$app $name$gname"
+done | ~/.local/tms/picker --with-nth=2.. --preview='cat {-1}' | cut -d ' ' -f 1 | while read -r app; do
+  gio launch "$app"
 done
