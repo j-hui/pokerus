@@ -1,7 +1,8 @@
 {-# LANGUAGE PartialTypeSignatures #-}
 {-# OPTIONS_GHC -Wno-partial-type-signatures #-}
 {-# OPTIONS_GHC -Wunused-imports #-}
-{-# OPTIONS_GHC -Wunused-top-binds #-}
+{-# OPTIONS_GHC -Wno-unused-top-binds #-}
+
 import           Data.Bifunctor                 ( Bifunctor(..) )
 import           Data.Char                      ( isSpace )
 import           Data.List                      ( dropWhileEnd
@@ -10,26 +11,35 @@ import           Data.List                      ( dropWhileEnd
                                                 , isPrefixOf
                                                 , nub
                                                 )
-import qualified Data.Map                     as M
+import qualified Data.Map                      as M
 import           Data.Maybe                     ( catMaybes
                                                 , fromMaybe
                                                 )
+import           Data.Monoid                    ( All )
 import           System.Exit                    ( exitSuccess )
 import           System.IO.Unsafe               ( unsafePerformIO )
+import           Text.Read                      ( readMaybe )
+
+import qualified XMonad.Core                   as Core
+import qualified XMonad.Hooks.DynamicLog       as Log
+import qualified XMonad.Layout.BoringWindows   as Boring
+import qualified XMonad.StackSet               as SS
+import qualified XMonad.Util.Dmenu             as Dmenu
 
 import           XMonad                         ( (-->)
                                                 , (<&&>)
                                                 , (<+>)
                                                 , (=?)
-                                                , ChangeLayout (..)
+                                                , ChangeLayout(..)
                                                 , Default(def)
                                                 , Dimension
+                                                , Event
+                                                , Full(..)
                                                 , KeyMask
                                                 , ManageHook
                                                 , MonadState(get)
                                                 , Resize(..)
                                                 , Tall(..)
-                                                , Full(..)
                                                 , Window
                                                 , X
                                                 , XConfig(..)
@@ -47,12 +57,8 @@ import           XMonad                         ( (-->)
                                                 , xmonad
                                                 , (|||)
                                                 )
-import qualified XMonad.Core                   as Core
-import qualified XMonad.StackSet               as SS
-
 import           XMonad.Actions.CopyWindow      ( kill1 )
-import           XMonad.Actions.CycleWS         ( WSType(..)
-                                                , nextScreen
+import           XMonad.Actions.CycleWS         ( nextScreen
                                                 , prevScreen
                                                 , shiftNextScreen
                                                 , shiftPrevScreen
@@ -62,11 +68,10 @@ import           XMonad.Actions.CycleWS         ( WSType(..)
 import           XMonad.Actions.RotSlaves       ( rotSlavesDown
                                                 , rotSlavesUp
                                                 )
-import           XMonad.Actions.WindowBringer   ( bringMenuArgs' )
-import           XMonad.Actions.WithAll         ( killAll )
-
+import           XMonad.Actions.WindowBringer   ( bringMenuArgs'
+                                                , bringWindow
+                                                )
 import           XMonad.Hooks.DebugStack        ( debugStack )
-import qualified XMonad.Hooks.DynamicLog       as Log
 import           XMonad.Hooks.EwmhDesktops      ( ewmh )
 import           XMonad.Hooks.FadeInactive      ( fadeInactiveLogHook )
 import           XMonad.Hooks.ManageDocks       ( avoidStruts
@@ -80,23 +85,18 @@ import           XMonad.Hooks.ManageHelpers     ( (-?>)
                                                 , isFullscreen
                                                 , transience'
                                                 )
+import           XMonad.Hooks.ServerMode        ( serverModeEventHookF )
 import           XMonad.Hooks.SetWMName         ( setWMName )
 import           XMonad.Hooks.UrgencyHook       ( NoUrgencyHook(..)
                                                 , focusUrgent
-                                                , readUrgents
                                                 , withUrgencyHook
                                                 )
 import           XMonad.Hooks.WorkspaceHistory  ( workspaceHistory
                                                 , workspaceHistoryHook
                                                 )
-
-
-import qualified XMonad.Layout.BoringWindows   as Boring
-
--- Layouts modifiers
-import           XMonad.Layout.Fullscreen       (fullscreenEventHook
-                                                , fullscreenManageHook
+import           XMonad.Layout.Fullscreen       ( fullscreenEventHook
                                                 , fullscreenFocus
+                                                , fullscreenManageHook
                                                 , fullscreenSupport
                                                 )
 import           XMonad.Layout.LayoutModifier   ( ModifiedLayout(..) )
@@ -119,10 +119,10 @@ import           XMonad.Layout.Spacing          ( Border(..)
                                                 , spacingRaw
                                                 )
 import           XMonad.Layout.WindowNavigation ( windowNavigation )
-
-import qualified XMonad.Util.Dmenu             as Dmenu
 import           XMonad.Util.EZConfig           ( mkKeymap )
-import           XMonad.Util.NamedWindows       ( getName, unName )
+import           XMonad.Util.NamedWindows       ( getName
+                                                , unName
+                                                )
 import           XMonad.Util.Run                ( runProcessWithInput )
 import           XMonad.Util.SpawnOnce          ( spawnOnce )
 
@@ -136,20 +136,18 @@ import qualified DBus.Client                   as D
 myModMask :: KeyMask
 myModMask = mod4Mask -- super/windows key
 
-myTerminal :: String
-myTerminal = "alacritty"
-
-myBrowser :: String
-myBrowser = "qutebrowser "
-
-myBrowser' :: String
-myBrowser' = "google-chrome-stable "
-
 myBorderWidth :: Dimension
 myBorderWidth = 2
 
-myScript :: String -> String
-myScript s = "~/.local/tms/" ++ s
+myTerminal :: String
+myTerminal = "alacritty"
+
+notifySend :: String -> X ()
+notifySend msg = spawn $ "notify-send XMonad \"" ++ msg ++ "\""
+
+notifyErr :: String -> X ()
+notifyErr msg =
+  spawn $ "notify-send -u critical -t 3000 XMonad \"" ++ msg ++ "\""
 
 -------------------------------------------------------------------------------
 -- Colors
@@ -173,12 +171,16 @@ myBgColor' = fromXres "*color8"
 myAccentColor :: String
 myAccentColor = fromXres "*color6"
 
-getFromXres :: String -> IO String
-getFromXres key = fromMaybe "" . findValue key <$> runProcessWithInput
-  "xrdb"
-  ["-query"]
-  ""
+-- | Hack to obtain theme colors from .Xresources
+fromXres :: String -> String
+fromXres = unsafePerformIO . getFromXres
  where
+  getFromXres :: String -> IO String
+  getFromXres key = fromMaybe "" . findValue key <$> runQuery
+
+  runQuery :: IO String
+  runQuery = runProcessWithInput "xrdb" ["-query"] ""
+
   findValue :: String -> String -> Maybe String
   findValue xresKey xres =
     snd <$> find ((== xresKey) . fst) (catMaybes $ splitAtColon <$> lines xres)
@@ -189,30 +191,26 @@ getFromXres key = fromMaybe "" . findValue key <$> runProcessWithInput
   splitAtTrimming :: String -> Int -> (String, String)
   splitAtTrimming str idx = bimap trim (trim . tail) $ splitAt idx str
 
-fromXres :: String -> String
-fromXres = unsafePerformIO . getFromXres
-
 -------------------------------------------------------------------------------
 -- Combinators and Helpers
 --
 
-nonEmptyStr :: String -> Maybe String
-nonEmptyStr s | null $ trim s = Nothing
-              | otherwise     = Just s
-
-onJust :: b -> (a -> X b) -> Maybe a -> X b
-onJust _ f (Just a) = f a
-onJust b _ Nothing  = return b
-
+-- nonEmptyStr :: String -> Maybe String
+-- nonEmptyStr s | null $ trim s = Nothing
+--               | otherwise     = Just s
+--
+-- onJust :: b -> (a -> X b) -> Maybe a -> X b
+-- onJust _ f (Just a) = f a
+-- onJust b _ Nothing  = return b
+--
 -- | X combinator for piping around strings. Fails if empty.
-(>|=) :: X String -> (String -> X ()) -> X ()
-xs >|= f = xs >>= return . nonEmptyStr >?= f
-
-(>?=) :: X (Maybe a) -> (a -> X ()) -> X ()
-xa >?= f = xa >>= onJust () f
-
-infixl 1 >|=
-infixl 1 >?=
+-- (>|=) :: X String -> (String -> X ()) -> X ()
+-- xs >|= f = xs >>= return . nonEmptyStr >?= f
+--
+-- (>?=) :: X (Maybe a) -> (a -> X ()) -> X ()
+-- xa >?= f = xa >>= onJust () f
+-- infixl 1 >|=
+-- infixl 1 >?=
 
 dmenuName :: String
 dmenuName = "rofi"
@@ -233,15 +231,17 @@ trim = dropWhileEnd isSpace . dropWhile isSpace
 -- Workspaces
 --
 myWorkspaces :: [String]
-myWorkspaces = zipWith (\i n -> show i ++ ":" ++ n) ([1..]::[Int])
-  [ "dev"     -- ^ Work-related software development
-  , "doc"     -- ^ Work-related reading and writing
-  , "cfg"     -- ^ Tinkering and config file editing
-  , "fun"     -- ^ Work-unrelated software development, reading, etc.
-  , "life"    -- ^ Life management
-  , "chat"    -- ^ Ongoing conversations
-  , "media"   -- ^ Multimedia applications, e.g., Spotify, video player, etc.
-  , "idle"    -- ^ Applications that run in the background, e.g., monitoring
+myWorkspaces = zipWith
+  (\i n -> show i ++ ":" ++ n)
+  ([1 ..] :: [Int])
+  [ "dev"     -- Work-related software development
+  , "doc"     -- Work-related reading and writing
+  , "cfg"     -- Tinkering and config file editing
+  , "fun"     -- Work-unrelated software development, reading, etc.
+  , "life"    -- Life management
+  , "chat"    -- Ongoing conversations
+  , "media"   -- Multimedia applications, e.g., Spotify, video player, etc.
+  , "idle"    -- Applications that run in the background, e.g., monitoring
   ]
 
 promptDesktop :: String -> X String
@@ -255,20 +255,23 @@ switchDesktop = windows . SS.greedyView
 shiftToDesktop :: String -> X ()
 shiftToDesktop = windows . SS.shift
 
+readWindow :: String -> Maybe Window
+readWindow = readMaybe
+
 promptWindow :: String -> X (Maybe Window)
 promptWindow p = do
   winIds <- SS.index <$> gets Core.windowset
-  wins <- M.fromList . map mkPair <$> mapM getName winIds
+  wins   <- M.fromList . map mkPair <$> mapM getName winIds
   fmap unName <$> myDmenu p wins
-    where mkPair w = ("(" ++ show (unName w) ++ ") " ++ show w, w)
+  where mkPair w = ("(" ++ show (unName w) ++ ") " ++ show w, w)
 
-bringWin :: (Eq a, Show a) => a -> SS.Stack a -> SS.Stack a
-bringWin a s@SS.Stack { SS.focus = f, SS.up = u, SS.down = d }
-  | a == f      = s
-  | a `elem` u  = s { SS.focus = a, SS.up = u' ++  f : tail d' }
-  | a `elem` d  = s { SS.focus = a, SS.down = f : filter (/= a) d }
-  | otherwise   = s
-   where (u', d') = span (/= a) u
+-- bringWin :: (Eq a, Show a) => a -> SS.Stack a -> SS.Stack a
+-- bringWin a s@SS.Stack { SS.focus = f, SS.up = u, SS.down = d }
+--   | a == f      = s
+--   | a `elem` u  = s { SS.focus = a, SS.up = u' ++  f : tail d' }
+--   | a `elem` d  = s { SS.focus = a, SS.down = f : filter (/= a) d }
+--   | otherwise   = s
+--    where (u', d') = span (/= a) u
 
 -------------------------------------------------------------------------------
 -- Layouts
@@ -281,10 +284,12 @@ floatFront :: SS.RationalRect
 floatFront = SS.RationalRect (1 / 6) (1 / 6) (2 / 3) (2 / 3)
 
 myLayoutHook :: ModifiedLayout _ _ Window
-myLayoutHook = avoidStruts
-             $ mkToggle (single FULL)
-             $ mkToggle (single MIRROR)
-             $ Boring.boringWindows (noBorders full) ||| Boring.boringAuto stack
+myLayoutHook =
+  avoidStruts
+    $   mkToggle (single FULL)
+    $   mkToggle (single MIRROR)
+    $   Boring.boringWindows (noBorders full)
+    ||| Boring.boringAuto stack
  where
   stack =
     renamed [Replace "stack"]
@@ -292,105 +297,57 @@ myLayoutHook = avoidStruts
       $ limitWindows 2
       $ mySpacing 2
       $ Tall 1 (3 / 100) (1 / 2)
-  full = renamed [Replace "full"]
-          $ windowNavigation
-          $ Full
+  full = renamed [Replace "full"] $ windowNavigation Full
 
 -------------------------------------------------------------------------------
 -- Keybinds
 --
 myKeys :: [(String, X ())]
 myKeys =
-  -- The following keys are unbound:
-  -- - b/f
-  -- - e
-  -- - d
-  -- - v
-  -- - n/p
-  -- - o
-  [ ("M-z z"                  , xmonadRecompile)
-  , ("M-z r"                  , xmonadRestart)
-  , ("M-z q"                  , io exitSuccess)  -- Quit XMonad
-  , ("M-z d"                  , debugStack)
-
-  , ("M-q"                    , spawn "dunstctl close-all")
-  , ("M-S-q"                  , spawn "xset s activate")
-
-  -- Applications
-  , ("M-;"                    , spawn "rofi -monitor -4 -show drun")
-  , ("M-S-;"                  , spawn "rofi -monitor -4 -show run")
-
-  , ("M-<Return>"             , spawn myTerminal)
-  , ("M-g"                    , spawn myBrowser')
-  , ("M-S-g"                  , spawn $ myBrowser' ++ " --incognito")
-  , ("M-i"                    , spawn $ myScript "passman")
-  , ("M-S-i"                  , spawn "thunar")
-  , ("M-S-a"                  , spawn $ myScript "cmd-launcher")
+  [ ("M-z z", xmonadRecompile)
+    , ("M-z r", xmonadRestart)
+    , ("M-z q", io exitSuccess)  -- Quit XMonad
+    , ("M-z d", debugStack)
 
   -- Workspaces
-  , ("M-/"                    , spawn "rofi -monitor -4 -show windowcd")
-  , ("M-S-/"                  , spawn "rofi -monitor -4 -show window")
-  , ("M-s"                    , promptDesktop "Switch to" >>= switchDesktop)
-  , ("M-S-s"                  , promptDesktop "Shift to" >>= shiftToDesktop)
-  , ("M-o"                    , promptWindow "Get window" >?= windows . SS.modify' . bringWin)
-  , ("M-S-o"                  , bringMenuArgs' dmenuName (dmenuArgs "bring"))
-
-  , ("M-.",                     nextScreen)
-  , ("M-,",                     prevScreen)
-  , ("M-S-.",                   shiftNextScreen)
-  , ("M-S-,",                   shiftPrevScreen)
-  , ("M-`",                     swapNextScreen)
-  , ("M-S-`",                   swapPrevScreen)
+  -- TODO:
+    , ("M-d", promptDesktop "Switch to" >>= switchDesktop)
+    , ("M-S-d", promptDesktop "Shift to" >>= shiftToDesktop)
+  -- , ("M-b"                    , promptWindow "Bring window" >>= windows . bringWindow)
+  -- SS.modify' . bringWin)
+    , ("M-b", bringMenuArgs' dmenuName (dmenuArgs "bring"))
+    , ("M-."  , nextScreen)
+    , ("M-,"  , prevScreen)
+    , ("M-S-.", shiftNextScreen)
+    , ("M-S-,", shiftPrevScreen)
+    , ("M-`"  , swapNextScreen)
+    , ("M-S-`", swapPrevScreen)
 
   -- Window management
-  , ("M-w"                    , kill1)
-  , ("M-S-w"                  , killAll)
-  , ("M-t"                    , withFocused $ windows . SS.sink)
-  , ("M-S-t"                  , withFocused $ windows . (`SS.float` floatFront))
+    , ("M-w"  , kill1)
+  -- , ("M-S-w"                  , killAll)
+    , ("M-t"  , withFocused $ windows . SS.sink)
+    , ("M-S-t", withFocused $ windows . (`SS.float` floatFront))
 
   -- Window navigation
-  , ("M-j"                    , Boring.focusDown)       -- Move focus to the next window
-  , ("M-k"                    , Boring.focusUp)         -- Move focus to the prev window
-  , ("M-S-j"                  , rotSlavesDown)          -- Rotate all windows except master
-  , ("M-S-k"                  , rotSlavesUp)            -- Rotate all windows except master
-  , ("M-m"                    , Boring.focusMaster)     -- Move focus to the master window
-  , ("M-S-m"                  , windows SS.swapMaster)  -- Swap the focused window and the master window
-
-  , ("M-y"                    , sendMessage NextLayout)       -- Toggle layout
-  , ("M-S-y"                  , sendMessage $ Toggle MIRROR)  -- Mirror layout
-  , ("M-S-u"                  , sendMessage $ Toggle FULL)    -- Toggle on full layout
-  , ("M-u"                    , focusUrgent >> windows SS.swapMaster) -- Move focus to urgent window
-
-  , ("M-h"                    , sendMessage Shrink)
-  , ("M-l"                    , sendMessage Expand)
-  , ("M-S-h"                  , decreaseLimit)              -- Decrease number of windows that can be shown
-  , ("M-S-l"                  , increaseLimit)              -- Increase number of windows that can be shown
-  , ("M-'"                    , spawn $ myScript "mediactl play-pause")
-  , ("M-["                    , spawn $ myScript "mediactl previous")
-  , ("M-]"                    , spawn $ myScript "mediactl next")
-  , ("M-S-'"                  , spawn $ myScript "mediactl here")
-  , ("<XF86AudioPlay>"        , spawn $ myScript "mediactl play-pause")
-  , ("<XF86AudioPrev>"        , spawn $ myScript "mediactl previous")
-  , ("<XF86AudioNext>"        , spawn $ myScript "mediactl next")
-  , ("M--"                    , spawn "amixer sset Master 10%-")
-  , ("M-="                    , spawn "amixer sset Master 10%+")
-  , ("M-S-="                  , spawn "amixer sset Master 0%")
-  , ("<XF86AudioLowerVolume>" , spawn "amixer sset Master 10%-")
-  , ("<XF86AudioRaiseVolume>" , spawn "amixer sset Master 10%+")
-  , ("<XF86AudioMute>"        , spawn "amixer sset Master 0%")
-  , ("<XF86MonBrightnessUp>"  , spawn "brightnessctl set 10%+")
-  , ("<XF86MonBrightnessDown>", spawn "brightnessctl set 10%-")
-  , ("<Print>"                , spawn $ myScript "screenshot")
-  , ("S-<Print>"              , spawn $ myScript "screenshot --fullscreen")
-  , ("M-x"                    , spawn $ myScript "screenshot")
-  , ("M-S-x"                  , spawn $ myScript "screenshot --fullscreen")
-  , ("M-c"                    , spawn $ myScript "screenshot --no-delete")
-  , ("M-S-c"                  , spawn $ myScript "screenshot --fullscreen --no-delete")
-  ] ++ map viewWorkspace workspaceKW ++ map shiftWorkspace workspaceKW
+    , ("M-j"  , Boring.focusDown)       -- Move focus to the next window
+    , ("M-k"  , Boring.focusUp)         -- Move focus to the prev window
+    , ("M-h"  , Boring.focusMaster)     -- Move focus to the master window
+    , ("M-S-h", windows SS.swapMaster)  -- Swap the focused window and the master window
+    , ("M-S-j", rotSlavesDown)          -- Rotate all windows except master
+    , ("M-S-k", rotSlavesUp)            -- Rotate all windows except master
+    , ("M-i"  , decreaseLimit)
+    , ("M-o"  , increaseLimit)
+    , ("M-S-i", sendMessage Shrink)
+    , ("M-S-o", sendMessage Expand)
+    , ("M-m"  , sendMessage $ Toggle FULL) -- Toggle on full layout
+    , ("M-u", focusUrgent >> windows SS.swapMaster) -- Focus urgent window
+    , ("M-r"  , sendMessage NextLayout)    -- Toggle layout
+    , ("M-S-r", sendMessage $ Toggle MIRROR)  -- Mirror layout
+    ]
+    ++ map viewWorkspace  workspaceKW
+    ++ map shiftWorkspace workspaceKW
  where
-  -- nonNSP :: WSType
-  -- nonNSP = WSIs $ return $ (/= "nsp") . SS.tag
-
   xmonadRecompile, xmonadRestart :: X ()
   xmonadRecompile =
     spawn "xmonad --recompile && notify-send XMonad 'recompiled successfully'"
@@ -400,11 +357,19 @@ myKeys =
       ++ " && xmonad --restart"
       ++ " && sleep 1"
       ++ " && polybar-msg cmd restart"
+      ++ " && pkill -USR1 -x sxhkd"
       ++ " && notify-send XMonad 'restarted successfully'"
 
   viewWorkspace (k, w) = ("M-" ++ show k, switchDesktop w)
   shiftWorkspace (k, w) = ("M-S-" ++ show k, shiftToDesktop w)
-  workspaceKW = take 9 $ zip ([1..]::[Int]) myWorkspaces
+  workspaceKW = take 9 $ zip ([1 ..] :: [Int]) myWorkspaces
+
+myServerEventHook :: Event -> X All
+myServerEventHook = serverModeEventHookF "XMONAD_CMD" (handle . words)
+ where
+  handle ("bring" : a : as) = notifySend $ "bring: " ++ a -- use bringWindow
+  handle (cmd         : _ ) = notifyErr $ "Unknown command: " ++ cmd
+  handle []                 = notifyErr "Empty command"
 
 -------------------------------------------------------------------------------
 -- Bar
@@ -454,6 +419,7 @@ myStartupHook = do
   spawnOnce "polybar top &"
   spawnOnce "polybar bottom &"
   spawnOnce "dunst &"
+  spawnOnce "sxhkd &"
   spawn "xsetroot -cursor_name left_ptr &"
   spawn "xset r rate 250 69 &"
 
@@ -466,7 +432,7 @@ myManageHook =
       [ isFullscreen --> doFullFloat
       , transience'
       , className =? "Gcr-prompter" --> doCenterFloat
-      , className =? "float-term"   --> doCenterFloat
+      , className =? "float-term" --> doCenterFloat
       ]
     <+> zoomShenanigans
  where
@@ -475,7 +441,8 @@ myManageHook =
     -- Leave certain meeting windows tiled
       (className =? "zoom" <&&> title =? "Zoom Meeting") -?> mempty
     , (className =? "zoom" <&&> title =? "Chat") -?> mempty
-    , (className =? "zoom" <&&> fmap ("Participants" `isPrefixOf`) title) -?> mempty
+    , (className =? "zoom" <&&> fmap ("Participants" `isPrefixOf`) title)
+      -?> mempty
 
     -- Float all other Zoom windows
     , (className =? "zoom") -?> doFloat
@@ -493,23 +460,22 @@ main = do
   xmonad $ cfg dbus
 
  where
-  cfg d =
-      withUrgencyHook NoUrgencyHook
-      $ fullscreenSupport
-      $ ewmh
-      $ def { manageHook         = manageDocks <+> fullscreenManageHook <+> myManageHook
-            , handleEventHook    = docksEventHook <+> fullscreenEventHook
-            , modMask            = myModMask
-            , terminal           = myTerminal
-            , startupHook        = myStartupHook
-            , layoutHook         = fullscreenFocus myLayoutHook
-            , workspaces         = myWorkspaces
-            , borderWidth        = myBorderWidth
-            , normalBorderColor  = myBgColor
-            , focusedBorderColor = myFgColor
-            , focusFollowsMouse  = False
-            , logHook = myLogHook <+> workspaceHistoryHook <+> polybarHook d
-            , keys               = (`mkKeymap` myKeys)
-            }
+  cfg d = withUrgencyHook NoUrgencyHook $ fullscreenSupport $ ewmh $ def
+    { manageHook         = manageDocks <+> fullscreenManageHook <+> myManageHook
+    , handleEventHook    = docksEventHook
+                           <+> fullscreenEventHook
+                           <+> myServerEventHook
+    , modMask            = myModMask
+    , terminal           = myTerminal
+    , startupHook        = myStartupHook
+    , layoutHook         = fullscreenFocus myLayoutHook
+    , workspaces         = myWorkspaces
+    , borderWidth        = myBorderWidth
+    , normalBorderColor  = myBgColor
+    , focusedBorderColor = myFgColor
+    , focusFollowsMouse  = False
+    , logHook            = myLogHook <+> workspaceHistoryHook <+> polybarHook d
+    , keys               = (`mkKeymap` myKeys)
+    }
 
 --  vim: set ts=2 sw=2 tw=120 et :
