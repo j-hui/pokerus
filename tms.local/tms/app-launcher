@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+set -euf
+
+if ! command -v gtk-launch >/dev/null 2>/dev/null ; then
+  notify-send -u critical -t 3000 "App launcher" "Missing dependency: gtk-launch"
+  exit 1
+fi
+
+if ! command -v fd >/dev/null 2>/dev/null ; then
+  fd () {
+    find "$3" -name "$2"
+  }
+fi
+
+if ! command -v rg >/dev/null 2>/dev/null ; then
+  rg () {
+    grep "$1" "$2" -E "$3" "$4"
+  }
+fi
+
+echo "$XDG_DATA_DIRS" | tr ':' '\n' | while read -r data_dir; do
+  app_dir="$data_dir/applications"
+  if [[ -d "$app_dir" ]]; then
+    # find "$app_dir" -name '*.desktop'
+    fd --glob '*.desktop' "$app_dir"
+  fi
+done | while read -r app; do
+  name="$(rg -m 1 "^Name=" "$app" | tail -c +6 )"
+  gname="$(rg -m 1 "^GenericName=" "$app" | tail -c +13 || true)"
+
+  if [[ -n "$gname" ]]; then
+    gname=" ($gname)"
+  fi
+  echo "$name$gname $app"
+done | ~/.local/tms/picker --with-nth=..-2 --preview='cat {-1}' | while read -r app; do
+  gtk-launch "$app"
+done
