@@ -12,7 +12,7 @@ super + slash
     rofi -dmenu
 
 ## reload sxhkd:
-super + z
+super + shift + z
     pkill -USR1 -x sxhkd && notify-send 'sxhkd' 'Reloaded config'
 
 #
@@ -119,8 +119,12 @@ super + {apostrophe,bracketleft,bracketright}
 # bspwm hotkeys/window management
 #
 
+## kill bspwm:
+super + z ; q
+    bspc quit
+
 ## restart bspwm:
-super + shift + z
+super + z ; r
     pkill -USR1 -x sxhkd ; \
     bspc wm --restart ; \
     polybar-msg cmd restart ; \
