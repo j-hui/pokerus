@@ -226,8 +226,8 @@ in
           ];
         };
         windowManager.bspwm.enable = true;
-        displayManager.defaultSession = "none+bspwm";
-        # displayManager.defaultSession = "none+xmonad";
+        # displayManager.defaultSession = "none+bspwm";
+        displayManager.defaultSession = "none+xmonad";
         displayManager.job.logToJournal = true;
         displayManager.lightdm = {
           enable = true;
