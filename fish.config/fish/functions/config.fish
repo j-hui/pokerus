@@ -20,7 +20,8 @@ function config --description "Edit files in ~/.config"
         $EDITOR ~/.gitpokerus ~/.gitconfig
     else if test $argv[1] = "xmonad"
         if test -e ~/.xmonad/shell.nix
-            nix-shell ~/.xmonad/shell.nix
+            cd ~/.xmonad
+            nix-shell --run 'ghci xmonad'
         else
             $EDITOR ~/.xmonad/xmonad.hs
         end
