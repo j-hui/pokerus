@@ -2,6 +2,11 @@
 
 set -euf
 
+if ! command -v xdo >/dev/null 2>/dev/null; then
+  notify-send -u critical -t 3000 "$0" "Missing dependency: xdo"
+  exit 1
+fi
+
 if ! command -v wmctrl >/dev/null 2>/dev/null; then
   notify-send -u critical -t 3000 "$0" "Missing dependency: wmctrl"
   exit 1
@@ -31,9 +36,6 @@ wmctrl -x -l | while read -r w; do
 
   echo "$winnum [$class] $title"
 done | ~/.local/tms/picker --with-nth=2.. | cut -d ' ' -f 1 | while read -r w; do
-  if [[ "$(wmctrl -m | head -n 1)" == "Name: bspwm" ]]; then
-    bspc node "$w" -f
-  else
-    wmctrl -a "$w"
-  fi
+  # For some reason wmctrl -a doesn't work
+  xdo activate "$w"
 done

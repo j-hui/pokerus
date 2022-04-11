@@ -7,6 +7,6 @@ if ! command -v wmctrl >/dev/null 2>/dev/null ; then
   exit 1
 fi
 
-wmctrl -l | ~/.local/tms/picker --with-nth=-1 | cut -d ' ' -f 1 | while read -r d ; do
+wmctrl -d | ~/.local/tms/picker --with-nth=-1 | cut -d ' ' -f 1 | while read -r d ; do
   wmctrl -s "$d"
 done
