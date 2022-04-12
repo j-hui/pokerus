@@ -66,6 +66,7 @@ import           XMonad.Hooks.FadeWindows       ( FadeHook(..)
                                                 , fadeWindowsEventHook
                                                 , fadeWindowsLogHook
                                                 , isUnfocused
+                                                , opaque
                                                 , transparency
                                                 )
 import           XMonad.Hooks.ManageDocks       ( avoidStruts
@@ -77,7 +78,9 @@ import           XMonad.Hooks.ManageHelpers     ( (-?>)
                                                 , doCenterFloat
                                                 , doFullFloat
                                                 , doRectFloat
+                                                , isDialog
                                                 , isFullscreen
+                                                , isInProperty
                                                 , transience
                                                 )
 import           XMonad.Hooks.ServerMode        ( serverModeEventHookF )
@@ -432,27 +435,25 @@ myManageHook =
   composeOne
     $  [ isFullscreen -?> doFullFloat
        , transience
+       , isDialog -?> doFloat
        , className =? "Gcr-prompter" -?> doCenterFloat
        , className =? "float-term" -?> doRectFloat floatBottom
        ]
     ++ zoomShenanigans
  where
   zoomShenanigans =
-    [
-    -- Leave certain meeting windows tiled
-      (className =? "zoom" <&&> title =? "Zoom Meeting") -?> mempty
-    , (className =? "zoom" <&&> title =? "Chat") -?> mempty
-    , (className =? "zoom" <&&> fmap ("Participants" `isPrefixOf`) title)
-      -?> mempty
-
-    -- Float all other Zoom windows
-    , (className =? "zoom") -?> doFloat
+    [ className
+      =?   "zoom"
+      <&&> isInProperty "_NET_WM_STATE" "_NET_WM_STATE_ABOVE"
+      -?>  doFloat
+    , className =? "zoom" <&&> title =? "Zoom - Licensed Account" -?> doFloat
     ]
 
 myFadeHook :: FadeHook
 myFadeHook = composeAll
-  [ isUnfocused <&&> fmap not (className =? "float-term") --> transparency 0.2
-  , className =? "float-term" --> transparency 0.2
+  [ isUnfocused <&&> fmap not (className =? "float-term") --> transparency 0.1
+  , className =? "float-term" --> transparency 0.1
+  , fmap not isUnfocused <&&> fmap not (className =? "float-term") --> opaque
   ]
 
 -------------------------------------------------------------------------------
@@ -470,9 +471,9 @@ main = do
                            <+> fullscreenEventHook
                            <+> myServerEventHook
                            <+> fadeWindowsEventHook
-    , logHook            = fadeWindowsLogHook myFadeHook
+    , logHook            = polybarHook d
                            <+> workspaceHistoryHook
-                           <+> polybarHook d
+                           <+> fadeWindowsLogHook myFadeHook
     , layoutHook         = fullscreenFocus myLayoutHook
     , startupHook        = myStartupHook
     , modMask            = myModMask

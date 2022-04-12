@@ -271,7 +271,7 @@ in
         enable = true;
         vSync = true;
         backend = "glx";
-        inactiveOpacity = 0.96;
+        # inactiveOpacity = 0.96;
 
         fade = true;
         fadeSteps = [ 0.05 0.05 ];
