@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+set -euf
+
+if [ $# -ne 1 ]; then
+  echo "usage: $0 <file>"
+fi
+
+file=$1
+
+fileinfo="$(file -i "$file")"
+charset="$(echo "$fileinfo" | rev | cut -d ' ' -f 1 | rev)"
+filetype="$(echo "$fileinfo" | rev | cut -d ' ' -f 2 | rev)"
+case "$filetype" in
+  "application/pdf;")
+    if ! command -v pdftotext >/dev/null; then
+      echo "Unable to preview $file: pdftotext is not installed."
+      exit 0
+    fi
+    pdftotext "$file" -
+    ;;
+  *)
+    if [[ "$charset" == "charset=us-ascii" ]]; then
+      if command -v bat >/dev/null; then
+        bat "$file"
+      else
+        cat "$file"
+      fi
+    else
+      echo "Cannot preview $(file "$file")"
+    fi
+    ;;
+esac
