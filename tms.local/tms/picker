@@ -39,10 +39,10 @@ shquote() {
 # shellcheck disable=SC2086
 fzf="fzf $(shquote "$@" $FZF_DEFAULT_OPTS)"
 
-trap exit CHLD
 trap "rm -f /tmp/fzfloat-in /tmp/fzfloat-out" EXIT
 [ -p /tmp/fzfloat-in  ] || mkfifo /tmp/fzfloat-in
 [ -p /tmp/fzfloat-out ] || mkfifo /tmp/fzfloat-out
+trap 'exit'  CHLD
 
 { while read -r LINE; do printf '%s\n' "$LINE"; done } <&0 >/tmp/fzfloat-in &
 
