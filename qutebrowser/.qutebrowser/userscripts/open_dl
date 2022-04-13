@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# Adapted from qutebrowser's open_download userscript
+# Open a file from the download directory using an interactive picker
+
+set -e
+
+DOWNLOAD_DIR=${DOWNLOAD_DIR:-$QUTE_DOWNLOAD_DIR}
+DOWNLOAD_DIR=${DOWNLOAD_DIR:-$HOME/Downloads}
+
+PICKER_CMD=${PICKER_CMD:-~/.local/tms/picker}
+
+msg() {
+    local cmd="$1"
+    shift
+    local msg="$*"
+    if [ -z "$QUTE_FIFO" ] ; then
+        echo "$cmd: $msg" >&2
+    else
+        echo "message-$cmd '${msg//\'/\\\'}'" >> "$QUTE_FIFO"
+    fi
+}
+die() {
+    msg error "$*"
+    if [ -n "$QUTE_FIFO" ] ; then
+        # when run as a userscript, the above error message already informs the
+        # user about the failure, and no additional "userscript exited with status
+        # 1" is needed.
+        exit 0;
+    else
+        exit 1;
+    fi
+}
+
+if ! command -v "${PICKER_CMD}" > /dev/null ; then
+    die "Picker command '${PICKER_CMD}' not found in PATH!"
+fi
+
+if ! [ -d "$DOWNLOAD_DIR" ] ; then
+    die "Download directory '$DOWNLOAD_DIR' not found!"
+fi
+
+file=$(ls -1 -A -t "$DOWNLOAD_DIR" | $PICKER_CMD --preview "preview $DOWNLOAD_DIR/{}" 2>/dev/null) || true
+if [ -z "$file" ];  then
+    exit 0
+fi
+
+path="$DOWNLOAD_DIR/$file"
+filetype=$(xdg-mime query filetype "$path")
+application=$(xdg-mime query default "$filetype")
+
+if [ -z "$application" ] ; then
+    die "Do not know how to open '$file' of type $filetype"
+fi
+
+msg info "Opening $file (of type $filetype) with ${application%.desktop}"
+
+xdg-open "$path" &

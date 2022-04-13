@@ -90,6 +90,7 @@ in
         unstable.zk
         unstable.taskwarrior
         unstable.taskwarrior-tui
+        poppler_utils
 
         # utilities
         binutils

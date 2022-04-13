@@ -34,6 +34,7 @@ bg_color = '#000000'
 
 # Put kitty, gvim, etc. in Qutebrowser's PATH, at least on macOS
 os.environ['PATH'] = '/usr/local/bin' + os.pathsep + os.environ['PATH']
+os.environ['ROFI_CMD'] = os.environ['HOME'] + '/.local/tms/picker'
 
 ### System/environment boilerplate }}}
 
@@ -143,7 +144,7 @@ c.aliases['bookmarks'] = 'open -t qute://bookmarks/'
 c.aliases['mpv'] = 'spawn mpv --autofit=100%x100% --force-window=immediate --keep-open=yes {url}'
 c.aliases['ompv'] = 'hint links spawn mpv --autofit=100%x100% --force-window=immediate {hint-url}'
 
-c.aliases['dl'] = 'spawn --userscript open_download'
+c.aliases['dl'] = 'spawn --userscript open_dl'
 
 c.aliases['chrome'] = 'spawn open -a "Google Chrome" {url}'
 c.aliases['ochrome'] = 'hint all spawn open -a "Google Chrome" {hint-url}'
