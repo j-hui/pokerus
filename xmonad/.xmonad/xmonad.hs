@@ -8,7 +8,6 @@ import           Data.Char                      ( isSpace )
 import           Data.List                      ( dropWhileEnd
                                                 , elemIndex
                                                 , find
-                                                , isPrefixOf
                                                 , nub
                                                 )
 import qualified Data.Map                      as M
@@ -53,6 +52,7 @@ import           XMonad.Actions.CycleWS         ( nextScreen
                                                 , prevScreen
                                                 , swapNextScreen
                                                 , swapPrevScreen
+                                                , toggleWS
                                                 )
 import           XMonad.Actions.RotSlaves       ( rotSlavesDown
                                                 , rotSlavesUp
@@ -62,7 +62,7 @@ import           XMonad.Actions.WindowBringer   ( bringMenuArgs'
                                                 )
 import           XMonad.Hooks.DebugStack        ( debugStack )
 import           XMonad.Hooks.EwmhDesktops      ( ewmh )
-import           XMonad.Hooks.FadeWindows       ( FadeHook(..)
+import           XMonad.Hooks.FadeWindows       ( FadeHook
                                                 , fadeWindowsEventHook
                                                 , fadeWindowsLogHook
                                                 , isUnfocused
@@ -127,6 +127,7 @@ import           XMonad.Util.SpawnOnce          ( spawnOnce )
 import qualified Codec.Binary.UTF8.String      as UTF8
 import qualified DBus                          as D
 import qualified DBus.Client                   as D
+import           XMonad.Core                    ( whenJust )
 import           XMonad.ManageHook              ( (-->)
                                                 , (<&&>)
                                                 , (<+>)
@@ -272,20 +273,11 @@ promptWindow p = do
   fmap unName <$> myDmenu p wins
   where mkPair w = ("(" ++ show (unName w) ++ ") " ++ show w, w)
 
--- bringWin :: (Eq a, Show a) => a -> SS.Stack a -> SS.Stack a
--- bringWin a s@SS.Stack { SS.focus = f, SS.up = u, SS.down = d }
---   | a == f      = s
---   | a `elem` u  = s { SS.focus = a, SS.up = u' ++  f : tail d' }
---   | a `elem` d  = s { SS.focus = a, SS.down = f : filter (/= a) d }
---   | otherwise   = s
---    where (u', d') = span (/= a) u
-
 -------------------------------------------------------------------------------
 -- Layouts
 --
 mySpacing :: Integer -> l a -> ModifiedLayout Spacing l a
 mySpacing i = spacingRaw True (Border i i i i) True (Border i i i i) True
-
 
 floatFront :: SS.RationalRect
 floatFront = SS.RationalRect (1 / 6) (1 / 6) (2 / 3) (2 / 3)
@@ -318,17 +310,12 @@ myKeys =
     , ("M-z q", io exitSuccess)  -- Quit XMonad
     , ("M-z d", debugStack)
 
-  -- Workspaces
-  -- TODO:
-  -- , ("M-d", promptDesktop "Switch to" >>= switchDesktop)
-  -- , ("M-S-d", promptDesktop "Shift to" >>= shiftToDesktop)
-  -- , ("M-b"                    , promptWindow "Bring window" >>= windows . bringWindow)
-  -- SS.modify' . bringWin)
-    -- , ("M-b", bringMenuArgs' dmenuName (dmenuArgs "bring"))
+  -- Screens and workspaces
     , ("M-."  , nextScreen)
     , ("M-,"  , prevScreen)
     , ("M-`"  , swapNextScreen)
     , ("M-S-`", swapPrevScreen)
+    , ("M-l"  , toggleWS)
 
   -- Window management
     , ("M-t"  , withFocused $ windows . SS.sink)
@@ -341,11 +328,13 @@ myKeys =
     , ("M-S-h", windows SS.swapMaster)  -- Swap the focused window and the master window
     , ("M-S-j", rotSlavesDown)          -- Rotate all windows except master
     , ("M-S-k", rotSlavesUp)            -- Rotate all windows except master
+    , ("M-u"  , focusUrgent >> windows SS.swapMaster) -- Focus urgent window
+
+  -- Layout management
     , ("M-i"  , decreaseLimit)
     , ("M-o"  , increaseLimit)
     , ("M-S-i", sendMessage Shrink)
     , ("M-S-o", sendMessage Expand)
-    , ("M-u"  , focusUrgent >> windows SS.swapMaster) -- Focus urgent window
     , ("M-m"  , sendMessage NextLayout)
     , ("M-S-m", sendMessage $ Toggle MIRROR)  -- Mirror layout
     ]
@@ -371,9 +360,10 @@ myKeys =
 myServerEventHook :: Event -> X All
 myServerEventHook = serverModeEventHookF "XMONAD_COMMAND" (handle . words)
  where
-  handle ("bring" : a : as) = notifySend $ "bring: " ++ a -- use bringWindow
-  handle (cmd         : _ ) = notifyErr $ "Unknown command: " ++ cmd
-  handle []                 = notifyErr "Empty command"
+  handle (   "bring"  : a : _) = whenJust (readWindow a) (windows . bringWindow)
+  handle (   "send"   : a : _) = windows $ SS.shift a
+  handle as@(_            : _) = notifyErr $ "Unknown command: " ++ unwords as
+  handle []                    = notifyErr "Empty command"
 
 -------------------------------------------------------------------------------
 -- Bar

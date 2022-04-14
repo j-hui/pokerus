@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+set -euf
+
+xmonadctl=~/.xmonad/xmonadctl
+
+errmsg () {
+  notify-send -u critical -t 3000 "$0" "$*"
+}
+
+if ! command -v "$xmonadctl" >/dev/null 2>/dev/null ; then
+  errmsg "Missing dependency: xmonadctl"
+  exit 1
+fi
+
+if ! command -v wmctrl >/dev/null 2>/dev/null ; then
+  errmsg "Missing dependency: wmctrl"
+  exit 1
+fi
+
+wmctrl -x -l | while read -r w; do
+  title="$(echo "$w" | awk '{ for(i=5; i<=NF; ++i) printf $i""FS; print "" }')"
+  winnum="$(echo "$w" | awk '{ print $1}')"
+  class="$(echo "$w" | awk '{ print $3 }' | cut -f 2 -d .)"
+  echo "$winnum [$class] $title"
+done | ~/.local/tms/picker --with-nth=2.. | cut -d ' ' -f 1 | while read -r w; do
+  "$xmonadctl" "bring $w"
+done

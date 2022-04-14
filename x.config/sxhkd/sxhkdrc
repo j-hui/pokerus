@@ -119,82 +119,94 @@ super + {equal,minus}
 super + {apostrophe,bracketleft,bracketright}
     playerctl --player=spotifyd,spotify,%any {play-pause,previous,next}
 
+#
+# XMonad window management
+#
+super + f
+    ~/.xmonad/scripts/send-to-desktop --follow
+
+super + g
+    ~/.xmonad/scripts/send-to-desktop
+
+super + b
+    ~/.xmonad/scripts/bring-window
+
 # #
 # # bspwm hotkeys/window management
 # #
-# 
+#
 # ## kill bspwm:
 # super + z ; q
 #     bspc quit
-# 
+#
 # ## restart bspwm:
 # super + z ; r
 #     pkill -USR1 -x sxhkd ; \
 #     bspc wm --restart ; \
 #     polybar-msg cmd restart ; \
 #     notify-send 'bspwm' 'Restarted bpwm'
-# 
+#
 # ## bspc close/kill window:
 # super + {_, shift +} w
 #     bspc node -{c,k}
-# 
+#
 # ## bspc focus/swap toward direction:
 # super + {_, shift +} {h, j, k, l}
 #     bspc node -{f,s} {west, south, north, east}
-# 
+#
 # ## bspc previous/next desktop:
 # super {+ p, + n}
 #     bspc desktop -f {prev,next}.local
-# 
+#
 # ## bspc send to previous/next desktop:
 # super + shift {+ p, + n}
 #     bspc node -d {prev,next}.local
-# 
+#
 # ## bspc switch/swap monitor:
 # super + {_, shift +} {comma, period}
 #     bspc monitor {-f,-s} {prev, next}
-# 
+#
 # ## bspc go/send to desktop:
 # super + {_, shift +} {1,2,3,4,5,6,7,8,9}
 #     bspc {desktop -f,node -d} '{1-dev,2-doc,3-cfg,4-fun,5-life,6-chat,7-media,8-idle,9-hide}'
-# 
+#
 # ## bspc goto urgent/floating:
 # super + {_, shift +} u
 #     n="$(bspc query -N -n newest.{urgent,floating})" && bspc node $n -f
-# 
+#
 # ## bspc rotate desktop:
 # super + {_, shift +} r
 #     bspc node @parent -R {90,270}
-# 
+#
 # # super + {Left, Down, Up, Right}
 # #     bspc node {@first, @second, @parent, @brother}.local.leaf -f
-# 
+#
 # super + y
 #     ~/.local/tms/bspctl hide
-# 
+#
 # super + shift + y
 #     ~/.local/tms/bspctl unhide --focus
-# 
+#
 # super + grave
 #     bspc node next.same_class -f
-# 
+#
 # ## bspc set fullscreen
 # super + {_, shift +} e
 #   bspc node -t {floating,fullscreen}
-# 
+#
 # ## bspc set tiled/pseudo-tiled
 # super + {_, shift +} t
 #     bspc node -t {tiled,pseudo_tiled}
-# 
+#
 # ## bspc toggle monocle/sticky:
 # super + {_, shift +} m
 #     bspc {desktop -l next,node -g sticky}
-# 
+#
 # ## bspc move floating window:
 # # super + {Left, Down, Up, Right}
 #     # bspc node -v {-20 0,0 20,0 -20,20 0}
 #     # bspc node -{f,s} {west, south, north, east}
-# 
+#
 # ## bspc move floating window:
 # # super + shift + {Left, Down, Up, Right}
 #     # bspc node -v {-20 0,0 20,0 -20,20 0}

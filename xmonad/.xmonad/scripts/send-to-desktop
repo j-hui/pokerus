@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+set -euf
+
+xmonadctl=~/.xmonad/xmonadctl
+
+errmsg () {
+  notify-send -u critical -t 3000 "$0" "$*"
+}
+
+if ! command -v "$xmonadctl" >/dev/null 2>/dev/null ; then
+  errmsg "Missing dependency: xmonadctl"
+  exit 1
+fi
+
+if ! command -v wmctrl >/dev/null 2>/dev/null ; then
+  errmsg "Missing dependency: wmctrl"
+  exit 1
+fi
+
+follow=
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -f|--follow)
+      follow=y
+      ;;
+    *)
+      errmsg "Unrecognized argument: $1"
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+wmctrl -d | ~/.local/tms/picker --with-nth=-1 | while read -r d ; do
+  desktop_num="$(echo "$d" | cut -d ' ' -f 1)"
+  desktop_name="$(echo "$d" | rev | cut -d ' ' -f 1 | rev)"
+  "$xmonadctl" "send $desktop_name" || { errmsg "Could not send to $desktop_name" ; exit ; }
+  if [[ "$follow" == "y" ]]; then
+    wmctrl -s "$desktop_num"
+  fi
+done
