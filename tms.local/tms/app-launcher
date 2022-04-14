@@ -19,7 +19,7 @@ if ! command -v rg >/dev/null 2>/dev/null ; then
   }
 fi
 
-echo "$XDG_DATA_DIRS" | tr ':' '\n' | while read -r data_dir; do
+echo ~/.local/share:"$XDG_DATA_DIRS" | tr ':' '\n' | sort | uniq | while read -r data_dir; do
   app_dir="$data_dir/applications"
   if [[ -d "$app_dir" ]]; then
     fd --glob '*.desktop' "$app_dir"
@@ -32,6 +32,6 @@ done | while read -r app; do
     gname=" ($gname)"
   fi
   echo "$app $name$gname"
-done | ~/.local/tms/picker --with-nth=2.. --preview='cat {-1}' | cut -d ' ' -f 1 | while read -r app; do
+done | ~/.local/tms/picker --with-nth=2.. --preview='cat {1}' | cut -d ' ' -f 1 | while read -r app; do
   gio launch "$app"
 done
