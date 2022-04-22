@@ -93,7 +93,9 @@ function M.config()
       { name = "buffer", keyword_length = 4 },
       { name = "spell", keyword_length = 5 },
     }),
-    documentation = true,
+    window = {
+      documentation = cmp.config.window.bordered(),
+    },
     -- formatting = {
     --   format = require'lspkind'.cmp_format({with_text = true, maxwidth = 50})
     -- },
