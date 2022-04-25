@@ -115,15 +115,15 @@ function M.on_attach(client, bufnr)
       "<cmd>lua vim.lsp.buf.hover()<CR>",
       "lsp-hover",
     },
-
-    ["]d"] = {
-      "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>",
-      "lsp-diagnostic-next",
-    },
-    ["[d"] = {
-      "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>",
-      "lsp-diagnostic-prev",
-    },
+    --
+    -- ["]d"] = {
+    --   "<cmd>lua vim.diagnostic.goto_next()<CR>",
+    --   "lsp-diagnostic-next",
+    -- },
+    -- ["[d"] = {
+    --   "<cmd>lua vim.diagnostic.goto_prev()<CR>",
+    --   "lsp-diagnostic-prev",
+    -- },
   }, { noremap = true, silent = true, buffer = bufnr })
 
   require("pokerus").xmap {
