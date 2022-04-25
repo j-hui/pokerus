@@ -9,8 +9,7 @@ else
      lua require('impatient').enable_profile()
   endif
 lua <<EOF
-  require "pokerus.config"
-  require "pokerus.packer"
+  require("pokerus").setup()
 EOF
   call pokerus#settings#setup()
   call pokerus#keybinds#setup()
