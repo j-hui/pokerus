@@ -148,10 +148,15 @@ function s:editingMaps()
   nnoremap x "_x
   nnoremap X "_X
   nnoremap D "_D
-
   nnoremap c "_c
-  nnoremap cc "_cc
+  nnoremap cc "_S
   nnoremap C "_C
+
+  xnoremap x "_x
+  xnoremap X "_X
+  xnoremap D "_D
+  xnoremap c "_c
+  xnoremap C "_C
 endfunction
 
 function s:commandMaps()
