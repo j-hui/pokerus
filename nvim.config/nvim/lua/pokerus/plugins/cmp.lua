@@ -104,11 +104,13 @@ function M.config()
     },
   }
   cmp.setup.cmdline("/", {
+    mapping = cmp.mapping.preset.cmdline(),
     sources = {
       { name = "buffer" },
     },
   })
   cmp.setup.cmdline(":", {
+    mapping = cmp.mapping.preset.cmdline(),
     sources = cmp.config.sources({
       { name = "path", keyword_length = 2, max_item_count = 16 },
     }, {
