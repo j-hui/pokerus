@@ -67,6 +67,13 @@ return {
   ]],
     {}
   ),
+  local_mod = fmt([[
+    local {} = {{}}
+
+    {}
+
+    return {}
+  ]], {i(1, "M"), i(0), rep(1)}),
   poke_plug = fmt(
     [[
       local M = {{}}
