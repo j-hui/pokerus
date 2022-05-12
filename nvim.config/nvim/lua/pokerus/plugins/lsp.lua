@@ -42,8 +42,13 @@ M.servers = {
   ["gopls"] = {},
   ["sumneko_lua"] = {
     on_new_config = function(new_config, new_root_dir)
-      local nvim_dir = vim.fn.resolve(vim.fn.stdpath "config")
-      if string.sub(new_root_dir, 1, string.len(nvim_dir)) == nvim_dir then
+      local function is_under(path)
+        path = vim.fn.resolve(vim.fn.stdpath(path))
+        return string.sub(new_root_dir, 1, string.len(path)) == path
+      end
+
+      -- Is this file related to Neovim/plugin developmet?
+      if is_under "config" or is_under "data" then
         local luasettings = require("lua-dev").setup {
           library = { plugins = false }, -- I have too many plugins xD
           lspconfig = new_config.settings,
