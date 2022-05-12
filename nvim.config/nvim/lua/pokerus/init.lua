@@ -97,13 +97,24 @@ function M.setup_keybinds()
     },
   }, { noremap = true, silent = true })
 
+  M.nmap({
+    ["<leader>+"] = {
+      ":lua ",
+      "lua-run",
+    },
+    ["<leader>="] = {
+      ":lua =()<left>",
+      "lua-eval",
+    },
+  }, { noremap = true, silent = false })
+
   -- These keybindings are already defined by Vim, so we just attach pretty
   -- names to them.
   M.map {
     g = {
       ["-"] = "open-parent-dir",
-      ["="]= "open-cwd",
-    }
+      ["="] = "open-cwd",
+    },
   }
 
 end
