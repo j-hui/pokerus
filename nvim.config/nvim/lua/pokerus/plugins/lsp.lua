@@ -41,6 +41,15 @@ M.servers = {
   ["rnix"] = {},
   ["gopls"] = {},
   ["sumneko_lua"] = {
+    settings = {
+      Lua = {
+        diagnostics = {
+          disable = {
+            "trailing-space",
+          },
+        },
+      },
+    },
     on_new_config = function(new_config, new_root_dir)
       local function is_under(path)
         path = vim.fn.resolve(vim.fn.stdpath(path))
@@ -51,7 +60,7 @@ M.servers = {
       if is_under "config" or is_under "data" then
         local luasettings = require("lua-dev").setup {
           library = { plugins = false }, -- I have too many plugins xD
-          lspconfig = new_config.settings,
+          lspconfig = { settings = new_config.settings },
         }
         new_config.settings = luasettings.settings
       end
