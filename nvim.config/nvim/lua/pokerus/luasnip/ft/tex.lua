@@ -1,5 +1,6 @@
 local ls = require "luasnip"
 
+---@diagnostic disable: unused-local
 local s = ls.snippet
 local sn = ls.snippet_node
 local t = ls.text_node
@@ -18,6 +19,7 @@ local fmt = require("luasnip.extras.fmt").fmt
 local fmta = require("luasnip.extras.fmt").fmta
 local types = require "luasnip.util.types"
 local conds = require "luasnip.extras.expand_conditions"
+---@diagnostic enable: unused-local
 
 local function rec_ls()
   return sn(nil, {
