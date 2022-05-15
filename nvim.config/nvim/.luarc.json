@@ -1,6 +1,9 @@
 {
-  "runtime.version" : "LuaJIT",
-  "diagnostics.globals": [
-    "vim"
-  ]
+    "Lua.diagnostics.disable": [
+        "different-requires",
+    ],
+    "diagnostics.globals": [
+        "vim"
+    ],
+    "runtime.version": "LuaJIT"
 }
