@@ -12,7 +12,12 @@ ls.config.set_config {
   ext_opts = {
     [types.choiceNode] = {
       active = {
-        virt_text = { { " <- LuaSnip", "Comment" } },
+        virt_text = { { "●", "DiagnosticHint" } },
+      },
+    },
+    [types.insertNode] = {
+      active = {
+        virt_text = { { "●", "DiagnosticInfo" } },
       },
     },
   },

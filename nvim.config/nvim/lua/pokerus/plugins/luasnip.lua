@@ -36,19 +36,24 @@ function M.source()
   )
 end
 
+function M.config()
+  vim.cmd [[
+    command! -nargs=? -complete=filetype LuaSnipEdit :lua require("pokerus.plugins.luasnip").edit(<f-args>)
+    command! -nargs=? -complete=filetype LSE :lua require("pokerus.plugins.luasnip").edit(<f-args>)
+    command! LuaSnipRefresh :lua require("pokerus.plugins.luasnip").source()
+    command! LSR :lua require("pokerus.plugins.luasnip").source()
+  ]]
+
+  M.source()
+end
+
 function M.plug(use)
   use {
     "L3MON4D3/LuaSnip",
     event = "VimEnter",
     requires = { "rafamadriz/friendly-snippets" },
     config = function()
-      vim.cmd [[
-        command! -nargs=? -complete=filetype LuaSnipEdit :lua require("pokerus.plugins.luasnip").edit(<f-args>)
-        command! -nargs=? -complete=filetype LSE :lua require("pokerus.plugins.luasnip").edit(<f-args>)
-        command! LuaSnipRefresh :lua require("pokerus.plugins.luasnip").source()
-        command! LSR :lua require("pokerus.plugins.luasnip").source()
-      ]]
-      require("pokerus.plugins.luasnip").source()
+      require("pokerus.plugins.luasnip").config()
     end,
   }
 end

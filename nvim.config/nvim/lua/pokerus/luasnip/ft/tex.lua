@@ -19,9 +19,31 @@ local fmta = require("luasnip.extras.fmt").fmta
 local types = require "luasnip.util.types"
 local conds = require "luasnip.extras.expand_conditions"
 
+local function rec_ls()
+  return sn(nil, {
+    c(1, {
+      -- important!! Having the sn(...) as the first choice will cause infinite recursion.
+      t { "" },
+      -- The same dynamicNode as in the snippet (also note: self reference).
+      sn(nil, { t { "", "\t\\item " }, i(1), d(2, rec_ls, {}) }),
+    }),
+  })
+end
+
 return {
-  test_snippet = sn(1, {
-    t "Basic text ",
-    i(1, "and an insertNode."),
-  }),
+  items = {
+    t { "\\begin{itemize}", "\t\\item " },
+    i(1),
+    d(2, rec_ls, {}),
+    t { "", "\\end{itemize}" },
+    i(0),
+  },
+  begin = fmt(
+    [[
+      \begin{{{}}}
+        {}
+      \end{{{}}}
+    ]],
+    { i(1, "env"), i(0), rep(1) }
+  ),
 }
