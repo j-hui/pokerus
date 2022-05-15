@@ -4,6 +4,7 @@ function M.config()
   local cmp = require "cmp"
   local ls = require "luasnip"
 
+  -- NOTE: default settings are reproduced here for clarity
   local mapping = {
     ["<C-n>"] = cmp.mapping.select_next_item {
       behavior = cmp.SelectBehavior.Insert,
@@ -19,19 +20,16 @@ function M.config()
     },
     ["<M-p>"] = cmp.mapping.scroll_docs(-4),
     ["<M-n>"] = cmp.mapping.scroll_docs(4),
-    ["<C-x><C-o>"] = cmp.mapping.complete(),
-    ["<C-x><C-x>"] = cmp.mapping.close(),
-    ["<C-x><C-q>"] = cmp.mapping.abort(),
-    ["<C-e>"] = cmp.mapping.close(),
-    ["<C-l>"] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
-    },
-    ["<C-y>"] = cmp.mapping.confirm {
+    ["<C-x>"] = cmp.mapping.complete(), -- show completion
+    ["<C-q>"] = cmp.mapping.abort(), -- close menu, restore text
+    ["<C-e>"] = cmp.mapping.close(), -- close menu, keeping text
+    ["<C-l>"] = cmp.mapping.confirm { -- default was <C-y>
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
   }
+
+  local function nop() end
 
   local ls_maps = {
     ["<C-l>"] = {
@@ -39,23 +37,12 @@ function M.config()
         if ls.expand_or_jumpable() then
           ls.expand_or_jump()
         else
-          cmp.confirm {
-            behavior = cmp.ConfirmBehavior.Replace,
-            select = true,
-          }
+          mapping["<C-l>"](nop)
         end
       end,
       "luasnip-expand-or-jump",
     },
-    ["<C-x><C-f>"] = {
-      function()
-        if ls.expand_or_jumpable() then
-          ls.expand_or_jump()
-        end
-      end,
-      "luasnip-expand-or-jump",
-    },
-    ["<C-x><C-b>"] = {
+    ["<C-j>"] = {
       function()
         if ls.jumpable(-1) then
           ls.jump(-1)
@@ -63,10 +50,12 @@ function M.config()
       end,
       "luasnip-jump-back",
     },
-    ["<C-x><C-g>"] = {
+    ["<C-x>"] = {
       function()
         if ls.choice_active() then
           ls.change_choice(1)
+        else
+          mapping["<C-x>"](nop)
         end
       end,
       "luasnip-change-choice",
