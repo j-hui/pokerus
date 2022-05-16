@@ -19,14 +19,19 @@ function M.config()
   }
 
   local R = require "nvim-autopairs.rule"
+  local cond = require "nvim-autopairs.conds"
   -- Adapted from: https://github.com/IndianBoy42/LunarVim/blob/0ec62e6ef5dff125065557347f840a65bea580a1/lua/lv-autopairs/init.lua
 
   npairs.add_rules {
-    R("|", "|", "rust"),
+    R("|", "|", "rust")
+      :with_pair(cond.not_after_regex "%%")
+      :with_pair(cond.not_before_regex("%S", 3)), -- TODO: not working
   }
 
   npairs.add_rules {
-    R("`", "'", "tex"),
+    R("`", "'", "tex")
+      :with_pair(cond.not_after_regex "%%")
+      :with_pair(cond.not_before_regex("%S")), -- TODO: not working
   }
 
   local texmods = {
@@ -53,14 +58,19 @@ function M.config()
 
   for lm, rm in pairs(texmods) do
     for lp, rp in pairs(texpairs) do
-      npairs.add_rule(R(lm .. lp, " " .. rm .. rp, "tex"))
+      npairs.add_rule(
+        R(lm .. lp, " " .. rm .. rp, "tex"):with_pair(cond.not_after_regex "%%")
+      )
     end
     for lp, rp in pairs(basicpairs) do
-      npairs.add_rule(R(lm .. lp, " " .. rm .. rp, "tex"))
+      npairs.add_rule(
+        R(lm .. lp, " " .. rm .. rp, "tex"):with_pair(cond.not_after_regex "%%")
+      )
     end
   end
+
   for lp, rp in pairs(texpairs) do
-    npairs.add_rule(R(lp, rp, "tex"))
+    npairs.add_rule(R(lp, rp, "tex"):with_pair(cond.not_after_regex "%%"))
   end
 end
 
