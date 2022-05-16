@@ -84,8 +84,8 @@ super + d
     ~/.local/tms/desktop-switcher
 
 ## window switcher:
-super + {f,s}
-    ~/.local/tms/window-switcher {--current,_}
+super + s
+    ~/.local/tms/window-switcher
 
 ## scratchpad terminal:
 super + semicolon
