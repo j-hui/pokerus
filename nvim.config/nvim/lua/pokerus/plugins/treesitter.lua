@@ -49,8 +49,13 @@ function M.config()
     playground = {
       enable = true,
     },
+    query_linter = {
+      enable = true,
+      use_virtual_text = true,
+      lint_events = {"BufWrite", "CursorHold"},
+    },
     highlight = {
-      enable = false, -- I won't have this until conceal via TS is supported
+      enable = true,
     },
     incremental_selection = {
       enable = true,
