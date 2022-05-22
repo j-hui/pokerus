@@ -114,5 +114,24 @@ function pokerus#commands#setup()
   command! SyntaxGroup call <SID>show_syntax_group()
   " }}}
 
+  " PDF: Open PDF file {{{
+    function s:openPDF(...)
+      if a:0 == 0
+        let l:pdf = expand('%:r') . '.pdf'
+      else
+        let l:pdf = a:1
+      endif
+      echom 'Opening ' . l:pdf . '...'
+      if has('mac')
+        call jobstart('open ' . l:pdf)
+      elseif has('linux')
+        call jobstart('xdg-open ' . l:pdf)
+      else
+        echom 'Unsupported operating system (neither mac nor linux)'
+      endif
+    endfunction
+    command! -nargs=? -complete=file PDF call <SID>openPDF(<f-args>)
+  " }}}
+
 endfunction
 " vim: set ts=2 sw=2 tw=80 et foldmethod=marker foldlevel=0 :
