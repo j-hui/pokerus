@@ -50,16 +50,15 @@ import           XMonad                         ( ChangeLayout(..)
                                                 )
 import           XMonad.Actions.CycleWS         ( nextScreen
                                                 , prevScreen
+                                                , shiftNextScreen
+                                                , shiftPrevScreen
                                                 , swapNextScreen
                                                 , swapPrevScreen
-                                                , toggleWS
                                                 )
 import           XMonad.Actions.RotSlaves       ( rotSlavesDown
                                                 , rotSlavesUp
                                                 )
-import           XMonad.Actions.WindowBringer   ( bringMenuArgs'
-                                                , bringWindow
-                                                )
+import           XMonad.Actions.WindowBringer   ( bringWindow )
 import           XMonad.Hooks.DebugStack        ( debugStack )
 import           XMonad.Hooks.EwmhDesktops      ( ewmh )
 import           XMonad.Hooks.FadeWindows       ( FadeHook
@@ -273,6 +272,19 @@ promptWindow p = do
   fmap unName <$> myDmenu p wins
   where mkPair w = ("(" ++ show (unName w) ++ ") " ++ show w, w)
 
+lastWorkspace :: X (Maybe String)
+lastWorkspace = do
+  history <- workspaceHistory
+  case history of
+    (_ : w : _) -> return $ Just w
+    _           -> return Nothing
+
+viewLastWorkspace :: X ()
+viewLastWorkspace = lastWorkspace >>= maybe (return ()) switchDesktop
+
+shiftLastWorkspace :: Window -> X ()
+shiftLastWorkspace f = lastWorkspace >>= maybe (return ()) shiftToDesktop
+
 -------------------------------------------------------------------------------
 -- Layouts
 --
@@ -313,9 +325,12 @@ myKeys =
   -- Screens and workspaces
     , ("M-."  , nextScreen)
     , ("M-,"  , prevScreen)
+    , ("M-S-.", shiftNextScreen)
+    , ("M-S-,", shiftPrevScreen)
     , ("M-`"  , swapNextScreen)
     , ("M-S-`", swapPrevScreen)
-    , ("M-l"  , toggleWS)
+    , ("M-l"  , viewLastWorkspace)
+    , ("M-S-l", withFocused shiftLastWorkspace)
 
   -- Window management
     , ("M-t"  , withFocused $ windows . SS.sink)
@@ -360,10 +375,10 @@ myKeys =
 myServerEventHook :: Event -> X All
 myServerEventHook = serverModeEventHookF "XMONAD_COMMAND" (handle . words)
  where
-  handle (   "bring"  : a : _) = whenJust (readWindow a) (windows . bringWindow)
-  handle (   "send"   : a : _) = windows $ SS.shift a
-  handle as@(_            : _) = notifyErr $ "Unknown command: " ++ unwords as
-  handle []                    = notifyErr "Empty command"
+  handle (   "bring" : a : _) = whenJust (readWindow a) (windows . bringWindow)
+  handle (   "send"  : a : _) = windows $ SS.shift a
+  handle as@(_           : _) = notifyErr $ "Unknown command: " ++ unwords as
+  handle []                   = notifyErr "Empty command"
 
 -------------------------------------------------------------------------------
 -- Bar
