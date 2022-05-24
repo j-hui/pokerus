@@ -8,7 +8,6 @@ import           Data.Char                      ( isSpace )
 import           Data.List                      ( dropWhileEnd
                                                 , elemIndex
                                                 , find
-                                                , nub
                                                 )
 import qualified Data.Map                      as M
 import           Data.Maybe                     ( catMaybes
@@ -25,29 +24,7 @@ import qualified XMonad.Layout.BoringWindows   as Boring
 import qualified XMonad.StackSet               as SS
 import qualified XMonad.Util.Dmenu             as Dmenu
 
-import           XMonad                         ( ChangeLayout(..)
-                                                , Default(def)
-                                                , Dimension
-                                                , Event
-                                                , Full(..)
-                                                , KeyMask
-                                                , ManageHook
-                                                , MonadState(get)
-                                                , Resize(..)
-                                                , Tall(..)
-                                                , Window
-                                                , X
-                                                , XConfig(..)
-                                                , gets
-                                                , io
-                                                , mod4Mask
-                                                , sendMessage
-                                                , spawn
-                                                , windows
-                                                , withFocused
-                                                , xmonad
-                                                , (|||)
-                                                )
+import           XMonad
 import           XMonad.Actions.CycleWS         ( nextScreen
                                                 , prevScreen
                                                 , shiftNextScreen
@@ -117,25 +94,12 @@ import           XMonad.Layout.Spacing          ( Border(..)
                                                 )
 import           XMonad.Layout.WindowNavigation ( windowNavigation )
 import           XMonad.Util.EZConfig           ( mkKeymap )
-import           XMonad.Util.NamedWindows       ( getName
-                                                , unName
-                                                )
 import           XMonad.Util.Run                ( runProcessWithInput )
 import           XMonad.Util.SpawnOnce          ( spawnOnce )
 
 import qualified Codec.Binary.UTF8.String      as UTF8
 import qualified DBus                          as D
 import qualified DBus.Client                   as D
-import           XMonad.Core                    ( whenJust )
-import           XMonad.ManageHook              ( (-->)
-                                                , (<&&>)
-                                                , (<+>)
-                                                , (=?)
-                                                , className
-                                                , composeAll
-                                                , doFloat
-                                                , title
-                                                )
 
 -------------------------------------------------------------------------------
 -- Variables
@@ -202,23 +166,6 @@ fromXres = unsafePerformIO . getFromXres
 -- Combinators and Helpers
 --
 
--- nonEmptyStr :: String -> Maybe String
--- nonEmptyStr s | null $ trim s = Nothing
---               | otherwise     = Just s
---
--- onJust :: b -> (a -> X b) -> Maybe a -> X b
--- onJust _ f (Just a) = f a
--- onJust b _ Nothing  = return b
---
--- | X combinator for piping around strings. Fails if empty.
--- (>|=) :: X String -> (String -> X ()) -> X ()
--- xs >|= f = xs >>= return . nonEmptyStr >?= f
---
--- (>?=) :: X (Maybe a) -> (a -> X ()) -> X ()
--- xa >?= f = xa >>= onJust () f
--- infixl 1 >|=
--- infixl 1 >?=
-
 dmenuName :: String
 dmenuName = "rofi"
 
@@ -251,11 +198,6 @@ myWorkspaces = zipWith
   , "idle"    -- Applications that run in the background, e.g., monitoring
   ]
 
-promptDesktop :: String -> X String
-promptDesktop prompt = do
-  history <- workspaceHistory
-  myDmenu_ prompt $ nub $ tail history ++ myWorkspaces
-
 switchDesktop :: String -> X ()
 switchDesktop = windows . SS.greedyView
 
@@ -264,13 +206,6 @@ shiftToDesktop = windows . SS.shift
 
 readWindow :: String -> Maybe Window
 readWindow = readMaybe
-
-promptWindow :: String -> X (Maybe Window)
-promptWindow p = do
-  winIds <- SS.index <$> gets Core.windowset
-  wins   <- M.fromList . map mkPair <$> mapM getName winIds
-  fmap unName <$> myDmenu p wins
-  where mkPair w = ("(" ++ show (unName w) ++ ") " ++ show w, w)
 
 lastWorkspace :: X (Maybe String)
 lastWorkspace = do
