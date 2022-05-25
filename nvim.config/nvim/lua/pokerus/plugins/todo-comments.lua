@@ -1,11 +1,22 @@
-return {
-  plug = function(use)
-    use {
-      "folke/todo-comments.nvim",
-      requires = { "nvim-lua/plenary.nvim" },
-      config = function()
-        require("todo-comments").setup {}
-      end,
+local M = {}
+
+function M.config()
+  require("todo-comments").setup {
+    highlight = {
+      before = "",
+      keyword = "fg",
+      after = "",
     }
-  end,
-}
+  }
+end
+
+function M.plug(use)
+  use {
+    "folke/todo-comments.nvim",
+    config = function()
+      require("pokerus.plugins.todo-comments").config()
+    end,
+  }
+end
+
+return M
