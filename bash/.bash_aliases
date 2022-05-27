@@ -54,8 +54,6 @@ elif which vim &> /dev/null; then
     alias vim='vim'
 fi
 
-mkdir -p ~/.tmp/backup ~/.tmp/swp ~/.tmp/undo
-
 ### nnn
 export NNN_FIFO='/tmp/nnn.fifo'
 export NNN_PLUG='o:fzopen;f:fzfcd;m:mimelist;p:preview-tabbed;d:dragdrop'

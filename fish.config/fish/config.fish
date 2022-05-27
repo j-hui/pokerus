@@ -116,7 +116,6 @@ else if command -v vim >/dev/null
 else
     echo "Could not locate preferred editors..."
 end
-mkdir -p ~/.tmp/backup ~/.tmp/swp ~/.tmp/undo
 ## Text editor }}}
 
 ## Kitty {{{

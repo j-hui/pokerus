@@ -1,33 +1,22 @@
+scriptencoding utf-8
 
 function s:BackupFiles()
-  " Deliberately avoid using /tmp/ to avoid leaking data on shared computer
-  "
-  " To allow backup files to be stored locally, run:
-  "
-  "     mkdir -p .backup .swp .undo
-  "
-  " To enable backups to be stashed centrally, put the following in .bashrc
-  "
-  "     mkdir -p ~/.tmp/backup ~/.tmp/swp ~/.tmp/undo
-  "
-  " Fallback to using current directory . if all else fails
-  "
-  " Also, put the following in global .gitignore
-  "
-  "     *~
-  "     *.swp
+  silent! !mkdir -p ~/.tmp/{backup,swp,undo}.{nvim,vim}
 
-  " TODO: backups don't work well on nvim with symlinked files
-  if !has('nvim')
-    set backup
-    set backupdir=.backup,~/.tmp/backup//,.
+  if has('nvim')
+    set backupdir=~/.tmp/backup.nvim//,.
+    set directory=~/.tmp/swp.nvim//,.
+    set undodir=~/.tmp/undo.nvim//,.
+  else
+    set backupdir=~/.tmp/backup.vim//,.
+    set directory=~/.tmp/swp.vim//,.
+    set undodir=~/.tmp/undo.vim//,.
   endif
 
+  set backup
   set swapfile
-  set directory=.swp,~/.tmp/swp//,.
-
   set undofile
-  set undodir=.undo,~/.tmp/undo//,.
+
   set undolevels=1000
   if has('persistent_undo')
     set undofile
