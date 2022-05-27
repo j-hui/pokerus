@@ -5,7 +5,6 @@ let
 in
 {
   options.pokerus.users = {
-    fish.enable = mkEnableOption "Use fish shell";
     "j-hui".hashedPassword = mkOption { type = types.str; };
     root.hashedPassword = mkOption { type = types.str; };
   };
@@ -21,13 +20,10 @@ in
           isNormalUser = true;
           hashedPassword = cfg."j-hui".hashedPassword;
           extraGroups = [ "wheel" "audio" "jackaudio" "networkmanager" "libvirtd" "docker" "user-with-access-to-virtualbox" ];
+          shell = pkgs.zsh;
         };
       };
+      programs.zsh.enable = true;
     }
-
-    (mkIf cfg.fish.enable {
-      users.users."j-hui".shell = pkgs.fish;
-      programs.fish.enable = true;
-    })
   ];
 }
