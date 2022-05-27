@@ -53,7 +53,7 @@ case "$1" in
     ;;
   *)
     if [[ -d ~/.config/$1 ]] ; then
-      $EDITOR "$HOME/.config/$1/*"
+      $EDITOR "$HOME/.config/$1/"*
     elif [[ -e ~/.config/$1 ]]; then
       $EDITOR "$HOME/.config/$1"
     else
