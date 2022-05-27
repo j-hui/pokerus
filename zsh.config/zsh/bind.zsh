@@ -2,6 +2,18 @@
 
 bindkey -e
 
+# ctrl-{left,right,up,down}
+bindkey "^[[1;5C" forward-word
+bindkey "^[[1;5D" backward-word
+bindkey "^[[1;5A" beginning-of-line
+bindkey "^[[1;5B" end-of-line
+
+# alt-{left,right,up,down}
+bindkey '\e\e[C' forward-word
+bindkey '\e\e[D' backward-word 
+bindkey '\e\e[C' beginning-of-line
+bindkey '\e\e[D' end-of-line
+
 # Taken from https://github.com/momo-lab/zsh-replace-multiple-dots/blob/master/replace-multiple-dots.plugin.zsh
 function replace_multiple_dots() {
   local dots=$LBUFFER[-3,-1]
