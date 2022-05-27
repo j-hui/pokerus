@@ -59,17 +59,17 @@ zstyle ':vcs_info:*' enable git svn
 
 timeinfo='%F{blue}[%T]%f'
 
-userinfo='%B%F{cyan}${USER}%f%b'
+userinfo='%B%F{green}${USER}%f%b'
 # show user in bold red if it is root
 if [[ $USER == 'root' ]]; then
   userinfo='%B%F{red}${USER}%f%b'
 fi
 
-at='%F{blue}@%f'
+at='%F{cyan}@%f'
 
-hostinfo='%F{cyan}$HOST%f'
+hostinfo='%F{blue}$HOST%f'
 
-colon='%F{blue}:%f'
+colon='%F{cyan}:%f'
 
 pathinfo='%F{yellow}$(felix_pwd_abbr)%f'
 
