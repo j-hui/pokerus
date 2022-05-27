@@ -2,4 +2,4 @@
 
 zinit light MichaelAquilina/zsh-auto-notify
 
-AUTO_NOTIFY_IGNORE+=("config")
+AUTO_NOTIFY_IGNORE+=("config" "zsh" "fish")
