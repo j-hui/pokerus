@@ -56,8 +56,16 @@ function s:TerminalIO()
   " Disable background color erase
   let &t_ut=''
 
+  " Helps Vim understand alacritty colors; nop for Neovim
+  " From: https://www.reddit.com/r/vim/comments/kennw5/comment/gg4hwop/?utm_source=share&utm_medium=web2x&context=3
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+
+  if has('termguicolors')
+    set termguicolors
+  endif
+
   set lazyredraw
-  set termguicolors
 endfunction
 
 function s:Clipboard()

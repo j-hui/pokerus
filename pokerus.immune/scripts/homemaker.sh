@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 # Set up my home directory, prior to infecting.
 # This script is idempotent; running it additional times should be ok.
 set -e
@@ -18,7 +18,7 @@ append () {
 
     echo "Info: appending $key... >> $dst"
     if grep -q "$key" "$dst"; then
-        echo "Warning: $dst already seems aliased:"
+        echo "Warning: $dst already seems appended:"
         echo
         grep -C 3 "$key" "$dst"
     else
@@ -28,6 +28,25 @@ append () {
     echo
 }
 
+prepend () {
+    local dst=$1
+    local key=$2
+    local src=$3
+
+    echo "Info: prepending $key... >> $dst"
+    if grep -q "$key" "$dst" ; then
+        echo "Warning: $dst already seems prepended:"
+        echo
+        grep -C 3 "$key" "$dst"
+    else
+        local tmp
+        tmp="$(mktemp)"
+        cat <(echo "$src") "$dst" > "$tmp"
+        mv "$tmp" "$dst"
+        echo "Info: prepended $key... >> $dst."
+    fi
+    echo
+}
 
 append ~/.bashrc '~/.bash_aliases' '
 if [ -f ~/.bash_aliases ] ; then
@@ -38,6 +57,10 @@ fi
 append ~/.gitconfig '~/.gitpokerus' '
 [include]
     path = ~/.gitpokerus
+'
+
+prepend ~/.zshrc '~/.config/zsh/pokerus.zsh' \
+'[ -f ~/.config/zsh/pokerus.zsh ] && source ~/.config/zsh/pokerus.zsh
 '
 
 echo "Info: sourcing .bash_aliases from ~/.bashrc and ~/.bash_profile"
