@@ -172,38 +172,6 @@ alias dfob="perl -pi -e 's/[^[:ascii:]]//g'"
 alias sudo='sudo ' # helps with scripting?
 alias :w="echo You\'re not in vim, dingus."
 
-config() {
-    if [ "$1" = "ssh" ]; then
-        mkdir -p "$HOME/.ssh"
-        $EDITOR ~/.ssh/config
-    elif [ "$1" = "bash" ]; then
-        $EDITOR ~/.bash_local ~/.bash_aliases ~/.bashrc ~/.bash_profile
-    elif [ "$1" = "vim" ]; then
-        pushd ~/.vim
-        if [ $? -ne 0 ]; then
-          echo "config: ~/.vim not found"
-          return 1
-        fi
-        $EDITOR ~/.vimrc autoload/pokerus/*.vim autoload/pokerus/plugins/*.vim after/ftplugin/*.vim
-        popd
-    elif [ "$1" = "nvim" ]; then
-        pushd ~/.config/nvim
-        if [ $? -ne 0 ]; then
-          echo "config: ~/.config/nvim not found"
-          return 1
-        fi
-        $EDITOR init.vim lua/pokerus/*.lua lua/pokerus/plugins/*.lua
-        popd
-    elif [ -e ~/.config/"$1" ]; then
-        $EDITOR ~/.config/"$1"/*
-    else
-        echo "Usage:"
-        echo "    config <config>"
-        echo
-        ls "$HOME/.config/"
-    fi
-}
-
 srcbash() {
     if [ -e ~/.bashrc ]; then
         source ~/.bashrc

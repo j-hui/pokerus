@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [[ $# -ne 1 ]]; then
+  echo "Wrong number of arguments."
+  echo
+  echo "Usage:"
+  echo "    config <config>"
+  echo
+  ls ~/.config/
+  exit 1
+fi
+
+case "$1" in
+  ssh)
+    mkdir -p ~/.ssh
+    pushd ~/.ssh
+    $EDITOR ~/.ssh/config
+    popd
+    ;;
+  bash)
+    pushd ~
+    $EDITOR ~/.bash_aliases ~/.bash_local ~/.bashrc ~/.bash_profile
+    popd
+    ;;
+  zsh)
+    pushd ~/.config/zsh
+    $EDITOR ~/.zshrc ~/.config/zsh/*
+    popd
+    ;;
+  vim)
+    pushd ~/.vim
+    $EDITOR ~/.vimrc autoload/pokerus/*.vim autoload/pokerus/plugins/*.vim after/ftplugin/*.vim
+    popd
+    ;;
+  nvim)
+    pushd ~/.config/nvim
+    $EDITOR init.vim lua/pokerus/*.lua lua/pokerus/plugins/*.lua
+    popd
+    ;;
+  git)
+    $EDITOR ~/.gitpokerus ~/.gitconfig
+    ;;
+  xmonad)
+    pushd ~/.xmonad
+    if [[ -e ~/.xmonad/shell.nix ]] && command -v nix-shell >/dev/null ; then
+      nix-shell --run 'ghci xmonad'
+    else
+      $EDITOR ~/.xmonad/xmonad.hs
+    fi
+    popd
+    ;;
+  *)
+    if [[ -d ~/.config/$1 ]] ; then
+      $EDITOR "$HOME/.config/$1/*"
+    elif [[ -e ~/.config/$1 ]]; then
+      $EDITOR "$HOME/.config/$1"
+    else
+      echo "Error: did not locate .config entry: $1"
+      echo
+      ls ~/.config
+      exit 1
+    fi
+    ;;
+esac
