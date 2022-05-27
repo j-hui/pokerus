@@ -34,7 +34,14 @@ zinit light-mode for \
 # zinit self-update
 
 # A few of plugins seem to require this
-autoload -U compinit; compinit
+autoload -U compinit
+
+# Only check cache once per day
+# https://gist.github.com/ctechols/ca1035271ad134841284
+for dump in ~/.zcompdump(N.mh+24); do
+  compinit
+done
+compinit -C
 
 for p in ~/.config/zsh/plugins/*.zsh ; do
     source "$p"
