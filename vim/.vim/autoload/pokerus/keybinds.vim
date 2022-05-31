@@ -41,6 +41,9 @@ function s:readlineMaps()
 endfunction
 
 function s:navigationMaps()
+  " Move forward by a character
+  nnoremap g<Space> <Space>
+
   " Block-oriented (non-linewise) navigation
   nnoremap j gj
   nnoremap k gk
