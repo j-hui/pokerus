@@ -75,16 +75,17 @@ pathinfo='%F{yellow}$(felix_pwd_abbr)%f'
 
 vcsinfo='${vcs_info_msg_0_}'
 
+precmdicon="%F{blue}#%f"
+prompticon="%B%F{blue};%f%b"
+
 # only show return code when non-zero
 returninfo='%B%(?..%F{red}[%?] )%b'
 
 setopt prompt_subst
 
 prompt_precmd () {
-    print -rP "${timeinfo} ${userinfo}${at}${hostinfo}${colon}${pathinfo} ${vcsinfo} ${returninfo}"
+    print -rP "${precmdicon}${timeinfo} ${userinfo}${at}${hostinfo}${colon}${pathinfo} ${vcsinfo} ${returninfo}"
 }
 add-zsh-hook precmd prompt_precmd
 
-PROMPT_ICON=▶
-
-PS1='%B%F{blue}${PROMPT_ICON}%f%b '
+PS1='${prompticon} '
