@@ -7,7 +7,7 @@ function pokerus#plugins#setup()
     Plug 'morhetz/gruvbox'
     " A classic theme
 
-    Plug 'ourigen/skyline.vim'
+    Plug 'j-hui/skyline.vim'
     " Lightweight status line that takes the guesswork out of configuration
 
     Plug 'ap/vim-buftabline'
