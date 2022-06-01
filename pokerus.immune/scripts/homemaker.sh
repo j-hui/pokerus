@@ -17,7 +17,8 @@ append () {
     local src=$3
 
     echo "Info: appending $key... >> $dst"
-    if grep -q "$key" "$dst"; then
+    touch "$dst"
+    if grep -q "$key" "$dst" ; then
         echo "Warning: $dst already seems appended:"
         echo
         grep -C 3 "$key" "$dst"
@@ -34,6 +35,7 @@ prepend () {
     local src=$3
 
     echo "Info: prepending $key... >> $dst"
+    touch "$dst"
     if grep -q "$key" "$dst" ; then
         echo "Warning: $dst already seems prepended:"
         echo
