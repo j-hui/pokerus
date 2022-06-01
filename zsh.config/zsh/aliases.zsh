@@ -19,5 +19,7 @@ if (( $+commands[exa] )); then
   alias lt='exa --tree'
   alias tree='exa --tree'
 else
-  alias ls='ls --color=auto'
+  if [[ "$(uname)" != Darwin ]]; then
+    alias ls='ls --color=auto'
+  fi
 fi
