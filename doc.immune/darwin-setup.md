@@ -76,6 +76,15 @@ EOF
 brew install vim neovim ripgrep exa dust diskus htop bottom bat tree tmux
 ```
 
+### Patched Fonts
+
+Install [Nerd Fonts](https://github.com/ryanoasis/nerd-fonts#option-3-install-script) via Homebrew:
+
+```
+brew tap homebrew/cask-fonts
+brew install --cask font-hack-nerd-font font-sauce-code-pro-nerd-font font-go-mono-nerd-font font-roboto-mono-nerd-font
+```
+
 ### GUI Applications
 
 ```shell
@@ -103,9 +112,15 @@ defaults write -g AppleShowAllExtensions -bool true
 defaults read com.apple.finder NewWindowTargetPath -string file:///Users/`whoami`
 ```
 
-### Get rid of marks display in Terminal
+### Setup Terminal.app
 
-Select View > Hide Marks.
+Get rid of the marks by selecting View > Hide Marks.
+
+Use Option as Meta key in Settings > Profiles > Keyboard.
+
+Make sure window closes when shell exits, Settings > Profiles > Shell.
+
+Set font to be a patched font.
 
 ----
 
