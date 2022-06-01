@@ -73,7 +73,7 @@ EOF
 ### Command-Line Utilities
 
 ```shell
-brew install vim neovim ripgrep exa dust diskus htop bottom bat tree tmux
+brew install vim neovim ripgrep exa dust diskus htop bottom bat tree tmux gh node gnu-sed
 ```
 
 ### Patched Fonts
@@ -120,7 +120,9 @@ Use Option as Meta key in Settings > Profiles > Keyboard.
 
 Make sure window closes when shell exits, Settings > Profiles > Shell.
 
-Set font to be a patched font.
+Enlarge window size to 120 x 48, Settings > Profiles > Window > Window Size.
+
+Set font to be a patched font, Settings > Profiles > Text > Font.
 
 ----
 
