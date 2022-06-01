@@ -68,8 +68,21 @@ Host *
     IdentityFile ~/.ssh/$(hostname)
 EOF
 ```
+## System Provisioning
 
-## Other
+### Command-Line Utilities
+
+```shell
+brew install vim neovim ripgrep exa dust diskus htop bottom bat tree tmux
+```
+
+### GUI Applications
+
+```shell
+brew instasll alacritty kitty google-chrome
+```
+
+### GUI applications
 
 ### Fast `KeyRepeat`
 
@@ -89,6 +102,10 @@ defaults write -g AppleShowAllExtensions -bool true
 ```shell
 defaults read com.apple.finder NewWindowTargetPath -string file:///Users/`whoami`
 ```
+
+### Get rid of marks display in Terminal
+
+Select View > Hide Marks.
 
 ----
 
