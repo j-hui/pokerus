@@ -1,34 +1,96 @@
 # Darwin Setup
 
-Good to have these.
+## Bootstrapping Checklist
 
-## Install Brew
+Do this before performing initial setup.
 
-    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+### Set hostname
 
+Doing this makes sure `hostname` works as expected.
 
-## Fast `KeyRepeat`
+The "normal" way to do this is in System Preferences > Sharing, but that doesn't set the primary hostname.
 
-    defaults write -g KeyRepeat -int 1 # normal minimum is 2 (30 ms)
-    defaults write -g InitialKeyRepeat -int 10 # normal minimum is 15 (225 ms)
-    defaults write -g ApplePressAndHoldEnabled -bool false
+Instead:
 
-## SSH config
+```
+hostname=<hostname>
+sudo scutil --set HostName "$hostname"
+sudo scutil --set LocalHostName "$hostname"
+sudo scutil --set ComputerName "$hostname"
+dscacheutil -flushcache
+```
 
-    Host *
-        UseKeychain yes
-        AddKeysToAgent yes
-        ForwardAgent yes
+Then reboot.
 
-### Other tips
+### Install Brew
 
-Show file extensions:
+Homepage for Brew can be found at [brew.sh](https://brew.sh/).
 
-    defaults write -g AppleShowAllExtensions -bool true
+The install snippet is:
 
-Finder in home directory:
+```shell
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
 
-    defaults read com.apple.finder NewWindowTargetPath -string file:///Users/`whoami`
+This installs `brew` to `/opt/homebrew/bin`. Add it to `PATH`:
+
+```sh
+export PATH="/opt/homebrew/bin:$PATH"
+```
+
+### Install coreutils
+
+```
+brew install coreutils
+```
+
+This ensures `realpath` is available.
+
+### Setup SSH
+
+Create new SSH key:
+
+```
+mkdir -p ~/.ssh &&
+ssh-keygen -t ed25519 -C "email@domain.com" -f ~/.ssh/"$(hostname)"
+```
+
+Add that to GitHub.
+
+Initialize ssh config file:
+
+```
+cat >> ~/.ssh/config << EOF
+Host *
+    UseKeychain yes
+    AddKeysToAgent yes
+    ForwardAgent yes
+    IdentityFile ~/.ssh/$(hostname)
+EOF
+```
+
+## Other
+
+### Fast `KeyRepeat`
+
+```shell
+defaults write -g KeyRepeat -int 1 # normal minimum is 2 (30 ms)
+defaults write -g InitialKeyRepeat -int 10 # normal minimum is 15 (225 ms)
+defaults write -g ApplePressAndHoldEnabled -bool false
+```
+### Show file extensions
+
+```shell
+defaults write -g AppleShowAllExtensions -bool true
+```
+
+### Finder in home directory
+
+```shell
+defaults read com.apple.finder NewWindowTargetPath -string file:///Users/`whoami`
+```
+
+----
 
 TODO: Port more from https://github.com/MartinHarding/macOSuckless
 

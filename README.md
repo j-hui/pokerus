@@ -4,9 +4,12 @@ Maintaining my dot files across multiple environments.
 
 ## Basic setup
 
-First, install these core dependencies:
+Ensure these core dependencies are installed:
 
     sudo git bash
+
+If bootstrapping macOS, see [instructions](doc.immune/darwin-setup.md).
+If bootstrapping Debian, see [instructions](doc.immune/debian-setup.md).
 
 Then, retrieve this repo and set up git aliases:
 
@@ -24,7 +27,7 @@ Install Bash hook, and setup Git and Bash:
 
 Full terminal rig:
 
-    git infect vim nvim.config fish.config tmux clitools.config ghc extern
+    git infect vim nvim.config zsh.config tmux clitools.config tms.local
 
 Darwin/Aqua rig:
 
@@ -32,7 +35,7 @@ Darwin/Aqua rig:
 
 Linux/X11 rig:
 
-    git infect x.config x qutebrowser.config qutebrowser kitty.config media.config
+    git infect x.config x qutebrowser.config qutebrowser alacritty.config media.config desktop.local-share
 
 Doom Emacs rig:
 
@@ -46,8 +49,8 @@ If `install` fails, running it a second term fixes it for some reason..
 
 ### Git user
 
-    git config --global user.email
-    git config --global user.name
+    git config --global user.email <email>
+    git config --global user.name <name>
 
 ### Password-less `sudo`
 
