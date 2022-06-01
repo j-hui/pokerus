@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export FZF_DEFAULT_OPTS='--bind=ctrl-k:kill-line,alt-a:select-all,alt-e:deselect-all,ctrl-space:toggle --marker=*'
 
@@ -14,9 +14,9 @@ fi
 
 if [[ -z $EDITOR ]]; then
   if (( $+commands[nvim] )) ; then
-    EDITOR=nvim
+    export EDITOR=nvim
   else
-    EDITOR=vim
+    export EDITOR=vim
   fi
 fi
 
