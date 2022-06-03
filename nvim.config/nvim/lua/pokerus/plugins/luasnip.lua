@@ -34,6 +34,7 @@ function M.source()
   vim.cmd(
     "source " .. (vim.fn.stdpath "config") .. "/lua/pokerus/luasnip/init.lua"
   )
+  require("luasnip.loaders.from_snipmate").lazy_load({path = "./snippets"})
 end
 
 function M.config()
@@ -51,7 +52,9 @@ function M.plug(use)
   use {
     "L3MON4D3/LuaSnip",
     event = "VimEnter",
-    requires = { "rafamadriz/friendly-snippets" },
+    requires = {
+      "rafamadriz/friendly-snippets",
+    },
     config = function()
       require("pokerus.plugins.luasnip").config()
     end,
