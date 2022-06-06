@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+if [[ $# -lt 1 ]]; then
+    echo "usage: $0 <filetypes>"
+    exit 1
+fi
+
+for i in "$@"; do
+    curl -sL "https://www.toptal.com/developers/gitignore/api/$i"
+done
