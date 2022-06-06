@@ -1,4 +1,6 @@
 font:
+  normal:
+    family: SauceCodePro Nerd Font
   size: 13.0
 
 bell:
@@ -9,8 +11,6 @@ bell:
   command:
     program: notify-send
     args: ["-t", "1000", "-u", "critical", "Alacritty"]
-
-background_opacity: 1.0
 
 cursor:
   style:
