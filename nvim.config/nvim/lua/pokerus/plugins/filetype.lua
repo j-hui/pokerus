@@ -1,7 +1,15 @@
 local M = {}
 
 function M.config()
-  require("filetype").setup {}
+  require("filetype").setup {
+    overrides = {
+      extensions = {
+        v = "coq",
+        x = "alex",
+        y = "happy",
+      },
+    },
+  }
 end
 
 function M.plug(use)
