@@ -23,3 +23,13 @@ else
     alias ls='ls --color=auto'
   fi
 fi
+
+if [[ "$(uname)" == Darwin ]]; then
+  alias o='open'
+else
+  if (( $+commands[mimeo] )); then
+    alias o=mimeo
+  else
+    alias o=xdg-open
+  fi
+fi
