@@ -102,6 +102,9 @@ if which mimeo &> /dev/null; then
     alias o=mimeo
 fi
 
+### zk
+export ZK_NOTEBOOK_DIR=~/canalave
+
 ### OS-specific configuration
 case "$OSTYPE" in
 *linux*)

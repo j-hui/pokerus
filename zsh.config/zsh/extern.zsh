@@ -24,3 +24,5 @@ if (( $+commands[nvim] )) ; then
   export MANPAGER='nvim +Man!'
   export MANWIDTH=999
 fi
+
+export ZK_NOTEBOOK_DIR=~/canalave

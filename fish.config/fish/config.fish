@@ -163,6 +163,7 @@ source ~/.opam/opam-init/init.fish > /dev/null 2> /dev/null; or true
 if command -v prettyping >/dev/null; abbr --add pping 'prettyping --nolegend'; end
 source ~/.local/share/git-subrepo/.fish.rc >/dev/null 2>/dev/null ; or true
 
+set -gx ZK_NOTEBOOK_DIR ~/canalave
 ## Misc Utilities }}}
 
 ### Utilities }}}
