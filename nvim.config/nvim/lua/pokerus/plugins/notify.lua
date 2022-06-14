@@ -1,10 +1,23 @@
 local M = {}
 
+function M.config()
+  vim.notify = require "notify"
+
+  require("pokerus").nmap {
+    ["<leader>q"] = {
+      function()
+        vim.notify.dismiss()
+      end,
+      "notifications-clear",
+    },
+  }
+end
+
 function M.plug(use)
   use {
     "rcarriga/nvim-notify",
     config = function()
-      vim.notify = require "notify"
+      require("pokerus.plugins.notify").config()
     end,
   }
 end
