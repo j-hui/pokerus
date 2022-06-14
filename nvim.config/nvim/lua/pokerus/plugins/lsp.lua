@@ -110,7 +110,7 @@ function M.on_attach(client, bufnr)
       "lsp-code-action",
     },
     x = {
-      "<cmd>lua vim.lsp.buf.codelens.run()<CR>",
+      "<cmd>lua vim.lsp.codelens.run()<CR>",
       "lsp-lens-code-action",
     },
     r = {
@@ -170,12 +170,11 @@ function M.on_attach(client, bufnr)
 end
 
 function M.rust_setup()
-  vim.cmd [[
-    augroup nvimlsp_extensions_rust
-      autocmd!
-      autocmd CursorHold,CursorHoldI <buffer> lua require'lsp_extensions'.inlay_hints{ only_current_line = true }
-    augroup END
-  ]]
+  require("rust-tools").setup {
+    server = {
+      on_attach = M.on_attach,
+    },
+  }
 end
 
 function M.config()
@@ -199,10 +198,9 @@ function M.config()
   end
 
   vim.cmd [[
-    augroup nvimlsp_extensions
+    augroup nvimlsp_rust
       autocmd!
       autocmd FileType rust lua require("pokerus.plugins.lsp").rust_setup()
-
     augroup END
 
     sign define LspDiagnosticsSignError text=✖ texthl=LspDiagnosticsSignError
@@ -216,8 +214,6 @@ function M.plug(use)
   use {
     "neovim/nvim-lspconfig",
     requires = {
-      "nvim-lua/lsp_extensions.nvim",
-      -- Better support ofr some languages
       "weilbith/nvim-lsp-smag",
       -- Override tagfunc, use C-] to jump to definition
       "folke/lua-dev.nvim",
@@ -228,6 +224,8 @@ function M.plug(use)
       -- Required for Aerial
       "folke/lsp-colors.nvim",
       -- Creates missing LSP diagnostics highlight groups
+      "simrat39/rust-tools.nvim",
+      -- Rust-specific support
     },
     config = function()
       require("pokerus.plugins.lsp").config()
