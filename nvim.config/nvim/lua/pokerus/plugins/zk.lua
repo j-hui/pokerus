@@ -25,8 +25,19 @@ function M.config()
               "<cmd>ZkBacklinks<CR>",
               "zk-backlinks",
             },
+          }, {
+            prefix = "<leader>l",
+            noremap = true,
+            silent = true,
+            buffer = bufnr,
+          })
+          require("pokerus").xmap({
+            p = {
+              ":'<,'>ZkNewFromTitleSelection { dir = 'person' }<CR>",
+              "zk-new-from-title-selection",
+            },
             t = {
-              "<cmd>ZkNewFromTitleSelection<CR>",
+              ":'<,'>ZkNewFromTitleSelection<CR>",
               "zk-new-from-title-selection",
             },
           }, {

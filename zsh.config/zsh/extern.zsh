@@ -26,3 +26,5 @@ if (( $+commands[nvim] )) ; then
 fi
 
 export ZK_NOTEBOOK_DIR=~/canalave
+
+export RIPGREP_CONFIG_PATH=~/.config/ripgrep/ripgreprc
