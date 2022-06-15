@@ -146,6 +146,8 @@ function s:editingMaps()
 
   " inoremap <expr> <C-D> col('.')>strlen(getline('.'))?"\<Lt>C-D>":"\<Lt>Del>"
 
+  inoremap <C-q> <C-o>v
+
   nnoremap _ "_
 
   nnoremap x "_x
