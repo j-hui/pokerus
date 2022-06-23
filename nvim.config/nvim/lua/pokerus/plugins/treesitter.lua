@@ -52,7 +52,7 @@ function M.config()
     query_linter = {
       enable = true,
       use_virtual_text = true,
-      lint_events = {"BufWrite", "CursorHold"},
+      lint_events = { "BufWrite", "CursorHold" },
     },
     highlight = {
       enable = true,
@@ -117,6 +117,14 @@ function M.config()
     ["ab"] = "treesitter-outer-block",
     ["ib"] = "treesitter-inner-block",
   }
+
+  require("spellsitter").setup {}
+  require("pokerus").imap({
+    s = {
+      "<C-g>u<Esc>:lua require'spellsitter'.nav(true)<CR>1z=`]a<C-g>u",
+      "correct-spelling",
+    },
+  }, { prefix = "<C-g>", silent = true, noremap = true })
 end
 
 function M.plug(use)
@@ -133,17 +141,12 @@ function M.plug(use)
       -- Dim inactive regions of code
       "danymat/neogen",
       -- Treesitter-powered doc-comment generator
+      "lewis6991/spellsitter.nvim",
+      -- Show spelling errors in only the right places
     },
     run = ":TSUpdate",
-    config = [[require("pokerus.plugins.treesitter").config()]]
-  }
-
-  use {
-    "lewis6991/spellsitter.nvim",
-    -- Show spelling errors
-    -- Note that somehow this plugin doesn't actually depend on nvim-treesitter
     config = function()
-      require("spellsitter").setup {}
+      require("pokerus.plugins.treesitter").config()
     end,
   }
 end
