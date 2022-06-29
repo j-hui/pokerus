@@ -184,3 +184,6 @@ executable's
 foundational
 sublanguage
 expressibility
+composable
+monad
+reifies
