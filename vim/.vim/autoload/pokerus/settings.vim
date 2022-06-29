@@ -92,6 +92,13 @@ function s:Appearance()
   set cmdheight=2           " Extra space in command line at bottom
   set noshowmode            " We already have lightline
 
+  if has('nvim')
+    " Neovim plugins I use tend to make a lot of use of the sign column
+    set signcolumn=yes      " Sign column always visible
+  else
+    set signcolumn=number   " Sign column shares space with line number column
+  endif
+
   augroup cursor_underline  " Underline cursor in insert mode
     autocmd!
     autocmd InsertEnter * set cul
