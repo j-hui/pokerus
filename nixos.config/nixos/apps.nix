@@ -106,20 +106,20 @@ in
       environment.systemPackages = with pkgs; [
         playerctl
         spotify
-        spotifywm (makeDesktopItem {
-          name = "Spotifywm";
-          exec = "spotifywm %U";
-          icon = "spotify-client";
-          desktopName = "Spotifywm";
-          genericName = "Music Player";
-          categories = "Audio;Music;Player;AudioVideo;";
-          mimeType = "x-scheme-handler/spotify;";
-          extraEntries =
-            ''
-            TryExec = spotifywm
-            StartupWMClass = spotify
-            '';
-        })
+        # spotifywm (makeDesktopItem {
+        #   name = "Spotifywm";
+        #   exec = "spotifywm %U";
+        #   icon = "spotify-client";
+        #   desktopName = "Spotifywm";
+        #   genericName = "Music Player";
+        #   categories = "Audio;Music;Player;AudioVideo;";
+        #   mimeType = "x-scheme-handler/spotify;";
+        #   extraEntries =
+        #     ''
+        #     TryExec = spotifywm
+        #     StartupWMClass = spotify
+        #     '';
+        # })
         feh
         mpv
         vlc

@@ -57,22 +57,22 @@ in
       mimeo
       simplescreenrecorder
       xfce.thunar xfce.xfconf xfce.tumbler xfce.exo
-      dragon-drop
+      xdragon
       devour
       xsel
       tabbed
       xterm st
       gnome3.gucharmap # for selecting fonts
-      river
 
       (xmonad-with-packages.override { packages = hp: [
           hp.xmonad-contrib hp.xmonad-extras hp.dbus
           hp.xmonad-volume
           hp.xmonad-spotify
-          hp.xmonad-screenshot
+          # hp.xmonad-screenshot
         ];
       })
       xmonad-log
+      xmobar
 
       paper-gtk-theme
       paper-icon-theme
@@ -106,7 +106,6 @@ in
         proggyfonts
         dejavu_fonts
         font-awesome
-        font-awesome-ttf
         ubuntu_font_family
         # source-code-pro
         source-sans-pro
@@ -221,7 +220,7 @@ in
           extraPackages = haskellPackages: [
             haskellPackages.xmonad-volume
             haskellPackages.xmonad-spotify
-            haskellPackages.xmonad-screenshot
+            # haskellPackages.xmonad-screenshot
             haskellPackages.dbus
           ];
         };

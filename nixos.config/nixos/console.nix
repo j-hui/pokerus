@@ -28,8 +28,6 @@ in
         sudo tmux screen
         neofetch
         asciinema
-        tealdeer
-        doge
         ruby
 
         # text editing
@@ -67,49 +65,56 @@ in
         # files
         ranger
         fzf
-        ag
         ripgrep
-        vgrep
         fd
         bat
         diskus
         du-dust
         exa
-        broot
-        nnn
-        unstable.xplr
-        borgbackup
-        rclone
-        sqlite
-        zoxide
-        tokei
-        yank
-        ruplacer
-        skim
+        tokei # count lines of code
+        sd # substitution tool
+        ruplacer # recursive replacement on steroids
         trash-cli
+
+        # this its own thing
         unstable.zk
+
+        # this is its own system
         unstable.taskwarrior
         unstable.taskwarrior-tui
-        poppler_utils
+
+        # TO REVISIT
+        unstable.xplr # double check
+        borgbackup # use
+        rclone
+
+        # Whatis this???
+        miller
+        poppler_utils # what is this used for??
 
         # utilities
         binutils
+
+        imagemagick
+
         unzip
+        zstd
         pv
         bc
         man-pages
-        miller
-        jq go-pup
-        w3m lynx
         file
-        imagemagick
-        zstd
-        cmark
-        mdcat
-        sd
-        xsv
         hexyl
         p7zip
+
+        jq
+
+        w3m lynx
+
+        xsv
+
+        cmark
+        mdcat
+
 
         # nix utilities
         patchelf
