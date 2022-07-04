@@ -187,3 +187,10 @@ expressibility
 composable
 monad
 reifies
+coroutines
+coroutine
+combinators
+reified
+applicative
+state
+durations
