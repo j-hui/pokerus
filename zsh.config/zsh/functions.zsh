@@ -19,3 +19,4 @@ path_add ~/.yarn/bin
 path_add ~/.config/yarn/global/node_modules/.bin
 path_add /snap/bin
 path_add ~/.local/go/bin
+path_add ~/.platformio/penv/bin
