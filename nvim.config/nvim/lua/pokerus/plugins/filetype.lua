@@ -4,6 +4,7 @@ function M.config()
   require("filetype").setup {
     overrides = {
       extensions = {
+        h = "c",
         v = "coq",
         x = "alex",
         y = "happy",
