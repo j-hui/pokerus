@@ -81,10 +81,6 @@ function M.on_attach(client, bufnr)
       "<cmd>lua vim.lsp.buf.hover()<CR>",
       "lsp-hover",
     },
-    j = {
-      "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>",
-      "lsp-show-diagnostic",
-    },
     d = {
       "<cmd>lua vim.lsp.buf.definition()<CR>",
       "lsp-goto-definition",
@@ -129,15 +125,6 @@ function M.on_attach(client, bufnr)
       "<cmd>lua vim.lsp.buf.hover()<CR>",
       "lsp-hover",
     },
-    --
-    -- ["]d"] = {
-    --   "<cmd>lua vim.diagnostic.goto_next()<CR>",
-    --   "lsp-diagnostic-next",
-    -- },
-    -- ["[d"] = {
-    --   "<cmd>lua vim.diagnostic.goto_prev()<CR>",
-    --   "lsp-diagnostic-prev",
-    -- },
   }, { noremap = true, silent = true, buffer = bufnr })
 
   require("pokerus").xmap {
@@ -163,7 +150,7 @@ function M.on_attach(client, bufnr)
   -- vim.cmd [[autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
   -- ^NOTE: causes weird issue sometimes but that can be ignored
 
-  vim.cmd [[command! Fmt lua vim.lsp.buf.formatting()]]
+  vim.cmd [[command! Fmt lua vim.lsp.buf.format {async = true}]]
 
   vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
   require("aerial").on_attach(client)

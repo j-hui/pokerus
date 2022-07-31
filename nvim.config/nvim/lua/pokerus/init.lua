@@ -95,6 +95,10 @@ function M.setup_keybinds()
       "<cmd>lua vim.diagnostic.goto_prev()<CR>",
       "diagnostic-prev",
     },
+    ["<leader>lj"] = {
+      "<cmd>lua vim.diagnostic.open_float()<CR>",
+      "diagnostic-show",
+    },
   }, { noremap = true, silent = true })
 
   M.nmap({
