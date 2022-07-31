@@ -68,8 +68,12 @@ return {
     local types = require "luasnip.util.types"
     local conds = require "luasnip.extras.expand_conditions"
     ---@diagnostic enable: unused-local
+
+    return {{
+      {}
+    }}
   ]],
-    {}
+    {i(0)}
   ),
   local_mod = fmt([[
     local {} = {{}}
