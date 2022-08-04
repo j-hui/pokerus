@@ -5,6 +5,7 @@
 
 import           Data.Bifunctor                 ( Bifunctor(..) )
 import           Data.Char                      ( isSpace )
+import           Data.Function                  ( (&) )
 import           Data.List                      ( dropWhileEnd
                                                 , elemIndex
                                                 , find
@@ -23,6 +24,7 @@ import qualified XMonad.Hooks.DynamicLog       as Log
 import qualified XMonad.Layout.BoringWindows   as Boring
 import qualified XMonad.StackSet               as SS
 import qualified XMonad.Util.Dmenu             as Dmenu
+import qualified XMonad.Util.Loggers           as Log
 
 import           XMonad
 import           XMonad.Actions.CycleWS         ( nextScreen
@@ -46,8 +48,7 @@ import           XMonad.Hooks.FadeWindows       ( FadeHook
                                                 , transparency
                                                 )
 import           XMonad.Hooks.ManageDocks       ( avoidStruts
-                                                , docksEventHook
-                                                , manageDocks
+                                                , docks
                                                 )
 import           XMonad.Hooks.ManageHelpers     ( (-?>)
                                                 , composeOne
@@ -240,12 +241,12 @@ myLayoutHook =
     ||| Boring.boringWindows (noBorders full)
  where
   stack =
-    renamed [Replace "stack"]
+    renamed [Replace "S"]
       $ windowNavigation
       $ limitWindows 3
       $ mySpacing 2
       $ Tall 1 (3 / 100) (1 / 2)
-  full = renamed [Replace "full"] $ windowNavigation Full
+  full = renamed [Replace "F"] $ windowNavigation Full
 
 -------------------------------------------------------------------------------
 -- Keybinds
@@ -292,16 +293,8 @@ myKeys =
     ++ map shiftWorkspace workspaceKW
  where
   xmonadRecompile, xmonadRestart :: X ()
-  xmonadRecompile =
-    spawn "xmonad --recompile && notify-send XMonad 'recompiled successfully'"
-  xmonadRestart =
-    spawn
-      $  "xmonad --recompile"
-      ++ " && xmonad --restart"
-      ++ " && sleep 1"
-      ++ " && polybar-msg cmd restart"
-      ++ " && pkill -USR1 -x sxhkd"
-      ++ " && notify-send XMonad 'restarted successfully'"
+  xmonadRecompile = spawn "~/.xmonad/scripts/xmoctl recompile"
+  xmonadRestart   = spawn "~/.xmonad/scripts/xmoctl restart"
 
   viewWorkspace (k, w) = ("M-" ++ show k, switchDesktop w)
   shiftWorkspace (k, w) = ("M-S-" ++ show k, shiftToDesktop w)
@@ -316,7 +309,7 @@ myServerEventHook = serverModeEventHookF "XMONAD_COMMAND" (handle . words)
   handle []                   = notifyErr "Empty command"
 
 -------------------------------------------------------------------------------
--- Bar
+-- Status bar
 --
 mkDbusClient :: IO D.Client
 mkDbusClient = do
@@ -326,33 +319,58 @@ mkDbusClient = do
  where
   opts = [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
 
-dbusOutput :: D.Client -> String -> IO ()
-dbusOutput dbus str = D.emit dbus $ signal { D.signalBody = body }
+dbusOutput :: D.Client -> String -> X ()
+dbusOutput dbus s = io $ D.emit dbus $ signal { D.signalBody = body s }
  where
   opath  = D.objectPath_ "/org/xmonad/Log"
   iname  = D.interfaceName_ "org.xmonad.Log"
   mname  = D.memberName_ "Update"
   signal = D.signal opath iname mname
-  body   = [D.toVariant $ UTF8.decodeString str]
+  body s = [D.toVariant $ UTF8.decodeString s]
+
+type ColorFn
+  =  String -- ^ Foreground color
+  -> String -- ^ Background color
+  -> String -- ^ Output string
+  -> String
+
+-- | Format string with color for polybar; background color not supported.
+polybarColor :: ColorFn
+polybarColor fc _ = Log.wrap ("%{F" ++ fc ++ "}") "%{F-}"
+
+barPP :: ColorFn -> Int -> Log.PP
+barPP color windowCount = def
+  { Log.ppCurrent         = color myFgColor' "" . Log.wrap "{" "}"
+  , Log.ppVisible         = color myFgColor "" . Log.wrap "[" "]"
+  , Log.ppUrgent          = color myUrgentColor "" . Log.wrap "<" ">"
+  , Log.ppHidden          = Log.wrap "" ""
+  , Log.ppHiddenNoWindows = color myBgColor' "" . Log.wrap "" ""
+  , Log.ppWsSep           = " "
+  , Log.ppSep             = " | "
+  , Log.ppTitle           = color myFgColor ""
+  , Log.ppLayout          = (++ "/" ++ show windowCount)
+  }
+
+getWindowCount :: X Int
+getWindowCount = length . SS.index <$> gets Core.windowset
+
+getTitle :: X String
+getTitle = fromMaybe "" <$> Log.logTitle
 
 polybarHook :: D.Client -> X ()
-polybarHook dbus = get >>= Log.dynamicLogWithPP . ppHook
- where
-  ppHook xs = def { Log.ppOutput          = dbusOutput dbus
-                  , Log.ppCurrent         = wrapper myFgColor' " {" "} "
-                  , Log.ppVisible         = wrapper myFgColor " [" "] "
-                  , Log.ppUrgent          = wrapper myUrgentColor " <" "> "
-                  , Log.ppHidden          = Log.wrap "  " "  "
-                  , Log.ppHiddenNoWindows = wrapper myBgColor' "  " "  "
-                  , Log.ppWsSep           = ""
-                  , Log.ppSep             = " | "
-                  , Log.ppTitle           = const ""
-                  , Log.ppLayout          = (++ " (" ++ windowCount xs ++ ")")
-                  }
-  wrapper c b a s
-    | s == "nsp" = mempty
-    | otherwise  = Log.wrap (b ++ "%{F" ++ c ++ "}") ("%{F-}" ++ a) s
-  windowCount = show . length . SS.index . Core.windowset
+polybarHook dbus = do
+  getWindowCount
+    >>= Log.dynamicLogString
+    .   barPP polybarColor
+    >>= dbusOutput dbus
+
+xmobarLogHook :: X ()
+xmobarLogHook = do
+  wc <- getWindowCount
+  let pp = barPP Log.xmobarColor wc
+  Log.dynamicLogString pp { Log.ppTitle = const "" } >>= Log.xmonadPropLog
+  getTitle >>= Log.xmonadPropLog' "_XMONAD_TITLE" . Log.ppTitle pp
+
 
 -------------------------------------------------------------------------------
 -- Startup
@@ -360,10 +378,9 @@ polybarHook dbus = get >>= Log.dynamicLogWithPP . ppHook
 myStartupHook :: X ()
 myStartupHook = do
   setWMName "LG3D"  -- Apparently useful for making Java GUI programs work
-  spawnOnce "polybar top &"
-  spawnOnce "polybar bottom &"
   spawnOnce "dunst &"
   spawnOnce "sxhkd &"
+  spawn "~/.config/xmobar/xmobar.hs &"
   spawn "xsetroot -cursor_name left_ptr &"
   spawn "xset r rate 250 69 &"
 
@@ -398,20 +415,24 @@ myFadeHook = composeAll
 
 -------------------------------------------------------------------------------
 -- Main
---
+--platform/zephyr/src/ssm-timer.c
 main :: IO ()
 main = do
-  dbus <- mkDbusClient
-  xmonad $ cfg dbus
-
+  -- d <- mkDbusClient
+  config & docks & xmonad
+  -- xmonad $ docks $ config d
+  -- config
+  -- config & docks & xmobar >>= xmonad
  where
-  cfg d = withUrgencyHook NoUrgencyHook $ fullscreenSupport $ ewmh $ def
-    { manageHook         = manageDocks <+> fullscreenManageHook <+> myManageHook
-    , handleEventHook    = docksEventHook
-                           <+> fullscreenEventHook
+  -- xmobar =
+  --   Log.statusBar "~/.config/xmobar/xmobar.hs" Log.xmobarPP toggleStrutsKey
+  -- toggleStrutsKey XConfig { modMask = modm } = (modm, xK_b)
+  config = withUrgencyHook NoUrgencyHook $ fullscreenSupport $ ewmh $ def
+    { manageHook         = fullscreenManageHook <+> myManageHook
+    , handleEventHook    = fullscreenEventHook
                            <+> myServerEventHook
                            <+> fadeWindowsEventHook
-    , logHook            = polybarHook d
+    , logHook            = xmobarLogHook
                            <+> workspaceHistoryHook
                            <+> fadeWindowsLogHook myFadeHook
     , layoutHook         = fullscreenFocus myLayoutHook

@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+set -euf
+
+xmo-recompile () {
+  if xmonad --recompile ; then
+    notify-send XMonad 'Compiled successfully'
+    return 0
+  else
+    notify-send XMonad 'Compilation failed'
+    return 1
+  fi
+}
+
+xmo-restart () {
+  xmo-recompile
+  pkill -f xmobar.hs || true
+  xmonad --restart
+  sleep 1
+  pkill -USR1 -x sxhkd
+  notify-send XMonad 'Restarted successfully'
+}
+
+if [ "$#" -lt 1 ] ; then
+  echo "No arguments given"
+  exit 1
+fi
+
+case "$1" in
+  recompile)
+    xmo-recompile
+    ;;
+  restart)
+    xmo-restart
+    ;;
+  *)
+    echo "Argument not recognized: $1"
+    exit 1
+    ;;
+esac

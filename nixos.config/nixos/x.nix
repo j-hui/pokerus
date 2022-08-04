@@ -222,6 +222,7 @@ in
             haskellPackages.xmonad-spotify
             # haskellPackages.xmonad-screenshot
             haskellPackages.dbus
+            haskellPackages.xmobar
           ];
         };
         windowManager.bspwm.enable = true;

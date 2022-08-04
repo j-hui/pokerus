@@ -2,6 +2,19 @@
 
 set -e
 
+open-config() {
+  if [[ -d ~/.config/$1 ]]; then
+    $EDITOR "$HOME/.config/$1/"*
+  elif [[ -e ~/.config/$1 ]]; then
+    $EDITOR "$HOME/.config/$1"
+  else
+    echo "Error: did not locate .config entry: $1"
+    echo
+    ls ~/.config
+    exit 1
+  fi
+}
+
 if [[ $# -ne 1 ]]; then
   echo "Wrong number of arguments."
   echo
@@ -13,6 +26,16 @@ if [[ $# -ne 1 ]]; then
 fi
 
 case "$1" in
+  config)
+    pushd ~/.local/tms
+    $EDITOR config
+    popd
+    ;;
+  tms)
+    pushd ~/.local/tms
+    $EDITOR ./*
+    popd
+    ;;
   ssh)
     mkdir -p ~/.ssh
     pushd ~/.ssh
@@ -44,23 +67,23 @@ case "$1" in
     ;;
   xmonad)
     pushd ~/.xmonad
-    if [[ -e ~/.xmonad/shell.nix ]] && command -v nix-shell >/dev/null ; then
+    if [[ -e ~/.xmonad/shell.nix ]] && command -v nix-shell >/dev/null; then
       nix-shell --run 'ghci xmonad'
     else
       $EDITOR ~/.xmonad/xmonad.hs
     fi
     popd
     ;;
-  *)
-    if [[ -d ~/.config/$1 ]] ; then
-      $EDITOR "$HOME/.config/$1/"*
-    elif [[ -e ~/.config/$1 ]]; then
-      $EDITOR "$HOME/.config/$1"
+  xmobar)
+    if [[ -e ~/.config/xmobar/shell.nix ]] && command -v nix-shell >/dev/null; then
+      pushd ~/.config/xmobar
+        nix-shell --run 'ghci xmobar.hs'
+      popd
     else
-      echo "Error: did not locate .config entry: $1"
-      echo
-      ls ~/.config
-      exit 1
+      open-config "xmobar"
     fi
+    ;;
+  *)
+    open-config "$1"
     ;;
 esac
