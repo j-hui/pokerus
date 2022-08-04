@@ -21,7 +21,7 @@ baseConfig = defaultConfig
   , allDesktops      = True   -- show on all desktops
   , overrideRedirect = True   -- set the Override Redirect flag (Xlib)
   , pickBroadest     = False  -- choose widest display (multi-monitor)
-  , persistent       = True   -- enable/disable hiding (True = disabled)
+  , persistent       = False  -- enable/disable hiding (True = disabled)
   , commands         = runnables
   }
 

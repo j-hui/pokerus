@@ -2,6 +2,8 @@
 
 set -euf
 
+xmobarquery="ghc.*:main.*xmobar"
+
 xmo-recompile () {
   if xmonad --recompile ; then
     notify-send XMonad 'Compiled successfully'
@@ -14,7 +16,7 @@ xmo-recompile () {
 
 xmo-restart () {
   xmo-recompile
-  pkill -f xmobar.hs || true
+  pkill -f "$xmobarquery" || true
   xmonad --restart
   sleep 1
   pkill -USR1 -x sxhkd
