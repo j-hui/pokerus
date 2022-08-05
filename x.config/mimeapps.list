@@ -26,3 +26,7 @@ video/*=mpv.desktop
 application/pdf=org.pwmt.zathura.desktop;google-chrome.desktop;
 inode/directory=thunar.desktop
 x-scheme-handler/webcal=google-chrome.desktop
+x-scheme-handler/magnet=userapp-transmission-gtk-1C2ZI1.desktop
+
+[Added Associations]
+x-scheme-handler/magnet=userapp-transmission-gtk-1C2ZI1.desktop;
