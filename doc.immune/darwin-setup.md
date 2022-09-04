@@ -70,6 +70,12 @@ EOF
 ```
 ## System Provisioning
 
+### Install System Utilities
+
+```shell
+brew install gnupg pinentry-mac
+```
+
 ### Command-Line Utilities
 
 ```shell
@@ -90,8 +96,6 @@ brew install --cask font-hack-nerd-font font-sauce-code-pro-nerd-font font-go-mo
 ```shell
 brew instasll alacritty kitty google-chrome
 ```
-
-### GUI applications
 
 ### Fast `KeyRepeat`
 
