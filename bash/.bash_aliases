@@ -42,10 +42,6 @@ git-ignore() {
 
 if which nvim &> /dev/null; then
     export EDITOR=nvim
-
-    alias vim='nvim'
-    alias nvim='nvim'               # open multiple files with vertical splits
-
     export MANPAGER='nvim +Man!'    # use nvim as pager
     export MANWIDTH=999             # let nvim handle wraparound
 
@@ -90,10 +86,11 @@ export RIPGREP_CONFIG_PATH=~/.config/ripgrep/ripgreprc
 
 ### kitty
 if which kitty &> /dev/null; then
-    alias ssh='kitty +kitten ssh'
-    alias kssh='kitty +kitten ssh'
-    alias kdiff='kitty +kitten diff'
-    alias icat='kitty +kitten icat --align left'
+    :
+    # alias ssh='kitty +kitten ssh'
+    # alias kssh='kitty +kitten ssh'
+    # alias kdiff='kitty +kitten diff'
+    # alias icat='kitty +kitten icat --align left'
 fi
 
 ### mimeo
@@ -192,6 +189,9 @@ fi
 
 ### Prompt/display configuration
 
+# For macOS
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
 # only works on Bash
 if [ "${0#*bash}" != "$0" ]; then
 
@@ -220,14 +220,19 @@ if [ "${0#*bash}" != "$0" ]; then
         PS2='> '
     }
 
+    prompt-demo() {
+        PS1='\u@\h\$ '
+        PS2='> '
+    }
+
     prompt-fancier() {
         PS1="\n$BASE \$(if [ \$? != 0 ]; then echo '$RED[ERR]'; else echo '$YELLOW'; fi)\n\$ $CLEAR"
         PS2="$BLUE> $CLEAR"
     }
 
     # Automatically trim long paths in the prompt (requires Bash 4.x)
-    PROMPT_DIRTRIM=2
-    prompt-fancier
+    PROMPT_DIRTRIM=3
+    prompt-demo
 
 else # ["${0#*bash}" != "$0"]
     PS1='$ '
