@@ -51,7 +51,10 @@ function s:TerminalIO()
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
   if has('termguicolors')
-    set termguicolors
+    " Apple's Terminal.app kind of sucks with colors
+    if $TERM_PROGRAM !=# 'Apple_Terminal'
+      set termguicolors
+    endif
   endif
 
   set lazyredraw
