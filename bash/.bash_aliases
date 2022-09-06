@@ -117,6 +117,7 @@ case "$OSTYPE" in
     # if running the GNU implementation of ls, --color=auto is needed instead.
     # leave this to be reset by .bash_local
     alias nproc='sysctl -n hw.ncpu'
+    PATH_ADD /opt/homebrew/bin
     ;;
 esac
 
@@ -141,7 +142,7 @@ alias ...='cd ../../'
 # Correct spelling errors in arguments supplied to cd
 shopt -s cdspell 2> /dev/null
 
-export CDPATH="."
+# export CDPATH="."
 
 alias sl='echo "
                  _-====-__-======-__-========-_____-============-__
@@ -221,7 +222,7 @@ if [ "${0#*bash}" != "$0" ]; then
     }
 
     prompt-demo() {
-        PS1='\u@\h\$ '
+        PS1="$GREEN\u@\h$CLEAR\$ "
         PS2='> '
     }
 
