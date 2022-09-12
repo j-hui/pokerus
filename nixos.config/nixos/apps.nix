@@ -156,6 +156,7 @@ in
         zathura mupdf evince
         pdftk
         libreoffice
+        enscript
       ];
     })
 
