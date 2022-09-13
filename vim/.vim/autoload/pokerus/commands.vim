@@ -47,19 +47,9 @@ function pokerus#commands#setup()
   command! Basic call s:basicToggle()
   " }}}
 
-  " "Share" mode: get of relative line numbers, always show cursor {{{
-  " Useful for screensharing
-  let s:sharemode = 0
-  function! g:ShareSetMode(mode)
-    if a:mode
-      set norelativenumber cursorline
-      let s:sharemode = 1
-    else
-      set relativenumber nocursorline
-      let s:sharemode = 0
-    endif
-  endfunction
-  command! Share if s:sharemode | call g:ShareSetMode(0) | else | call g:ShareSetMode(1) | endif
+  " "Share" mode: toggle share mode {{{
+  " Function defined in settings.vim
+  command! Share call g:PokerusToggleShare()
   " }}}
 
   " AutoFormat: format paragraph on each keystroke {{{

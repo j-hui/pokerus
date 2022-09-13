@@ -85,6 +85,30 @@ function s:Clipboard()
   endif
 endfunction
 
+
+let s:pokerus_sharemode = 1
+
+function! g:PokerusToggleShare()
+  if s:pokerus_sharemode
+    set relativenumber nocursorline
+    let s:pokerus_sharemode = 0
+
+    augroup cursor_underline  " Underline cursor in insert mode
+      autocmd!
+      autocmd InsertEnter * set cursorline
+      autocmd InsertLeave * set nocursorline
+    augroup END
+
+  else
+    set norelativenumber cursorline
+    let s:pokerus_sharemode = 1
+
+    augroup cursor_underline  " Clear cursorline toggling
+      autocmd!
+    augroup END
+  endif
+endfunction
+
 function s:Appearance()
   set background=dark
   set number                " Line numbers
@@ -102,11 +126,8 @@ function s:Appearance()
     set signcolumn=number   " Sign column shares space with line number column
   endif
 
-  augroup cursor_underline  " Underline cursor in insert mode
-    autocmd!
-    autocmd InsertEnter * set cul
-    autocmd InsertLeave * set nocul
-  augroup END
+  " Initialize sharing/cursorline settings
+  call g:PokerusToggleShare()
 
   " set nowrap                            " Soft wrap
   set linebreak                           " If we show wrap, break at a character
