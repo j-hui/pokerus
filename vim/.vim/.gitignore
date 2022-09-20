@@ -1,0 +1,4 @@
+*.spl
+autoload/local
+sessions
+.netrwhist
