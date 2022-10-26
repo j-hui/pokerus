@@ -102,6 +102,9 @@ function pokerus#plugins#setup()
     Plug 'tpope/vim-fugitive'
     " tpope's illegal git plugin
 
+    Plug 'junegunn/limelight.vim'
+    " Dim out distractions
+
   " Vim + Neovim (w/ setup) }}}
 
   " Filetype {{{
@@ -145,12 +148,14 @@ function pokerus#plugins#setup()
   call pokerus#plugins#speeddating#setup()
   call pokerus#plugins#subversive#setup()
   call pokerus#plugins#suda#setup()
+  call pokerus#plugins#limelight#setup()
 
   call pokerus#plugins#cpp_enhanced#setup()
   call pokerus#plugins#haskell#setup()
   call pokerus#plugins#go#setup()
   call pokerus#plugins#zig#setup()
   call pokerus#plugins#markdown#setup()
+
 endfunction
 
 " vim: set ts=2 sw=2 tw=80 et foldmethod=marker foldlevel=0 :
