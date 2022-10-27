@@ -52,6 +52,9 @@ function s:navigationMaps()
   inoremap <C-c>  <Esc>
   " inoremap kj   <Esc>
 
+  nnoremap <C-d>  <C-d>zz
+  nnoremap <C-u>  <C-u>zz
+
   " Normal mode readline style navigation
   nnoremap <C-n>    <C-e>j
   nnoremap <C-p>    <C-y>k
