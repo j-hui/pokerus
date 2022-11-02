@@ -2,9 +2,9 @@ local M = {}
 
 function M.config()
   require("fidget").setup {
-    debug = {
-      logging = true,
-    },
+    -- debug = {
+    --   logging = true,
+    -- },
   }
 end
 
