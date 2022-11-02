@@ -154,7 +154,7 @@ in
       environment.systemPackages = with pkgs; [
         inkscape gimp tuxpaint drawing gthumb
         zathura mupdf evince
-        pdftk
+        pdftk pdfgrep
         libreoffice
         enscript
       ];
