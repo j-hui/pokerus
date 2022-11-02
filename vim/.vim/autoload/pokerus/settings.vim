@@ -147,9 +147,7 @@ function s:Appearance()
                                           " custom replacement character is defined
   set concealcursor=                      " Show concealed text when running cursor over
 
-  set foldlevelstart=10
-  set foldnestmax=10
-  set foldmethod=syntax
+  set foldlevel=99                        " Start without folding too many things
 
   set shortmess+=c                        " Don't show information about pop-up menu
 endfunction
