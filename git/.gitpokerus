@@ -26,7 +26,7 @@
     unpushed = log @{u}..
     ups      = log @{u}..
     branches = "!git for-each-ref --sort='-authordate' --format='%(authordate)%09%(objectname:short)%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"
-    brs      = "!git for-each-ref --sort='-authordate' --format='%(authordate)%09%(objectname:short)%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"
+    brs      = for-each-ref --format='%(refname:short)' refs/heads/
 
     rs      = restore
     us      = restore --staged
