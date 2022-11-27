@@ -21,3 +21,5 @@ if argc() > 1
  silent blast   " load last buffer
  silent bfirst  " switch back to the first
 endif
+
+" vim: set ts=2 sw=2 tw=80 et :

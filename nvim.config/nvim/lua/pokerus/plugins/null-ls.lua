@@ -16,7 +16,7 @@ function M.config()
       null_ls.builtins.diagnostics.vint,
       null_ls.builtins.diagnostics.statix,
       null_ls.builtins.formatting.asmfmt,
-      null_ls.builtins.formatting.stylua,
+      -- null_ls.builtins.formatting.stylua,
       null_ls.builtins.diagnostics.zsh,
     },
   }

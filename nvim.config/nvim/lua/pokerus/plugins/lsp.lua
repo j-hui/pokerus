@@ -58,7 +58,7 @@ M.servers = {
 
       -- Is this file related to Neovim/plugin developmet?
       if is_under "config" or is_under "data" then
-        local luasettings = require("lua-dev").setup {
+        local luasettings = require("neodev").setup {
           library = { plugins = false }, -- I have too many plugins xD
           lspconfig = { settings = new_config.settings },
         }
@@ -153,7 +153,7 @@ function M.on_attach(client, bufnr)
   vim.cmd [[command! Fmt lua vim.lsp.buf.format {async = true}]]
 
   vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-  require("aerial").on_attach(client)
+  -- require("aerial").on_attach(client)
 end
 
 function M.rust_setup()
@@ -178,7 +178,7 @@ function M.config()
   for lsp, cfg in pairs(M.servers) do
     nvim_lsp[lsp].setup(vim.tbl_extend("keep", cfg, {
       on_attach = M.on_attach,
-      capabilities = require("cmp_nvim_lsp").update_capabilities(
+      capabilities = require("cmp_nvim_lsp").default_capabilities(
         vim.lsp.protocol.make_client_capabilities()
       ),
     }))
@@ -203,7 +203,7 @@ function M.plug(use)
     requires = {
       "weilbith/nvim-lsp-smag",
       -- Override tagfunc, use C-] to jump to definition
-      "folke/lua-dev.nvim",
+      "folke/neodev.nvim",
       -- Nvim lua development
       "stevearc/aerial.nvim",
       -- Code outline viewer
