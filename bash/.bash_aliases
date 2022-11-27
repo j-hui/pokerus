@@ -14,6 +14,8 @@ PATH_ADD() {
 }
 
 PATH_ADD ~/.local/tms
+PATH_ADD ~/.ghcup/bin
+
 
 ### fzf
 
@@ -222,7 +224,7 @@ if [ "${0#*bash}" != "$0" ]; then
     }
 
     prompt-demo() {
-        PS1="$GREEN\u@\h$CLEAR\$ "
+        PS1="\\n$GREEN\u@\h$CLEAR\$ "
         PS2='> '
     }
 
