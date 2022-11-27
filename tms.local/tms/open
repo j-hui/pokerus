@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -e
+
+case "$(uname -s)" in
+    Linux*)
+      if which mimeo >/dev/null 2>/dev/null; then
+          mimeo "$@"
+      else
+          xdg-open "$@"
+      fi
+      ;;
+    Darwin*)
+      /usr/bin/open "$@"
+      ;;
+    *)
+      echo "Unknown environment."
+      ;;
+esac

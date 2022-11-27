@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -e
+
+case "$(uname -s)" in
+    Linux*)
+      notify-send "$@"
+      ;;
+    Darwin*)
+      echo "$@"
+      ;;
+    *)
+      echo "Unknown environment."
+      ;;
+esac
