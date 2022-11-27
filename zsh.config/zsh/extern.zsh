@@ -28,3 +28,5 @@ fi
 export ZK_NOTEBOOK_DIR=~/canalave
 
 export RIPGREP_CONFIG_PATH=~/.config/ripgrep/ripgreprc
+
+[ -f ~/.local/share/git-subrepo/.rc ] && source ~/.local/share/git-subrepo/.rc
