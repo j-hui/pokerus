@@ -52,4 +52,6 @@ for i in {1..5} ; do
   cmd="$(printf '.%.0s' {0..$i})"
   def="$(printf '../%.0s' {1..$i})"
   eval "alias $cmd='cd $def'"
+  cmd="$cmd/"
+  eval "alias $cmd='cd $def'"
 done
