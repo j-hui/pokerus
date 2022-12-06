@@ -23,10 +23,20 @@ M.servers = {
       texlab = {
         build = { onSave = true },
         chkTex = { onOpenAndSave = true },
-        forwardSearch = {
-          executable = "zathura",
-          args = { "--synctex-forward", "%l:1:%f", "%p" },
-        },
+        forwardSearch = (function()
+          local skim_path = "/Applications/Skim.app/Contents/SharedSupport/displayline"
+          if vim.fn.executable(skim_path) then
+            return {
+              executable = skim_path,
+              args = { "-g", "%l", "%p", "%f" },
+            }
+          else
+            return {
+              executable = "zathura",
+              args = { "--synctex-forward", "%l:1:%f", "%p" },
+            }
+          end
+        end)()
       },
     },
   },
