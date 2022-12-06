@@ -77,7 +77,7 @@ M.servers = {
     end,
     root_dir = function(filename) -- (extra arg: bufnr)
       local util = require "lspconfig.util"
-      local primary = util.root_pattern ".luarc.json"(filename)
+      local primary = util.root_pattern ".luarc.json" (filename)
       local backup = util.find_git_ancestor(filename)
       return primary or backup
     end,
