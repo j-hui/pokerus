@@ -299,9 +299,10 @@ in
         # C
         gcc gnumake automake cmake autoconf pkg-config m4 libtool dpkg
         gcc-unwrapped gcovr
+        gcc-arm-embedded
         doxygen
         clang clang-tools
-        bear pythonPackages.compiledb
+        bear python3Packages.compiledb
         cdecl
         valgrind
         unstable.universal-ctags
@@ -310,6 +311,7 @@ in
 
         # Python
         (python3.withPackages(ps: with ps; [
+          click
           pynvim
           virtualenvwrapper
           mypy pylint
