@@ -19,6 +19,7 @@ local languages = {
   "lua",
   "make",
   "markdown",
+  "markdown_inline",
   "nix",
   "ocaml",
   "ocaml_interface",

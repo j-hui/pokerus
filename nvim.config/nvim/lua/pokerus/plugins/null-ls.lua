@@ -20,6 +20,13 @@ function M.config()
       null_ls.builtins.diagnostics.zsh,
     },
   }
+  vim.api.nvim_create_autocmd('LspAttach', {
+    callback = function(args)
+      -- When I use gq, I don't want LSP to perform formatting for me for most kinds of buffers.
+      -- See: https://github.com/jose-elias-alvarez/null-ls.nvim/issues/1130#issuecomment-1268760653
+      vim.bo[args.buf].formatexpr = nil
+    end,
+  })
 end
 
 function M.plug(use)
