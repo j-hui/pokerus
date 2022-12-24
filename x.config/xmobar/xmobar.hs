@@ -8,7 +8,7 @@ import           Xmobar
 
 baseConfig :: Config
 baseConfig = defaultConfig
-  { font             = "xft:SauceCodePro Nerd Font Mono:size=12:antialias=true"
+  { font             = "SauceCodePro Nerd Font Mono 12"
   , bgColor          = "black"
   , fgColor          = "#646464"
   , position         = Top
