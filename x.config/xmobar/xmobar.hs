@@ -11,8 +11,7 @@ baseConfig = defaultConfig
   { font             = "SauceCodePro Nerd Font Mono 12"
   , bgColor          = "black"
   , fgColor          = "#646464"
-  , position         = Top
-  , border           = BottomB
+  , position         = TopH 30
   , borderColor      = "#646464"
   , sepChar          = "%"    -- delineator between plugin names and straight text
   , alignSep         = "}{"   -- separator between left-right alignment
@@ -140,7 +139,7 @@ topBar isLaptop = baseConfig { template = left ++ " }{ " ++ right }
         | otherwise = "%default:Master% | %date% | %kbd% "
 
 bottomBar :: Bool -> Config
-bottomBar isLaptop = baseConfig { position = Bottom
+bottomBar isLaptop = baseConfig { position = BottomH 30
                                 , template = left ++ " }{ " ++ right
                                 }
  where
