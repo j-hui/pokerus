@@ -1,7 +1,7 @@
 /* Notification center */
 
 .blurredBG, #main_window, .blurredBG.low, .blurredBG.normal {
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(0, 0, 0, 0.8);
 }
 
 .noti-center.time {
@@ -24,32 +24,32 @@
 }
 
 .blurredBG.notification {
-    background:  rgba(255, 255, 255, 0.4);
+    background:  rgba(0, 0, 0, 0.4);
 }
 
 .blurredBG.notification.critical {
-    background: rgba(255, 0, 0, 0.5);
+    background: rgba(255, 20, 20, 0.8);
 }
 
 .notificationInCenter.critical {
-    background: rgba(155, 0, 20, 0.5);
+    background: rgba(155, 20, 40, 0.8);
 }
 
 /* Labels */
 
 label {
-    color: #322;
+    color: #ccc;
 }
 
 label.notification {
-    color: #322;
+    color: #ccc;
 }
 
 label.critical {
-    color: #000;
+    color: #ccc;
 }
 .notificationInCenter label.critical {
-    color: #000;
+    color: #ccc;
 }
 
 
@@ -81,7 +81,7 @@ button:hover {
 }
 
 .userbuttonlabel {
-    color: #222;
+    color: #ccc;
     font-size: 12px;
 }
 
@@ -90,7 +90,7 @@ button:hover {
 }
 
 .userbuttonlabel:hover {
-    color: #111;
+    color: #ddd;
 }
 
 button.buttonState1 {
@@ -98,7 +98,7 @@ button.buttonState1 {
 }
 
 .userbuttonlabel.buttonState1 {
-    color: #fff;
+    color: #ddd;
 }
 
 button.buttonState1:hover {
@@ -106,7 +106,7 @@ button.buttonState1:hover {
 }
 
 .userbuttonlabel.buttonState1:hover {
-    color: #111;
+    color: #fff;
 }
 
 button.buttonState2 {
@@ -114,7 +114,7 @@ button.buttonState2 {
 }
 
 .userbuttonlabel.buttonState2 {
-    color: #111;
+    color: #ddd;
 }
 
 button.buttonState2:hover {
@@ -122,7 +122,7 @@ button.buttonState2:hover {
 }
 
 .userbuttonlabel.buttonState2:hover {
-    color: #000;
+    color: #fff;
 }
 
 
