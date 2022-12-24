@@ -380,7 +380,7 @@ myStartupHook = do
   setWMName "LG3D"  -- Apparently useful for making Java GUI programs work
   spawnOnce "dunst &"
   spawnOnce "sxhkd &"
-  spawn "~/.config/xmobar/xmobar.hs &"
+  spawnOnce "~/.config/xmobar/xmobar.hs &"
   spawn "xsetroot -cursor_name left_ptr &"
   spawn "xset r rate 250 69 &"
 
