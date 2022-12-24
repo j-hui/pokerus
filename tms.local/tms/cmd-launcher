@@ -29,7 +29,7 @@ else
 fi
 
 if [ -z "$cmd" ]; then
-  err "Usage: $0 [<cmd>]"
+  echo "Usage: $0 [<cmd>]"
   exit 1
 fi
 
