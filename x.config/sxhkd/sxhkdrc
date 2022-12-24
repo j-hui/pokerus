@@ -35,13 +35,13 @@ super + a ; a
 super + a ; o
     xdo activate -N qutebrowser || qutebrowser
 
-## google chrome:
-super + a ; g
-    google-chrome-stable
+## google browser:
+super + a ; b
+    firefox
 
-## incognito chrome:
+## incognito browser:
 super + a ; i
-    google-chrome-stable --incognito
+    firefox --private-window
 
 ## define selected text:
 super + a ; d
