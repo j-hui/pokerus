@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+
+pkill sxhkd
+sxhkd &
+
+pkill -f xmobar.hs
+~/.config/xmobar/xmobar.hs &
+
+~/.local/tms/notifyctl restart
+
+xset r rate 250 69
+xsetroot -cursor_name left_ptr

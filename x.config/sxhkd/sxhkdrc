@@ -68,8 +68,20 @@ super + a ; v
 #
 
 ## clear notifications:
-super + q
-    dunstctl close-all
+super + q ; {q, super + q}
+    ~/.local/tms/notifyctl clear
+
+## clear all notifications:
+super + q ; w
+    ~/.local/tms/notifyctl clear-all
+
+## show/toggle notifications:
+super + q ; space
+    ~/.local/tms/notifyctl toggle
+
+## restart notification daemon:
+super + q ; z
+    ~/.local/tms/notifyctl restart
 
 ## lock:
 super + shift + q

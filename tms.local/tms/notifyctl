@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+case "$1" in
+  "" | clear)
+    notify-send a --hint boolean:deadd-notification-center:true \
+        --hint string:type:clearPopups
+    ;;
+  clear-all)
+    notify-send a --hint boolean:deadd-notification-center:true \
+        --hint string:type:clearInCenter
+    ;;
+  toggle|show)
+    pkill -SIGUSR1 deadd
+    ;;
+  restart)
+    pkill deadd && echo "Killed running deadd process"
+    deadd-notification-center &
+    sleep 0.1
+    notify-send "deadd" "Restarted successfully"
+    ;;
+  *)
+    ;;
+esac

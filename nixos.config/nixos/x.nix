@@ -49,7 +49,9 @@ in
       rofi-pass
       rofi-mpd
       conky
-      dunst libnotify
+      libnotify
+      dunst
+      deadd-notification-center
       pinentry pinentry-gtk2
       xclip
       scrot
