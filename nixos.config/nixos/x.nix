@@ -154,11 +154,10 @@ in
       dbus.enable = true;
       autorandr.enable = true;
       xserver = {
-        inherit (cfg.xkbOptions);
-
         enable = true;
         exportConfiguration = true;
         layout = "us";
+        xkbOptions = cfg.xkbOptions;
 
         videoDrivers =
           cfg.videoDrivers ++ [ "radeon" "cirrus" "vesa" "modesetting"];
@@ -235,8 +234,8 @@ in
         displayManager.lightdm = {
           enable = true;
           greeters.mini = {
-            inherit (cfg.user);
             enable = true;
+            user = cfg.user;
             extraConfig = ''
                   [greeter]
                   show-password-label = true
