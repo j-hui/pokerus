@@ -67,7 +67,7 @@ local function setup_packer()
       transitive_opt = false,
       profile = {
         enable = true,
-        threshold = 5,
+        threshold = 1,
       },
     },
   }
