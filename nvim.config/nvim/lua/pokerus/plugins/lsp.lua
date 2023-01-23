@@ -44,7 +44,7 @@ M.servers = {
   ["pyright"] = {},
   ["tsserver"] = {},
   ["hls"] = {
-    settings = { haskell = { formattingProvider = "brittany" } },
+    settings = { haskell = { formattingProvider = "fourmolu" } },
   },
   ["vimls"] = {},
   ["ocamllsp"] = {},
