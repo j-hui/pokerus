@@ -56,14 +56,15 @@ function M.setup()
   vim.g.loaded_netrwPlugin = 1
   vim.g.mapleader = " "
 
-  local config = {
-    performance = {
-      rtp = {
-        reset = false
-      }
-    }
-  }
-  require("lazy").setup({ { import = "pokerus.plugins" } }, config)
+  local colorscheme = require "pokerus.colorscheme"
+
+  require("lazy").setup({
+    { import = "pokerus.plugins" },
+    colorscheme.colorschemes,
+  }, {
+    performance = { rtp = { reset = false } },
+    install = { colorscheme = { colorscheme.main, "habamax" } },
+  })
 
   vim.fn["pokerus#settings#setup"]()
   setup_nvim_settings()
