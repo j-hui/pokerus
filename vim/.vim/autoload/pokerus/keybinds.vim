@@ -1,4 +1,4 @@
-function s:readlineMaps()
+function! s:readlineMaps() abort
   " NOTE: some readline-style bindings cherrypicked/simplified from tpope/vim-rsi
 
   if &encoding ==# 'latin1' && has('gui_running') && !empty(findfile('plugin/sensible.vim', escape(&runtimepath, ' ')))
@@ -40,7 +40,7 @@ function s:readlineMaps()
   endif
 endfunction
 
-function s:navigationMaps()
+function! s:navigationMaps() abort
   " Move forward by a character
   nnoremap g<Space> <Space>
 
@@ -86,7 +86,7 @@ function s:navigationMaps()
 
   nnoremap <silent> = :let @/='\<'.expand('<cword>').'\>'<bar>set hlsearch<CR>
 
-  function! s:i_ctrl_e()
+  function! s:i_ctrl_e() abort
     " If in context menu, accept selection
     if pumvisible()
       return "\<C-y>"
@@ -117,7 +117,7 @@ function s:navigationMaps()
   nmap <silent> g= :edit .<CR>
 endfunction
 
-function s:editingMaps()
+function! s:editingMaps() abort
   set pastetoggle=<F2>
   " Don't leave visual mode when indending
   xnoremap < <gv
@@ -167,7 +167,7 @@ function s:editingMaps()
   xnoremap C "_C
 endfunction
 
-function s:commandMaps()
+function! s:commandMaps() abort
   " Eliminate extra key press
   nnoremap ; :
   vnoremap ; :
@@ -187,7 +187,7 @@ function s:commandMaps()
   " cnoremap <expr> <C-D> getcmdpos()>strlen(getcmdline())?"\<Lt>C-D>":"\<Lt>Del>"
   " cnoremap <expr> <C-F> getcmdpos()>strlen(getcmdline())?&cedit:"\<Lt>Right>"
 
-  function! s:c_ctrl_u()
+  function! s:c_ctrl_u() abort
     " If in context menu, simulate page up-ish behavior
     if pumvisible()
       return repeat("\<c-p>", 10)
@@ -200,7 +200,7 @@ function s:commandMaps()
     return "\<C-U>"
   endfunction
 
-  function! s:c_ctrl_d()
+  function! s:c_ctrl_d() abort
     " If in context menu, simulate page down-ish behavior
     if pumvisible()
       return repeat("\<c-n>", 10)
@@ -209,7 +209,7 @@ function s:commandMaps()
     return "\<Del>"
   endfunction
 
-  function! s:c_ctrl_k()
+  function! s:c_ctrl_k() abort
     " Simulate kill line, stash contents in small delete register
     if getcmdpos() > 0
       let @- = getcmdline()[getcmdpos()-1:]
@@ -225,11 +225,11 @@ function s:commandMaps()
   cnoremap <C-Y> <C-R>-
 endfunction
 
-function s:termMaps()
+function! s:termMaps() abort
   tnoremap <C-]> <C-\><C-N>
 endfunction
 
-function pokerus#keybinds#setup()
+function! pokerus#keybinds#setup() abort
 
   " Disable ex mode
   nnoremap Q <nop>

@@ -1,6 +1,6 @@
 scriptencoding utf-8
 
-function s:BackupFiles()
+function! s:BackupFiles() abort
   silent! !mkdir -p ~/.tmp/{backup,swp,undo}.{nvim,vim}
 
   if has('nvim')
@@ -24,7 +24,7 @@ function s:BackupFiles()
   endif
 endfunction
 
-function s:TerminalIO()
+function! s:TerminalIO() abort
   set mouse=a       " Mouse interaction
 
   for i in range(2, 12) " F2...F12 seem to cause Neovim to panic
@@ -60,7 +60,7 @@ function s:TerminalIO()
   set lazyredraw
 endfunction
 
-function s:Clipboard()
+function! s:Clipboard() abort
   let os = substitute(system('uname'), '\n', '', '')
   if os ==? 'Darwin'
     set clipboard=unnamed
@@ -88,8 +88,15 @@ endfunction
 
 let s:pokerus_sharemode = 1
 
-function! g:PokerusToggleShare()
-  if s:pokerus_sharemode
+function! g:PokerusSetShare(s) abort
+  if a:s
+    set norelativenumber cursorline
+    let s:pokerus_sharemode = 1
+
+    augroup cursor_underline  " Clear cursorline toggling
+      autocmd!
+    augroup END
+  else
     set relativenumber nocursorline
     let s:pokerus_sharemode = 0
 
@@ -98,18 +105,18 @@ function! g:PokerusToggleShare()
       autocmd InsertEnter * set cursorline
       autocmd InsertLeave * set nocursorline
     augroup END
-
-  else
-    set norelativenumber cursorline
-    let s:pokerus_sharemode = 1
-
-    augroup cursor_underline  " Clear cursorline toggling
-      autocmd!
-    augroup END
   endif
 endfunction
 
-function s:Appearance()
+function! g:PokerusToggleShare() abort
+  if s:pokerus_sharemode
+    call g:PokerusSetShare(0)
+  else
+    call g:PokerusSetShare(1)
+  endif
+endfunction
+
+function! s:Appearance() abort
   set background=dark
   set number                " Line numbers
   set relativenumber        " Relative line numbers
@@ -150,9 +157,13 @@ function s:Appearance()
   set foldlevel=99                        " Start without folding too many things
 
   set shortmess+=c                        " Don't show information about pop-up menu
+
+  if has('splitkeep')
+    set splitkeep=screen                  " Keep splits stable
+  endif
 endfunction
 
-function s:Navigation()
+function! s:Navigation() abort
   set hidden                      " Jump away files even when unsaved
 
   set backspace=indent,eol,start  " Backspacing over everything in insert mode
@@ -187,7 +198,7 @@ function s:Navigation()
   let g:netrw_bufsettings = 'noma nomod nonu nowrap ro buflisted'
 endfunction
 
-function s:Editing()
+function! s:Editing() abort
   set textwidth=80      " How wide text should be
   set expandtab         " Expand tabs to spaces
   set tabstop=4         " Expand tabs to 4 spaces
@@ -210,12 +221,12 @@ function s:Editing()
   " Add to filetype-specific hooks below if misbehaving.
 endfunction
 
-function s:Spelling()
+function! s:Spelling() abort
   setlocal spelllang=en_us
   set spellfile=~/.vim/spell/en.utf-8.add
 endfunction
 
-function s:Misc()
+function! s:Misc() abort
   set shell=bash
   set modeline
   set modelines=5
@@ -248,7 +259,7 @@ function s:Misc()
   let g:no_gitrebase_maps = 1
 endfunction
 
-function pokerus#settings#setup()
+function! pokerus#settings#setup() abort
   call s:BackupFiles()
   call s:TerminalIO()
   call s:Clipboard()
