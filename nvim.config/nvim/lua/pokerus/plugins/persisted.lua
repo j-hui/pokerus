@@ -1,16 +1,18 @@
-local M = {}
-
-function M.plug(use)
-  use {
-    "olimorris/persisted.nvim",
-    opt = true,
-    cmd = { "SessionLoad", "SessionLoadLast" },
-    config = function()
-      require("persisted").setup {
-        use_git_branch = true,
-      }
-    end,
-  }
-end
-
-return M
+return {
+  "olimorris/persisted.nvim",
+  cmd = {
+    "SessionToggle",
+    "SessionStart",
+    "SessionStop",
+    "SessionSave",
+    "SessionLoad",
+    "SessionLoadLast",
+    "SessionDelete",
+  },
+  config = function()
+    require("persisted").setup {
+      use_git_branch = true,
+    }
+    require("telescope").load_extension("persisted")
+  end,
+}

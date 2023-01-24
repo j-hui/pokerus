@@ -1,17 +1,8 @@
-local M = {}
-
-function M.config()
-  require("pokerus").vimsetup("markdown")
-end
-
-function M.plug(use)
-  use {
-    "preservim/vim-markdown",
+return {
+  { "preservim/vim-markdown",
     config = function()
-      require("pokerus.plugins.markdown").config()
+      require("pokerus").vimsetup("markdown")
     end,
-  }
-  use "ellisonleao/glow.nvim"
-end
-
-return M
+  },
+  { "ellisonleao/glow.nvim" }
+}

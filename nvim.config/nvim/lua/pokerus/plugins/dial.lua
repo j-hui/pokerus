@@ -1,22 +1,20 @@
 return {
-  plug = function(use)
-    use {
-      "monaqa/dial.nvim",
-      config = function()
-        local dial = require("dial.map")
-
-        require("pokerus").nmap({
-          ["+"] = { dial.inc_normal(), "dial-increment" },
-          ["-"] = { dial.dec_normal(), "dial-decrement" },
-        }, { noremap = true })
-
-        require("pokerus").xmap({
-          ["+"] = { dial.inc_visual(), "dial-increment" },
-          ["-"] = { dial.dec_visual(), "dial-decrement" },
-          ["g+"] = { dial.inc_gvisual(), "dial-g-increment" },
-          ["g-"] = { dial.dec_gvisual(), "dial-g-decrement" },
-        }, { noremap = true })
-      end,
-    }
+  "monaqa/dial.nvim",
+  keys = {
+    { "+", mode = "n" },
+    { "-", mode = "n" },
+    { "+", mode = "x" },
+    { "-", mode = "x" },
+    { "g+", mode = "x" },
+    { "g-", mode = "x" },
+  },
+  config = function()
+    local dm = require("dial.map")
+    vim.keymap.set("n", "+", dm.inc_normal(), { desc = "dial-increment" })
+    vim.keymap.set("n", "-", dm.dec_normal(), { desc = "dial-decrement" })
+    vim.keymap.set("v", "+", dm.inc_visual(), { desc = "dial-increment" })
+    vim.keymap.set("v", "-", dm.dec_visual(), { desc = "dial-decrement" })
+    vim.keymap.set("v", "g+", dm.inc_gvisual(), { desc = "dial-g-increment" })
+    vim.keymap.set("v", "g-", dm.dec_gvisual(), { desc = "dial-g-decrement" })
   end,
 }

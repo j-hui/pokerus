@@ -1,15 +1,4 @@
-local M = {}
-
-function M.config()
-end
-
-function M.plug(use)
-  use {
-    'mong8se/actually.nvim',
-    config = function()
-      require("pokerus.plugins.actually").config()
-    end,
-  }
-end
-
-return M
+return {
+  -- A neovim plugin to help load the file you meant to load.
+  'mong8se/actually.nvim'
+}

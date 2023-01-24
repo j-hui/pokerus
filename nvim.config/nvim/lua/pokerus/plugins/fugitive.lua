@@ -1,24 +1,16 @@
-local M = {}
-
-function M.plug(use)
-  use {
-    "tpope/vim-fugitive",
-    config = function()
-      require("pokerus").vimsetup("fugitive")
-      require("pokerus").nmap({
-        name = "git",
-        d = { "<cmd>Gdiffsplit<CR>", "git-diff-split" },
-        D = { "<cmd>Git diff --cached<CR>", "git-diff-cached" },
-        p = { "<cmd>Git pull<CR>", "git-pull" },
-        P = { "<cmd>Git push<CR>", "git-push" },
-        c = { "<cmd>Git commit<CR>", "git-commit" },
-        s = { "<cmd>Git<CR>", "git-status" },
-
-        -- l = { "<cmd>Gclog<CR>", "git-log" },
-        -- use telescope instead
-      }, { prefix = "<leader>g" })
-    end,
-  }
-end
-
-return M
+return {
+  "tpope/vim-fugitive",
+  event = "VeryLazy",
+  cmd = { "G", "Git" },
+  keys = {
+    { "<leader>gd", "<cmd>Gdiffsplit<CR>", mode = "n", desc = "git-diff-split" },
+    { "<leader>gD", "<cmd>Git diff --cached<CR>", mode = "n", desc = "git-diff-cached" },
+    { "<leader>gp", "<cmd>Git pull<CR>", mode = "n", desc = "git-pull" },
+    { "<leader>gP", "<cmd>Git push<CR>", mode = "n", desc = "git-push" },
+    { "<leader>gc", "<cmd>Git commit<CR>", mode = "n", desc = "git-commit" },
+    { "<leader>gs", "<cmd>Git<CR>", mode = "n", desc = "git-status" },
+  },
+  config = function()
+    require("pokerus").vimsetup("fugitive")
+  end,
+}

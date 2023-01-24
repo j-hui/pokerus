@@ -1,5 +1,3 @@
-local M = {}
-
 local function noremap(mode, lhs, rhs)
   vim.api.nvim_buf_set_keymap(0, mode, lhs, rhs, { noremap = true })
 end
@@ -9,7 +7,7 @@ local function unmap(mode, lhs)
 end
 
 -- venn.nvim: enable or disable keymappings
-M.toggle = function()
+local function venn_toggle()
   local venn_enabled = vim.inspect(vim.b.venn_enabled)
   if venn_enabled == "nil" then
     vim.b.venn_enabled = true
@@ -39,15 +37,13 @@ M.toggle = function()
   end
 end
 
-M.plug = function(use)
-  use {
-    "jbyuki/venn.nvim",
-    config = function()
-      vim.g.venn_ve = nil
-      vim.g.venn_enabled = false
-      vim.cmd [[command! Venn lua require"pokerus.plugins.venn".toggle()]]
-    end,
-  }
-end
+vim.g.venn_ve = nil
+vim.g.venn_enabled = false
 
-return M
+return {
+  "jbyuki/venn.nvim",
+  cmd = { "Venn", "VBox" },
+  init = function ()
+    vim.api.nvim_create_user_command("Venn", venn_toggle, {})
+  end,
+}

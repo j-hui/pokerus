@@ -1,23 +1,11 @@
-local M = {}
-
-M.servers = {
+-- TODO: see how to decouple these configs from lsp.lua
+local lsp_servers = {
   ["clangd"] = {},
   ["texlab"] = {
     on_attach = function(client, bufnr)
-      require("pokerus.plugins.lsp").on_attach(client, bufnr)
-      require("pokerus").nmap(
-        {
-          c = {
-            "<cmd>TexlabBuild<CR>",
-            "tex-build",
-          },
-          f = {
-            "<cmd>TexlabForward<CR>",
-            "tex-goto-line",
-          },
-        },
-        { prefix = "<leader>l", noremap = true, silent = true, buffer = bufnr }
-      )
+      require("pokerus.lsp").on_attach(client, bufnr)
+      vim.keymap.set("n", "<leader>lc", "<cmd>TexlabBuild<CR>", { desc = "tex-build" })
+      vim.keymap.set("n", "<leader>lf", "<cmd>TexlabForward<CR>", { desc = "tex-goto-line" })
     end,
     settings = {
       texlab = {
@@ -40,7 +28,6 @@ M.servers = {
       },
     },
   },
-  ["rust_analyzer"] = {},
   ["pyright"] = {},
   ["tsserver"] = {},
   ["hls"] = {
@@ -84,150 +71,25 @@ M.servers = {
   },
 }
 
-function M.on_attach(client, bufnr)
-  require("pokerus").nmap({
-    name = "lsp",
-    k = {
-      "<cmd>lua vim.lsp.buf.hover()<CR>",
-      "lsp-hover",
-    },
-    d = {
-      "<cmd>lua vim.lsp.buf.definition()<CR>",
-      "lsp-goto-definition",
-    },
-    e = {
-      "<cmd>lua vim.lsp.buf.declaration()<CR>",
-      "lsp-goto-declaration",
-    },
-    i = {
-      "<cmd>lua vim.lsp.buf.implementation()<CR>",
-      "lsp-goto-implementation",
-    },
-    t = {
-      "<cmd>lua vim.lsp.buf.type_definition()<CR>",
-      "lsp-goto-typedef",
-    },
-    ["="] = {
-      "<cmd>lua vim.lsp.buf.references()<CR>",
-      "lsp-references",
-    },
-    a = {
-      "<cmd>lua vim.lsp.buf.code_action()<CR>",
-      "lsp-code-action",
-    },
-    x = {
-      "<cmd>lua vim.lsp.codelens.run()<CR>",
-      "lsp-lens-code-action",
-    },
-    r = {
-      "<cmd>lua vim.lsp.buf.rename()<CR>",
-      "lsp-rename",
-    },
-  }, {
-    prefix = "<leader>l",
-    noremap = true,
-    silent = true,
-    buffer = bufnr,
-  })
+return {
+  "neovim/nvim-lspconfig",
+  dependencies = {
+    "weilbith/nvim-lsp-smag",
+    -- Override tagfunc, use C-] to jump to definition
 
-  require("pokerus").nmap({
-    K = {
-      "<cmd>lua vim.lsp.buf.hover()<CR>",
-      "lsp-hover",
-    },
-  }, { noremap = true, silent = true, buffer = bufnr })
+    "folke/neodev.nvim",
+    -- Nvim lua development
 
-  require("pokerus").xmap {
-    ["<leader>la"] = {
-      "<cmd>lua vim.lsp.buf.code_action()<CR>",
-      "lsp-code-action",
-      noremap = true,
-      silent = true,
-      buffer = bufnr,
-    },
-  }
+    "folke/lsp-colors.nvim",
+    -- Creates missing LSP diagnostics highlight groups
 
-  require("pokerus").xmap {
-    ["<leader>lo"] = {
-      "<cmd>AerialToggle!<CR>",
-      "lsp-outline",
-      noremap = true,
-      silent = true,
-      buffer = bufnr,
-    },
-  }
-
-  -- vim.cmd [[autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
-  -- ^NOTE: causes weird issue sometimes but that can be ignored
-
-  vim.cmd [[command! Fmt lua vim.lsp.buf.format {async = true}]]
-
-  vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-  -- require("aerial").on_attach(client)
-end
-
-function M.rust_setup()
-  require("rust-tools").setup {
-    server = {
-      on_attach = M.on_attach,
-    },
-  }
-end
-
-function M.config()
-  local nvim_lsp = require "lspconfig"
-
-  require("aerial").setup {
-    manage_folds = false,
-    backends = {
-      ["_"] = { "lsp", "treesitter" },
-      ["bib"] = { "treesitter" },
-    },
-  }
-
-  for lsp, cfg in pairs(M.servers) do
-    nvim_lsp[lsp].setup(vim.tbl_extend("keep", cfg, {
-      on_attach = M.on_attach,
-      capabilities = require("cmp_nvim_lsp").default_capabilities(
-        vim.lsp.protocol.make_client_capabilities()
-      ),
-    }))
-  end
-
-  vim.cmd [[
-    augroup nvimlsp_rust
-      autocmd!
-      autocmd FileType rust lua require("pokerus.plugins.lsp").rust_setup()
-    augroup END
-
-    sign define LspDiagnosticsSignError text=✖ texthl=LspDiagnosticsSignError
-    sign define LspDiagnosticsSignWarning text=‼ texthl=LspDiagnosticsSignWarning
-    sign define LspDiagnosticsSignInformation text=ℹ texthl=LspDiagnosticsSignInformation
-    sign define LspDiagnosticsSignHint text=» texthl=LspDiagnosticsSignHint
-  ]]
-end
-
-function M.plug(use)
-  use {
-    "neovim/nvim-lspconfig",
-    requires = {
-      "weilbith/nvim-lsp-smag",
-      -- Override tagfunc, use C-] to jump to definition
-      "folke/neodev.nvim",
-      -- Nvim lua development
-      "stevearc/aerial.nvim",
-      -- Code outline viewer
-      "nvim-treesitter/nvim-treesitter",
-      -- Required for Aerial
-      "folke/lsp-colors.nvim",
-      -- Creates missing LSP diagnostics highlight groups
-      "simrat39/rust-tools.nvim",
-      -- Rust-specific support
-    },
-    config = function()
-      require("pokerus.plugins.lsp").config()
-    end,
-  }
-end
-
-return M
+    "hrsh7th/nvim-cmp",
+    "hrsh7th/cmp-nvim-lsp",
+    -- Completion suggestions
+  },
+  config = function()
+    for lsp, cfg in pairs(lsp_servers) do
+      require("pokerus.lsp").setup(lsp, cfg)
+    end
+  end,
+}

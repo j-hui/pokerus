@@ -1,11 +1,6 @@
 return {
-  plug = function(use)
-    use {
-      "danymat/neogen",
-      requires = { "nvim-treesitter/nvim-treesitter" },
-      config = function()
-        require("neogen").setup {}
-      end,
-    }
-  end,
+  "danymat/neogen",
+  dependencies = { "nvim-treesitter/nvim-treesitter" },
+  cmd = "Neogen",
+  config = true,
 }

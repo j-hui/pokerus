@@ -1,19 +1,18 @@
 local M = {}
 
 function M.snip_path(ft)
-  if ft == ".init" then
-    return (vim.fn.stdpath "config") .. "/lua/pokerus/luasnip/init.lua"
+  local path = (vim.fn.stdpath "config") .. "/lua/pokerus/luasnip/"
+  if ft == nil or ft == ".init" then
+    path = path .. "init.lua"
   else
-    return (vim.fn.stdpath "config")
-      .. "/lua/pokerus/luasnip/ft/"
-      .. ft
-      .. ".lua"
+    path = path .. "ft/" .. ft .. ".lua"
   end
+  return path
 end
 
-function M.edit(ft)
-  if ft then
-    vim.cmd("edit" .. M.snip_path(ft))
+function M.edit(args)
+  if args.args then
+    vim.cmd("edit " .. M.snip_path(args.args))
   else
     local fts = { "all", ".init" }
 
@@ -24,41 +23,29 @@ function M.edit(ft)
 
     vim.ui.select(fts, { prompt = "Luasnip filetype:" }, function(choice)
       if choice then
-        vim.cmd("edit" .. M.snip_path(choice))
+        vim.cmd("edit " .. M.snip_path(choice))
       end
     end)
   end
 end
 
 function M.source()
-  vim.cmd(
-    "source " .. (vim.fn.stdpath "config") .. "/lua/pokerus/luasnip/init.lua"
-  )
-  require("luasnip.loaders.from_snipmate").lazy_load({path = "./snippets"})
+  vim.cmd("source " .. M.snip_path())
+  require("luasnip.loaders.from_snipmate").lazy_load({ path = "./snippets" })
 end
 
-function M.config()
-  vim.cmd [[
-    command! -nargs=? -complete=filetype LuaSnipEdit :lua require("pokerus.plugins.luasnip").edit(<f-args>)
-    command! -nargs=? -complete=filetype LSE :lua require("pokerus.plugins.luasnip").edit(<f-args>)
-    command! LuaSnipRefresh :lua require("pokerus.plugins.luasnip").source()
-    command! LSR :lua require("pokerus.plugins.luasnip").source()
-  ]]
+return {
+  "L3MON4D3/LuaSnip",
+  event = "InsertEnter",
+  dependencies = {
+    "rafamadriz/friendly-snippets",
+  },
+  config = function()
+    vim.api.nvim_create_user_command("LuaSnipEdit", M.edit, { nargs = "?", complete = "filetype" })
+    vim.api.nvim_create_user_command("LSE", M.edit, { nargs = "?", complete = "filetype" })
+    vim.api.nvim_create_user_command("LuaSnipRefresh", M.source, {})
+    vim.api.nvim_create_user_command("LSE", M.source, {})
 
-  M.source()
-end
-
-function M.plug(use)
-  use {
-    "L3MON4D3/LuaSnip",
-    event = "VimEnter",
-    requires = {
-      "rafamadriz/friendly-snippets",
-    },
-    config = function()
-      require("pokerus.plugins.luasnip").config()
-    end,
-  }
-end
-
-return M
+    M.source()
+  end,
+}

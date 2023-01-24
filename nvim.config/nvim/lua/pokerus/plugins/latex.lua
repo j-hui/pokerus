@@ -1,34 +1,27 @@
-local M = {}
-function M.setup()
-  -- I could do this in Lua but there's the stupid escapes to fuss with
-  vim.cmd [[
-    let b:endwise_addition = '\="\\end" . matchstr(submatch(0), "{.\\{-}}")'
-    let b:endwise_words = 'begin'
-    let b:endwise_pattern = '\\begin{.\{-}}'
-    let b:endwise_syngroups = 'texSection,texBeginEnd,texBeginEndName,texStatement'
-  ]]
+return {
+  "KeitaNakamura/tex-conceal.vim",
+  ft = "tex",
+  init = function()
+    vim.api.nvim_create_autocmd("Filetype", {
+      pattern = "tex",
+      callback = function()
+        vim.cmd [[
+          let b:endwise_addition = '\="\\end" . matchstr(submatch(0), "{.\\{-}}")'
+          let b:endwise_words = 'begin'
+          let b:endwise_pattern = '\\begin{.\{-}}'
+          let b:endwise_syngroups = 'texSection,texBeginEnd,texBeginEndName,texStatement'
+        ]]
 
-  require("pokerus").imap({
-    ["/"] = { "\\emph{}<left>", "latex-emph" },
-    ["t"] = { "\\texttt{}<left>", "latex-texttt" },
-    ["b"] = { "\\textbf{}<left>", "latex-textbf" },
-    ["i"] = { "\\textit{}<left>", "latex-textit" },
-  }, { buffer = 0, prefix = "<C-g>" })
-end
+        vim.keymap.set("i", "<C-g>/", "\\emph{}<left>", { desc = "latex-emph" })
+        vim.keymap.set("i", "<C-g>t", "\\texttt{}<left>", { desc = "latex-texttt" })
+        vim.keymap.set("i", "<C-g>b", "\\textbf{}<left>", { desc = "latex-textbf" })
+        vim.keymap.set("i", "<C-g>i", "\\textit{}<left>", { desc = "latex-textit" })
+      end
+    })
+  end,
+}
 
-function M.plug(use)
-  use { "KeitaNakamura/tex-conceal.vim" }
-  vim.cmd [[
-    augroup tex-settings
-      autocmd!
-      autocmd Filetype tex lua require("pokerus.plugins.latex").setup()
-    augroup END
-  ]]
-end
-
-return M
-
---[[ TODO: recover my old vimtex config (if I ever use it again)
+--[[ NOTE: recover my old vimtex config (if I ever use it again)
 function s:StackVimtex()
   Plug 'lervag/vimtex'
     let g:tex_flavor = 'latex'

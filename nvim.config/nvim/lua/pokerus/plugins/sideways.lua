@@ -1,14 +1,8 @@
 return {
-  plug = function(use)
-    use {
-      "AndrewRadev/sideways.vim",
-      -- Move things sideways in lists
-      config = function()
-        require("pokerus").nmap {
-          ["ch"] = { "<cmd>SidewaysLeft<cr>", "sideways-left" },
-          ["cl"] = { "<cmd>SidewaysRight<cr>", "sideways-right" },
-        }
-      end,
-    }
-  end,
+  "AndrewRadev/sideways.vim",
+  -- Move things sideways in lists
+  keys = {
+    { "ch",  "<cmd>SidewaysLeft<CR>", mode = "n", desc = "sideways-left" },
+    { "ch",  "<cmd>SidewaysRight<CR>", mode = "n", desc = "sideways-right" },
+  },
 }

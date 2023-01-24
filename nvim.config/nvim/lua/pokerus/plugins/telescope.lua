@@ -1,5 +1,3 @@
-local M = {}
-
 local function action(f, ...)
   local args = { ... }
   return function(b)
@@ -57,6 +55,7 @@ local imaps = {
   end,
   ["<Esc>"] = action "close",
 }
+
 local nmaps = {
   ["<Up>"] = { "k", type = "command" },
   ["<Down>"] = { "j", type = "command" },
@@ -69,123 +68,99 @@ local nmaps = {
   ["<C-n>"] = action_set("shift_selection", 1),
 }
 
-function M.config()
-  require("telescope").setup {
-    defaults = require("telescope.themes").get_ivy {
-      winblend = 20,
-      mappings = { i = imaps, n = nmaps },
-      file_ignore_patterns = { "node_modules", ".git" },
-      vimgrep_arguments = {
-        "rg",
-        "--color=never",
-        "--no-heading",
-        "--with-filename",
-        "--line-number",
-        "--column",
-        "--smart-case",
-        "-u",
-        "-u",
-      },
-    },
-    pickers = {
-      find_files = {
-        hidden = true,
-      },
-    },
-    extensions = {
-      file_browser = {
-        mappings = {
-          n = nmaps,
-          i = vim.tbl_extend("force", imaps, {
-            ["<C-o>"] = fb_action "create",
-            ["<C-g>"] = fb_action "toggle_hidden",
-            ["<C-]>"] = fb_action "goto_cwd",
-            ["<C-l>"] = fb_action "change_cwd",
-            ["~"] = fb_action "goto_home_dir",
-            ["<C-w>"] = function()
-              vim.cmd [[norm! db]]
-            end,
-          }),
+return {
+  "nvim-telescope/telescope.nvim",
+  dependencies = {
+    "nvim-lua/plenary.nvim",
+    { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+    "nvim-telescope/telescope-file-browser.nvim",
+    "keyvchan/telescope-find-pickers.nvim",
+  },
+  cmd = "Telescope",
+  init = function()
+    local function nmap(...)
+      vim.keymap.set("n", ...)
+    end
+
+    nmap("<leader><leader>", extension "find_pickers", { desc = "telescope" })
+
+    nmap("<leader>f", extension "file_browser", { desc = "telescope-file-browser" })
+    nmap("<leader>o", builtin "find_files", { desc = "telescope-files" })
+    nmap("<leader>O", builtin("find_files", { no_ignore = true }), { desc = "telescope-files*" })
+    nmap("<leader>e", builtin_cwd "find_files", { desc = "telescope-cwd-files" })
+    nmap("<leader>E", builtin_cwd("find_files", { no_ignore = true }), { desc = "telescope-cwd-files*" })
+    nmap("<leader>b", builtin "buffers", { desc = "telescope-buffers" })
+    nmap("<leader>*", builtin "grep_string", { desc = "telescope-grep-word" })
+    nmap("<leader>r", builtin_cwd "live_grep", { desc = "telescope-grep-live" })
+    nmap("<leader>/", builtin_cwd("live_grep", { grep_open_files = true }), { desc = "telescope-sneak" })
+    nmap("<leader>h", builtin "help_tags", { desc = "telescope-help" })
+    nmap("<leader>c", builtin "commands", { desc = "telescope-commands" })
+    nmap("<leader>K", builtin "man_pages", { desc = "telescope-man-pages" })
+
+    nmap("<leader>gf", builtin "git_files", { desc = "git-files" })
+    nmap("<leader>gm", builtin "git_status", { desc = "git-modified" })
+    nmap("<leader>gl", builtin "git_commits", { desc = "git-log" })
+    nmap("<leader>gL", builtin "git_bcommits", { desc = "git-buffer-log" })
+    nmap("<leader>gb", builtin "git_branches", { desc = "git-branches" })
+
+    nmap("<leader>l/", builtin "lsp_workspace_symbols", { desc = "lsp-workspace-symbols" })
+    nmap("<leader>ls", builtin "lsp_document_symbols", { desc = "lsp-document-symbols" })
+
+    local cmd = vim.api.nvim_create_user_command
+    cmd("H", ":Telescope help_tags", { desc = "telescope-help" })
+    cmd("Help", ":Telescope help_tags", { desc = "telescope-help" })
+    cmd("Hi", ":Telescope help_tags", { desc = "telescope-highlights" })
+    cmd("Highlights", ":Telescope help_tags", { desc = "telescope-highlights" })
+    cmd("M", ":Telescope man_pages", { desc = "telescope-man-pages" })
+    cmd("Man", ":Telescope man_pages", { desc = "telescope-man-pages" })
+
+    cmd("Rg", function(t)
+      require("telescope.builtin").grep_string { search = t.args }
+    end, { desc = "telescope-grep", nargs = "+" })
+
+  end,
+  config = function()
+    require("telescope").setup {
+      defaults = require("telescope.themes").get_ivy {
+        winblend = 20,
+        mappings = { i = imaps, n = nmaps },
+        file_ignore_patterns = { "node_modules", ".git" },
+        vimgrep_arguments = {
+          "rg",
+          "--color=never",
+          "--no-heading",
+          "--with-filename",
+          "--line-number",
+          "--column",
+          "--smart-case",
+          "-u",
+          "-u",
         },
       },
-    },
-  }
-  require("telescope").load_extension "fzf"
-  require("telescope").load_extension "file_browser"
-
-  require("pokerus").nmap({
-    f = { extension "file_browser", "telescope-file-browser" },
-    o = { builtin "find_files", "telescope-files" },
-    O = {
-      builtin("find_files", { no_ignore = true }),
-      "telescope-files*",
-    },
-    e = { builtin_cwd "find_files", "telescope-edit" },
-    E = {
-      builtin_cwd("find_files", { no_ignore = true }),
-      "telescope-edit*",
-    },
-    b = { builtin "buffers", "telescope-buffers" },
-    ["*"] = { builtin "grep_string", "telescope-grep-word" },
-    r = { builtin_cwd "live_grep", "telescope-grep-live" },
-    ["/"] = {
-      builtin_cwd("live_grep", { grep_open_files = true }),
-      "telescope-sneak",
-    },
-    h = { builtin "help_tags", "telescope-help" },
-    c = { builtin "commands", "telescope-commands" },
-    K = { builtin "man_pages", "telescope-man-pages" },
-  }, { prefix = "<leader>" })
-
-  require("pokerus").nmap({
-    name = "git",
-    f = { builtin "git_files", "git-files" },
-    m = { builtin "git_status", "git-modified" },
-    l = { builtin "git_commits", "git-log" },
-    L = { builtin "git_bcommits", "git-buffer-log" },
-    b = { builtin "git_branches", "git-branches" },
-  }, { prefix = "<leader>g" })
-
-  require("pokerus").nmap({
-    name = "git",
-    f = { builtin "git_files", "git-files" },
-    m = { builtin "git_status", "git-modified" },
-    l = { builtin "git_commits", "git-log" },
-    L = { builtin "git_bcommits", "git-buffer-log" },
-    b = { builtin "git_branches", "git-branches" },
-  }, { prefix = "<leader>g" })
-
-  require("pokerus").nmap({
-    name = "lsp",
-    ["/"] = { builtin "lsp_workspace_symbols", "lsp-workspace-symbols" },
-    s = { builtin "lsp_document_symbols", "lsp-document-symbols" },
-  }, { prefix = "<leader>l" })
-
-  vim.cmd [[
-    command! H                  :Telescope help_tags
-    command! Help               :Telescope help_tags
-
-    command! Hi                 :Telescope highlights
-    command! Highlights         :Telescope highlights
-
-    command! M                  :Telescope man_pages
-    command! Manpages           :Telescope man_pages
-
-    command! -nargs=+ -bang Rg  :lua require'telescope.builtin'.grep_string{search=<q-args>}
-    ]]
-end
-
-function M.plug(use)
-  use {
-    "nvim-telescope/telescope.nvim",
-    opt = true,
-    event = "VimEnter",
-    requires = {
-      "nvim-lua/plenary.nvim",
-      { "nvim-telescope/telescope-fzf-native.nvim", run = "make" },
-      "nvim-telescope/telescope-file-browser.nvim",
-    },
-    config = [[require("pokerus.plugins.telescope").config()]],
-  }
-end
-return M
+      pickers = {
+        find_files = {
+          hidden = true,
+        },
+      },
+      extensions = {
+        file_browser = {
+          mappings = {
+            n = nmaps,
+            i = vim.tbl_extend("force", imaps, {
+              ["<C-o>"] = fb_action "create",
+              ["<C-g>"] = fb_action "toggle_hidden",
+              ["<C-]>"] = fb_action "goto_cwd",
+              ["<C-l>"] = fb_action "change_cwd",
+              ["~"] = fb_action "goto_home_dir",
+              ["<C-w>"] = function()
+                vim.cmd [[norm! db]]
+              end,
+            }),
+          },
+        },
+      },
+    }
+    require("telescope").load_extension "fzf"
+    require("telescope").load_extension "file_browser"
+  end,
+}

@@ -1,38 +1,13 @@
-local M = {}
-
-function M.config()
-  -- TODO: open luadev buffer automatically
-  -- TODO: binding to close luadev buffer
-  -- TODO: evaluate text object based on treesitter nodes
-
-  require("pokerus").nmap ({
-    name = "+luadev",
-    ["<space>"] = {
-      "<cmd>Luadev<CR>"
-      , "lua-buffer",
-    },
-    ["c"] = {
-      "<Plug>(Luadev-Run)",
-      "lua-run",
-    },
-    ["x"] = {
-      "<Plug>(Luadev-RunLine)",
-      "lua-run-line",
-    },
-    ["k"] = {
-      "<Plug>(Luadev-RunWord)",
-      "lua-run-line",
-    },
-  }, {prefix = "<leader>x"})
-end
-
-function M.plug(use)
-  use {
-    "bfredl/nvim-luadev",
-    config = function()
-      require("pokerus.plugins.luadev").config()
-    end,
-  }
-end
-
-return M
+return {
+  "bfredl/nvim-luadev",
+  ft = "lua",
+  keys = {
+    -- TODO: open luadev buffer automatically
+    -- TODO: binding to close luadev buffer
+    -- TODO: evaluate text object based on treesitter nodes
+    { "<leader>x<space>", "<cmd>Luadev<CR>", mode = "n", desc = "lua-buffer" },
+    { "<leader>xc", "<Plug>(Luadev-Run)", mode = "n", desc = "lua-run" },
+    { "<leader>xx", "<Plug>(Luadev-RunLine)", mode = "n", desc = "lua-run-line" },
+    { "<leader>xk", "<Plug>(Luadev-RunWord)", mode = "n", desc = "lua-run-word" },
+  },
+}

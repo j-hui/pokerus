@@ -1,149 +1,153 @@
-local M = {}
-
-function M.plug(use)
+return {
   -- No setup {{{
-  use "tpope/vim-unimpaired"
+  { "tpope/vim-unimpaired", event = "VeryLazy" },
   -- ]* and [* mappings
 
-  use "tpope/vim-endwise"
-  -- Automatically add closing token where appropriate
-
-  use "tpope/vim-abolish"
+  { "tpope/vim-abolish", cmd = { "Abolish", "Subvert" } },
   -- Smarter subtitutions
 
-  use "tpope/vim-eunuch"
+  { "tpope/vim-eunuch", event = "InsertEnter" },
   -- UNIX-like functionality in Vim
 
-  use "tommcdo/vim-exchange"
+  { "tommcdo/vim-exchange", event = "VeryLazy" },
   -- Exchange text with repeated cx{motion}
 
-  use "duggiefresh/vim-easydir"
+  { "duggiefresh/vim-easydir" },
   -- Create directories when non-existent
 
-  use "lervag/file-line"
+  { "lervag/file-line" },
   -- Open file:line
 
-  use "andymass/vim-matchup"
+  { "andymass/vim-matchup", keys = { "%" } },
   -- %-navigate user-defined pairs
 
-  use "christoomey/vim-titlecase"
+  { "christoomey/vim-titlecase", event = "VeryLazy" },
   -- Title case w/ gz<motion>
 
-  use "cosminadrianpopescu/vim-tail"
+  { "cosminadrianpopescu/vim-tail", cmd = { "TailStart", "TailStop" } },
   -- Make vim behave like tail -f
 
-  use "guns/xterm-color-table.vim"
+  { "guns/xterm-color-table.vim", cmd = "XtermColorTable" },
   -- Preview all 256 xterm colors
 
-  use "moll/vim-bbye"
+  { "moll/vim-bbye", cmd = { "Bdelete", "Bwipeout" } },
   -- Delete buffers without messing up buffer layout
 
-  use "AndrewRadev/bufferize.vim"
+  {
+    "AndrewRadev/bufferize.vim",
+    cmd = { "Bufferize", "BufferizeSystem", "BufferizeTimer" },
+  },
   -- Command contents in buffer
 
-  use "AndrewRadev/linediff.vim"
+  { "AndrewRadev/linediff.vim", cmd = "Linediff" },
   -- Vimdiff line ranges
 
   -- No setup }}}
 
   -- Vim setup {{{
-  use {
+  {
     "lambdalisue/suda.vim",
     -- Give vim sudo powers
+    event = "VeryLazy",
     config = function()
       require("pokerus").vimsetup "suda"
     end,
-  }
+  },
 
-  use {
+  {
     "svermeulen/vim-subversive",
     -- Substitute from yank
+    event = "VeryLazy",
     config = function()
       require("pokerus").vimsetup "subversive"
     end,
-  }
+  },
 
-  use {
+  {
     "machakann/vim-sandwich",
     -- Fancier vim-surround + d
+    event = "VeryLazy",
     config = function()
       require("pokerus").vimsetup "sandwich"
     end,
-  }
+  },
 
-  use {
+  {
     "ojroques/vim-oscyank",
     -- Yank across the terminal
+    event = "VeryLazy",
     config = function()
       require("pokerus").vimsetup "oscyank"
     end,
-  }
+  },
 
-  use {
+  {
     "junegunn/fzf",
     -- The classic fuzzy-finder
-    run = function()
+    build = function()
       vim.fn["fzf#install"]()
     end,
     config = function()
       require("pokerus").vimsetup "fzf"
     end,
-  }
+  },
   -- Vim setup }}}
 
   -- Filetypes {{{
-  use "leanprover/lean.vim"
-  use "idris-hackers/idris-vim"
-  use "LnL7/vim-nix"
-  use "baskerville/vim-sxhkdrc"
-  use "blyoa/vim-promela-syntax"
-  use "chrisbra/csv.vim"
-  use "rust-lang/rust.vim"
-  use "leafgarland/typescript-vim"
-  use "keith/swift.vim"
-  use "dag/vim-fish"
-  use "cespare/vim-toml"
-  use "neomutt/neomutt.vim"
-  use "liuchengxu/graphviz.vim"
-  use "editorconfig/editorconfig-vim"
-  use "mboughaba/i3config.vim"
-  use "andy-morris/happy.vim"
-  use "andy-morris/alex.vim"
-  use "euclidianAce/BetterLua.vim"
+  { "idris-hackers/idris-vim", ft = "idris" },
+  { "LnL7/vim-nix", ft = "nix" },
+  { "baskerville/vim-sxhkdrc", ft = "sxhkdrc" },
+  { "blyoa/vim-promela-syntax", ft = "promela" },
+  { "chrisbra/csv.vim", ft = "csv" },
+  { "rust-lang/rust.vim", ft = "rust" },
+  { "leafgarland/typescript-vim", ft = "typescript" },
+  { "keith/swift.vim", ft = "swift" },
+  { "dag/vim-fish", ft = "fish" },
+  { "cespare/vim-toml", ft = "toml" },
+  { "neomutt/neomutt.vim", ft = { "neomuttrc", "mail", "neomuttlog" } },
+  { "liuchengxu/graphviz.vim", ft = "dot" },
+  { "editorconfig/editorconfig-vim", ft = "dosini" },
+  { "mboughaba/i3config.vim", ft = "i3config" },
+  { "andy-morris/happy.vim", ft = "happy" },
+  { "andy-morris/alex.vim", ft = "alex" },
+  { "euclidianAce/BetterLua.vim", ft = "lua" },
   -- Filetypes }}}
 
   -- Filetypes w/ setup {{{
-  use {
+  {
     "fatih/vim-go",
+    ft = "go",
     config = function()
       require("pokerus").vimsetup "go"
     end,
-  }
+  },
 
-  use {
+  {
     "octol/vim-cpp-enhanced-highlight",
+    ft = "cpp",
     config = function()
       require("pokerus").vimsetup "cpp_enhanced"
     end,
-  }
+  },
 
-  use {
+  {
     "neovimhaskell/haskell-vim",
+    ft = "haskell",
     config = function()
       require("pokerus").vimsetup "haskell"
     end,
-  }
+  },
 
-  use {
+  {
     "ziglang/zig.vim",
+    ft = "zig",
     config = function()
       require("pokerus").vimsetup "zig"
     end,
-  }
+  },
   -- Filetypes w/ setup }}}
 
   -- Filetypes configured elsewhere:
   -- markdown
   -- coq
-end
-return M
+}
