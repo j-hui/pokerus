@@ -75,6 +75,7 @@ return {
     { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     "nvim-telescope/telescope-file-browser.nvim",
     "keyvchan/telescope-find-pickers.nvim",
+    "debugloop/telescope-undo.nvim",
   },
   cmd = "Telescope",
   init = function()
@@ -96,6 +97,7 @@ return {
     nmap("<leader>h", builtin "help_tags", { desc = "telescope-help" })
     nmap("<leader>c", builtin "commands", { desc = "telescope-commands" })
     nmap("<leader>K", builtin "man_pages", { desc = "telescope-man-pages" })
+    nmap("<leader>u", extension "undo", { desc = "telescope-undo" })
 
     nmap("<leader>gf", builtin "git_files", { desc = "git-files" })
     nmap("<leader>gm", builtin "git_status", { desc = "git-modified" })
@@ -113,6 +115,8 @@ return {
     cmd("Highlights", ":Telescope help_tags", { desc = "telescope-highlights" })
     cmd("M", ":Telescope man_pages", { desc = "telescope-man-pages" })
     cmd("Man", ":Telescope man_pages", { desc = "telescope-man-pages" })
+    cmd("U", ":Telescope undo", { desc = "telescope-undo" })
+    cmd("Undo", ":Telescope undo", { desc = "telescope-undo" })
 
     cmd("Rg", function(t)
       require("telescope.builtin").grep_string { search = t.args }
@@ -158,9 +162,13 @@ return {
             }),
           },
         },
+        undo = {
+          side_by_side = true,
+        },
       },
     }
     require("telescope").load_extension "fzf"
     require("telescope").load_extension "file_browser"
+    require("telescope").load_extension("undo")
   end,
 }
