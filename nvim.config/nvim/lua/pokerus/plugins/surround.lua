@@ -1,3 +1,72 @@
+local ft_opts = {
+  markdown = {
+    surrounds = {
+      -- link
+      ["l"] = {
+        add = function()
+          local link = require("nvim-surround.config").get_input("Link: ")
+          return {
+            { "[" },
+            { "](" .. link .. ")" },
+          }
+        end,
+        find = "%b[]%b()",
+        delete = "^(%[)().-(%]%b())()$",
+        change = {
+          target = "^()()%b[]%((.-)()%)$",
+          replacement = function()
+            local link = require("nvim-surround.config").get_input("Link: ")
+            return {
+              { "" },
+              { link },
+            }
+          end,
+        },
+      },
+      -- link text
+      ["L"] = {
+        add = function()
+          local text = require("nvim-surround.config").get_input("Text: ")
+          return {
+            { "[" .. text .. "](" },
+            { ")" },
+          }
+        end,
+        find = "%b[]%b()",
+        -- delete = "^(%[)().-(%]%b())()$",
+        delete = "^(%b[]%()().-(%))()$",
+        change = {
+          -- target = "^()()%b[]%((.-)()%)$",
+          target = "^%[(.-)()%]%b()()()",
+          replacement = function()
+            local link = require("nvim-surround.config").get_input("Text: ")
+            return {
+              { link },
+              { "" },
+            }
+          end,
+        },
+      }
+    },
+  },
+  tex = {
+    surrounds = {
+      ["c"] = {
+        add = function()
+          local cmd = require("nvim-surround.config").get_input("Command: ")
+          return { { "\\" .. cmd .. "{" }, { "}" } }
+        end,
+      },
+      ["e"] = {
+        add = function()
+          local env = require("nvim-surround.config").get_input("Environment: ")
+          return { { "\\begin{" .. env .. "}" }, { "\\end{" .. env .. "}" } }
+        end,
+      },
+    },
+  },
+}
+
 return {
   "kylechui/nvim-surround",
   version = "*",
@@ -12,8 +81,20 @@ return {
     },
     highlight = {
       duration = 0,
-   },
-   move_cursor = false,
+    },
+    move_cursor = false,
   },
-  event = "VeryLazy",
+  config = function(_, opts)
+    require("nvim-surround").setup(opts)
+
+    for ft, o in pairs(ft_opts) do
+      if type(o) == "string" then
+        o = ft_opts[o]
+      end
+      require("pokerus.ft").ft_callback(ft, function()
+        require("nvim-surround").buffer_setup(o)
+      end)
+    end
+  end,
+  -- event = "VeryLazy",
 }
