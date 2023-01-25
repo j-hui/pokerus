@@ -4,11 +4,11 @@ M.colorschemes = {
   {
     "nyoom-engineering/oxocarbon.nvim",
     schemename = "oxocarbon",
-    main = true,
   },
   {
     "folke/tokyonight.nvim",
     schemename = "tokyonight",
+    main = true,
     opts = {
       style = "night",
       styles = {
