@@ -9,45 +9,18 @@ return {
           cmd = { "zk", "lsp" },
           name = "zk",
           on_attach = function(client, bufnr)
-            -- require("pokerus.plugins.lsp").on_attach(client, bufnr)
-            -- require("pokerus").nmap({
-            --   ["."] = {
-            --     "<cmd>ZkNotes<CR>",
-            --     "zk-cd",
-            --   },
-            --   n = {
-            --     "<cmd>ZkNotes<CR>",
-            --     "zk-notes",
-            --   },
-            --   f = {
-            --     "<cmd>ZkLinks<CR>",
-            --     "zk-links",
-            --   },
-            --   b = {
-            --     "<cmd>ZkBacklinks<CR>",
-            --     "zk-backlinks",
-            --   },
-            -- }, {
-            --   prefix = "<leader>l",
-            --   noremap = true,
-            --   silent = true,
-            --   buffer = bufnr,
-            -- })
-            -- require("pokerus").xmap({
-            --   p = {
-            --     ":'<,'>ZkNewFromTitleSelection { dir = 'person' }<CR>",
-            --     "zk-new-from-title-selection",
-            --   },
-            --   t = {
-            --     ":'<,'>ZkNewFromTitleSelection<CR>",
-            --     "zk-new-from-title-selection",
-            --   },
-            -- }, {
-            --   prefix = "<leader>l",
-            --   noremap = true,
-            --   silent = true,
-            --   buffer = bufnr,
-            -- })
+            require("pokerus.lsp").on_attach(client, bufnr)
+
+            local function map(m, l, r, d)
+              vim.keymap.set(m, l, r, { desc = "zk-" .. d, buffer = bufnr })
+            end
+
+            map("n", "<leader>l.", "<cmd>ZkCd<CR>", "cd")
+            map("n", "<leader>ln", "<cmd>ZkNotes<CR>", "notes")
+            map("n", "<leader>lf", "<cmd>ZkLinks<CR>", "links")
+            map("n", "<leader>lb", "<cmd>ZkBacklinks<CR>", "backlinks")
+            map("x", "<leader>lp", [[:'<,'>ZkNewFromTitleSelection { dir = 'person' }<CR>]], "new-person")
+            map("x", "<leader>lt", [[:'<,'>ZkNewFromTitleSelection<CR>]], "new-note")
           end,
         },
       },
