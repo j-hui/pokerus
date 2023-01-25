@@ -20,7 +20,7 @@ local function ensure_lazy()
 end
 
 --- Neovim-specific settings that aren't associated with any specific plugin.
-local function setup_nvim_settings()
+local function nvim_colorscheme_settings()
   local signs = {
     { name = "DiagnosticSignError", text = "✖" },
     { name = "DiagnosticSignWarn", text = "‼" },
@@ -62,24 +62,41 @@ function M.setup()
     { import = "pokerus.plugins" },
     colorscheme.colorschemes,
   }, {
-    performance = { rtp = { reset = false } },
     install = { colorscheme = { colorscheme.main, "habamax" } },
+    performance = {
+      rtp = {
+        reset = false,
+        disabled_plugins = {
+          "gzip",
+          "matchit",
+          "matchparen",
+          "netrwPlugin",
+          "rplugin",
+          "tarPlugin",
+          "tohtml",
+          "tutor",
+          "zipPlugin",
+        },
+      }
+    },
   })
 
   vim.fn["pokerus#settings#setup"]()
-  setup_nvim_settings()
+  nvim_colorscheme_settings()
+  require("pokerus.callback").colorscheme(nvim_colorscheme_settings)
 
   vim.fn["pokerus#keybinds#setup"]()
   setup_nvim_keybinds()
 
   vim.fn["pokerus#commands#setup"]()
 
-  vim.cmd [[
-    augroup highlight_yank
-      autocmd!
-      autocmd TextYankPost * silent! lua vim.highlight.on_yank{higroup="CursorLine", timeout=690}
-    augroup END
-  ]]
+  -- Done by yanky.nvim
+  -- vim.cmd [[
+  --   augroup highlight_yank
+  --     autocmd!
+  --     autocmd TextYankPost * silent! lua vim.highlight.on_yank{higroup="CursorLine", timeout=690}
+  --   augroup END
+  -- ]]
 end
 
 --- Call the Pokerus setup function for a Vim plugin.

@@ -91,7 +91,7 @@ return {
       if type(o) == "string" then
         o = ft_opts[o]
       end
-      require("pokerus.ft").ft_callback(ft, function()
+      require("pokerus.callback").filetype(ft, function()
         require("nvim-surround").buffer_setup(o)
       end)
     end

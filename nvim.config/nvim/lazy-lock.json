@@ -90,6 +90,7 @@
   "ssr.nvim": { "branch": "main", "commit": "e6a11a702483d26f767f937575d549ac73b2fea3" },
   "stay-in-place.nvim": { "branch": "main", "commit": "0628b6db8970fc731abf9608d6f80659b58932c9" },
   "stickybuf.nvim": { "branch": "master", "commit": "cde97217a7e81ea4488e0c32b8ae6c9d181156c8" },
+  "substitute.nvim": { "branch": "main", "commit": "42d09f1e6324d98aa2e5b765b64528e0aefe72b0" },
   "suda.vim": { "branch": "master", "commit": "08abd39dfe1cee681b8ce3e7321da5fa03e045c1" },
   "swift.vim": { "branch": "master", "commit": "ba6f6cef58d08ac741aaf1626d3799d476cd43b6" },
   "telescope-file-browser.nvim": { "branch": "master", "commit": "304508fb7bea78e3c0eeddd88c4837501e403ae8" },
@@ -123,7 +124,6 @@
   "vim-nix": { "branch": "master", "commit": "7d23e97d13c40fcc6d603b291fe9b6e5f92516ee" },
   "vim-oscyank": { "branch": "main", "commit": "e6298736a7835bcb365dd45a8e8bfe86d935c1f8" },
   "vim-promela-syntax": { "branch": "master", "commit": "57359653d18b24678680b755924ff4a1488cbaca" },
-  "vim-subversive": { "branch": "master", "commit": "6286cda3f9222bfd490fe34a00a2d8cd4925adec" },
   "vim-sxhkdrc": { "branch": "master", "commit": "7b8abc305ba346c3af7d57da0ebec2b2f2d3f5b0" },
   "vim-tail": { "branch": "master", "commit": "2e99378d1d4a9d360d8f1b752a5a30ab5894fe88" },
   "vim-textobj-between": { "branch": "master", "commit": "fa7723c08b1f2d55e1a30ba720d2fd4db27cb1e8" },
@@ -143,6 +143,7 @@
   "which-key.nvim": { "branch": "main", "commit": "684e96c5e8477f1ee9b3f2e9a12d802fd12c5531" },
   "wrapping.nvim": { "branch": "master", "commit": "fcd57ac890f2af39fb1ddda54e989a15c7158629" },
   "xterm-color-table.vim": { "branch": "master", "commit": "8785bb47a38a8bce3f5e452c083907e1a9b32763" },
+  "yanky.nvim": { "branch": "main", "commit": "7909ff03d073d53859d9507fca79f785cf1d47ef" },
   "zen-mode.nvim": { "branch": "main", "commit": "38a660094dd023176ed4d6ecb1fe028546717f78" },
   "zig.vim": { "branch": "master", "commit": "c8caa9ab97334ca5af2d69900108bb4af20933c5" },
   "zk-nvim": { "branch": "main", "commit": "2fd9f9f29270bb28477e000100625276ec2a2377" }

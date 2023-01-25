@@ -54,14 +54,14 @@ return {
     end,
   },
 
-  {
-    "svermeulen/vim-subversive",
-    -- Substitute from yank
-    event = "VeryLazy",
-    config = function()
-      require("pokerus").vimsetup "subversive"
-    end,
-  },
+  -- {
+  --   "svermeulen/vim-subversive",
+  --   -- Substitute from yank
+  --   event = "VeryLazy",
+  --   config = function()
+  --     require("pokerus").vimsetup "subversive"
+  --   end,
+  -- },
 
   -- {
   --   "machakann/vim-sandwich",
