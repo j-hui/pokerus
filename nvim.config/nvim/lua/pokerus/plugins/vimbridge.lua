@@ -63,14 +63,14 @@ return {
     end,
   },
 
-  {
-    "machakann/vim-sandwich",
-    -- Fancier vim-surround + d
-    event = "VeryLazy",
-    config = function()
-      require("pokerus").vimsetup "sandwich"
-    end,
-  },
+  -- {
+  --   "machakann/vim-sandwich",
+  --   -- Fancier vim-surround + d
+  --   event = "VeryLazy",
+  --   config = function()
+  --     require("pokerus").vimsetup "sandwich"
+  --   end,
+  -- },
 
   {
     "ojroques/vim-oscyank",

@@ -112,13 +112,11 @@ return {
           enable = true,
           lookahead = true,
           keymaps = {
-            ["a$"] = "@function.outer",
-            ["i$"] = "@function.inner",
+            ["af"] = "@function.outer",
+            ["if"] = "@function.inner",
             ["cc"] = "@comment.inner",
-            ["a:"] = "@class.outer",
-            ["i:"] = "@class.inner",
-            ["a;"] = "@block.outer",
-            ["i;"] = "@block.inner",
+            ["ab"] = "@block.outer",
+            ["ib"] = "@block.inner",
           },
         },
         swap = {
