@@ -73,6 +73,7 @@ local lsp_servers = {
 
 return {
   "neovim/nvim-lspconfig",
+  event = "VeryLazy",
   dependencies = {
     "weilbith/nvim-lsp-smag",
     -- Override tagfunc, use C-] to jump to definition
@@ -83,7 +84,6 @@ return {
     "folke/lsp-colors.nvim",
     -- Creates missing LSP diagnostics highlight groups
 
-    "hrsh7th/nvim-cmp",
     "hrsh7th/cmp-nvim-lsp",
     -- Completion suggestions
   },
