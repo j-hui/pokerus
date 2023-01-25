@@ -73,7 +73,6 @@ local lsp_servers = {
 
 return {
   "neovim/nvim-lspconfig",
-  event = "VeryLazy",
   dependencies = {
     "weilbith/nvim-lsp-smag",
     -- Override tagfunc, use C-] to jump to definition
