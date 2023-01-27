@@ -51,7 +51,6 @@ M.lspconfig = {
     "folke/lsp-colors.nvim",
     -- Creates missing LSP diagnostics highlight groups
 
-    "hrsh7th/nvim-cmp",
     "hrsh7th/cmp-nvim-lsp",
     -- Insertion
   },
