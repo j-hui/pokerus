@@ -5,12 +5,10 @@ return {
     vim.api.nvim_create_autocmd("Filetype", {
       pattern = "tex",
       callback = function()
-        vim.cmd [[
-          let b:endwise_addition = '\="\\end" . matchstr(submatch(0), "{.\\{-}}")'
-          let b:endwise_words = 'begin'
-          let b:endwise_pattern = '\\begin{.\{-}}'
-          let b:endwise_syngroups = 'texSection,texBeginEnd,texBeginEndName,texStatement'
-        ]]
+        vim.b.endwise_addition = [[\="\\end" . matchstr(submatch(0), "{.\\{-}}")]]
+        vim.b.endwise_words = [[begin]]
+        vim.b.endwise_pattern = [[\\begin{.\{-}}]]
+        vim.b.endwise_syngroups = [[texSection,texBeginEnd,texBeginEndName,texStatement]]
 
         vim.keymap.set("i", "<C-g>/", "\\emph{}<left>", { desc = "latex-emph" })
         vim.keymap.set("i", "<C-g>t", "\\texttt{}<left>", { desc = "latex-texttt" })
