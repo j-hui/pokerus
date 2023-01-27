@@ -3,7 +3,7 @@ return {
   { "tpope/vim-unimpaired", event = "VeryLazy" },
   -- ]* and [* mappings
 
-  { "tpope/vim-abolish", cmd = { "Abolish", "Subvert" } },
+  -- { "tpope/vim-abolish", cmd = { "Abolish", "Subvert" } },
   -- Smarter subtitutions
 
   { "tpope/vim-eunuch", event = "InsertEnter" },
@@ -18,7 +18,13 @@ return {
   { "lervag/file-line" },
   -- Open file:line
 
-  { "andymass/vim-matchup", keys = { "%" } },
+  { "andymass/vim-matchup",
+    init = function()
+      vim.g.matchup_matchparen_offscreen = { method = "popup" }
+      vim.g.matchup_override_vimtex = 1
+      vim.g.matchup_matchparen_deferred = 1
+    end
+  },
   -- %-navigate user-defined pairs
 
   { "christoomey/vim-titlecase", event = "VeryLazy" },
