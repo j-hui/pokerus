@@ -52,7 +52,6 @@ return {
       extensions = {
         "fugitive",
         "fzf",
-        "fern",
       },
     }
   end,
