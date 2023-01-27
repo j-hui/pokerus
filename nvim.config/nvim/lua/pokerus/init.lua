@@ -68,9 +68,9 @@ function M.setup()
         reset = false,
         disabled_plugins = {
           "gzip",
-          "matchit",
-          "matchparen",
-          "netrwPlugin",
+          "matchit",      -- supplanted by vim-matchup
+          "matchparen",   -- supplanted by vim-matchup
+          "netrwPlugin",  -- supplanted by lir.nvim
           "rplugin",
           "tarPlugin",
           "tohtml",
