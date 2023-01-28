@@ -69,6 +69,18 @@ local lsp_servers = {
       return primary or backup
     end,
   },
+  ["ltex"] = {
+    settings = {
+      enabled = { "latex", "tex", "bib", "markdown" },
+      checkFrequency = "save",
+      diagnosticSeverity = "information",
+      language = "en",
+      additionalRules = {
+        enablePickyRules = true,
+        motherTongue = "en",
+      };
+    },
+  },
 }
 
 return {

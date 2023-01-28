@@ -2,7 +2,7 @@ return {
   "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
   lazy = false,
   keys = {
-    { "<leader>ll", function() require("lsp_lines").toggle() end, desc = "lsp-lines-toggle" },
+    { "<leader>lL", function() require("lsp_lines").toggle() end, desc = "lsp-lines-toggle" },
   },
   config = function()
     require("lsp_lines").setup()
