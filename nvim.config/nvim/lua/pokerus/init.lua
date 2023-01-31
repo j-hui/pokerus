@@ -24,7 +24,7 @@ local nvim_use_virtual_text = true
 local function nvim_configure_diagnostics()
   local virtual_text_config = {
     severity = {
-      min = vim.diagnostic.severity.ERROR,
+      min = vim.diagnostic.severity.WARN,
     }
   }
   if nvim_use_virtual_text then
