@@ -52,6 +52,7 @@ return {
     -- Automatically end tokens
   },
   build = ":TSUpdate",
+  event = "VeryLazy",
   keys = {
     { "gr", mode = "n", desc = "treesitter-refactor" },
     { "gl", mode = "n", desc = "treesitter-swap-next-param" },
@@ -98,10 +99,10 @@ return {
         enable = true,
       },
       refactor = {
+        highlight_definitions = { enable = true },
+        highlight_current_scope = { enable = true },
         smart_rename = {
           enable = true,
-          highlight_definitions = { enable = true },
-          highlight_current_scope = { enable = true },
           keymaps = {
             smart_rename = "gr",
           },
