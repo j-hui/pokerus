@@ -42,7 +42,7 @@ local function nvim_configure_diagnostics()
 end
 
 --- Neovim-specific settings that aren't associated with any specific plugin.
-local function nvim_colorscheme_settings()
+local function setup_nvim_colorscheme()
   local signs = {
     { name = "DiagnosticSignError", text = "✖" },
     { name = "DiagnosticSignWarn", text = "‼" },
@@ -69,6 +69,17 @@ local function setup_nvim_keybinds()
   vim.keymap.set("n", "g=", ":edit .<CR>", { desc = "open-cwd" })
 end
 
+local function setup_nvim_ftdetect()
+  vim.filetype.add {
+    extension = {
+      h = "c",
+      v = "coq",
+      x = "alex",
+      y = "happy",
+    },
+  }
+end
+
 --- Entry point to my Neovim configuration.
 ---
 --- Called from init.vim.
@@ -77,6 +88,7 @@ function M.setup()
 
   vim.g.loaded_netrw = 1
   vim.g.loaded_netrwPlugin = 1
+
   vim.g.mapleader = " "
 
   local colorscheme = require "pokerus.colorscheme"
@@ -106,11 +118,14 @@ function M.setup()
 
   vim.fn["pokerus#settings#setup"]()
   nvim_configure_diagnostics()
-  nvim_colorscheme_settings()
-  require("pokerus.callback").colorscheme(nvim_colorscheme_settings)
+
+  setup_nvim_colorscheme()
+  require("pokerus.callback").colorscheme(setup_nvim_colorscheme)
 
   vim.fn["pokerus#keybinds#setup"]()
   setup_nvim_keybinds()
+
+  setup_nvim_ftdetect()
 
   vim.fn["pokerus#commands#setup"]()
 
