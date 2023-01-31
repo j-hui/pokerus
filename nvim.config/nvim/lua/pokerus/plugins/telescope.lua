@@ -85,11 +85,13 @@ return {
 
     nmap("<leader><leader>", extension "find_pickers", { desc = "telescope" })
 
-    nmap("<leader>f", extension "file_browser", { desc = "telescope-file-browser" })
+    nmap("<leader>f", extension("file_browser", {}), { desc = "telescope-file-browser" })
+    nmap("<leader>E", extension("file_browser", { respect_gitignore = false }), { desc = "telescope-file-browser*" })
+    nmap("<leader>e", extension("file_browser", { path = "%:p:h" }), { desc = "telescope-edit" })
+    nmap("<leader>E", extension("file_browser", { path = "%:p:h", respect_gitignore = false }), { desc = "telescope-edit*" })
     nmap("<leader>o", builtin "find_files", { desc = "telescope-files" })
     nmap("<leader>O", builtin("find_files", { no_ignore = true }), { desc = "telescope-files*" })
-    nmap("<leader>e", builtin_cwd "find_files", { desc = "telescope-cwd-files" })
-    nmap("<leader>E", builtin_cwd("find_files", { no_ignore = true }), { desc = "telescope-cwd-files*" })
+
     nmap("<leader>b", builtin "buffers", { desc = "telescope-buffers" })
     nmap("<leader>*", builtin "grep_string", { desc = "telescope-grep-word" })
     nmap("<leader>r", builtin_cwd "live_grep", { desc = "telescope-grep-live" })
@@ -148,13 +150,22 @@ return {
       },
       extensions = {
         file_browser = {
+          hidden = true, -- show hidden files
+          grouped = true, -- group folders together
+          cwd_to_path = true,
           mappings = {
             n = nmaps,
             i = vim.tbl_extend("force", imaps, {
+              ["<C-g>"] = false,
               ["<C-o>"] = fb_action "create",
-              ["<C-g>"] = fb_action "toggle_hidden",
-              ["<C-]>"] = fb_action "goto_cwd",
-              ["<C-l>"] = fb_action "change_cwd",
+              ["<C-l>"] = fb_action "toggle_browser",
+              ["<C-t>"] = fb_action "toggle_hidden",
+              ["<C-y>"] = fb_action "goto_cwd",
+              ["<C-]>"] = fb_action "change_cwd",
+              ["<C-r>"] = fb_action "rename",
+              ["<C-s>"] = fb_action "move",
+              ["<C-c>"] = fb_action "copy",
+              ["<C-x>"] = fb_action "remove",
               ["~"] = fb_action "goto_home_dir",
               ["<C-w>"] = function()
                 vim.cmd [[norm! db]]
