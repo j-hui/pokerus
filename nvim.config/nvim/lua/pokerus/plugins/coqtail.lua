@@ -49,6 +49,7 @@ local function def_coqtail_maps(t)
   imap("<C-c>p", "<Esc><Plug>CoqUndo", "coq-undo")
   imap("<C-c>l", "<Esc><Plug>CoqToLine", "coq-to-line")
   imap("<C-c>c", "<Esc>mz$<Plug>CoqToLine`z", "coq-to-eol")
+  imap("<C-c><CR>", "<Esc>mz$<Plug>CoqToLine`z", "coq-to-eol")
 
   nmap("<C-c>n", "<Plug>CoqNext", "coq-next")
   nmap("<C-c>p", "<Plug>CoqUndo", "coq-undo")
@@ -67,8 +68,8 @@ local function def_coqtail_maps(t)
 end
 
 local function def_coqtail_highlights()
-  local checked_hl = vim.api.nvim_get_hl_by_name("DiffChange")
-  local sent_hl = vim.api.nvim_get_hl_by_name("DiffAdd")
+  local checked_hl = vim.api.nvim_get_hl_by_name("DiffChange", true)
+  local sent_hl = vim.api.nvim_get_hl_by_name("DiffAdd", true)
   vim.api.nvim_set_hl(0, "CoqtailChecked", checked_hl)
   vim.api.nvim_set_hl(0, "CoqtailSent", sent_hl)
 end
