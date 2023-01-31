@@ -3,7 +3,12 @@ return {
   { "tpope/vim-unimpaired", event = "VeryLazy" },
   -- ]* and [* mappings
 
-  -- { "tpope/vim-abolish", cmd = { "Abolish", "Subvert" } },
+  { "tpope/vim-abolish",
+    event = "VeryLazy",
+    config = function()
+      require("pokerus").vimsetup "abolish"
+    end,
+  },
   -- Smarter subtitutions
 
   { "tpope/vim-eunuch", event = "InsertEnter" },
