@@ -34,6 +34,15 @@ function pokerus#plugins#setup()
     Plug 'tpope/vim-speeddating'
     " increment/decrement dates
 
+    Plug 'svermeulen/vim-subversive'
+    " Substitute from yank
+
+    Plug 'machakann/vim-sandwich'
+    " Fancier vim-surround + d
+
+    Plug 'junegunn/limelight.vim'
+    " Dim out distractions
+
   " Vim-specific }}}
 
   " Vim + Neovim (no setup) {{{
@@ -43,9 +52,6 @@ function pokerus#plugins#setup()
 
     Plug 'tpope/vim-endwise'
     " Automatically add closing token where appropriate
-
-    Plug 'tpope/vim-abolish'
-    " Smarter subtitutions
 
     Plug 'tpope/vim-eunuch'
     " UNIX-like functionality in Vim
@@ -86,12 +92,6 @@ function pokerus#plugins#setup()
     Plug 'lambdalisue/suda.vim'
     " Give vim sudo powers
 
-    Plug 'svermeulen/vim-subversive'
-    " Substitute from yank
-
-    Plug 'machakann/vim-sandwich'
-    " Fancier vim-surround + d
-
     Plug 'ojroques/vim-oscyank'
     " Yank across the terminal
 
@@ -102,8 +102,8 @@ function pokerus#plugins#setup()
     Plug 'tpope/vim-fugitive'
     " tpope's illegal git plugin
 
-    Plug 'junegunn/limelight.vim'
-    " Dim out distractions
+    Plug 'tpope/vim-abolish'
+    " Smarter subtitutions
 
   " Vim + Neovim (w/ setup) }}}
 
@@ -139,16 +139,17 @@ function pokerus#plugins#setup()
 
   call pokerus#plugins#buftabline#setup()
   call pokerus#plugins#skyline#setup()
+  call pokerus#plugins#sneak#setup()
+  call pokerus#plugins#subversive#setup()
+  call pokerus#plugins#sandwich#setup()
+  call pokerus#plugins#limelight#setup()
+  call pokerus#plugins#speeddating#setup()
 
   call pokerus#plugins#fugitive#setup()
   call pokerus#plugins#fzf#setup()
   call pokerus#plugins#oscyank#setup()
-  call pokerus#plugins#sandwich#setup()
-  call pokerus#plugins#sneak#setup()
-  call pokerus#plugins#speeddating#setup()
-  call pokerus#plugins#subversive#setup()
   call pokerus#plugins#suda#setup()
-  call pokerus#plugins#limelight#setup()
+  call pokerus#plugins#abolish#setup()
 
   call pokerus#plugins#cpp_enhanced#setup()
   call pokerus#plugins#haskell#setup()
