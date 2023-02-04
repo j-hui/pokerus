@@ -229,6 +229,12 @@ function! s:termMaps() abort
   tnoremap <C-]> <C-\><C-N>
 endfunction
 
+function! s:windowMaps() abort
+  nnoremap doq <cmd>cclose<CR>
+  nnoremap dol <cmd>lclose<CR>
+  nnoremap doh <cmd>helpclose<CR>
+endfunction
+
 function! pokerus#keybinds#setup() abort
 
   " Disable ex mode
@@ -240,6 +246,7 @@ function! pokerus#keybinds#setup() abort
   call s:editingMaps()
   call s:commandMaps()
   call s:termMaps()
+  call s:windowMaps()
 
 endfunction
 

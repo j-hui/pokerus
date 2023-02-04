@@ -1,1 +1,2 @@
-  noremap <buffer><nowait> q :q<CR>
+set nobuflisted
+noremap <buffer><nowait> q :bw<CR>
