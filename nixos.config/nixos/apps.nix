@@ -359,6 +359,7 @@ in
         # Latex
         tectonic texlive.combined.scheme-full bibclean texlab
         graphviz
+        ltex-ls
 
         # Pandoc
         pandoc
