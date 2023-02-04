@@ -88,7 +88,8 @@ return {
     nmap("<leader>f", extension("file_browser", {}), { desc = "telescope-file-browser" })
     nmap("<leader>E", extension("file_browser", { respect_gitignore = false }), { desc = "telescope-file-browser*" })
     nmap("<leader>e", extension("file_browser", { path = "%:p:h" }), { desc = "telescope-edit" })
-    nmap("<leader>E", extension("file_browser", { path = "%:p:h", respect_gitignore = false }), { desc = "telescope-edit*" })
+    nmap("<leader>E", extension("file_browser", { path = "%:p:h", respect_gitignore = false }),
+      { desc = "telescope-edit*" })
     nmap("<leader>o", builtin "find_files", { desc = "telescope-files" })
     nmap("<leader>O", builtin("find_files", { no_ignore = true }), { desc = "telescope-files*" })
 
@@ -107,18 +108,36 @@ return {
     nmap("<leader>gL", builtin "git_bcommits", { desc = "git-buffer-log" })
     nmap("<leader>gb", builtin "git_branches", { desc = "git-branches" })
 
-    nmap("<leader>l/", builtin "lsp_workspace_symbols", { desc = "lsp-workspace-symbols" })
-    nmap("<leader>ls", builtin "lsp_document_symbols", { desc = "lsp-document-symbols" })
+    nmap("<leader>ld", builtin "diagnostics", { desc = "telescope-diagnostics" })
+    nmap("<leader>l?", builtin "lsp_workspace_symbols", { desc = "lsp-workspace-symbols" })
+    nmap("<leader>l/", builtin "lsp_document_symbols", { desc = "lsp-document-symbols" })
+
+    -- Override some of my own lsp handlers
+    local lsp = require("pokerus.lsp")
+
+    lsp.definition = function(opt)
+      opt = opt or {}
+      require("telescope.builtin").lsp_definitions({ jump_type = opt.jump })
+    end
+
+    lsp.implementation = function(opt)
+      opt = opt or {}
+      require("telescope.builtin").lsp_implementations({ jump_type = opt.jump })
+    end
+
+    lsp.typedef = function(opt)
+      opt = opt or {}
+      require("telescope.builtin").lsp_type_definitions({ jump_type = opt.jump })
+    end
+
+    lsp.references = function(opt)
+      opt = opt or {}
+      require("telescope.builtin").lsp_references({ jump_type = opt.jump })
+    end
 
     local cmd = vim.api.nvim_create_user_command
-    cmd("H", ":Telescope help_tags", { desc = "telescope-help" })
-    cmd("Help", ":Telescope help_tags", { desc = "telescope-help" })
-    cmd("Hi", ":Telescope help_tags", { desc = "telescope-highlights" })
-    cmd("Highlights", ":Telescope help_tags", { desc = "telescope-highlights" })
-    cmd("M", ":Telescope man_pages", { desc = "telescope-man-pages" })
-    cmd("Man", ":Telescope man_pages", { desc = "telescope-man-pages" })
-    cmd("U", ":Telescope undo", { desc = "telescope-undo" })
-    cmd("Undo", ":Telescope undo", { desc = "telescope-undo" })
+    cmd("Hi", ":Telescope highlights", { desc = "telescope-highlights" })
+    cmd("Highlights", ":Telescope highlights", { desc = "telescope-highlights" })
 
     cmd("Rg", function(t)
       require("telescope.builtin").grep_string { search = t.args }

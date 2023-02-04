@@ -60,7 +60,7 @@ local function setup_nvim_keybinds()
   vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "diagnostic-next", silent = true })
   vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "diagnostic-prev", silent = true })
   vim.keymap.set("n", "<leader>lj", vim.diagnostic.open_float, { desc = "diagnostic-show", silent = true })
-  vim.keymap.set("n", "<leader>ll", nvim_configure_diagnostics, { desc = "virtual-text-toggle", silent = true })
+  vim.keymap.set("n", "<leader>lL", nvim_configure_diagnostics, { desc = "virtual-text-toggle", silent = true })
 
   vim.keymap.set("n", "<leader>+", ":lua ", { desc = "lua-run" })
   vim.keymap.set("n", "<leader>=", ":lua =()<left>", { desc = "lua-eval" })
