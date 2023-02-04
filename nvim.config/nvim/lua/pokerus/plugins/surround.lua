@@ -70,6 +70,7 @@ local ft_opts = {
 return {
   "kylechui/nvim-surround",
   version = "*",
+  event = "VeryLazy",
   dependencies = {
     "nvim-treesitter/nvim-treesitter",
     "nvim-treesitter/nvim-treesitter-textobjects",
@@ -96,5 +97,4 @@ return {
       end)
     end
   end,
-  -- event = "VeryLazy",
 }
