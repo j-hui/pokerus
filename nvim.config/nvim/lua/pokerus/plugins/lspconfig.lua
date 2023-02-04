@@ -13,7 +13,7 @@ local lsp_servers = {
         chkTex = { onOpenAndSave = true },
         forwardSearch = (function()
           local skim_path = "/Applications/Skim.app/Contents/SharedSupport/displayline"
-          if vim.fn.executable(skim_path) then
+          if vim.fn.executable(skim_path) ~= 0 then
             return {
               executable = skim_path,
               args = { "-g", "%l", "%p", "%f" },
