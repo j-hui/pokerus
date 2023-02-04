@@ -225,8 +225,22 @@ function! s:commandMaps() abort
   cnoremap <C-Y> <C-R>-
 endfunction
 
-function! s:termMaps() abort
+function! s:terminalMaps() abort
   tnoremap <C-]> <C-\><C-N>
+  tnoremap <C-\>h <Cmd>wincmd h<CR>
+  tnoremap <C-\>l <Cmd>wincmd l<CR>
+  tnoremap <C-\>j <Cmd>wincmd j<CR>
+  tnoremap <C-\>k <Cmd>wincmd k<CR>
+  tnoremap <C-\>H <Cmd>wincmd H<CR>
+  tnoremap <C-\>L <Cmd>wincmd L<CR>
+  tnoremap <C-\>J <Cmd>wincmd J<CR>
+  tnoremap <C-\>K <Cmd>wincmd K<CR>
+  tnoremap <C-\>o <Cmd>wincmd o<CR>
+  tnoremap <C-\>r <Cmd>wincmd r<CR>
+  tnoremap <C-\>: <C-\><C-N>:
+  tnoremap <C-\>; <C-\><C-N>:
+  tnoremap <C-\>v <Cmd>wincmd v<CR>
+  tnoremap <C-\>s <Cmd>wincmd s<CR>
 endfunction
 
 function! s:windowMaps() abort
@@ -245,7 +259,7 @@ function! pokerus#keybinds#setup() abort
   call s:navigationMaps()
   call s:editingMaps()
   call s:commandMaps()
-  call s:termMaps()
+  call s:terminalMaps()
   call s:windowMaps()
 
 endfunction
