@@ -5,12 +5,14 @@ return {
     "kyazdani42/nvim-web-devicons",
     "tamago324/lir-git-status.nvim",
   },
+  event = "VeryLazy",
   config = function()
     local actions = require "lir.actions"
     local mark_actions = require "lir.mark.actions"
     local clipboard_actions = require "lir.clipboard.actions"
 
     require("lir").setup {
+      show_hidden_files = true,
       mappings = {
         ["<CR>"] = actions.edit,
         ["<C-s>"] = actions.split,
@@ -38,5 +40,13 @@ return {
       },
     }
     require("lir.git_status").setup { show_ignored = false }
+
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = "lir",
+      callback = function()
+        vim.api.nvim_buf_set_option(0, "buflisted", true)
+        vim.api.nvim_buf_set_option(0, "bufhidden", "hide")
+      end,
+    })
   end,
 }
