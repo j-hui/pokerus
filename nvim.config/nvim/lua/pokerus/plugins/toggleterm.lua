@@ -12,13 +12,13 @@ return {
   },
   keys = {
     { "<C-\\><C-\\>", mode = { "n", "i", "t" }, desc = "toggle-term" },
-    { "<C-\\>x", "<cmd>ToggleTerm direction=horizontal<CR>", mode = { "n" }, desc = "toggle-term" },
-    { "<C-\\><space>", "<cmd>ToggleTerm direction=float<CR>", desc = "toggle-float-term" },
   },
   config = function()
     require("toggleterm").setup {
       open_mapping = "<C-\\><C-\\>",
       autochdir = true,
+      shell = vim.fn.environ().SHELL or vim.o.shell,
+      close_on_exit = false,
     }
   end
 }
