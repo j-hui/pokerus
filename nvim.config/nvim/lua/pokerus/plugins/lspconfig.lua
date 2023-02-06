@@ -31,7 +31,16 @@ local lsp_servers = {
   ["pyright"] = {},
   ["tsserver"] = {},
   ["hls"] = {
-    settings = { haskell = { formattingProvider = "fourmolu" } },
+    settings = {
+      haskell = {
+        formattingProvider = "fourmolu",
+        plugin = {
+          stan = {
+            globalOn = false,
+          },
+        },
+      }
+    },
   },
   ["vimls"] = {},
   ["ocamllsp"] = {},
