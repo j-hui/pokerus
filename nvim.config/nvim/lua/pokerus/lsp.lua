@@ -100,29 +100,4 @@ function M.on_attach(_, bufnr)
 
 end
 
--- TODO: try to decouple lspconfig for each filetype.
-M.lspconfig = {
-  "neovim/nvim-lspconfig",
-  dependencies = {
-    "weilbith/nvim-lsp-smag",
-    -- Override tagfunc, use C-] to jump to definition
-
-    "folke/lsp-colors.nvim",
-    -- Creates missing LSP diagnostics highlight groups
-
-    "hrsh7th/cmp-nvim-lsp",
-    -- Insertion
-  },
-  lazy = true,
-}
-
-function M.setup(lsp, cfg)
-  require("lspconfig")[lsp].setup(vim.tbl_extend("keep", cfg, {
-    on_attach = M.on_attach,
-    capabilities = require("cmp_nvim_lsp").default_capabilities(
-      vim.lsp.protocol.make_client_capabilities()
-    ),
-  }))
-end
-
 return M
