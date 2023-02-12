@@ -153,7 +153,7 @@ in
     (mkIf cfg.office.enable {
       environment.systemPackages = with pkgs; [
         inkscape gimp tuxpaint drawing gthumb
-        zathura mupdf evince
+        zathura mupdf evince sioyek
         pdftk pdfgrep
         libreoffice
         enscript
