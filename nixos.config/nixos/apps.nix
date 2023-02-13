@@ -244,6 +244,8 @@ in
 
     (mkIf cfg.dev.enable {
 
+      nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
       # required for rr
       boot.kernel.sysctl."kernel.perf_event_paranoid" = 1;
       systemd.tmpfiles.rules = [
