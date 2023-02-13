@@ -20,7 +20,7 @@ M.colorschemes = {
   {
     "Shatur/neovim-ayu",
     schemename = "ayu",
-    main = true,
+    -- main = true,
     opts = {
       mirage = true,
     },
@@ -29,7 +29,7 @@ M.colorschemes = {
     "catppuccin/nvim",
     name = "catppuccin",
     schemename = "catppuccin",
-    -- main = true,
+    main = true,
     opts = {
       flavour = "mocha",
     },
