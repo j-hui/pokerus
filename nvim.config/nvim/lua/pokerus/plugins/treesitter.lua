@@ -5,6 +5,7 @@ local languages = {
   "cpp",
   "css",
   "dot",
+  "fennel",
   "fish",
   "go",
   "haskell",
