@@ -129,6 +129,8 @@ function M.setup()
 
   vim.fn["pokerus#commands#setup"]()
 
+  require("pokerus.scratch").setup()
+
   -- Done by yanky.nvim
   -- vim.cmd [[
   --   augroup highlight_yank
