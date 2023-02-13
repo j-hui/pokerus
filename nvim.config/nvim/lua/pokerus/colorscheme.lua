@@ -8,13 +8,30 @@ M.colorschemes = {
   {
     "folke/tokyonight.nvim",
     schemename = "tokyonight",
-    main = true,
+    -- main = true,
     opts = {
       style = "night",
       styles = {
         keywords = { italic = false }
       },
       sidebars = { "qf", "vista_kind", "terminal", "packer" }
+    },
+  },
+  {
+    "Shatur/neovim-ayu",
+    schemename = "ayu",
+    main = true,
+    opts = {
+      mirage = true,
+    },
+  },
+  {
+    "catppuccin/nvim",
+    name = "catppuccin",
+    schemename = "catppuccin",
+    -- main = true,
+    opts = {
+      flavour = "mocha",
     },
   },
   {
