@@ -1,6 +1,10 @@
 return {
   "ggandor/leap.nvim",
-  dependencies = { "ggandor/flit.nvim", "ggandor/leap-spooky.nvim", "ggandor/leap-ast.nvim" },
+  dependencies = {
+    "ggandor/flit.nvim",
+    "ggandor/leap-spooky.nvim",
+    "ggandor/leap-ast.nvim"
+  },
   keys = {
     -- flit
     { "f", mode = { "n", "x", "o" } },
