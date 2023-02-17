@@ -90,6 +90,7 @@ function M.setup()
   vim.g.loaded_netrwPlugin = 1
 
   vim.g.mapleader = " "
+  vim.g.devpath = "~/Documents/nvim-dev"
 
   local colorscheme = require "pokerus.colorscheme"
 
@@ -98,6 +99,10 @@ function M.setup()
     colorscheme.colorschemes,
   }, {
     install = { colorscheme = { colorscheme.main, "habamax" } },
+    dev = {
+      path = vim.g.devpath,
+      fallback = true,
+    },
     performance = {
       rtp = {
         reset = false,

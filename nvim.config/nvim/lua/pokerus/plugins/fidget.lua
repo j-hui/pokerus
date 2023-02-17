@@ -3,4 +3,5 @@ return {
   dependencies = { "neovim/nvim-lspconfig" },
   event = "LspAttach",
   config = true,
+  dev = true,
 }
