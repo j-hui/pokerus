@@ -28,6 +28,10 @@ function pokerus#commands#setup()
   command! Here cd %:h
   " }}}
 
+  " Print the location of file {{{
+  command! Where echom expand('%')
+  " }}}
+
   " Source .vimrc {{{
   command! Vimrc source ~/.vimrc
   " }}}
