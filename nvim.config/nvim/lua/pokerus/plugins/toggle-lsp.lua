@@ -9,6 +9,6 @@ return {
   },
   cmd = { "ToggleLSP", "ToggleNullLSP" },
   keys = {
-    { "<leader>l<BS>", "<cmd>ToggleLSP<CR>", mode = "n", desc = "lsp-toggle" },
+    { "<leader>lq", "<cmd>ToggleLSP<CR>", mode = "n", desc = "lsp-toggle" },
   },
 }
