@@ -1,4 +1,4 @@
-return {
+return false and {
   settings = {
     haskell = {
       formattingProvider = "fourmolu",
