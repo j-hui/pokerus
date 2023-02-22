@@ -22,6 +22,10 @@ cursor:
     blinking: On
   blink_interval: 500
 
+window:
+  # For macOS
+  option_as_alt: Both
+
 mouse:
   hide_when_typing: false
 
@@ -124,23 +128,7 @@ key_bindings:
   - { key: Underline, mods: Control|Shift,                     action: DecreaseFontSize }
   - { key: 12,        mods: Control|Shift,                     action: DecreaseFontSize }
 
-#debug:
-  # Display the time it takes to redraw each frame.
-  #render_timer: false
-
-  # Keep the log file after quitting Alacritty.
-  #persistent_logging: false
-
-  # Log level
-  #
-  # Values for `log_level`:
-  #   - Off
-  #   - Error
-  #   - Warn
-  #   - Info
-  #   - Debug
-  #   - Trace
-  #log_level: Warn
-
-  # Print all received window events.
-  #print_events: false
+import:
+  # NOTE: alacritty's super hacky idea of conditional configuration.
+  # This fails silently when this file doesn't exist.
+  - /Users/j-hui/.config/alacritty-macos.yml
