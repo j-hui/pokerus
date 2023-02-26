@@ -2,6 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=haskell
 
 build-*/
+prompt-history
 
 ### Haskell ###
 dist
