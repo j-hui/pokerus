@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+set -euf
+
+app="$1"
+shift
+
+xdo activate -N "$app" || "$@"
