@@ -228,8 +228,14 @@ in
           ];
         };
         windowManager.bspwm.enable = true;
+        windowManager.i3.enable = true;
+        windowManager.i3.extraPackages = with pkgs; [
+          i3blocks
+          i3status
+        ];
         # displayManager.defaultSession = "none+bspwm";
-        displayManager.defaultSession = "none+xmonad";
+        # displayManager.defaultSession = "none+xmonad";
+        displayManager.defaultSession = "none+i3";
         displayManager.job.logToJournal = true;
         displayManager.lightdm = {
           enable = true;
