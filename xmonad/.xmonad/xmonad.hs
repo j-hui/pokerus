@@ -18,7 +18,6 @@ import qualified XMonad.Core as Core
 import qualified XMonad.Hooks.DynamicLog as Log
 import qualified XMonad.Layout.BoringWindows as Boring
 import qualified XMonad.StackSet as SS
-import qualified XMonad.Util.Dmenu as Dmenu
 import qualified XMonad.Util.Loggers as Log
 
 import XMonad
@@ -106,6 +105,11 @@ import XMonad.Util.SpawnOnce (spawnOnce)
 import qualified Codec.Binary.UTF8.String as UTF8
 import qualified DBus as D
 import qualified DBus.Client as D
+import qualified XMonad.Prompt as XP
+import qualified XMonad.Prompt.FuzzyMatch as XP
+import qualified XMonad.Prompt.Window as XP
+import qualified XMonad.Prompt.Workspace as XP
+import qualified XMonad.Prompt.XMonad as XP
 
 
 -------------------------------------------------------------------------------
@@ -180,29 +184,8 @@ fromXres = unsafePerformIO . getFromXres
   splitAtTrimming :: String -> Int -> (String, String)
   splitAtTrimming str idx = bimap trim (trim . tail) $ splitAt idx str
 
-
--------------------------------------------------------------------------------
--- Combinators and Helpers
---
-
-dmenuName :: String
-dmenuName = "rofi"
-
-
-dmenuArgs :: String -> [String]
-dmenuArgs p = ["-monitor", "-4", "-dmenu", "-p", p]
-
-
-myDmenu_ :: String -> [String] -> X String
-myDmenu_ prompt = Dmenu.menuArgs dmenuName (dmenuArgs prompt)
-
-
-myDmenu :: String -> M.Map String a -> X (Maybe a)
-myDmenu prompt = Dmenu.menuMapArgs dmenuName (dmenuArgs prompt)
-
-
-trim :: String -> String
-trim = dropWhileEnd isSpace . dropWhile isSpace
+  trim :: String -> String
+  trim = dropWhileEnd isSpace . dropWhile isSpace
 
 
 -------------------------------------------------------------------------------
@@ -284,13 +267,38 @@ myLayoutHook =
 
 
 -------------------------------------------------------------------------------
+-- Prompt
+--
+
+myXPConfig :: XP.XPConfig
+myXPConfig =
+  def
+    { XP.promptKeymap = myXPKeys
+    , XP.searchPredicate = XP.fuzzyMatch
+    , XP.sorter = XP.fuzzySort
+    , XP.completionKey = (controlMask, xK_i)
+    }
+
+
+myXPKeys :: M.Map (KeyMask, KeySym) (XP.XP ())
+myXPKeys = myKeys `M.union` XP.emacsLikeXPKeymap
+ where
+  p = isSpace
+  myKeys =
+    M.fromList
+      [ ((controlMask, xK_n), XP.moveHistory SS.focusUp')
+      , ((controlMask, xK_p), XP.moveHistory SS.focusDown')
+      ]
+
+
+-------------------------------------------------------------------------------
 -- Keybinds
 --
 myKeys :: [(String, X ())]
 myKeys =
   [ ("M-z z", xmonadRecompile)
   , ("M-z r", xmonadRestart)
-  , ("M-z q", io exitSuccess) -- Quit XMonad
+  , ("M-z q", xmonadQuit)
   , ("M-z d", debugStack)
   , -- Screens and workspaces
     ("M-.", nextScreen)
@@ -319,13 +327,21 @@ myKeys =
   , ("M-S-o", sendMessage Expand)
   , ("M-m", sendMessage NextLayout)
   , ("M-S-m", sendMessage $ Toggle MIRROR) -- Mirror layout
+  -- XPrompt
+  , ("M-;", XP.xmonadPrompt myXPConfig)
+  -- , ("M-d", XP.workspacePrompt myXPConfig (windows . SS.shift))
+  , ("M-g", XP.windowPrompt myXPConfig XP.Goto XP.wsWindows)
+  , ("M-S-g", XP.windowPrompt myXPConfig XP.Goto XP.allWindows)
+  , ("M-b", XP.windowPrompt myXPConfig XP.Bring XP.wsWindows)
+  , ("M-S-b", XP.windowPrompt myXPConfig XP.Bring XP.allWindows)
   ]
     ++ map viewWorkspace workspaceKW
     ++ map shiftWorkspace workspaceKW
  where
-  xmonadRecompile, xmonadRestart :: X ()
+  xmonadRecompile, xmonadRestart, xmonadQuit :: X ()
   xmonadRecompile = spawn "~/.xmonad/scripts/xmoctl recompile"
   xmonadRestart = spawn "~/.xmonad/scripts/xmoctl restart"
+  xmonadQuit = io exitSuccess
 
   viewWorkspace (k, w) = ("M-" ++ show k, switchDesktop w)
   shiftWorkspace (k, w) = ("M-S-" ++ show k, shiftToDesktop w)
