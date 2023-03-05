@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+set -euf
+
+if ! command -v i3-msg >/dev/null 2>/dev/null ; then
+  notify-send -u critical -t 3000 "$0" "Missing dependency: i3-msg"
+  exit 1
+fi
+
+if ! command -v wmctrl >/dev/null 2>/dev/null ; then
+  notify-send -u critical -t 3000 "$0" "Missing dependency: wmctrl"
+  exit 1
+fi
+
+workspace_cmd="workspace %s"
+
+if [ $# -ge 1 ] ; then
+  workspace_cmd="$1"
+fi
+
+get_desktop() {
+  wmctrl -d | ~/.local/tms/picker --with-nth=-1 --print-query | rev | cut -d ' ' -f 1 | rev | while read -r d ; do
+    if [ -z "$d" ]; then
+      continue
+    fi
+    echo "$d"
+    break
+  done
+}
+
+desktop="$(get_desktop)"
+
+if [ -z "$desktop" ]; then
+  exit
+fi
+
+for workspace_cmd in "$@"; do
+  cmd="${workspace_cmd//%s/$desktop}"
+  set +e
+  msg="$(i3-msg "$cmd")"
+  status="$?"
+  set -e
+  if [ $status -ne 0 ]; then
+    msg="$(echo "$msg" | jq -r '.[0].error')"
+    notify-send -u critical -t 3000 "i3" "$msg"
+  fi
+done
