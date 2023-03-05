@@ -18,7 +18,9 @@ st_font="SauceCodePro Nerd Font Mono:size=14"
 command -v sh         >/dev/null  || die "Missing dependency: sh"
 command -v fzf        >/dev/null  || die "Missing dependency: fzf"
 command -v awk        >/dev/null  || die "Missing dependency: awk"
-command -v alacritty  >/dev/null  || die "Missing dependency: alacritty"
+command -v st >/dev/null  || die "Missing dependency: st"
+# command -v alacritty  >/dev/null  || die "Missing dependency: alacritty"
+command -v xdotool >/dev/null  || die "Missing dependency: xdotool"
 
 die () {
   echo "$@" >&2
@@ -36,8 +38,14 @@ shquote() {
     }' "$@"
 }
 
+for winid in $(xdotool search --class "$class" || true) ; do
+  kill $(xdotool getwindowpid "$winid")
+done
+rm -f /tmp/fzfloat-in /tmp/fzfloat-out
+
 # shellcheck disable=SC2086
 fzf="fzf $(shquote "$@" $FZF_DEFAULT_OPTS)"
+
 
 trap "rm -f /tmp/fzfloat-in /tmp/fzfloat-out" EXIT
 [ -p /tmp/fzfloat-in  ] || mkfifo /tmp/fzfloat-in
@@ -47,7 +55,7 @@ trap 'exit'  CHLD
 { while read -r LINE; do printf '%s\n' "$LINE"; done } <&0 >/tmp/fzfloat-in &
 
 # shellcheck disable=SC2016
-# alacritty --class "Alacritty,$class" -e \
+# alacritty --class "$class,Alacritty" -e \
 #   sh -c "$fzf </tmp/fzfloat-in >/tmp/fzfloat-out" &
 st -f "$st_font" -c "$class" -e sh -c "$fzf </tmp/fzfloat-in >/tmp/fzfloat-out" &
 
