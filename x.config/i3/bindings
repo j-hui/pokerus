@@ -1,0 +1,188 @@
+################
+# Key bindings #
+################
+
+set $mod Mod4
+floating_modifier $mod
+
+## Basic keybindings
+
+bindsym $mod+w kill
+
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+bindsym $mod+o workspace back_and_forth
+bindsym $mod+n workspace next_on_output
+bindsym $mod+p workspace prev_on_output
+
+bindsym $mod+Shift+o move container to workspace back_and_forth
+bindsym $mod+Shift+n move container to workspace next_on_output
+bindsym $mod+Shift+p move container to workspace prev_on_output
+
+# Focus parent container
+bindsym $mod+u focus parent
+# Focus toward child
+bindsym $mod+Shift+u focus child
+
+# Focus between tiling/floating layer
+bindsym $mod+t focus mode_toggle
+# Move between tiling/floating layer
+bindsym $mod+Shift+t floating toggle
+
+# Toggle between split layouts
+bindsym $mod+r layout toggle split
+# Toggle between tabbed layouts
+bindsym $mod+Shift+r layout toggle stacking tabbed
+
+# Show the next scratchpad window or hide the focused scratchpad window.
+# If there are multiple scratchpad windows, this command cycles through them.
+bindsym $mod+i scratchpad show
+
+# move the currently focused window to the scratchpad
+bindsym $mod+Shift+i move scratchpad
+
+# Enter fullscreen mode for the focused container
+bindsym $mod+m fullscreen toggle
+
+bindsym $mod+d exec --no-startup-id ~/.local/tms/desktop-switcher
+bindsym $mod+s exec --no-startup-id ~/.local/tms/window-switcher
+
+## i3 management
+set $mode_i3 i3: [r]estart re[l]oad [q]uit
+bindsym $mod+z mode "$mode_i3"
+mode "$mode_i3" {
+    bindsym Escape mode "default"
+    bindsym Return mode "default"
+
+    bindsym r restart
+    bindsym l reload
+    bindsym q exit
+}
+
+set $mode_ws workspace: [c]reate [r]ename [m]ove [f]ollow
+bindsym $mod+x mode "$mode_ws"
+mode "$mode_ws" {
+    bindsym Escape mode "default"
+    bindsym Return mode "default"
+
+    bindsym c mode "default"; exec  ~/.config/i3/i3-with-workspace 'workspace %s'
+    bindsym r mode "default"; exec  ~/.config/i3/i3-with-workspace 'rename workspace to %s'
+
+    bindsym m mode "default"; exec  ~/.config/i3/i3-with-workspace 'move container to workspace %s'
+    bindsym f mode "default"; exec  ~/.config/i3/i3-with-workspace 'move container to workspace %s' 'workspace %s'
+}
+
+bindsym $mod+y mode "resize"
+# resize window (you can also use the mouse for that)
+mode "resize" {
+    bindsym h           resize shrink width 10 px or 10 ppt
+    bindsym j           resize grow height 10 px or 10 ppt
+    bindsym k           resize shrink height 10 px or 10 ppt
+    bindsym l           resize grow width 10 px or 10 ppt
+
+    # same bindings, but for the arrow keys
+    bindsym Left        resize shrink width 10 px or 10 ppt
+    bindsym Down        resize grow height 10 px or 10 ppt
+    bindsym Up          resize shrink height 10 px or 10 ppt
+    bindsym Right       resize grow width 10 px or 10 ppt
+
+    # back to normal: Enter or Escape or $mod+r
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym $mod+y mode "default"
+}
+
+## Desktop environment
+
+# Lock
+bindsym $mod+Shift+q exec --no-startup-id xset s activate
+
+# Volume control
+bindsym $mod+equal exec --no-startup-id                 "amixer sset Master 10%+"
+bindsym $mod+minus exec --no-startup-id                 "amixer sset Master 10%-"
+bindsym $mod+XF86AudioRaiseVolume exec --no-startup-id  "amixer sset Master 10%+"
+bindsym $mod+XF86AudioLowerVolume exec --no-startup-id  "amixer sset Master 10%-"
+bindsym $mod+XF86AudioMute exec --no-startup-id         "amixer sset Master 0%"
+
+# Brightness control
+bindsym $mod+XF86MonBrightnessUp    exec --no-startup-id "brightnessctl set 10%+"
+bindsym $mod+XF86MonBrightnessDown  exec --no-startup-id "brightnessctl set 10%-"
+
+# Media control
+bindsym $mod+apostrophe    exec --no-startup-id "playerctl --player=spotifyd,spotify,%any play-pause"
+bindsym $mod+bracketleft   exec --no-startup-id "playerctl --player=spotifyd,spotify,%any previous"
+bindsym $mod+bracketright  exec --no-startup-id "playerctl --player=spotifyd,spotify,%any next"
+
+# Screenshots
+set $mode_copy_screen copy screenshot: [c]:select [f]ullscreen
+set $mode_save_screen save screenshot: [c]:select [f]ullscreen
+bindsym $mod+c          mode "$mode_copy_screen"
+bindsym $mod+Shift+c    mode "$mode_save_screen"
+mode "$mode_copy_screen" {
+    bindsym Escape mode "default"
+    bindsym Return mode "default"
+
+    bindsym c               mode "default"; exec --no-startup-id ~/.local/tms/screenshot
+    bindsym $mod+c          mode "default"; exec --no-startup-id ~/.local/tms/screenshot
+    bindsym $mod+Shift+c    mode "default"; exec --no-startup-id ~/.local/tms/screenshot
+
+    bindsym f               mode "default"; exec --no-startup-id ~/.local/tms/screenshot --fullscreen
+    bindsym $mod+f          mode "default"; exec --no-startup-id ~/.local/tms/screenshot --fullscreen
+}
+mode "$mode_save_screen" {
+    bindsym Escape mode "default"
+    bindsym Return mode "default"
+
+    bindsym c               mode "default"; exec --no-startup-id ~/.local/tms/screenshot --no-delete
+    bindsym $mod+c          mode "default"; exec --no-startup-id ~/.local/tms/screenshot --no-delete
+    bindsym $mod+Shift+c    mode "default"; exec --no-startup-id ~/.local/tms/screenshot --no-delete
+
+    bindsym f               mode "default"; exec --no-startup-id ~/.local/tms/screenshot --no-delete --fullscreen
+    bindsym $mod+f          mode "default"; exec --no-startup-id ~/.local/tms/screenshot --no-delete --fullscreen
+}
+
+# Notifications
+set $mode_notif notifications: [<SPC>]:show [q]:clear [w]:clear-all [z]:restart
+bindsym $mod+q mode "$mode_notif"
+mode "$mode_notif" {
+    bindsym Escape mode "default"
+    bindsym Return mode "default"
+
+    bindsym Space   mode "default"; exec --no-startup-id ~/.local/tms/notifyctl toggle
+    bindsym q       mode "default"; exec --no-startup-id ~/.local/tms/notifyctl clear-all
+    bindsym $mod+q  mode "default"; exec --no-startup-id ~/.local/tms/notifyctl clear-all
+    bindsym w       mode "default"; exec --no-startup-id ~/.local/tms/notifyctl clear-all
+    bindsym z       mode "default"; exec --no-startup-id ~/.local/tms/notifyctl restart
+}
+
+## Applications
+
+bindsym $mod+Shift+a exec --no-startup-id ~/.local/tms/app-launcher
+
+set $mode_app launch: [a]lacritty [b]rowser [i]ncognito [q]utebrowser [']:spotify
+
+bindsym $mod+a mode "$mode_app"
+mode "$mode_app" {
+    bindsym Escape mode "default"
+    bindsym Return mode "default"
+
+    bindsym a       mode "default"; exec alacritty
+    bindsym b       mode "default"; exec firefox
+    bindsym i       mode "default"; exec firefox --private-window
+
+    bindsym q \
+    mode "default"; workspace qutebrowser;  exec ~/.local/tms/raise-or-start qutebrowser qutebrowser
+
+    bindsym apostrophe\
+    mode "default"; workspace spotify;      exec ~/.local/tms/raise-or-start Spotify spotify
+}
+
+#  vim: set ts=4 sw=0 tw=80 et ft=i3config :

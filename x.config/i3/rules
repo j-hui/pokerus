@@ -1,0 +1,30 @@
+################
+# Window rules #
+################
+
+for_window [instance="^float-term$"] \
+floating enable, sticky enable, move position 0 ppt 50 ppt, resize set width 100 ppt height 50 ppt, move position 0 ppt 50 ppt, border none, focus
+for_window [class="^float-term$"] \
+floating enable, sticky enable, move position 0 ppt 50 ppt, resize set width 100 ppt height 50 ppt, move position 0 ppt 50 ppt, border none, focus
+
+for_window [class="gcr-prompter"] \
+floating enable, sticky enable, border none
+
+for_window [class="Spotify"] \
+move container to workspace spotify
+
+## Zoom bullshit
+# See https://bewilderedoctothorpe.net/2022/03/30/i3wm-zoom-screen-sharing/
+
+# For notifications
+for_window [title="^zoom\s?$"] floating enable
+no_focus [title="^zoom\s?$"]
+
+# Meetings joined or started via link
+# TODO: these aren't working lmao
+for_window [title="^start\?action=join.*$"] floating enable
+no_focus [title="^start\?action=join.*$"]
+for_window [title="^join\?action=join.*$"] floating enable
+no_focus [title="^join\?action=join.*$"]
+
+#  vim: set ts=4 sw=0 tw=80 et ft=i3config :

@@ -1,0 +1,34 @@
+################
+# i3bar/status #
+################
+
+# Use pactl to adjust volume in PulseAudio.
+set $refresh_i3status killall -SIGUSR1 i3status
+
+bar {
+    status_command i3status ~/.config/i3status/config
+    position top
+
+    workspace_buttons yes
+    workspace_min_width 32 px
+    tray_output primary
+
+    binding_mode_indicator no
+
+    separator_symbol " | "
+}
+
+bar {
+    status_command i3status -c ~/.config/i3status/`hostname`-config
+    position bottom
+
+    workspace_buttons no
+    workspace_min_width 32 px
+    tray_output none
+
+    binding_mode_indicator yes
+
+    separator_symbol " | "
+}
+
+#  vim: set ts=4 sw=0 tw=80 et ft=i3config :
