@@ -62,6 +62,11 @@ case "$1" in
     $EDITOR init.vim lua/pokerus/*.lua lua/pokerus/plugins/*.lua
     popd
     ;;
+  tmux)
+    pushd ~/.config/tmux
+    $EDITOR tmux.conf
+    popd
+    ;;
   git)
     $EDITOR ~/.gitpokerus ~/.gitconfig
     ;;
