@@ -5,8 +5,6 @@ setopt BAD_PATTERN
 unsetopt BEEP
 unsetopt LIST_BEEP
 
-SHELL=zsh
-
 # From https://jdhao.github.io/2021/03/24/zsh_history_setup/
 export HISTFILE=~/.histfile
 export HISTSIZE=1000000   # the number of items for the internal history list
