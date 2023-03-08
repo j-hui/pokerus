@@ -56,12 +56,13 @@ bindsym $mod+d exec --no-startup-id ~/.local/tms/desktop-switcher
 bindsym $mod+s exec --no-startup-id ~/.local/tms/window-switcher
 
 ## i3 management
-set $mode_i3 i3: [r]estart re[l]oad [q]uit
+set $mode_i3 i3: [x]rdb [r]estart re[l]oad [q]uit
 bindsym $mod+z mode "$mode_i3"
 mode "$mode_i3" {
     bindsym Escape mode "default"
     bindsym Return mode "default"
 
+    bindsym x exec --no-startup-id xrdb ~/.Xresources, mode "default", reload
     bindsym r restart
     bindsym l reload
     bindsym q exit
