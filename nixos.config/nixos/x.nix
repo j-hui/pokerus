@@ -76,25 +76,19 @@ in
       xmonad-log
       xmobar
 
-      paper-gtk-theme
-      paper-icon-theme
-      unstable.dracula-theme
-      adapta-gtk-theme
-      pantheon.elementary-gtk-theme
-      pantheon.elementary-sound-theme
-      pantheon.elementary-icon-theme
-      materia-theme
-      vimix-gtk-themes
       xorg.xcursorthemes
+
+      numix-icon-theme
       pop-gtk-theme
       pop-icon-theme
-      sweet
-      qogir-icon-theme
-      moka-icon-theme
-      tango-icon-theme
-      numix-icon-theme
-      gnome-icon-theme
-      humanity-icon-theme
+      whitesur-gtk-theme
+      whitesur-icon-theme
+
+      # Unused themes:
+      # sweet
+      # materia-theme
+      # vimix-gtk-themes
+      # vimix-icon-theme
     ];
 
     fonts = {
