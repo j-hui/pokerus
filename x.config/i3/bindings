@@ -61,6 +61,7 @@ bindsym $mod+z mode "$mode_i3"
 mode "$mode_i3" {
     bindsym Escape mode "default"
     bindsym Return mode "default"
+    bindsym Ctrl+bracketleft mode "default"
 
     bindsym x exec --no-startup-id xrdb ~/.Xresources, mode "default", reload
     bindsym r restart
@@ -73,6 +74,7 @@ bindsym $mod+x mode "$mode_ws"
 mode "$mode_ws" {
     bindsym Escape mode "default"
     bindsym Return mode "default"
+    bindsym Ctrl+bracketleft mode "default"
 
     bindsym c mode "default"; exec  ~/.config/i3/scripts/i3-with-workspace 'workspace %s'
     bindsym r mode "default"; exec  ~/.config/i3/scripts/i3-with-workspace 'rename workspace to %s'
@@ -81,9 +83,9 @@ mode "$mode_ws" {
     bindsym f mode "default"; exec  ~/.config/i3/scripts/i3-with-workspace 'move container to workspace %s' 'workspace %s'
 }
 
-bindsym $mod+y mode "resize"
-# resize window (you can also use the mouse for that)
-mode "resize" {
+set $mode_resize resize: [←|↑]:shrink [→|↓]:grow
+bindsym $mod+y mode "$mode_resize"
+mode "$mode_resize" {
     bindsym h           resize shrink width 10 px or 10 ppt
     bindsym j           resize grow height 10 px or 10 ppt
     bindsym k           resize shrink height 10 px or 10 ppt
@@ -98,6 +100,7 @@ mode "resize" {
     # back to normal: Enter or Escape or $mod+r
     bindsym Return mode "default"
     bindsym Escape mode "default"
+    bindsym Ctrl+bracketleft mode "default"
     bindsym $mod+y mode "default"
 }
 
@@ -130,6 +133,7 @@ bindsym $mod+Shift+c    mode "$mode_save_screen"
 mode "$mode_copy_screen" {
     bindsym Escape mode "default"
     bindsym Return mode "default"
+    bindsym Ctrl+bracketleft mode "default"
 
     bindsym c               mode "default"; exec --no-startup-id ~/.local/tms/screenshot
     bindsym $mod+c          mode "default"; exec --no-startup-id ~/.local/tms/screenshot
@@ -141,6 +145,7 @@ mode "$mode_copy_screen" {
 mode "$mode_save_screen" {
     bindsym Escape mode "default"
     bindsym Return mode "default"
+    bindsym Ctrl+bracketleft mode "default"
 
     bindsym c               mode "default"; exec --no-startup-id ~/.local/tms/screenshot --no-delete
     bindsym $mod+c          mode "default"; exec --no-startup-id ~/.local/tms/screenshot --no-delete
@@ -156,6 +161,7 @@ bindsym $mod+q mode "$mode_notif"
 mode "$mode_notif" {
     bindsym Escape mode "default"
     bindsym Return mode "default"
+    bindsym Ctrl+bracketleft mode "default"
 
     bindsym Space   mode "default"; exec --no-startup-id ~/.local/tms/notifyctl toggle
     bindsym q       mode "default"; exec --no-startup-id ~/.local/tms/notifyctl clear-all
@@ -174,6 +180,7 @@ bindsym $mod+a mode "$mode_app"
 mode "$mode_app" {
     bindsym Escape mode "default"
     bindsym Return mode "default"
+    bindsym Ctrl+bracketleft mode "default"
 
     bindsym a       mode "default"; exec alacritty
     bindsym b       mode "default"; exec firefox
