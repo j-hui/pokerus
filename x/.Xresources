@@ -1,173 +1,41 @@
-! More themes here: https://github.com/logico-dev/Xresources-themes
+! Loosely adapted from: https://github.com/vinceliuice/WhiteSur-gtk-theme
 
-! Note: under the base16 scheme, the shade is used for the light and dark variants of the same color
+! Colors
+*background:    #1f1f1f
+*foreground:    #dadada
 
+! black
+*.color0:       #242424
+*.color8:       #333333
 
-! Base16 Atlas
-! Author: Alex Lende (https://ajlende.com)
+! red
+*.color1:       #ED5F5D
+*.color9:       #c35b65
 
-#define base00 #002635
-#define base01 #00384d
-#define base02 #517F8D
-#define base03 #6C8B91
-#define base04 #869696
-#define base05 #a1a19a
-#define base06 #e6e6dc
-#define base07 #fafaf8
-#define base08 #ff5a67
-#define base09 #f08e48
-#define base0A #ffcc1b
-#define base0B #7fc06e
-#define base0D #5dd7b9
-#define base0C #14747e
-#define base0E #9a70a4
-#define base0F #c43060
+! green
+*.color2:       #79B757
+*.color10:      #82ac5d
 
-! Base16 Icy
-! Author icyphox (https://icyphox.ga)
+! yellow
+*.color3:       #F3BA4B
+*.color11:      #e4b558
 
-! #define base00 #021012
-! #define base01 #031619
-! #define base02 #041f23
-! #define base03 #052e34
-! #define base04 #064048
-! #define base05 #095b67
-! #define base06 #0c7c8c
-! #define base07 #109cb0
-! #define base08 #16c1d9
-! #define base09 #b3ebf2
-! #define base0A #80deea
-! #define base0B #4dd0e1
-! #define base0C #26c6da
-! #define base0D #00bcd4
-! #define base0E #00acc1
-! #define base0F #0097a7
+! blue
+*.color4:       #0860F2
+*.color12:      #5271ad
 
+! magenta
+*.color5:       #E55E9C
+*.color13:      #cd7092
 
-! Base16 Material
-! Author: Nate Peterseon
+! cyan
+*.color6:       #2E7CF7
+*.color14:      #4c7bd9
 
-! #define base00 #263238
-! #define base01 #2E3C43
-! #define base02 #314549
-! #define base03 #546E7A
-! #define base04 #B2CCD6
-! #define base05 #EEFFFF
-! #define base06 #EEFFFF
-! #define base07 #FFFFFF
-! #define base08 #F07178
-! #define base09 #F78C6C
-! #define base0A #FFCB6B
-! #define base0B #C3E88D
-! #define base0C #89DDFF
-! #define base0D #82AAFF
-! #define base0E #C792EA
-! #define base0F #FF5370
-
-! Base16 Material Darker
-! Author: Nate Peterson
-
-! #define base00 #212121
-! #define base01 #303030
-! #define base02 #353535
-! #define base03 #4a4a4a
-! #define base04 #b2ccd6
-! #define base05 #eeffff
-! #define base06 #eeffff
-! #define base07 #ffffff
-! #define base08 #f07178
-! #define base09 #f78c6c
-! #define base0A #ffcb6b
-! #define base0B #c3e88d
-! #define base0C #89ddff
-! #define base0D #82aaff
-! #define base0E #c792ea
-! #define base0F #ff5370
-
-! Base16 Material Palenight
-! Author: Nate Peterson
-
-! #define base00 #292D3E
-! #define base01 #444267
-! #define base02 #32374D
-! #define base03 #676E95
-! #define base04 #8796B0
-! #define base05 #959DCB
-! #define base06 #959DCB
-! #define base07 #FFFFFF
-! #define base08 #F07178
-! #define base09 #F78C6C
-! #define base0A #FFCB6B
-! #define base0B #C3E88D
-! #define base0C #89DDFF
-! #define base0D #82AAFF
-! #define base0E #C792EA
-! #define base0F #FF5370
-
-
-! Base16 Gruvbox dark, medium
-! Scheme: Dawid Kurek (dawikur@gmail.com), morhetz (https://github.com/morhetz/gruvbox)
-
-#define base00 #282828
-#define base01 #3c3836
-#define base02 #504945
-#define base03 #665c54
-#define base04 #bdae93
-#define base05 #d5c4a1
-#define base06 #ebdbb2
-#define base07 #fbf1c7
-#define base08 #fb4934
-#define base09 #fe8019
-#define base0A #fabd2f
-#define base0B #b8bb26
-#define base0C #8ec07c
-#define base0D #83a598
-#define base0E #d3869b
-#define base0F #d65d0e
-
-*foreground:   base0D
-#ifdef background_opacity
-*background:   [background_opacity]base00
-#else
-*background:   base00
-#endif
-*cursorColor:  base0D
-
-*i3bg:          base01
-*i3bg_hi:       base01
-*i3bg_urg:      base01
-*i3text:        base05
-*i3text_hi:     base05
-*i3text_urg:    base08
-*i3border:      base00
-*i3border_hi:   base02
-*i3border_urg:  base08
-
-*color0:       base00
-*color1:       base08
-*color2:       base0B
-*color3:       base0A
-*color4:       base0D
-*color5:       base0E
-*color6:       base0C
-*color7:       base05
-
-*color8:       base03
-*color9:       base08
-*color10:      base0B
-*color11:      base0A
-*color12:      base0D
-*color13:      base0E
-*color14:      base0C
-*color15:      base07
-
-! Note: colors beyond 15 might not be loaded (e.g., xterm, urxvt),
-! use 'shell' template to set these if necessary
-*color16:      base09
-*color17:      base0F
-*color18:      base01
-*color19:      base02
-*color20:      base04
-*color21:      base06
+! white
+*.color7:       #f5f5f5
+*.color15:      #dadada
 
 XTerm.vt100.faceName: Source Code Pro:size=15
+
+/* vim: set ts=4 sw=0 tw=80 et ft=xdefaults :*/
