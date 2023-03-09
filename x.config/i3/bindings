@@ -186,4 +186,15 @@ mode "$mode_app" {
     mode "default"; workspace spotify;      exec ~/.local/tms/raise-or-start Spotify spotify
 }
 
+## Mouse bindings
+
+# Middle button
+bindsym --release button2 kill
+# Right button
+bindsym button3 floating toggle
+
+# Side buttons
+bindsym button9 move left
+bindsym button8 move right
+
 #  vim: set ts=4 sw=0 tw=80 et ft=i3config :

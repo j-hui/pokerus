@@ -6,33 +6,43 @@ workspace_layout stacking
 focus_follows_mouse no
 focus_wrapping no
 popup_during_fullscreen smart
+default_border normal 2
 
 exec_always --no-startup-id ~/.local/tms/notifyctl restart
 exec_always --no-startup-id xset r rate 250 69
 exec_always --no-startup-id xsetroot -cursor_name left_ptr
 
-default_border normal 3
+# Adapted from https://github.com/vinceliuice/WhiteSur-gtk-theme
+set $base_color             #242424
+set $text_color             #dadada
 
-set_from_resource   $bg             i3bg
-set_from_resource   $bg_hi          i3bg_hi
-set_from_resource   $bg_urg         i3bg_urg
+set $theme_color_default    #0860F2
+set $theme_color_blue       #2E7CF7
+set $theme_color_purple     #9A57A3
+set $theme_color_pink       #E55E9C
+set $theme_color_red        #ED5F5D
+set $theme_color_orange     #E9873A
+set $theme_color_yellow     #F3BA4B
+set $theme_color_green      #79B757
+set $theme_color_grey       #8C8C8C
 
-set_from_resource   $text           i3text
-set_from_resource   $text_hi        i3text_hi
-set_from_resource   $text_urg       i3text_urg
+set $bg_lo                  #242424
+set $bg_hi                  #383838
 
-set_from_resource   $border         i3border
-set_from_resource   $border_hi      i3border_hi
-set_from_resource   $border_urg     i3border_urg
+set $fg_darker              #afafaf
+set $fg_normal              #dedede
+set $fg_accent              #79B757
 
-# class                     border      background  text        indicator   child_border
-client.unfocused            $border     $bg         $text       $text_urg   $border
-client.placeholder          $border     $bg         $text       $text_urg   $border
-client.focused_inactive     $border     $bg         $text_hi    $text_urg   $border
-client.focused              $border_hi  $bg_hi      $text_hi    $text_urg   $border_hi
-client.urgent               $border_urg $bg_urg     $text_urg   $text_urg   $border_urg
+set $fg_indicator           #383838
 
-client.background           $bg
+# class                     border      background  text        indicator       child_border
+client.unfocused            $bg_lo      $bg_lo      $fg_darker  $fg_indicator   $bg_lo
+client.placeholder          $bg_lo      $bg_lo      $fg_darker  $fg_indicator   $bg_lo
+client.focused_inactive     $bg_hi      $bg_hi      $fg_normal  $fg_indicator   $bg_hi
+client.focused              $fg_normal  $bg_hi      $fg_normal  $fg_indicator   $fg_normal
+client.urgent               $fg_accent  $bg_hi      $fg_accent  $fg_indicator   $fg_accent
+
+client.background           $base_color
 
 include ~/.config/i3/rules
 include ~/.config/i3/bindings

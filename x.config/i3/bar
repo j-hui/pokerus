@@ -16,6 +16,19 @@ bar {
     binding_mode_indicator no
 
     separator_symbol " | "
+
+    colors {
+        background  $bg_lo
+        statusline  $fg_normal
+        separator   $fg_darker
+
+        # class             border      background  text
+        focused_workspace   $fg_normal  $bg_hi      $fg_normal
+        active_workspace    $bg_hi      $bg_hi      $fg_normal
+        inactive_workspace  $bg_lo      $bg_lo      $fg_darker
+        urgent_workspace    $fg_accent  $bg_hi      $fg_accent
+        binding_mode        $bg_hi      $fg_accent  $bg_hi
+    }
 }
 
 bar {
@@ -29,6 +42,19 @@ bar {
     binding_mode_indicator yes
 
     separator_symbol " | "
+
+    colors {
+        background  $bg_lo
+        statusline  $fg_normal
+        separator   $fg_darker
+
+        # class             border      background  text
+        focused_workspace   $fg_normal  $bg_hi      $fg_normal
+        active_workspace    $bg_hi      $bg_hi      $fg_normal
+        inactive_workspace  $bg_lo      $bg_lo      $fg_darker
+        urgent_workspace    $fg_accent  $bg_hi      $fg_accent
+        binding_mode        $bg_hi      $fg_accent  $bg_hi
+    }
 }
 
 #  vim: set ts=4 sw=0 tw=80 et ft=i3config :
