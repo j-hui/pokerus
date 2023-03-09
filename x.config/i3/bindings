@@ -74,11 +74,11 @@ mode "$mode_ws" {
     bindsym Escape mode "default"
     bindsym Return mode "default"
 
-    bindsym c mode "default"; exec  ~/.config/i3/i3-with-workspace 'workspace %s'
-    bindsym r mode "default"; exec  ~/.config/i3/i3-with-workspace 'rename workspace to %s'
+    bindsym c mode "default"; exec  ~/.config/i3/scripts/i3-with-workspace 'workspace %s'
+    bindsym r mode "default"; exec  ~/.config/i3/scripts/i3-with-workspace 'rename workspace to %s'
 
-    bindsym m mode "default"; exec  ~/.config/i3/i3-with-workspace 'move container to workspace %s'
-    bindsym f mode "default"; exec  ~/.config/i3/i3-with-workspace 'move container to workspace %s' 'workspace %s'
+    bindsym m mode "default"; exec  ~/.config/i3/scripts/i3-with-workspace 'move container to workspace %s'
+    bindsym f mode "default"; exec  ~/.config/i3/scripts/i3-with-workspace 'move container to workspace %s' 'workspace %s'
 }
 
 bindsym $mod+y mode "resize"
