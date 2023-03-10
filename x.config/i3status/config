@@ -1,0 +1,22 @@
+general {
+        output_format = "i3bar"
+        colors = true
+        interval = 1
+}
+
+order += "volume master"
+order += "tztime local"
+
+volume master {
+        format = " %volume"
+        format_muted = " (%volume)"
+        device = "default"
+        mixer = "Master"
+        mixer_idx = 0
+}
+
+tztime local {
+        format = "%Y-%m-%d (%a) %H:%M:%S"
+}
+
+# vim: set ts=4 sw=0 tw=80 et ft=i3config :

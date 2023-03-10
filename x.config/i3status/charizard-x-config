@@ -1,0 +1,45 @@
+general {
+        # output_format = "term"
+        colors = true
+        interval = 2
+}
+
+order += "load"
+order += "cpu_temperature 0"
+order += "memory"
+order += "disk /"
+order += "ethernet eno1"
+
+
+load {
+    format = " %1min"
+    max_threshold = "1"
+}
+
+cpu_temperature 0 {
+        path = "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon1/temp1_input"
+        format = " %degrees°C"
+        max_threshold = 69
+        format_above_threshold = " %degrees°C"
+
+}
+
+memory {
+        format = " %used/%total"
+        threshold_degraded = "10%"
+        threshold_critical = "5%"
+}
+
+disk "/" {
+        format = " %used/%total (%percentage_used)"
+        prefix_type = "custom"
+        low_threshold = "10"
+        threshold_type = "percentage_avail"
+}
+
+ethernet eno1 {
+        format_up = " eno1 %ip (%speed)"
+        format_down = " eno1 down"
+}
+
+# vim: set ts=4 sw=0 tw=80 et ft=i3config :
