@@ -96,5 +96,10 @@ return {
         require("nvim-surround").buffer_setup(o)
       end)
     end
+
+    local ft = vim.opt.filetype:get()
+    if ft_opts[ft] then
+      require("nvim-surround").buffer_setup(ft_opts[ft])
+    end
   end,
 }
