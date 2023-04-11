@@ -57,10 +57,11 @@ local function tex_find_environment()
   local cfg = require("nvim-surround.config")
   if vim.g.loaded_nvim_treesitter then
     local selection = cfg.get_selection {
-      query = {
-        capture = "@block.outer",
-        type = "textobjects",
-      }
+      node = "generic_environment",
+      -- query = {
+      --   capture = "@block.outer",
+      --   type = "textobjects",
+      -- }
     }
     if selection then
       return selection
@@ -145,6 +146,7 @@ local tex_opts = {
 local ft_opts = {
   markdown = markdown_opts,
   tex = tex_opts,
+  plaintex = "tex",
 }
 
 return {
@@ -179,6 +181,9 @@ return {
 
     local ft = vim.opt.filetype:get()
     if ft_opts[ft] then
+      if type(ft_opts[ft]) == "string" then
+        ft = ft_opts[ft]
+      end
       require("nvim-surround").buffer_setup(ft_opts[ft])
     end
   end,
