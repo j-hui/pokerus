@@ -2,7 +2,7 @@ return {
   "chentoast/marks.nvim",
   opts = {
     mappings = {
-      annotate = "mm",
+      annotate = "m.",
     },
   },
   config = true,
