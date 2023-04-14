@@ -4,7 +4,7 @@ local function harpoon(m, f)
   end
 end
 
-return {
+return {} or {
   "ThePrimeagen/harpoon",
   dependencies = {
     "nvim-lua/plenary.nvim",
