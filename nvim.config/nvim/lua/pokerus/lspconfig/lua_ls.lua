@@ -22,7 +22,6 @@ return {
 
     -- Is this file related to Neovim/plugin developmet?
     if is_under "config" or is_under "data" or is_nvim_dev then
-      print("using neodev")
       local luasettings = require("neodev").setup {
         library = { plugins = false }, -- I have too many plugins xD
         lspconfig = { settings = new_config.settings },
