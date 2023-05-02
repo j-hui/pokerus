@@ -62,13 +62,15 @@ local function tex_find_environment()
       --   capture = "@block.outer",
       --   type = "textobjects",
       -- }
+      -- NOTE: ^query doesn't seem to work very reliably with LaTeX environments
     }
     if selection then
       return selection
     end
   end
   return cfg.get_selection [[\begin%b{}.-\end%b{}]]
-  -- NOTE: ^this does not correctly handle \begin{}-\end{} pairs in all cases.
+  -- NOTE: ^this does not correctly handle \begin{}-\end{} pairs in all cases
+  --        (hence we use treesitter if available)
 end
 
 local tex_opts = {
