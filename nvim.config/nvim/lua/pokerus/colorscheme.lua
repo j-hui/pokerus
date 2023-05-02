@@ -34,14 +34,6 @@ M.colorschemes = {
       flavour = "mocha",
     },
   },
-  {
-    "projekt0n/github-nvim-theme",
-    modname = "github-theme",
-    schemename = "github_dark",
-    opts = {
-      keyword_style = "bold",
-    },
-  },
 }
 
 for _, colo in ipairs(M.colorschemes) do
