@@ -76,6 +76,7 @@ local function setup_nvim_ftdetect()
       v = "coq",
       x = "alex",
       y = "happy",
+      pio = "pio",
     },
   }
 end

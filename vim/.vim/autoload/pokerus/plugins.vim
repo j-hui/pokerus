@@ -132,6 +132,7 @@ function pokerus#plugins#setup()
     Plug 'preservim/vim-markdown', { 'as': 'preservim-vim-markdown' }
     Plug 'euclidianAce/BetterLua.vim'
     Plug 'whonore/coqtail'
+    Plug 'mikebentley15/vim-pio'
   " Filetype }}}
   call plug#end()
 

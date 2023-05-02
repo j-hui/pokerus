@@ -122,6 +122,7 @@ return {
   { "andy-morris/happy.vim", ft = "happy" },
   { "andy-morris/alex.vim", ft = "alex" },
   { "euclidianAce/BetterLua.vim", ft = "lua" },
+  { "mikebentley15/vim-pio", ft = "pio" },
   -- Filetypes }}}
 
   -- Filetypes w/ setup {{{
