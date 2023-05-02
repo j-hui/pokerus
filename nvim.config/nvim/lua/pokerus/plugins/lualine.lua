@@ -3,13 +3,9 @@ return {
   event = "UIEnter",
   dependencies = {
     "kyazdani42/nvim-web-devicons",
-    "SmiteshP/nvim-gps",
     "nvim-treesitter/nvim-treesitter",
   },
   config = function()
-    local gps = require "nvim-gps"
-    gps.setup {}
-
     require("lualine").setup {
       options = {
         section_separators = "",
@@ -24,7 +20,6 @@ return {
         lualine_c = {
           "hostname",
           "filename",
-          { gps.get_location, cond = gps.is_available },
         },
         lualine_x = {
           function()
