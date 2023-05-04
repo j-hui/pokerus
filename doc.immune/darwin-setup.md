@@ -76,13 +76,53 @@ EOF
 brew install gnupg pinentry-mac
 ```
 
-### Command-Line Utilities
+### Bash
 
 macOS seems to use `~/.bash_profile` instead of `~/.bashrc`. Insist on the latter:
 
 ```shell
 ln -s ~/.bashrc ~/.bash_profile
 ```
+
+Make sure the following paths are in `PATH`:
+
+```
+export PATH
+PATH="/opt/homebrew/bin:$PATH"
+PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH"
+PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
+```
+
+### Zsh
+
+See above instructions about `PATH`.
+
+Install some completions:
+
+```shell
+brew install zsh-completions
+```
+
+Add this to `~/.zshrc`:
+
+```shell
+if type brew &>/dev/null; then
+  FPATH="$(brew --prefix)/share/zsh/site-functions:$FPATH"
+  FPATH="$(brew --prefix)/share/zsh-completions:$FPATH"
+
+  autoload -Uz compinit
+  compinit
+fi
+```
+
+Then load them:
+
+```shell
+rm -f ~/.zcompdump; compinit
+chmod -R go-w '/opt/homebrew/share'
+```
+
+### Command-Line Utilities
 
 ```shell
 brew install vim neovim ripgrep exa dust diskus htop bottom bat tree tmux gh node gnu-sed
@@ -108,8 +148,7 @@ brew install alacritty wezterm kitty warp
 Browsers and password managers:
 
 ```shell
-brew tap amar1729/formulae # for browserpass
-brew install firefox google-chrome 1password browserpass tunnelblick
+brew install firefox google-chrome 1password tunnelblick
 ```
 
 Customization:
