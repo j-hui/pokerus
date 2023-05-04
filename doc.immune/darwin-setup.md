@@ -78,6 +78,12 @@ brew install gnupg pinentry-mac
 
 ### Command-Line Utilities
 
+macOS seems to use `~/.bash_profile` instead of `~/.bashrc`. Insist on the latter:
+
+```shell
+ln -s ~/.bashrc ~/.bash_profile
+```
+
 ```shell
 brew install vim neovim ripgrep exa dust diskus htop bottom bat tree tmux gh node gnu-sed
 ```
