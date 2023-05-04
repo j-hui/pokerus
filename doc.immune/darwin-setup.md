@@ -44,7 +44,7 @@ export PATH="/opt/homebrew/bin:$PATH"
 brew install coreutils
 ```
 
-This ensures `realpath` is available.
+This ensures the GNU implementation of `realpath` is available (which `git infect` depends on).
 
 ### Setup SSH
 
@@ -93,8 +93,34 @@ brew install --cask font-hack-nerd-font font-sauce-code-pro-nerd-font font-go-mo
 
 ### GUI Applications
 
+Shells:
+
 ```shell
-brew instasll alacritty kitty google-chrome
+brew install alacritty wezterm kitty warp
+```
+
+Browsers and password managers:
+
+```shell
+brew install firefox google-chrome 1password browserpass tunnelblick
+```
+
+Customization:
+
+```shell
+brew install rectangle keycastr alt-tab
+```
+
+Media:
+
+```shell
+brew install vlc sioyek skim spotify slidepilot balenaetcher creality-slicer transmission bitwig-studio
+```
+
+Communication:
+
+```shell
+brew install zoom discord slack whatsapp messenger
 ```
 
 ### Fast `KeyRepeat`
