@@ -108,6 +108,7 @@ brew install alacritty wezterm kitty warp
 Browsers and password managers:
 
 ```shell
+brew tap amar1729/formulae # for browserpass
 brew install firefox google-chrome 1password browserpass tunnelblick
 ```
 
