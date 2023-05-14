@@ -14,8 +14,7 @@ PATH_ADD() {
 }
 
 PATH_ADD ~/.local/tms
-PATH_ADD ~/.ghcup/bin
-
+PATH_ADD ~/.local/bin
 
 ### fzf
 
