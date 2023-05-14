@@ -124,8 +124,46 @@ chmod -R go-w '/opt/homebrew/share'
 
 ### Command-Line Utilities
 
+Text editing and session management:
+
 ```shell
-brew install vim neovim ripgrep exa dust diskus htop bottom bat tree tmux gh node gnu-sed
+brew install vim neovim tmux tree-sitter
+```
+
+File management:
+
+```shell
+brew install ripgrep exa dust diskus bat tree gnu-sed git-delta jq hexyl TankerHQ/homebrew-repo/ruplacer
+```
+
+Process management:
+
+```shell
+brew install htop bottom hyperfine
+```
+
+Version control and web:
+
+```shell
+brew install git gh subversion curl wget
+```
+
+C and embedded development:
+
+```shell
+brew install make cmake cmake-docs bear llvm ccls gcc-arm-embedded picocom
+```
+
+Other development:
+
+```shell
+brew install node go shellcheck vint lua luajit lua-language-server prettier pyright
+```
+
+Writing and media:
+
+```shell
+brew install enscript hugo imagemagick lychee texinfo texlab ltex-ls pdfgrep pdftk-java pandoc bib-tool mactex
 ```
 
 ### Patched Fonts
@@ -148,7 +186,7 @@ brew install alacritty wezterm kitty warp
 Browsers and password managers:
 
 ```shell
-brew install firefox google-chrome 1password tunnelblick
+brew install firefox google-chrome arc 1password tunnelblick
 ```
 
 Customization:
@@ -160,7 +198,7 @@ brew install rectangle keycastr alt-tab
 Media:
 
 ```shell
-brew install vlc sioyek skim spotify slidepilot balenaetcher creality-slicer transmission bitwig-studio
+brew install vlc sioyek skim spotify slidepilot balenaetcher creality-slicer transmission bitwig-studio steam
 ```
 
 Communication:
@@ -169,11 +207,23 @@ Communication:
 brew install zoom discord slack whatsapp messenger
 ```
 
+Virtualization:
+
+```shell
+brew install docker
+```
+
+Misc.:
+
+```sh
+brew install logictech-options
+```
+
 ### Fast `KeyRepeat`
 
 ```shell
 defaults write -g KeyRepeat -int 1 # normal minimum is 2 (30 ms)
-defaults write -g InitialKeyRepeat -int 10 # normal minimum is 15 (225 ms)
+defaults write -g InitialKeyRepeat -int 20 # normal minimum is 15 (225 ms)
 defaults write -g ApplePressAndHoldEnabled -bool false
 ```
 ### Show file extensions
@@ -187,6 +237,9 @@ defaults write -g AppleShowAllExtensions -bool true
 ```shell
 defaults read com.apple.finder NewWindowTargetPath -string file:///Users/`whoami`
 ```
+
+> **NOTE** this doesn't seem to work from CLI, but is easily configured in
+> Finder's preferences.
 
 ### Setup Terminal.app
 
