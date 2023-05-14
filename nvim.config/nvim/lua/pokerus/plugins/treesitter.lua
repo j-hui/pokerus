@@ -9,7 +9,7 @@ local languages = {
   "fish",
   "go",
   "haskell",
-  "help",
+  "vimdoc",
   "html",
   "java",
   "javascript",
