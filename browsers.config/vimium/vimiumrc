@@ -1,0 +1,35 @@
+# we rawdogging these key binds
+unmapAll
+
+# pretend we're always in insert mode, to avoid confusing web apps
+
+# readline page navigation
+map <c-d> scrollPageDown
+map <c-u> scrollPageUp
+map <c-n> scrollDown
+map <c-p> scrollUp
+map <c-f> scrollRight
+map <c-b> scrollLeft
+map <c-e> scrollToRight
+map <c-a> scrollToLeft
+
+map <c-o>g scrollToTop
+map <c-o>G scrollToBottom
+map <c-o>u goPrevious
+map <c-o>U goNext
+map <c-o>^ goUp
+map <c-o>0 goToRoot
+
+# "escaped" normal mode commands
+map <c-o>y copyCurrentUrl
+map <c-o>p openCopiedUrlInCurrentTab
+map <c-o>P openCopiedUrlInNewTab
+
+map <c-o>f LinkHints.activateMode
+map <c-o>F LinkHints.activeModeToOpenInNewTab
+map <c-o>i focusInput
+map <c-o>/ enterFindMode
+map <c-o>n performFind
+map <c-o>N performBackwardsFind
+
+map <c-o>h showHelp
