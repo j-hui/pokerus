@@ -34,24 +34,20 @@ else
   fi
 fi
 
-# Taken from https://github.com/momo-lab/zsh-replace-multiple-dots/blob/master/replace-multiple-dots.plugin.zsh
-# function replace_multiple_dots() {
-#   local dots=$LBUFFER[-3,-1]
-#   if [[ $dots =~ "^[ //\"']?\.\.$" ]]; then
-#     LBUFFER=$LBUFFER[1,-3]'../.'
-#   fi
-#   zle self-insert
-# }
-#
-# zle -N replace_multiple_dots
-# bindkey "." replace_multiple_dots
-
-alias .=pwd
-
-for i in {1..5} ; do
-  cmd="$(printf '.%.0s' {0..$i})"
-  def="$(printf '../%.0s' {1..$i})"
-  eval "alias $cmd='cd $def'"
-  cmd="$cmd/"
-  eval "alias $cmd='cd $def'"
-done
+# From: https://stackoverflow.com/a/4766798
+# This was written entirely by Mikael Magnusson (Mikachu)
+# Basically type '...' to get '../..' with successive .'s adding /..
+function rationalise-dot {
+    local MATCH # keep the regex match from leaking to the environment
+    if [[ $LBUFFER =~ '(^|/| |      |'$'\n''|\||;|&)\.\.$' ]]; then
+      LBUFFER+=/
+      zle self-insert
+      zle self-insert
+    else
+      zle self-insert
+    fi
+}
+zle -N rationalise-dot
+bindkey . rationalise-dot
+# without this, typing a . aborts incremental history search
+bindkey -M isearch . self-insert
