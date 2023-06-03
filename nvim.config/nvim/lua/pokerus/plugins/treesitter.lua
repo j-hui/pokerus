@@ -17,6 +17,7 @@ local languages = {
   "latex",
   "llvm",
   "lua",
+  "luau",
   "make",
   "markdown",
   "markdown_inline",
