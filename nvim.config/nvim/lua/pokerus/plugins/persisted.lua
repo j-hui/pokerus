@@ -1,5 +1,6 @@
 return {
   "olimorris/persisted.nvim",
+  dependencies = { "nvim-telescope/telescope.nvim" },
   cmd = {
     "SessionToggle",
     "SessionStart",
