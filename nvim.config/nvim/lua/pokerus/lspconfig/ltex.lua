@@ -1,4 +1,4 @@
-return {
+return false and {
   settings = {
     enabled = { "latex", "tex", "bib", "markdown" },
     checkFrequency = "save",
