@@ -5,5 +5,9 @@ return {
     "nvim-lua/plenary.nvim",
   },
   ft = "rust",
-  config = true,
+  config = {
+    server = {
+      on_attach = require("pokerus.lsp").on_attach
+    },
+  },
 }
