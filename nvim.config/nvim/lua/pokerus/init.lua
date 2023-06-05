@@ -78,6 +78,7 @@ local function setup_nvim_ftdetect()
       y = "happy",
       pio = "pio",
       luau = "luau",
+      rbxlx = "xml",
     },
   }
 end
