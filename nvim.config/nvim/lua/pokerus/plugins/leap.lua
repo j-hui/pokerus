@@ -1,4 +1,4 @@
-return {
+return {} or {
   "ggandor/leap.nvim",
   dependencies = {
     "ggandor/flit.nvim",

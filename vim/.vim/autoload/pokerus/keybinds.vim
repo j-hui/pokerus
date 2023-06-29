@@ -169,8 +169,12 @@ endfunction
 
 function! s:commandMaps() abort
   " Eliminate extra key press
-  nnoremap ; :
-  vnoremap ; :
+  " nnoremap ; :
+  " vnoremap ; :
+
+  " Eliminate chording
+  nnoremap <Space>; :
+  vnoremap <Space>; :
 
   " Don't use <Left> and <Right> key for selecting previous/next match
   cnoremap <Left> <Space><BS><Left>
