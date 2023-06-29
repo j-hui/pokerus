@@ -14,9 +14,8 @@ function pokerus#plugins#sneak#setup()
   omap C <Plug>Sneak_S
 
   " Already mapped ; to :
-  map ,   <Plug>Sneak_;
-  map ],  <Plug>Sneak_;
-  map [,  <Plug>Sneak_,
+  map H <Plug>Sneak_;
+  map L <Plug>Sneak_,
 
   " 1-character enhanced 'f'
   nmap f <Plug>Sneak_f
