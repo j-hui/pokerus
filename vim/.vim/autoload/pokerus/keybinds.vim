@@ -169,10 +169,10 @@ endfunction
 
 function! s:commandMaps() abort
   " Eliminate extra key press
-  " nnoremap ; :
-  " vnoremap ; :
+  nnoremap ; :
+  vnoremap ; :
 
-  " Eliminate chording
+  " Alternative mapping for :
   nnoremap <Space>; :
   vnoremap <Space>; :
 
