@@ -110,7 +110,7 @@ return {
   { "baskerville/vim-sxhkdrc", ft = "sxhkdrc" },
   { "blyoa/vim-promela-syntax", ft = "promela" },
   { "chrisbra/csv.vim", ft = "csv" },
-  { "rust-lang/rust.vim", ft = "rust" },
+  -- { "rust-lang/rust.vim", ft = "rust" }, -- superseded by rust-tools.nvim
   { "leafgarland/typescript-vim", ft = "typescript" },
   { "keith/swift.vim", ft = "swift" },
   { "dag/vim-fish", ft = "fish" },

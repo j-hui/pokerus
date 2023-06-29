@@ -7,7 +7,7 @@ return {
   ft = "rust",
   config = {
     server = {
-      on_attach = require("pokerus.lsp").on_attach
+      on_attach = require("pokerus.lsp").on_attach,
     },
   },
 }
