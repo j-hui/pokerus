@@ -56,18 +56,18 @@ return {
   build = ":TSUpdate",
   event = "VeryLazy",
   keys = {
-    { "gr", mode = "n", desc = "treesitter-refactor" },
-    { "gl", mode = "n", desc = "treesitter-swap-next-param" },
-    { "gh", mode = "n", desc = "treesitter-swap-prev-param" },
+    { "gr",        mode = "n", desc = "treesitter-refactor" },
+    { "gl",        mode = "n", desc = "treesitter-swap-next-param" },
+    { "gh",        mode = "n", desc = "treesitter-swap-prev-param" },
     { "<leader>v", mode = "n", desc = "treesitter-select" },
 
-    { "a.", mode = "o", desc = "treesitter-outer-function" },
-    { "i.", mode = "o", desc = "treesitter-outer-function" },
-    { "cc", mode = "o", desc = "treesitter-inner-comment" },
-    { "ac", mode = "o", desc = "treesitter-outer-class" },
-    { "ic", mode = "o", desc = "treesitter-inner-class" },
-    { "ab", mode = "o", desc = "treesitter-outer-block" },
-    { "ib", mode = "o", desc = "treesitter-inner-block" },
+    { "a.",        mode = "o", desc = "treesitter-outer-function" },
+    { "i.",        mode = "o", desc = "treesitter-outer-function" },
+    { "cc",        mode = "o", desc = "treesitter-inner-comment" },
+    { "ac",        mode = "o", desc = "treesitter-outer-class" },
+    { "ic",        mode = "o", desc = "treesitter-inner-class" },
+    { "ab",        mode = "o", desc = "treesitter-outer-block" },
+    { "ib",        mode = "o", desc = "treesitter-inner-block" },
   },
   config = function()
     if vim.fn.executable "tree-sitter" ~= 0 then
@@ -117,7 +117,7 @@ return {
           keymaps = {
             ["af"] = "@function.outer",
             ["if"] = "@function.inner",
-            ["cc"] = "@comment.inner",
+            ["ic"] = "@comment.inner",
             ["ab"] = "@block.outer",
             ["ib"] = "@block.inner",
           },
@@ -131,6 +131,9 @@ return {
             ["gh"] = "@parameter.inner",
           },
         },
+      },
+      matchup = {
+        enable = true,
       },
     }
   end,
