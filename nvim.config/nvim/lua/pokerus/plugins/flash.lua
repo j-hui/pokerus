@@ -3,7 +3,9 @@ return {
   event = "VeryLazy",
   opts = {
     modes = {
-      maps = { [";"] = "L", [","] = "H" },
+      char = {
+        keys = { "f", "F", "t", "T", [";"] = "L", [","] = "H" },
+      },
     },
   },
   keys = {
@@ -12,7 +14,7 @@ return {
       mode = { "n", "x", "o" },
       function()
         -- default options: exact mode, multi window, all directions, with a backdrop
-        require("flash").jump { search = { mode = "fuzzy" }}
+        require("flash").jump { search = { mode = "fuzzy" } }
       end,
       desc = "Flash",
     },
