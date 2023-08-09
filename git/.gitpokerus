@@ -7,6 +7,9 @@
     autoSetupRemote = true
 [pull]
     rebase = false
+[merge]
+    conflictStyle = zdiff3
+    guitool = vimdiff
 [alias]
     co = checkout
     st = status
