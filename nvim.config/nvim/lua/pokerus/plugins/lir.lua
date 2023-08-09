@@ -2,7 +2,7 @@ return {
   "tamago324/lir.nvim",
   dependencies = {
     "nvim-lua/plenary.nvim",
-    "kyazdani42/nvim-web-devicons",
+    "nvim-tree/nvim-web-devicons",
     "tamago324/lir-git-status.nvim",
   },
   event = "VeryLazy",
