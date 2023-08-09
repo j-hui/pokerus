@@ -7,6 +7,14 @@ return {
   ft = "rust",
   config = {
     server = {
+      settings = {
+        ["rust-analyzer"] = {
+          -- cargo = { features = { "mlua" } },
+          diagnostics = {
+            disabled = { "unresolved-proc-macro" },
+          },
+        },
+      },
       on_attach = require("pokerus.lsp").on_attach,
     },
   },
