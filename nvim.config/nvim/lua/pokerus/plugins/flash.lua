@@ -2,10 +2,10 @@ return {
   "folke/flash.nvim",
   event = "VeryLazy",
   opts = {
-    search = {
-      enable = false, -- Rely on "," to do epic searching
-    },
     modes = {
+      search = {
+        enabled = false, -- Rely on "," to do epic searching
+      },
       char = {
         keys = { "f", "F", "t", "T", [";"] = "L", [","] = "H" },
       },
