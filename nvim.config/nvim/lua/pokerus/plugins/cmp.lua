@@ -14,7 +14,7 @@ return {
     "hrsh7th/cmp-vsnip",
     "hrsh7th/cmp-omni",
     "hrsh7th/cmp-path",
-    "f3fora/cmp-spell",
+    -- "f3fora/cmp-spell",
     "hrsh7th/cmp-cmdline",
     "hrsh7th/cmp-nvim-lua",
     "hrsh7th/cmp-nvim-lsp-signature-help",
@@ -109,7 +109,7 @@ return {
         { name = "path" },
       }, {
         { name = "buffer", keyword_length = 4 },
-        { name = "spell", keyword_length = 5 },
+        -- { name = "spell", keyword_length = 5 },
       }),
       window = {
         documentation = cmp.config.window.bordered(),
