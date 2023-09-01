@@ -10,6 +10,9 @@ return {
       settings = {
         ["rust-analyzer"] = {
           -- cargo = { features = { "mlua" } },
+          check = {
+            command = "clippy",
+          },
           diagnostics = {
             disabled = { "unresolved-proc-macro" },
           },
