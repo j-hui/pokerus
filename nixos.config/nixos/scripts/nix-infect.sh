@@ -314,7 +314,7 @@ in
   # Use the GRUB 2 boot loader.
   boot.loader.grub = {
     enable = true;
-    version = 2;
+    # version = 2;
     device = "$DISK";
     copyKernels = true;
     efiSupport = true; # Don't include for BIOS boot

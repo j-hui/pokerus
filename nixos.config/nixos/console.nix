@@ -158,7 +158,7 @@ in
 
       services = {
         openssh.enable = true;
-        openssh.forwardX11 = true;
+        openssh.settings.X11Forwarding = true;
       };
 
       # networking.wireguard.enable = true;
