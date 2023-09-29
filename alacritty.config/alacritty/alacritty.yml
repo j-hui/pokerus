@@ -1,7 +1,5 @@
 font:
-  normal:
-    family: SauceCodePro Nerd Font
-  size: 13.0
+  size: 14.0
 
 bell:
   duration: 0
