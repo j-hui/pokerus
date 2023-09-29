@@ -8,15 +8,15 @@ map <c-d> scrollPageDown
 map <c-u> scrollPageUp
 map <c-n> scrollDown
 map <c-p> scrollUp
-map <c-f> scrollRight
-map <c-b> scrollLeft
+map <a-f> scrollRight
+map <a-b> scrollLeft
 map <c-e> scrollToRight
 map <c-a> scrollToLeft
 
 map <c-o>g scrollToTop
 map <c-o>G scrollToBottom
-map <c-o>u goPrevious
-map <c-o>U goNext
+map <c-o>b goPrevious
+map <c-o>w goNext
 map <c-o>^ goUp
 map <c-o>0 goToRoot
 
@@ -31,5 +31,8 @@ map <c-o>i focusInput
 map <c-o>/ enterFindMode
 map <c-o>n performFind
 map <c-o>N performBackwardsFind
+
+map <c-o>d removeTab
+map <c-o>u restoreTab
 
 map <c-o>h showHelp
