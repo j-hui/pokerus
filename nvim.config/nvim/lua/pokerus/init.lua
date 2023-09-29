@@ -57,8 +57,17 @@ end
 
 --- Neovim-specific keybindings that aren't associated with any specific plugin.
 local function setup_nvim_keybinds()
-  vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "diagnostic-next", silent = true })
-  vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "diagnostic-prev", silent = true })
+  local function goto_next_diagnostic()
+    vim.diagnostic.goto_next({ severity = { min = vim.diagnostic.severity.WARN } })
+  end
+
+  local function goto_prev_diagnostic()
+    vim.diagnostic.goto_prev({ severity = { min = vim.diagnostic.severity.WARN } })
+  end
+
+  vim.keymap.set("n", "]d", goto_next_diagnostic, { desc = "diagnostic-next", silent = true })
+  vim.keymap.set("n", "[d", goto_prev_diagnostic, { desc = "diagnostic-prev", silent = true })
+
   vim.keymap.set("n", "<leader>lj", vim.diagnostic.open_float, { desc = "diagnostic-show", silent = true })
   vim.keymap.set("n", "<leader>lL", nvim_configure_diagnostics, { desc = "virtual-text-toggle", silent = true })
 
@@ -111,8 +120,8 @@ function M.setup()
         reset = false,
         disabled_plugins = {
           "gzip",
-          "matchit", -- supplanted by vim-matchup
-          "matchparen", -- supplanted by vim-matchup
+          "matchit",     -- supplanted by vim-matchup
+          "matchparen",  -- supplanted by vim-matchup
           "netrwPlugin", -- supplanted by lir.nvim
           "rplugin",
           "tarPlugin",
