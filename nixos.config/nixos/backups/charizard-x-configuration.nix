@@ -55,8 +55,8 @@ in
   };
 
   environment.variables = {
-    EDITOR = "vim";
-    BROWSER = "qutebrowser";
+    EDITOR = "nvim";
+    BROWSER = "firefox";
     TERMINAL = "kitty";
   };
 
