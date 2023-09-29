@@ -105,6 +105,7 @@ in
         file
         hexyl
         p7zip
+        magic-wormhole
 
         jq
 
