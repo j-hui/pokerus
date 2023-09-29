@@ -95,7 +95,7 @@ in
       fontDir.enable = true;
       enableGhostscriptFonts = true;
       fonts = with pkgs; [
-        (nerdfonts.override { fonts = [ "Hack" "SourceCodePro" ]; })
+        (nerdfonts.override { fonts = [ "ComicShannsMono" "Hack" "SourceCodePro" ]; })
         corefonts
         inconsolata
         terminus_font
@@ -116,7 +116,7 @@ in
       ];
       fontconfig = {
         defaultFonts = {
-          monospace = [ "Source Code Pro" "SauceCodePro Nerd Font Mono" ];
+          monospace = [ "ComicShannsMono Nerd Font" "Source Code Pro" "SauceCodePro Nerd Font Mono" ];
           sansSerif = [ "Source Sans Pro" ];
           serif     = [ "Source Serif Pro" ];
         };
