@@ -17,7 +17,7 @@ return {
     -- "f3fora/cmp-spell",
     "hrsh7th/cmp-cmdline",
     "hrsh7th/cmp-nvim-lua",
-    "hrsh7th/cmp-nvim-lsp-signature-help",
+    -- "hrsh7th/cmp-nvim-lsp-signature-help",
     -- Snippets
     "L3MON4D3/LuaSnip",
     "saadparwaiz1/cmp_luasnip",
@@ -105,7 +105,7 @@ return {
         { name = "luasnip" },
         { name = "nvim_lua" },
         { name = "nvim_lsp" },
-        { name = "nvim_lsp_signature_help" },
+        -- { name = "nvim_lsp_signature_help" },
         { name = "path" },
       }, {
         { name = "buffer", keyword_length = 4 },
