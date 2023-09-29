@@ -182,7 +182,7 @@ mode "$mode_app" {
     bindsym Return mode "default"
     bindsym Ctrl+bracketleft mode "default"
 
-    bindsym a       mode "default"; exec alacritty
+    bindsym a       mode "default"; exec kitty
     bindsym b       mode "default"; exec firefox
     bindsym i       mode "default"; exec firefox --private-window
 
