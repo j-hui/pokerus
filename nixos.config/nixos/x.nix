@@ -116,7 +116,7 @@ in
       ];
       fontconfig = {
         defaultFonts = {
-          monospace = [ "ComicShannsMono Nerd Font" "Source Code Pro" "SauceCodePro Nerd Font Mono" ];
+          monospace = [ "Source Code Pro" "SauceCodePro Nerd Font Mono" ];
           sansSerif = [ "Source Sans Pro" ];
           serif     = [ "Source Serif Pro" ];
         };
