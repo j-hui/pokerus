@@ -156,18 +156,20 @@ mode "$mode_save_screen" {
 }
 
 # Notifications
-set $mode_notif notifications: [<SPC>]:show [q]:clear [w]:clear-all [z]:restart
+set $mode_notif notifications: [<SPC>]:show [q]:clear [w]:clear-in-center [p]: pause [P]: unpause [z]:restart
 bindsym $mod+q mode "$mode_notif"
 mode "$mode_notif" {
     bindsym Escape mode "default"
     bindsym Return mode "default"
     bindsym Ctrl+bracketleft mode "default"
 
-    bindsym Space   mode "default"; exec --no-startup-id ~/.local/tms/notifyctl toggle
-    bindsym q       mode "default"; exec --no-startup-id ~/.local/tms/notifyctl clear-all
-    bindsym $mod+q  mode "default"; exec --no-startup-id ~/.local/tms/notifyctl clear-all
+    bindsym space   mode "default"; exec --no-startup-id ~/.local/tms/notifyctl toggle
+    bindsym q       mode "default"; exec --no-startup-id ~/.local/tms/notifyctl clear
+    bindsym $mod+q  mode "default"; exec --no-startup-id ~/.local/tms/notifyctl clear
     bindsym w       mode "default"; exec --no-startup-id ~/.local/tms/notifyctl clear-all
     bindsym z       mode "default"; exec --no-startup-id ~/.local/tms/notifyctl restart
+    bindsym p       mode "default"; exec --no-startup-id ~/.local/tms/notifyctl disable
+    bindsym Shift+p mode "default"; exec --no-startup-id ~/.local/tms/notifyctl enable
 }
 
 ## Applications

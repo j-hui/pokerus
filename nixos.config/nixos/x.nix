@@ -50,7 +50,7 @@ in
       rofi-mpd
       conky
       libnotify
-      dunst
+      # dunst
       deadd-notification-center
       pinentry pinentry-gtk2
       xclip
