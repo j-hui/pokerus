@@ -13,7 +13,7 @@ return {
   },
   keys = {
     {
-      ",",
+      ",", -- Motion/jump that combines search and easymotion-like keys
       mode = { "n", "x", "o" },
       function()
         -- default options: exact mode, multi window, all directions, with a backdrop
@@ -22,7 +22,7 @@ return {
       desc = "Flash",
     },
     {
-      "!",
+      "!", -- Motion/jump that targets treesitter nodes
       mode = { "n", "o", "x" },
       function()
         require("flash").treesitter()
@@ -30,7 +30,7 @@ return {
       desc = "Flash Treesitter",
     },
     {
-      "r",
+      "r", -- Motion in remote location/buffer (with automatic return)
       mode = "o",
       function()
         require("flash").remote()
