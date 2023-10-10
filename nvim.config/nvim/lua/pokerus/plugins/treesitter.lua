@@ -42,8 +42,9 @@ local languages_need_compile = {
 return {
   "nvim-treesitter/nvim-treesitter",
   dependencies = {
-    "nvim-treesitter/nvim-treesitter-refactor",
-    -- Use treesitter to refactor identifiers
+    -- "nvim-treesitter/nvim-treesitter-refactor",
+    -- Use treesitter to refactor identifiers ; tzachar/local-highlight.nvim
+    -- promises to be faster for large files
     "nvim-treesitter/nvim-treesitter-textobjects",
     -- Use treesitter to find motion text objects
     "nvim-treesitter/playground",
@@ -56,7 +57,7 @@ return {
   build = ":TSUpdate",
   event = "VeryLazy",
   keys = {
-    { "gr",        mode = "n", desc = "treesitter-refactor" },
+    -- { "gr",        mode = "n", desc = "treesitter-refactor" },
     { "gl",        mode = "n", desc = "treesitter-swap-next-param" },
     { "gh",        mode = "n", desc = "treesitter-swap-prev-param" },
     { "<leader>v", mode = "n", desc = "treesitter-select" },
@@ -100,16 +101,16 @@ return {
       endwise = {
         enable = true,
       },
-      refactor = {
-        highlight_definitions = { enable = true },
-        -- highlight_current_scope = { enable = true },
-        smart_rename = {
-          enable = true,
-          keymaps = {
-            smart_rename = "gr",
-          },
-        },
-      },
+      -- refactor = {
+      --   highlight_definitions = { enable = true },
+      --   -- highlight_current_scope = { enable = true },
+      --   smart_rename = {
+      --     enable = true,
+      --     keymaps = {
+      --       smart_rename = "gr",
+      --     },
+      --   },
+      -- },
       textobjects = {
         select = {
           enable = true,
