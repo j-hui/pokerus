@@ -115,21 +115,25 @@ return {
     -- Override some of my own lsp handlers
     local lsp = require("pokerus.lsp")
 
+    ---@diagnostic disable-next-line: duplicate-set-field
     lsp.definition = function(opt)
       opt = opt or {}
       require("telescope.builtin").lsp_definitions({ jump_type = opt.jump })
     end
 
+    ---@diagnostic disable-next-line: duplicate-set-field
     lsp.implementation = function(opt)
       opt = opt or {}
       require("telescope.builtin").lsp_implementations({ jump_type = opt.jump })
     end
 
+    ---@diagnostic disable-next-line: duplicate-set-field
     lsp.typedef = function(opt)
       opt = opt or {}
       require("telescope.builtin").lsp_type_definitions({ jump_type = opt.jump })
     end
 
+    ---@diagnostic disable-next-line: duplicate-set-field
     lsp.references = function(opt)
       opt = opt or {}
       require("telescope.builtin").lsp_references({ jump_type = opt.jump })
