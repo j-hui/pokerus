@@ -43,16 +43,22 @@ return {
   "nvim-treesitter/nvim-treesitter",
   dependencies = {
     -- "nvim-treesitter/nvim-treesitter-refactor",
-    -- Use treesitter to refactor identifiers ; tzachar/local-highlight.nvim
-    -- promises to be faster for large files
+    -- Use treesitter to refactor identifiers
+
     "nvim-treesitter/nvim-treesitter-textobjects",
     -- Use treesitter to find motion text objects
+
     "nvim-treesitter/playground",
     -- Show treesitter state in split pane
+
     "folke/twilight.nvim",
     -- Dim inactive regions of code
+
     "RRethy/nvim-treesitter-endwise",
     -- Automatically end tokens
+
+    "andymass/vim-matchup",
+    -- Let vim-matchup integrate with treesitter
   },
   build = ":TSUpdate",
   event = "VeryLazy",
@@ -61,7 +67,6 @@ return {
     { "gl",        mode = "n", desc = "treesitter-swap-next-param" },
     { "gh",        mode = "n", desc = "treesitter-swap-prev-param" },
     { "<leader>v", mode = "n", desc = "treesitter-select" },
-
     { "a.",        mode = "o", desc = "treesitter-outer-function" },
     { "i.",        mode = "o", desc = "treesitter-outer-function" },
     { "cc",        mode = "o", desc = "treesitter-inner-comment" },
