@@ -24,9 +24,6 @@ return {
 
     "paulhybryant/vim-textobj-path",
     -- {a,i} {p,P} for path names
-
-    "adriaanzon/vim-textobj-matchit",
-    -- {a,i} m for matchit pairs
   },
   init = function()
     vim.g.textobj_continuous_line_no_default_key_mappings = 1
@@ -36,7 +33,5 @@ return {
   keys = {
     { "a\\", "<Plug>(textobj-continuous-vim-a)", mode = { "o", "x" } },
     { "i\\", "<Plug>(textobj-continuous-vim-i)", mode = { "o", "x" } },
-    { "a%", "<Plug>(textobj-matchit-a)", mode = { "o", "x" } },
-    { "i%", "<Plug>(textobj-matchit-i)", mode = { "o", "x" } },
   },
 }
