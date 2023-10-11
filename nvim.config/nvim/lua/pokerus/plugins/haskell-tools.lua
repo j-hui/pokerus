@@ -6,11 +6,12 @@ return {
     "akinsho/toggleterm.nvim",
   },
   ft = { "haskell", "cabal" },
-  config = function()
-    require('haskell-tools').setup {
+  init = function()
+    -- haskell-tools apparently no longer wants you to call .setup()
+    vim.g.haskell_tools = {
       hls = {
-        on_attach = function()
-          require("pokerus.lsp").on_attach()
+        on_attach = function(client, bufnr)
+          require("pokerus.lsp").on_attach(client, bufnr)
         end,
         settings = {
           haskell = {
