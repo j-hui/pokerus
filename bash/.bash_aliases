@@ -126,10 +126,10 @@ stty -ixon # enable XON/XOFF flow control (whatever that means)
 
 ### Navigation/FS
 
-if which exa &> /dev/null; then
-    alias ll='exa -lagF'
-    alias la='exa -a'
-    alias l='exa -F'
+if which lsd &> /dev/null; then
+    alias ll='lsd -lagF'
+    alias la='lsd -a'
+    alias l='lsd -F'
 else
     alias ll='ls -lagF'
     alias la='ls -A'

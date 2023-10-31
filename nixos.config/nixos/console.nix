@@ -70,7 +70,7 @@ in
         bat
         diskus
         du-dust
-        exa
+        lsd
         tokei # count lines of code
         sd # substitution tool
         ruplacer # recursive replacement on steroids

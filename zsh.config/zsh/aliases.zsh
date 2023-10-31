@@ -7,17 +7,17 @@ edit () {
 alias e='edit'
 alias nv='nvim'
 
-if (( $+commands[exa] )); then
-  exa_params=('--git' '--icons' '--classify' '--group-directories-first' '--time-style=long-iso' '--group' '--color-scale')
+if (( $+commands[lsd] )); then
+  lsd_params=('--git' '--icons' '--classify' '--group-directories-first' '--time-style=long-iso' '--group' '--color-scale')
 
-  alias ls='exa ${exa_params}'
-  alias l='exa --git-ignore ${exa_params}'
-  alias ll='exa --all --header --long ${exa_params}'
-  alias llm='exa --all --header --long --sort=modified ${exa_params}'
-  alias la='exa -lbhHigUmuSa'
-  alias lx='exa -lbhHigUmuSa@'
-  alias lt='exa --tree'
-  alias tree='exa --tree'
+  alias ls='lsd ${lsd_params}'
+  alias l='lsd --git-ignore ${lsd_params}'
+  alias ll='lsd --all --header --long ${lsd_params}'
+  alias llm='lsd --all --header --long --sort=modified ${lsd_params}'
+  alias la='lsd -lbhHigUmuSa'
+  alias lx='lsd -lbhHigUmuSa@'
+  alias lt='lsd --tree'
+  alias tree='lsd --tree'
 else
   if [[ "$(uname)" != Darwin ]]; then
     alias ls='ls --color=auto'
