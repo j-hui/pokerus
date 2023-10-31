@@ -110,8 +110,8 @@ case "$OSTYPE" in
     alias rm='rm -I'
     alias dmesg='dmesg --color'
     alias pacman='pacman --color=auto'
-    alias ls-users="awk -F':' '{ print \$1}' /etc/passwd"
-    alias ls-groups="awk -F':' '{ print \$1}' /etc/group"
+    function ls-users() { awk -F':' '{ print \$1}' /etc/passwd; }
+    function ls-groups() { awk -F':' '{ print \$1}' /etc/group; }
     ;;
 *darwin*)
     alias ls='ls -G'
