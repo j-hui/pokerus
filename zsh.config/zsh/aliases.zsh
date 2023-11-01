@@ -8,20 +8,18 @@ alias e='edit'
 alias nv='nvim'
 
 if (( $+commands[lsd] )); then
-  lsd_params=('--git' '--icons' '--classify' '--group-directories-first' '--time-style=long-iso' '--group' '--color-scale')
-
-  alias ls='lsd ${lsd_params}'
-  alias l='lsd --git-ignore ${lsd_params}'
-  alias ll='lsd --all --header --long ${lsd_params}'
-  alias llm='lsd --all --header --long --sort=modified ${lsd_params}'
-  alias la='lsd -lbhHigUmuSa'
-  alias lx='lsd -lbhHigUmuSa@'
-  alias lt='lsd --tree'
+  alias ls='lsd'
+  alias ll='lsd -la'
+  alias la='lsd -a'
+  alias l='lsd -F'
   alias tree='lsd --tree'
 else
   if [[ "$(uname)" != Darwin ]]; then
     alias ls='ls --color=auto'
   fi
+  alias ll='ls -lagF'
+  alias la='ls -A'
+  alias l='ls -F'
 fi
 
 if [[ "$(uname)" == Darwin ]]; then

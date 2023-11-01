@@ -1,0 +1,11 @@
+header: true
+
+# Possible values: permission, user, group, context, size, date, name, inode, links, git
+blocks:
+  - permission
+  - user
+  - group
+  - size
+  - date
+  - git
+  - name
