@@ -233,12 +233,11 @@ return {
           grouped = true,     -- group folders together
           cwd_to_path = true, -- use path as cwd
           follow_symlinks = true,
-          collapse_dirs = true,
+          -- collapse_dirs = true,
           mappings = {
             n = nmaps,
             i = vim.tbl_extend("force", imaps, {
               ["<C-w>"] = { "<cmd>norm! db<cr>", type = "command" },
-              ["<S-CR>"] = fb_action.create_from_prompt,
               ["<BS>"] = fb_action.backspace,
 
               ["<C-g>"] = false,
