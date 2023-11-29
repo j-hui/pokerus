@@ -4,6 +4,7 @@ return {
     "nvim-lua/plenary.nvim",
     "nvim-telescope/telescope.nvim",
     "akinsho/toggleterm.nvim",
+    "kevinhwang91/nvim-ufo",
   },
   ft = { "haskell", "cabal" },
   init = function()
