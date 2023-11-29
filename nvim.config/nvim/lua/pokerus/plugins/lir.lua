@@ -5,7 +5,6 @@ return {
     "nvim-tree/nvim-web-devicons",
     "tamago324/lir-git-status.nvim",
   },
-  event = "VeryLazy",
   config = function()
     local actions = require "lir.actions"
     local mark_actions = require "lir.mark.actions"
