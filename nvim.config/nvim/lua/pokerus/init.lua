@@ -115,6 +115,14 @@ function M.setup()
       path = vim.g.devpath,
       fallback = true,
     },
+    checker = {
+      enabled = true,
+      concurrency = 4,
+    },
+    change_detection = {
+      enabled = false,
+      notify = false,
+    },
     performance = {
       rtp = {
         reset = false,
