@@ -20,7 +20,65 @@ local function builtin_cwd(name, opt)
   end
 end
 
--- Actions for file browsing
+local my_fb_action = {
+  -- open up cwd using telescope find_files
+  find_files = function(prompt_bufnr)
+    local fb_utils = require("telescope._extensions.file_browser.utils")
+    local action_state = require("telescope.actions.state")
+
+    local selections = fb_utils.get_selected_files(prompt_bufnr, false)
+    local search_dirs = vim.tbl_map(function(path) return path:absolute() end, selections)
+    if vim.tbl_isempty(search_dirs) then
+      local current_finder = action_state.get_current_picker(prompt_bufnr).finder
+      search_dirs = { current_finder.path }
+    end
+    require("telescope.actions").close(prompt_bufnr)
+    print("finding in " .. vim.inspect(search_dirs))
+    require("telescope.builtin").find_files({ search_dirs = search_dirs })
+  end,
+
+  -- live_grep only within current path or multi-selected files
+  live_grep = function(prompt_bufnr)
+    local fb_utils = require("telescope._extensions.file_browser.utils")
+    local action_state = require("telescope.actions.state")
+
+    local selections = fb_utils.get_selected_files(prompt_bufnr, false)
+    local search_dirs = vim.tbl_map(function(path) return path:absolute() end, selections)
+    if vim.tbl_isempty(search_dirs) then
+      local current_finder = action_state.get_current_picker(prompt_bufnr).finder
+      search_dirs = { current_finder.path }
+    end
+    require("telescope.actions").close(prompt_bufnr)
+    require("telescope.builtin").live_grep({ search_dirs = search_dirs })
+  end,
+
+  -- Toggle between cwd and current (non-telescope) buffer path
+  toggle_path = function(prompt_bufnr)
+    local fb_utils = require("telescope._extensions.file_browser.utils")
+    local action_state = require("telescope.actions.state")
+    local Path = require("plenary.path")
+
+    local current_picker = action_state.get_current_picker(prompt_bufnr)
+    local finder = current_picker.finder
+    local bufr_path = Path:new(vim.fn.expand("#:p"))
+    local bufr_parent_path = bufr_path:parent():absolute()
+
+    if finder.path ~= bufr_parent_path then
+      finder.path = bufr_parent_path
+      fb_utils.selection_callback(current_picker, bufr_path:absolute())
+    else
+      finder.path = vim.loop.cwd()
+    end
+    fb_utils.redraw_border_title(current_picker)
+    current_picker:refresh(finder, {
+      new_prefix = fb_utils.relative_path_prefix(finder),
+      reset_prompt = true,
+      multi = current_picker._multi,
+    })
+  end,
+}
+
+-- For file browsing
 local browse = {
   folders = extension("file_browser", { files = false }),
   folders_here = extension("file_browser", { files = false, path = "%:p:h" }),
@@ -198,12 +256,16 @@ return {
 
               ["<C-g>-"] = fb_action.goto_parent_dir,
               ["<C-g>="] = fb_action.goto_cwd,
-              ["<C-g>/"] = fb_action.goto_home_dir,
               ["<C-g>."] = fb_action.change_cwd,
+              ["<C-g>~"] = fb_action.goto_home_dir,
+              ["<C-g>`"] = my_fb_action.toggle_path,
 
               ["<C-g>a"] = fb_action.select_all,
               ["<C-g>d"] = fb_action.sort_by_date,
               ["<C-g>s"] = fb_action.sort_by_size,
+
+              ["<C-g>/"] = my_fb_action.live_grep,
+              ["<C-g>f"] = my_fb_action.find_files,
             }),
           },
         },
