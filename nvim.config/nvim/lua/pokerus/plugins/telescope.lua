@@ -153,7 +153,6 @@ return {
       defaults = require("telescope.themes").get_ivy {
         winblend = 20,
         mappings = { i = imaps, n = nmaps },
-        file_ignore_patterns = { "node_modules", ".git" },
         vimgrep_arguments = {
           "rg",
           "--color=never",
