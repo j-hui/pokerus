@@ -3,14 +3,14 @@ return {
   dependencies = { "nvim-lua/plenary.nvim", "ojroques/vim-oscyank" },
   opts = {
     opts = {
-      mappings = "<leader>gy",
       action_callback = function(url)
         vim.api.nvim_command("let @\" = '" .. url .. "'")
-        vim.fn.OSCYankString(url)
+        vim.fn.OSCYank(url)
       end,
     },
+    mappings = "<leader>gy",
   },
   keys = {
-    { "<leader>gy", desc = "git-yank-url" }
+    { "<leader>gy", desc = "git-yank-url", mode = { "n", "v" } }
   },
 }
