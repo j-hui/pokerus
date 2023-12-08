@@ -47,6 +47,16 @@ M.colorschemes = {
     -- main = true,
     schemename = "everblush",
     name = "everblush",
+    opts = {
+      override = {
+        -- Comments are too dark
+        Comment = { fg = "#606769" },
+        ["@comment"] = { fg = "#606769" },
+
+        -- Floating point numbers are aggressively dimmed for some reason
+        ["@float"] = { fg = "@number" },
+      },
+    },
   },
 }
 
