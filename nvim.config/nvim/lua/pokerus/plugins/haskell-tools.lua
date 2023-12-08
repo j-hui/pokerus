@@ -23,7 +23,6 @@ return {
           },
         },
       },
-      repl = { handler = "toggleterm" },
     }
   end,
 }
