@@ -29,10 +29,24 @@ M.colorschemes = {
     "catppuccin/nvim",
     name = "catppuccin",
     schemename = "catppuccin",
-    main = true,
+    -- main = true,
     opts = {
       flavour = "mocha",
     },
+  },
+  {
+    "neanias/everforest-nvim",
+    schemename = "everforest",
+    main = true,
+    opts = {
+      background = "hard",
+    },
+  },
+  {
+    "Everblush/nvim",
+    -- main = true,
+    schemename = "everblush",
+    name = "everblush",
   },
 }
 
