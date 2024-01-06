@@ -155,6 +155,11 @@ in
 
         # testing
         stress mesa-demos
+
+        # embedded stuff
+        probe-rs-cli
+        elf2uf2-rs
+        flip-link
       ];
 
       services = {
