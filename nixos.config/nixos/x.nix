@@ -94,7 +94,7 @@ in
     fonts = {
       fontDir.enable = true;
       enableGhostscriptFonts = true;
-      fonts = with pkgs; [
+      packages = with pkgs; [
         (nerdfonts.override { fonts = [ "ComicShannsMono" "Hack" "SourceCodePro" ]; })
         corefonts
         inconsolata

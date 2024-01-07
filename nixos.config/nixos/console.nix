@@ -61,6 +61,8 @@ in
         gopass
         ripasso-cursive
         xkcdpass
+        _1password
+        _1password-gui
 
         # files
         ranger
@@ -136,7 +138,7 @@ in
         bind whois inetutils
         wireguard-tools
         python38Packages.speedtest-cli
-        dhcp rustscan
+        rustscan
         prettyping
         gnutls
         bridge-utils
@@ -157,7 +159,7 @@ in
         stress mesa-demos
 
         # embedded stuff
-        probe-rs-cli
+        probe-rs
         elf2uf2-rs
         flip-link
       ];

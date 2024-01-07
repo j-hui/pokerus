@@ -17,29 +17,6 @@ let
           withALSA = true;
           withPulseAudio = true;
         };
-
-  efm-langserver = pkgs.buildGoModule rec {
-    pname = "efm-langserver";
-    version = "0.0.29";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "mattn";
-      repo = "efm-langserver";
-      rev = "v${version}";
-      sha256 = "0zz63w5g8siaip0fqc5mqx7y6kcvi9c2k2w6xz8wrl3kicbwcvgw";
-    };
-
-    # subPackages = [ "." ];
-
-    vendorSha256 = "b5c6bed5246b172bd4f2db4799f3058865ddd40f2b4121169b531cdaaa7411f2";
-
-    meta = with lib; {
-      description = "General purpose Language Server";
-      homepage = "https://github.com/mattn/efm-langserver";
-      license = licenses.mit;
-      platforms = platforms.unix;
-    };
-  };
 in
 {
 
@@ -191,7 +168,7 @@ in
 
     (mkIf cfg.emacs.enable  {
       environment.systemPackages = with pkgs; [
-        pinentry_emacs
+        pinentry-emacs
       ];
       services.emacs.enable = true;
     })
