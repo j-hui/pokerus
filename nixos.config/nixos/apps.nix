@@ -359,7 +359,38 @@ in
         rustup rustfmt unstable.rust-analyzer crate2nix
 
         # Latex
-        tectonic texlive.combined.scheme-full bibclean texlab
+        tectonic bibclean texlab
+        (texlive.combine {
+          inherit (pkgs.texlive)
+            collection-fontsrecommended
+            collection-fontsextra
+            collection-fontutils
+            collection-latex
+            collection-latexrecommended
+            collection-latexextra
+            collection-langenglish
+            collection-luatex
+            collection-mathscience
+            collection-plaingeneric
+            collection-pictures
+
+            # collection-bibtexextra
+            biber
+            biblatex
+            biblatex-anonymous
+            biblatex-ieee
+            biblatex-software
+
+            # collection-binextra
+            chktex
+            latexindent
+            latexmk
+
+            # collection-publishers
+            acmart acmconf
+            ieeeconf ieeetran
+          ;
+        })
         graphviz
         ltex-ls
 
