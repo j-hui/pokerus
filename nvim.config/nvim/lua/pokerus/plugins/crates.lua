@@ -4,15 +4,21 @@ return {
   dependencies = {
     "nvim-lua/plenary.nvim",
     "hrsh7th/nvim-cmp",
-    "jose-elias-alvarez/null-ls.nvim",
   },
-  config = function()
-    require("crates").setup {
-      null_ls = {
+  opts = {
+    lsp = {
+      enabled = true,
+      on_attach = function(client, bufnr)
+        require("pokerus.lsp").on_attach(client, bufnr)
+      end,
+      actions = true,
+      completion = true,
+      hover = true,
+    },
+    src = {
+      cmp = {
         enabled = true,
-        name = "crates.nvim",
       },
-    }
-    require("cmp").setup.buffer({ sources = { { name = "crates" } } })
-  end,
+    },
+  },
 }
