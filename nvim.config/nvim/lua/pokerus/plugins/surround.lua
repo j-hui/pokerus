@@ -1,5 +1,4 @@
---[[ Markdown ]] --
-
+--[[ Markdown ]]
 local markdown_opts = {
   surrounds = {
     -- link
@@ -47,12 +46,11 @@ local markdown_opts = {
           }
         end,
       },
-    }
+    },
   },
 }
 
---[[ Tex/LaTeX ]] --
-
+--[[ Tex/LaTeX ]]
 local function tex_find_environment()
   local cfg = require("nvim-surround.config")
   if vim.g.loaded_nvim_treesitter then
@@ -145,15 +143,47 @@ local tex_opts = {
   },
 }
 
+--[[ Rust ]]
+local rust_opts = {
+  surrounds = {
+    -- "generic" (e.g., T -> Box<T>)
+    ["g"] = {
+      add = function()
+        local config = require("nvim-surround.config")
+        local result = config.get_input("Enter the generic name: ")
+        if result then
+          return { { result .. "<" }, { ">" } }
+        end
+      end,
+      find = function()
+        local config = require("nvim-surround.config")
+        return config.get_selection({ node = "generic_type" })
+      end,
+      delete = "^(.-<)().-(>)()$",
+      change = {
+        target = "^(.-<)().-(>)()$",
+        replacement = function()
+          local config = require("nvim-surround.config")
+          local result = config.get_input("Enter the generic name: ")
+          if result then
+            return { { result .. "<" }, { ">" } }
+          end
+        end,
+      },
+    },
+  }
+}
+
 local ft_opts = {
   markdown = markdown_opts,
   tex = tex_opts,
   plaintex = "tex",
+  rust = rust_opts,
 }
 
 return {
   "kylechui/nvim-surround",
-  version = "v2.0.5",
+  version = "v2.1.4",
   event = "VeryLazy",
   dependencies = {
     "nvim-treesitter/nvim-treesitter",
