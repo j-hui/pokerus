@@ -14,6 +14,7 @@ local languages = {
   "java",
   "javascript",
   "json",
+  "just",
   "latex",
   "llvm",
   "lua",
@@ -126,6 +127,8 @@ return {
             ["ic"] = "@comment.inner",
             ["ab"] = "@block.outer",
             ["ib"] = "@block.inner",
+            ["ax"] = "@call.outer",
+            ["ix"] = "@call.inner",
           },
         },
         swap = {
