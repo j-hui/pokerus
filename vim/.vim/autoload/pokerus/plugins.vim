@@ -133,6 +133,7 @@ function pokerus#plugins#setup()
     Plug 'euclidianAce/BetterLua.vim'
     Plug 'whonore/coqtail'
     Plug 'mikebentley15/vim-pio'
+    Plug 'NoahTheDuke/vim-just'
   " Filetype }}}
   call plug#end()
 
