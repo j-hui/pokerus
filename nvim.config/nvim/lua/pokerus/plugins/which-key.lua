@@ -13,14 +13,14 @@ return {
     local wk = require("which-key")
     wk.setup(opts)
     wk.register({
-      ["<leader>l"] = { name = "lsp" },
-      ["<leader>g"] = { name = "git" },
-      ["<leader>x"] = { name = "exec" },
+      ["<leader>l"] = { group = "lsp" },
+      ["<leader>g"] = { group = "git" },
+      ["<leader>x"] = { group = "exec" },
     }, { mode = "n" })
     wk.register({
-      ["<leader>l"] = { name = "lsp" },
-      ["<leader>g"] = { name = "git" },
-      ["<leader>x"] = { name = "exec" },
+      ["<leader>l"] = { group = "lsp" },
+      ["<leader>g"] = { group = "git" },
+      ["<leader>x"] = { group = "exec" },
     }, { mode = "v" })
   end
 }
