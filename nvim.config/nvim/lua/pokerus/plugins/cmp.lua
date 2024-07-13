@@ -1,8 +1,6 @@
 return {
   "hrsh7th/nvim-cmp",
-
   event = "InsertEnter",
-
   dependencies = {
     -- Symbols
     "onsails/lspkind-nvim",
@@ -44,9 +42,9 @@ return {
       ["<M-p>"] = cmp.mapping.scroll_docs(-4),
       ["<M-n>"] = cmp.mapping.scroll_docs(4),
       ["<C-x>"] = cmp.mapping.complete(), -- show completion
-      ["<C-q>"] = cmp.mapping.abort(), -- close menu, restore text
-      ["<C-e>"] = cmp.mapping.close(), -- close menu, keeping text
-      ["<C-l>"] = cmp.mapping.confirm { -- default was <C-y>
+      ["<C-q>"] = cmp.mapping.abort(),    -- close menu, restore text
+      ["<C-e>"] = cmp.mapping.close(),    -- close menu, keeping text
+      ["<C-l>"] = cmp.mapping.confirm {   -- default was <C-y>
         behavior = cmp.ConfirmBehavior.Replace,
         select = true,
       },

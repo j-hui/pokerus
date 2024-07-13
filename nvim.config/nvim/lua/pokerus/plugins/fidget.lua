@@ -6,7 +6,7 @@ return {
     local opts = {
       notification = {
         window = {
-          relative = "win",
+          relative = "editor",
           -- align = "avoid_cursor",
           -- border_hl = "WarningMsg",
           -- normal_hl = "",
@@ -26,7 +26,8 @@ return {
         -- },
         configs = {
           default = vim.tbl_extend("force", require('fidget.notification').default_config, {
-            icon_on_left = true,
+            -- icon_on_left = false,
+            -- update_hook = false,
           }),
         }
       },
@@ -35,7 +36,35 @@ return {
         -- suppress_done_already = true
         ignore_empty_message = false,
         display = {
+          -- progress_icon = 2 , -- bad pattern
+          -- progress_icon = { 2 }, -- bad pattern
+          -- progress_icon = {
+          -- pattern = 3 , -- { "⣷", "⣯", "⣟", "⡿", "⢿", "⣻", "⣽", "⣾" },
+          -- },
           -- progress_icon = function(now) return now % 2 < 1 and "+" or "-" end,
+          -- overrides = {
+            -- rust_analyzer = {
+            --   name = "Rust Analyzer",
+            --   icon = require("fidget.progress.display").for_icon(
+            --     require("fidget.spinner").animate({
+            --       pattern = require("fidget.spinner.patterns").arrow,
+            --       period = 2.5,
+            --     }),
+            --     "🦀"
+            --   ),
+            --   update_hook = function(item)
+            --     require("fidget.notification").set_content_key(item)
+            --     if item.hidden == nil and string.match(item.annote, "clippy") then
+            --       -- Hide clippy-related notifications
+            --       item.hidden = true
+            --     end
+            --   end,
+            -- },
+          -- }
+        },
+        -- ignore = { "null-ls" },
+        lsp = {
+          -- log_handler = true,
         },
       },
       logger = {
