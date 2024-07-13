@@ -8,10 +8,11 @@
 [pull]
     rebase = false
 [merge]
-    conflictStyle = zdiff3
+    ; conflictStyle = zdiff3
     guitool = vimdiff
 [alias]
     co = checkout
+    sw = switch
     st = status
     br = branch --sort=committerdate
     ps = push
