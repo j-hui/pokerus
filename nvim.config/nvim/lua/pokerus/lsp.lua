@@ -73,7 +73,7 @@ function M.on_attach(_, bufnr)
 
   nmap("K", M.hover, lsp_keymap "hover")
   nmap("<leader>lk", M.hover, lsp_keymap "hover")
-  nmap("<leader>l=", M.format, lsp_keymap "format")
+  -- nmap("<leader>l=", M.format, lsp_keymap "format") -- delegated to conform.nvim
   nmap("<leader>la", M.code_action, lsp_keymap "code-action")
   nmap("<leader>lr", M.rename, lsp_keymap "rename")
   xmap("<leader>la", M.code_action, lsp_keymap "code-action")

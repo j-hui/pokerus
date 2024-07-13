@@ -1,4 +1,4 @@
-return {
+return {} or {
   "nvimtools/none-ls.nvim",
   init = function()
     vim.api.nvim_create_autocmd('LspAttach', {
@@ -31,15 +31,14 @@ return {
         null_ls.builtins.formatting.prettier.with {
           filetypes = { "html", "json", "yaml", "markdown" }
         },
-        null_ls.builtins.diagnostics.shellcheck,
-        null_ls.builtins.formatting.shfmt.with {
-          extra_args = { "-i", "2", "-ci" },
-        },
+        -- null_ls.builtins.formatting.shfmt.with {
+        --   extra_args = { "-i", "2", "-ci" },
+        -- },
         null_ls.builtins.diagnostics.vint,
         null_ls.builtins.diagnostics.statix,
         null_ls.builtins.formatting.asmfmt,
         -- null_ls.builtins.formatting.stylua,
-        null_ls.builtins.diagnostics.zsh,
+        -- null_ls.builtins.diagnostics.zsh,
       },
     }
   end,
