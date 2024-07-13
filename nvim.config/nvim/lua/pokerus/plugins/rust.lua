@@ -1,5 +1,17 @@
-return {
-  "simrat39/rust-tools.nvim",
+local use_ferris = true
+
+local ferris = {
+  "vxpm/ferris.nvim",
+  dependencies = {
+    "neovim/nvim-lspconfig",
+  },
+  opts = {},
+  ft = "rust",
+}
+
+local rustaceanvim = {
+  "mrcjkb/rustaceanvim",
+  version = "^4",
   dependencies = {
     "mfussenegger/nvim-dap",
     "neovim/nvim-lspconfig",
@@ -8,9 +20,15 @@ return {
   ft = "rust",
 
   config = function()
-    local opts = {
+    -- NOTE: See how to configure different settings per project here: https://github.com/mrcjkb/rustaceanvim?tab=readme-ov-file#how-to-dynamically-load-different-rust-analyzer-settings-per-project
+
+    vim.g.rustaceanvim = {
+      -- LSP configuration
       server = {
-        settings = {
+        on_attach = function(client, bufnr)
+          require("pokerus.lsp").on_attach(client, bufnr)
+        end,
+        default_settings = {
           ["rust-analyzer"] = {
             check = {
               -- allTargets = false,
@@ -19,11 +37,13 @@ return {
             },
             -- cargo = { features = { "mlua" } },
             diagnostics = {
-              disabled = { "unresolved-proc-macro" },
+              disabled = {
+                "inactive-code",
+                "unresolved-proc-macro",
+              },
             },
           },
         },
-        on_attach = require("pokerus.lsp").on_attach,
       },
     }
 
@@ -31,7 +51,8 @@ return {
     local extension_path = vim.fn.globpath(vim.env.HOME .. "/.vscode/extensions", "vadimcn.vscode-lldb-*", false, true)
     if #extension_path > 0 then
       if #extension_path > 1 then
-        vim.notify("Multiple versions of vscode-lldb appear to be installed!", vim.log.levels.WARN)
+        vim.notify("Multiple versions of vscode-lldb appear to be installed!\n" .. vim.inspect(extension_path),
+          vim.log.levels.WARN)
       end
 
       local codelldb_path = extension_path[1] .. 'adapter/codelldb'
@@ -40,11 +61,17 @@ return {
 
       -- The liblldb extension is .so for linux and .dylib for macOS
       liblldb_path = liblldb_path .. (this_os == "Linux" and ".so" or ".dylib")
-      opts.dap = {
-        adapter = require('rust-tools.dap').get_codelldb_adapter(codelldb_path, liblldb_path)
+
+      -- Set dap configuration
+      vim.g.rustaceanvim.dap = {
+        adapter = require("rustaceanvim.config").get_codelldb_adapter(codelldb_path, liblldb_path)
       }
     end
-
-    require('rust-tools').setup(opts)
   end,
 }
+
+if use_ferris then
+  return ferris
+else
+  return rustaceanvim
+end
