@@ -11,7 +11,7 @@ return {
     "nvim-neotest/neotest-plenary",
     "folke/neodev.nvim",
     "rouge8/neotest-rust",
-    "mrcjkb/neotest-haskell",
+    -- "mrcjkb/neotest-haskell", -- takes a long time to build
   },
   event = "VeryLazy",
   keys = {
@@ -41,7 +41,7 @@ return {
           args = { "--no-capture" },
           dap_adapter = "lldb",
         },
-        require("neotest-haskell"),
+        -- require("neotest-haskell"),
         require("neotest-vim-test")({
           ignore_file_types = { "python", "vim", "lua" },
         }),
