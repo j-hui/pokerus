@@ -1,26 +1,17 @@
 return {
   "folke/which-key.nvim",
-  opts = {
-    spelling = { enabled = true, },
-    hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ ", "<Plug>", "<plug>", },
-    operators = {
-      gc = "comment-line",
-      gb = "comment-block",
-      s = "substitute",
-    },
-  },
-  config = function(_, opts)
+  config = function()
     local wk = require("which-key")
-    wk.setup(opts)
+
+    wk.setup()
+
     wk.add({
-      {
-        mode = { "n" },
-        { "<leader>l", group = "lsp" },
-        { "<leader>g", group = "git" },
-        { "<leader>x", group = "exec" },
+      { -- Override verbose descriptions
+        mode = "n",
+        { "gx", desc = "Open file or link" },
       },
-      {
-        mode = { "v" },
+      { -- Mnemonics for my own groups
+        mode = { "n", "v" },
         { "<leader>l", group = "lsp" },
         { "<leader>g", group = "git" },
         { "<leader>x", group = "exec" },
