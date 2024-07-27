@@ -23,6 +23,8 @@ return {
           return "  " .. tostring(diagnostics_dict["error"])
         elseif level:match("warning") then
           return "  " .. tostring(diagnostics_dict["warning"])
+        elseif level:match("info") and context.buffer:current() then
+          return "  " .. tostring(diagnostics_dict["info"])
         else
           return ""
         end
