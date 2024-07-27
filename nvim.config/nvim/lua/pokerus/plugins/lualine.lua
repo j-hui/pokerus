@@ -1,3 +1,20 @@
+local function wordcount()
+  if vim.bo.filetype ~= "md"
+      and vim.bo.filetype ~= "txt"
+      and vim.bo.filetype ~= "text"
+      and vim.bo.filetype ~= "markdown"
+  then
+    return ""
+  end
+  local wc = vim.fn.wordcount()
+  local count = wc.visual_words and wc.visual_words or wc.words
+  if count == 1 then
+    return tostring(count) .. " word"
+  else
+    return tostring(count) .. " words"
+  end
+end
+
 return {
   "nvim-lualine/lualine.nvim",
   event = "UIEnter",
@@ -12,37 +29,24 @@ return {
         component_separators = "",
       },
       sections = {
+        lualine_a = { "mode" },
         lualine_b = {
           "branch",
           "diff",
           { "diagnostics", colored = false },
         },
         lualine_c = {
-          "hostname",
+          -- "hostname",
           "filename",
         },
         lualine_x = {
-          function()
-            if
-              vim.bo.filetype ~= "md"
-              and vim.bo.filetype ~= "txt"
-              and vim.bo.filetype ~= "text"
-              and vim.bo.filetype ~= "markdown"
-            then
-              return ""
-            end
-            local wc = vim.fn.wordcount()
-            local count = wc.visual_words and wc.visual_words or wc.words
-            if count == 1 then
-              return tostring(count) .. " word"
-            else
-              return tostring(count) .. " words"
-            end
-          end,
+          wordcount,
           "filetype",
           "encoding",
           "fileformat",
         },
+        lualine_y = { "progress" },
+        lualine_z = { "location" },
       },
       extensions = {
         "fugitive",
