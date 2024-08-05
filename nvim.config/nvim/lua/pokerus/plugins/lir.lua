@@ -1,4 +1,4 @@
-return {
+return {} or {
   "tamago324/lir.nvim",
   dependencies = {
     "nvim-lua/plenary.nvim",
