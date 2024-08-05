@@ -5,14 +5,15 @@ local function fn(f, ...)
   end
 end
 
-return {
+return {} or {
   "lfv89/vim-interestingwords",
   keys = {
     { "<leader>i", fn("InterestingWords", "n"), mode = "n", desc = "mark-interesting" },
     { "<leader>i", fn("InterestingWords", "n"), mode = "x", desc = "mark-interesting" },
-    { "[i", fn("WordNavigation", 0), mode = "n", desc = "prev-interesting" },
-    { "]i", fn("WordNavigation", 1), mode = "n", desc = "next-interesting" },
-    { "<leader>I",
+    { "[i",        fn("WordNavigation", 0),     mode = "n", desc = "prev-interesting" },
+    { "]i",        fn("WordNavigation", 1),     mode = "n", desc = "next-interesting" },
+    {
+      "<leader>I",
       function()
         vim.cmd [[noh]]
         fn("UncolorAllWords")()
