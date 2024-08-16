@@ -16,8 +16,8 @@ local function init_linters()
   linter({ "c", "cpp" }, "clangtidy", "clang-tidy")
   linter("nix", "statix")
   linter("nix", "nix")
-  linter("tex", "lacheck")
-  -- linter("tex", "chktex")
+  -- linter("tex", "lacheck") -- not too verbose, but not configurable
+  linter("tex", "chktex") -- quite verbose, but configurable. See: https://www.nongnu.org/chktex/ChkTeX.pdf
   linter("lua", "luacheck")
   linter({ "bash", "sh" }, "shellcheck")
   linter("zsh", "zsh")
