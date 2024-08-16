@@ -81,7 +81,7 @@ end
 local function setup_nvim_ftdetect()
   vim.filetype.add {
     filename = {
-      justfile = "justfile",
+      justfile = "just",
     },
     extension = {
       h = "c",
