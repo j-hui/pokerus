@@ -28,8 +28,8 @@ return {
 
     npairs.add_rules {
       R("|", "|", "rust")
-        :with_pair(cond.not_after_regex "%%")
-        :with_pair(cond.not_before_regex("%S", 3)), -- TODO: not working
+          :with_pair(cond.not_after_regex "%%")
+          :with_pair(cond.not_before_regex("%S", 3)), -- TODO: not working
     }
 
     -- npairs.add_rules {
