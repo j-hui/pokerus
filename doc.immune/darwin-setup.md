@@ -52,7 +52,7 @@ Create new SSH key:
 
 ```
 mkdir -p ~/.ssh &&
-ssh-keygen -t ed25519 -C "email@domain.com" -f ~/.ssh/"$(hostname)"
+ssh-keygen -t ed25519 -C "j-hui@$(hostname)" -f ~/.ssh/"$(hostname)"
 ```
 
 Add that to GitHub.
@@ -133,7 +133,7 @@ brew install vim neovim tmux tree-sitter
 File management:
 
 ```shell
-brew install ripgrep exa dust diskus bat tree gnu-sed git-delta jq hexyl TankerHQ/homebrew-repo/ruplacer
+brew install ripgrep lsd dust diskus bat tree gnu-sed git-delta jq hexyl TankerHQ/homebrew-repo/ruplacer
 ```
 
 Process management:
@@ -172,7 +172,7 @@ Install [Nerd Fonts](https://github.com/ryanoasis/nerd-fonts#option-3-install-sc
 
 ```
 brew tap homebrew/cask-fonts
-brew install --cask font-hack-nerd-font font-sauce-code-pro-nerd-font font-go-mono-nerd-font font-roboto-mono-nerd-font
+brew install --cask font-hack-nerd-font font-sauce-code-pro-nerd-font font-go-mono-nerd-font font-roboto-mono-nerd-font font-comic-shanns-mono-nerd-font
 ```
 
 ### GUI Applications
@@ -186,7 +186,7 @@ brew install alacritty wezterm kitty warp
 Browsers and password managers:
 
 ```shell
-brew install firefox google-chrome arc 1password tunnelblick
+brew install firefox google-chrome arc 1password
 ```
 
 Customization:
@@ -216,7 +216,7 @@ brew install docker
 Misc.:
 
 ```sh
-brew install logictech-options
+brew install logitech-options
 ```
 
 ### Fast `KeyRepeat`
