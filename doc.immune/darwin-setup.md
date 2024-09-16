@@ -222,10 +222,14 @@ brew install logitech-options
 ### Fast `KeyRepeat`
 
 ```shell
-defaults write -g KeyRepeat -int 1 # normal minimum is 2 (30 ms)
-defaults write -g InitialKeyRepeat -int 20 # normal minimum is 15 (225 ms)
+defaults write -g KeyRepeat -int 1
+defaults write -g InitialKeyRepeat -int 20
 defaults write -g ApplePressAndHoldEnabled -bool false
 ```
+
+Note that the normal minimum `KeyRepeat` is 2 (30 ms)
+and the normal minimum `InitialKeyRepeat` is 15 (225 ms).
+
 ### Show file extensions
 
 ```shell
