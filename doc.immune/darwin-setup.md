@@ -216,7 +216,7 @@ brew install docker
 Misc.:
 
 ```sh
-brew install logitech-options
+brew install logi-options+
 ```
 
 ### Fast `KeyRepeat`
