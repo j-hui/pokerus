@@ -43,9 +43,6 @@ git-ignore() {
 
 if which nvim &> /dev/null; then
     export EDITOR=nvim
-    export MANPAGER='nvim +Man!'    # use nvim as pager
-    export MANWIDTH=999             # let nvim handle wraparound
-
 elif which vim &> /dev/null; then
     export EDITOR=vim
     alias vim='vim'
