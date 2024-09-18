@@ -64,8 +64,8 @@ return {
     dashboard.section.header.val = rat
 
     dashboard.section.buttons.val = {
-      dashboard.button( "e", "  > New file" , ":ene <BAR> startinsert<CR>"),
-      dashboard.button( "o", "  > Find file", ":Telescope find_files<CR>"),
+      dashboard.button( "i", "  > New file" , ":ene <BAR> startinsert<CR>"),
+      dashboard.button( "e", "  > Find file", ":Telescope find_files<CR>"),
       dashboard.button( "r", "  > Recent"   , ":Telescope oldfiles<CR>"),
       dashboard.button( "s", "  > Settings" , ":cd " .. vim.fn.stdpath "config" .. " <BAR> edit .<CR>"),
       dashboard.button( "q", "  > Quit NVIM", ":qa<CR>"),
