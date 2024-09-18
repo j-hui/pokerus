@@ -16,7 +16,6 @@ if vim.fn.has("mac") then
       args = { "%p" },
     }
   end
-
 elseif vim.fn.has("linux") then
   if vim.fn.executable("zathura") then
     fwdsearch = {
@@ -40,13 +39,23 @@ return {
     vim.keymap.set("n", "<leader>lc", "<cmd>TexlabBuild<CR>", { desc = "tex-build" })
     if fwdsearch then
       vim.keymap.set("n", "<leader>lf", "<cmd>TexlabForward<CR>", { desc = "tex-goto-line" })
+    else
+      vim.keymap.set("n", "<leader>lf", function()
+          vim.notify("No forward search available", vim.log.levels.WARN, { title = "texlab" })
+        end,
+        { desc = "tex-goto-line" })
     end
   end,
   settings = {
     texlab = {
-      build = { onSave = true },
+      build = { onSave = false },
+      formatterLineLength = 240,
       chkTex = { onOpenAndSave = true },
       forwardSearch = fwdsearch,
+      experimental = {
+        verbatimEnvironments = { "lstlisting" },
+        labelReferenceCommands = { "cref" },
+      },
     },
   },
 }
