@@ -18,6 +18,11 @@ return {
 
     local lspconfigs = split(glob((stdpath "config") .. "/lua/pokerus/lspconfig/*"))
 
+    local capabilities = vim.tbl_deep_extend("force",
+      vim.lsp.protocol.make_client_capabilities(),
+      require('cmp_nvim_lsp').default_capabilities()
+    )
+
     for _, lsp in ipairs(lspconfigs) do
       lsp = substitute(lsp, "^.*/", "", "")
       lsp = substitute(lsp, "\\.lua$", "", "")
@@ -28,9 +33,7 @@ return {
         cfg = cfg == true and {} or cfg
         require("lspconfig")[lsp].setup(vim.tbl_extend("keep", cfg, {
           on_attach = require("pokerus.lsp").on_attach,
-          capabilities = require("cmp_nvim_lsp").default_capabilities(
-            vim.lsp.protocol.make_client_capabilities()
-          ),
+          capabilities = capabilities,
         }))
       end
     end
