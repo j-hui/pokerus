@@ -20,7 +20,7 @@ M.colorschemes = {
   {
     "Shatur/neovim-ayu",
     schemename = "ayu",
-    -- main = true,
+    main = true,
     opts = {
       mirage = true,
     },
@@ -37,7 +37,7 @@ M.colorschemes = {
   {
     "neanias/everforest-nvim",
     schemename = "everforest",
-    main = true,
+    -- main = true,
     opts = {
       background = "hard",
     },
