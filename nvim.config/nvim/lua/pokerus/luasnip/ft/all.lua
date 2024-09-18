@@ -22,8 +22,8 @@ local conds = require "luasnip.extras.expand_conditions"
 ---@diagnostic enable: unused-local
 
 return {
-  test_snippet = sn(1, {
-    t "Basic text ",
-    i(1, "and an insertNode."),
-  }),
+  -- test_snippet = sn(1, {
+  --   t "Basic text ",
+  --   i(1, "and an insertNode."),
+  -- }),
 }
