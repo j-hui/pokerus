@@ -7,7 +7,13 @@ return {
         enabled = false, -- Rely on "," to do epic searching
       },
       char = {
+        -- NOTE: H and L are remapped to jump forward and backward
         keys = { "f", "F", "t", "T", [";"] = "L", [","] = "H" },
+      },
+      treesitter = {
+        highlight = {
+          backdrop = true,
+        }
       },
     },
   },
@@ -19,23 +25,23 @@ return {
         -- default options: exact mode, multi window, all directions, with a backdrop
         require("flash").jump { search = { mode = "fuzzy" } }
       end,
-      desc = "Flash",
+      desc = "flash-search",
     },
     {
-      "!", -- Motion/jump that targets treesitter nodes
-      mode = { "n", "o", "x" },
+      "q", -- Motion/jump that targets treesitter nodes
+      mode = { "o", "x" },
       function()
         require("flash").treesitter()
       end,
-      desc = "Flash Treesitter",
+      desc = "flash-treesitter",
     },
     {
-      "r", -- Motion in remote location/buffer (with automatic return)
+      "o", -- Motion in remote location/buffer (with automatic return)
       mode = "o",
       function()
         require("flash").remote()
       end,
-      desc = "Remote Flash",
+      desc = "flash-remote",
     },
   },
 }
