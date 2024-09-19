@@ -213,12 +213,6 @@ Virtualization:
 brew install docker
 ```
 
-Misc.:
-
-```sh
-brew install logi-options+
-```
-
 ### Fast `KeyRepeat`
 
 ```shell
