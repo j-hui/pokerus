@@ -22,7 +22,7 @@ export FZF_DEFAULT_OPTS='--bind=ctrl-k:kill-line'
 
 if which bat &> /dev/null; then
     export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always {} | head -500'"
-    export MANPAGER="sh -c 'col -bx | bat -l man -p --paging always'"
+    export MANPAGER="sh -c 'col -bx | bat -l man -p --paging always --style=plain'"
 else
     export FZF_CTRL_T_OPTS="--preview 'cat {}'"
 fi
