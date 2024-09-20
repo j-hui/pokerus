@@ -91,6 +91,7 @@ local function setup_nvim_ftdetect()
       pio = "pio",
       luau = "luau",
       rbxlx = "xml",
+      pbxproj = "pbxproj",
     },
   }
 end

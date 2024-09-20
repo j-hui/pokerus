@@ -134,6 +134,7 @@ function pokerus#plugins#setup()
     Plug 'whonore/coqtail'
     Plug 'mikebentley15/vim-pio'
     Plug 'NoahTheDuke/vim-just'
+    Plug 'cfdrake/vim-pbxproj'
   " Filetype }}}
   call plug#end()
 

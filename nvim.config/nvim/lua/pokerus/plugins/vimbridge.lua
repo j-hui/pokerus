@@ -115,6 +115,7 @@ return {
   { "euclidianAce/BetterLua.vim", ft = "lua" },
   { "mikebentley15/vim-pio", ft = "pio" },
   { "NoahTheDuke/vim-just", ft = "just" },
+  { "cfdrake/vim-pbxproj", ft = "pbxproj" },
   -- Filetypes }}}
 
   -- Filetypes w/ setup {{{
