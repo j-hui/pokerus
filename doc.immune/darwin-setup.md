@@ -38,13 +38,21 @@ This installs `brew` to `/opt/homebrew/bin`. Add it to `PATH`:
 export PATH="/opt/homebrew/bin:$PATH"
 ```
 
-### Install coreutils
+### Install Dependencies
 
-```
-brew install coreutils
+The version of Bash distributed with macOS is outdated, and the `realpath` implementation
+is the FreeBSD version which lacks some features that Pokerus's `git infect` depends on.
+Install the necessary dependencies using:
+
+```console
+brew install coreutils bash
 ```
 
-This ensures the GNU implementation of `realpath` is available (which `git infect` depends on).
+### Install Bash
+
+```sh
+brew install bash
+```
 
 ### Setup SSH
 
