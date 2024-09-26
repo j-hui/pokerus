@@ -92,6 +92,7 @@ local function setup_nvim_ftdetect()
       luau = "luau",
       rbxlx = "xml",
       pbxproj = "pbxproj",
+      modulemap = "modulemap",
     },
   }
 end

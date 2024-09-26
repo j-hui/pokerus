@@ -64,6 +64,7 @@ return {
       rust = { "rustfmt" },
       toml = { "taplo" },
       yaml = { "yq" },
+      swift = { "swiftformat" },
     },
   },
   init = function()

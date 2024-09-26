@@ -135,6 +135,7 @@ function pokerus#plugins#setup()
     Plug 'mikebentley15/vim-pio'
     Plug 'NoahTheDuke/vim-just'
     Plug 'cfdrake/vim-pbxproj'
+    Plug 'compnerd/modulemap-vim'
   " Filetype }}}
   call plug#end()
 

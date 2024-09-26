@@ -116,6 +116,7 @@ return {
   { "mikebentley15/vim-pio", ft = "pio" },
   { "NoahTheDuke/vim-just", ft = "just" },
   { "cfdrake/vim-pbxproj", ft = "pbxproj" },
+  { "compnerd/modulemap-vim", ft = "modulemap" },
   -- Filetypes }}}
 
   -- Filetypes w/ setup {{{

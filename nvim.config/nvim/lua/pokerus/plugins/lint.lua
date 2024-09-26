@@ -23,6 +23,7 @@ local function init_linters()
   linter("zsh", "zsh")
   linter("haskell", "hlint")
   linter("markdown", "markdownlint")
+  linter("swift", "swiftlint")
 end
 
 local should_lint = true
