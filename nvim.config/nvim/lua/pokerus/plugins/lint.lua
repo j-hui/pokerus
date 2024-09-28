@@ -23,7 +23,7 @@ local function init_linters()
   linter("zsh", "zsh")
   linter("haskell", "hlint")
   linter("markdown", "markdownlint")
-  linter("swift", "swiftlint")
+  -- linter("swift", "swiftlint") -- NOTE: not an official Swift tool
 end
 
 local should_lint = true
@@ -117,7 +117,7 @@ return {
     vim.api.nvim_create_user_command("LintOff", lint_off, { desc = "Turn off nvim-lint" })
     vim.api.nvim_create_user_command("LintShow", lint_show, { desc = "Show nvim-lint status" })
 
-    vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost" }, {
+    vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
       callback = try_lint,
     })
   end,

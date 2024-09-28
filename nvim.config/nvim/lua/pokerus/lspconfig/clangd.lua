@@ -13,6 +13,7 @@ for _, c in ipairs(compilers) do
   end
 end
 
+-- return false and {
 return {
   -- TODO: Get rid of this awful config.
   -- Tracking: https://github.com/clangd/clangd/issues/539

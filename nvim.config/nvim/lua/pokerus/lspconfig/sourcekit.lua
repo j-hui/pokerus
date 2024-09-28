@@ -1,2 +1,2 @@
-return {
+return false and {
 }

@@ -64,7 +64,7 @@ return {
       rust = { "rustfmt" },
       toml = { "taplo" },
       yaml = { "yq" },
-      swift = { "swiftformat" },
+      swift = { "swift_format" }, -- note that "swiftformat" is not an official Swift tool
     },
   },
   init = function()
