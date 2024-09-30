@@ -1,5 +1,7 @@
 return {
   "chrisgrieser/nvim-origami",
-  event = "BufReadPost",
-  opts = {},
+  event = "VeryLazy",
+  opts = {
+    keepFoldsAcrossSessions = false,
+  },
 }

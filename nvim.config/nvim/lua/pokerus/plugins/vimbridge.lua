@@ -129,14 +129,6 @@ return {
   },
 
   {
-    "octol/vim-cpp-enhanced-highlight",
-    ft = "cpp",
-    config = function()
-      require("pokerus").vimsetup "cpp_enhanced"
-    end,
-  },
-
-  {
     "neovimhaskell/haskell-vim",
     ft = "haskell",
     config = function()
