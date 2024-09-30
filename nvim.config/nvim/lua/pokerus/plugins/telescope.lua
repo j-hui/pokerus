@@ -103,8 +103,11 @@ function M.config()
     ["<C-b>"] = { "<Left>", type = "command" },
     ["<C-h>"] = { "<BS>", type = "command" },
     ["<C-k>"] = { "<cmd>norm! d$<cr>", type = "command" },
-    ["<Esc>"] = action.close,
+
     ["<C-]>"] = { "<Esc>", type = "command" },
+    ["<C-v>"] = { "<Esc>", type = "command" },
+    ["<Esc>"] = action.close,
+
     -- NOTE: scroll = half-page, shift = single entry
     ["<C-u>"] = action_set("scroll_results", -1),
     ["<C-d>"] = action_set("scroll_results", 1),
@@ -112,7 +115,11 @@ function M.config()
     ["<C-n>"] = action_set("shift_selection", 1),
     ["<M-u>"] = action_set("scroll_previewer", -1),
     ["<M-d>"] = action_set("scroll_previewer", 1),
-    ["<C-x>"] = action.which_key,
+
+
+    ["<C-s>"] = action.select_vertical,
+    ["<C-x>"] = action.select_horizontal,
+    ["<C-/>"] = action.which_key,
   }
 
   local nmaps = {
@@ -120,13 +127,22 @@ function M.config()
     ["<Down>"] = { "j", type = "command" },
     ["<Left>"] = { "h", type = "command" },
     ["<Right>"] = { "l", type = "command" },
+
+    ["<C-]>"] = action.nop,
+    ["<C-v>"] = action.nop,
+    ["<Esc>"] = action.close,
     ["q"] = action.close,
+
     ["<C-u>"] = action_set("scroll_results", -1),
     ["<C-d>"] = action_set("scroll_results", 1),
     ["<C-p>"] = action_set("shift_selection", -1),
     ["<C-n>"] = action_set("shift_selection", 1),
     ["<M-u>"] = action_set("scroll_previewer", -1),
     ["<M-d>"] = action_set("scroll_previewer", 1),
+
+    ["<C-s>"] = action.select_vertical,
+    ["<C-x>"] = action.select_horizontal,
+    ["<C-/>"] = action.which_key,
   }
 
   telescope.setup({
