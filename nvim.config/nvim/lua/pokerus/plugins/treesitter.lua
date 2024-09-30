@@ -62,8 +62,8 @@ M.languages_need_compile = {
 
 M.keys = {
   -- { "gr",        mode = "n", desc = "treesitter-refactor" },
-  { "gl",        mode = "n", desc = "treesitter-swap-next-param" },
-  { "gh",        mode = "n", desc = "treesitter-swap-prev-param" },
+  { "cl",        mode = "n", desc = "treesitter-swap-next-param" },
+  { "ch",        mode = "n", desc = "treesitter-swap-prev-param" },
   { "<leader>v", mode = "n", desc = "treesitter-select" },
   { "a.",        mode = "o", desc = "treesitter-outer-function" },
   { "i.",        mode = "o", desc = "treesitter-outer-function" },
