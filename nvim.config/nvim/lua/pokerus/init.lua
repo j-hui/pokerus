@@ -102,6 +102,7 @@ end
 --- Called from init.vim.
 function M.setup()
   ensure_lazy()
+  require("pokerus.profile").setup()
 
   vim.g.loaded_netrw = 1
   vim.g.loaded_netrwPlugin = 1
