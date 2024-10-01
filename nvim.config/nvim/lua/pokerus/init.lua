@@ -82,6 +82,7 @@ local function setup_nvim_ftdetect()
   vim.filetype.add {
     filename = {
       justfile = "just",
+      [".envrc"] = "sh",
     },
     extension = {
       h = "c",

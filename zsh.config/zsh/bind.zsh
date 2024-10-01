@@ -19,3 +19,22 @@ bindkey '\e\e[C' forward-word
 bindkey '\e\e[D' backward-word 
 bindkey '\e\e[C' beginning-of-line
 bindkey '\e\e[D' end-of-line
+
+# From: https://stackoverflow.com/a/4766798
+# This was written entirely by Mikael Magnusson (Mikachu)
+# Basically type '...' to get '../..' with successive .'s adding /..
+function rationalise-dot {
+    local MATCH # keep the regex match from leaking to the environment
+    if [[ $LBUFFER =~ '(^|/| |      |'$'\n''|\||;|&)\.\.$' ]]; then
+      LBUFFER+=/
+      zle self-insert
+      zle self-insert
+    else
+      zle self-insert
+    fi
+}
+zle -N rationalise-dot
+bindkey . rationalise-dot
+# without this, typing a . aborts incremental history search
+bindkey -M isearch . self-insert
+

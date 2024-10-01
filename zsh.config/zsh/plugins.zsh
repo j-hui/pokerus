@@ -33,9 +33,12 @@ zinit light-mode for \
 
 # zinit self-update
 
-# A few of plugins seem to require this
-autoload -U compinit
+if (( $+commands[brew] )); then
+  FPATH="$(brew --prefix)/share/zsh/site-functions:$FPATH"
+  FPATH="$(brew --prefix)/share/zsh-completions:$FPATH"
+fi
 
+autoload -Uz compinit
 # Only check cache once per day
 # https://gist.github.com/ctechols/ca1035271ad134841284
 for dump in ~/.zcompdump(N.mh+24); do

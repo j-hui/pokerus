@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 
-errecho() {
-    echo "Pokerus error:" "$@" >&2
-}
-
-PATH_ADD() {
+path_add() {
     if [ -n "$1" ]; then
         case ":$PATH:" in
             *":$1:"*) :;;           # already there
@@ -13,10 +9,8 @@ PATH_ADD() {
     fi
 }
 
-PATH_ADD ~/.local/tms
-PATH_ADD ~/.local/bin
-
-### fzf
+path_add ~/.local/tms
+path_add ~/.local/bin
 
 export FZF_DEFAULT_OPTS='--bind=ctrl-k:kill-line'
 
@@ -33,14 +27,6 @@ if which fd &> /dev/null; then
     export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
 
-### git
-
-git-ignore() {
-    curl -sL "https://www.toptal.com/developers/gitignore/api/$1"
-}
-
-### vim/nvim
-
 if which nvim &> /dev/null; then
     export EDITOR=nvim
 elif which vim &> /dev/null; then
@@ -48,57 +34,11 @@ elif which vim &> /dev/null; then
     alias vim='vim'
 fi
 
-### nnn
-export NNN_FIFO='/tmp/nnn.fifo'
-export NNN_PLUG='o:fzopen;f:fzfcd;m:mimelist;p:preview-tabbed;d:dragdrop'
-
-### gcalcli
-if which gcalcli &> /dev/null; then
-    gcal () {
-        if [ "$#" -lt 1 ]; then
-            echo "Today's agenda:"
-            gcalcli agenda now 23:59:59
-            return
-        fi
-        case "$1" in
-
-        today)
-            echo "Today's agenda:"
-            gcalcli agenda 00:00:00 23:59:59
-            ;;
-
-        tmrw|tomorrow)
-            echo "Tomorrow's agenda:"
-            gcalcli agenda "tomorrow 00:00:00" "tomorrow 23:59:59"
-            ;;
-
-        *)
-            gcalcli "$@"
-                ;;
-        esac
-    }
+if which direnv &>/dev/null; then
+  eval "$(direnv hook bash)"
 fi
 
-### ripgrep
 export RIPGREP_CONFIG_PATH=~/.config/ripgrep/ripgreprc
-
-### kitty
-if which kitty &> /dev/null; then
-    :
-    # alias ssh='kitty +kitten ssh'
-    # alias kssh='kitty +kitten ssh'
-    # alias kdiff='kitty +kitten diff'
-    # alias icat='kitty +kitten icat --align left'
-fi
-
-### mimeo
-if which mimeo &> /dev/null; then
-    alias open=mimeo
-    alias o=mimeo
-fi
-
-### zk
-export ZK_NOTEBOOK_DIR=~/canalave
 
 ### OS-specific configuration
 case "$OSTYPE" in
@@ -115,7 +55,7 @@ case "$OSTYPE" in
     # if running the GNU implementation of ls, --color=auto is needed instead.
     # leave this to be reset by .bash_local
     alias nproc='sysctl -n hw.ncpu'
-    PATH_ADD /opt/homebrew/bin
+    path_add /opt/homebrew/bin # On Apple Silicon
     ;;
 esac
 
@@ -134,67 +74,24 @@ else
     alias l='ls -F'
 fi
 
-alias cd..='cd ..'
-alias ..='cd ..'
-alias ...='cd ../../'
-
-# Correct spelling errors in arguments supplied to cd
-shopt -s cdspell 2> /dev/null
-
-# export CDPATH="."
-
-alias sl='echo "
-                 _-====-__-======-__-========-_____-============-__
-               _(                                                 _)
-            OO(           _/_ _  _  _/_   _/_ _  _  _/_           )_
-           0  (_          (__(_)(_) (__   (__(_)(_) (__            _)
-         o0     (_                                                _)
-        o         -=-___-===-_____-========-___________-===-dwb-=-
-      .o                                _________
-     . ______          ______________  |         |      _____
-   _()_||__|| ________ |            |  |_________|   __||___||__
-  (BNSF 1995| |      | |            | __Y______00_| |_         _|
- /-OO----OO^^=^OO--OO^=^OO--------OO^=^OO-------OO^=^OO-------OO^=P
-#####################################################################"'
-
-### Searching
 alias grep="grep --color=auto"
 alias egrep="egrep --color=auto"
 alias fgrep="fgrep --color=auto"
 
-### Utilities
-alias mrproper="rm -rvf .*.swp *~"
-alias dfob="perl -pi -e 's/[^[:ascii:]]//g'"
-
-## Misc
-alias sudo='sudo ' # helps with scripting?
-alias :w="echo You\'re not in vim, dingus."
-
-srcbash() {
-    if [ -e ~/.bashrc ]; then
-        source ~/.bashrc
-        echo "sourced ~/.bash_profile"
-    elif [ -e ~/.bash_profile ]; then
-        source ~/.bash_profile
-        echo "sourced ~/.bash_profile"
-    else
-        errecho 'No ~/.bashrc or ~/.bash_profile found.'
-        return 1
-    fi
-}
+alias cd..='cd ..'
 
 if [ -f ~/.ssh/config ]; then
     complete -W "$(grep 'Host ' ~/.ssh/config | sed 's/Host //')" -X '\*' ssh
 fi
 
-### Prompt/display configuration
+# Correct spelling errors in arguments supplied to cd
+shopt -s cdspell 2> /dev/null
 
 # For macOS
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
 # only works on Bash
 if [ "${0#*bash}" != "$0" ]; then
-
     # Colors
     RED="\[\033[40;0;31m\]"
     GREEN="\[\033[40;0;32m\]"
@@ -238,19 +135,6 @@ else # ["${0#*bash}" != "$0"]
     PS1='$ '
     PS2='> '
 fi # ["${0#*bash}" != "$0"]
-
-# colored man pages
-man() {
-    env \
-        LESS_TERMCAP_mb=$(printf "\e[1;31m") \
-        LESS_TERMCAP_md=$(printf "\e[1;31m") \
-        LESS_TERMCAP_me=$(printf "\e[0m") \
-        LESS_TERMCAP_se=$(printf "\e[0m") \
-        LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
-        LESS_TERMCAP_ue=$(printf "\e[0m") \
-        LESS_TERMCAP_us=$(printf "\e[1;32m") \
-            man "$@"
-}
 
 # Automatically trim long paths in the prompt (requires Bash 4.x)
 PROMPT_DIRTRIM=2
@@ -328,10 +212,6 @@ sbind '"\e[D": backward-char'
 PROMPT_COMMAND='history -a'
 
 unset sbind
-
-### File security
-
-umask 077
 
 if [ -f ~/.bash_local ]; then
      source ~/.bash_local

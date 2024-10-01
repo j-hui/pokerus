@@ -141,7 +141,7 @@ brew install vim neovim tmux tree-sitter
 File management:
 
 ```shell
-brew install ripgrep fd lsd dust diskus bat tree gnu-sed git-delta jq hexyl TankerHQ/homebrew-repo/ruplacer
+brew install ripgrep fd lsd dust diskus bat tree gnu-sed git-delta jq hexyl TankerHQ/homebrew-repo/ruplacer direnv
 ```
 
 Process management:
