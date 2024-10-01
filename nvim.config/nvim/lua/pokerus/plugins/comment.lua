@@ -7,8 +7,8 @@ return {
     { "gb", mode = "x", desc = "block-comment" },
   },
   config = function()
-    require("Comment").setup {}
+    require("Comment").setup({})
     local ft = require('Comment.ft')
-    ft({'alex', 'happy'}, {'--%s', '{-%s-}'})
+    ft({ 'alex', 'happy' }, { '--%s', '{-%s-}' })
   end,
 }
