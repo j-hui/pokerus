@@ -4,15 +4,11 @@ local M = {
     "nvim-treesitter/nvim-treesitter-textobjects",
     -- Use treesitter to find motion text objects
 
-    "nvim-treesitter/playground",
-    -- Show treesitter state in split pane
-
     "RRethy/nvim-treesitter-endwise",
     -- Automatically end tokens
 
     -- "nvim-treesitter/nvim-treesitter-refactor",
     -- Use treesitter to refactor identifiers
-
   },
   build = ":TSUpdate",
   event = "VeryLazy",
@@ -90,22 +86,17 @@ function M.config(opts)
 end
 
 M.opts = {
-  playground = { enable = true },
-  highlight = { enable = true },
-  endwise = { enable = true },
-  query_linter = {
+  highlight = {
     enable = true,
-    use_virtual_text = true,
-    lint_events = { "BufWrite", "CursorHold" },
+    disable = function(lang, buf)
+      local max_filesize = 100 * 1024 -- 100 KB
+      local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+      if ok and stats and stats.size > max_filesize then
+        return true
+      end
+    end,
   },
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = false,
-      node_incremental = "<tab>",
-      node_decremental = "<S-tab>",
-    },
-  },
+  endwise = { enable = true, },
   textobjects = {
     select = {
       enable = true,
