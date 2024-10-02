@@ -60,4 +60,12 @@ if (( $+commands[direnv] )) ; then
   eval "$(direnv hook zsh)"
 fi
 
+if [ -n "$KITTY_PID" ] ; then
+  # Probably running in a native kitty window.
+  #
+  # Note that KITTY_WINDOW_ID is defined in both the native kitty window
+  # and whatever native kitty SSHs into, so checking that does not work.
+  alias ssh='kitten ssh'
+fi
+
 [ -f ~/.local/share/git-subrepo/.rc ] && source ~/.local/share/git-subrepo/.rc

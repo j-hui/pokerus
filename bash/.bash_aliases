@@ -37,6 +37,14 @@ fi
 if which direnv &>/dev/null; then
   eval "$(direnv hook bash)"
 fi
+ 
+if [ -n "$KITTY_PID" ] ; then
+  # Probably running in a native kitty window.
+  #
+  # Note that KITTY_WINDOW_ID is defined in both the native kitty window
+  # and whatever native kitty SSHs into, so checking that does not work.
+  alias ssh='kitten ssh'
+fi
 
 export RIPGREP_CONFIG_PATH=~/.config/ripgrep/ripgreprc
 
