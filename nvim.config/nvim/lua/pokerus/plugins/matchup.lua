@@ -14,6 +14,6 @@ return {
 
     vim.g.matchup_surround_enabled = 1              -- cs% and ds%
 
-    require("pokerus.plugins.treesitter").opts.endwise = { enable = true }
+    require("pokerus.plugins.treesitter").opts.matchup = { enable = true }
   end
 }
