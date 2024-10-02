@@ -170,6 +170,10 @@ function M.setup()
   --     autocmd TextYankPost * silent! lua vim.highlight.on_yank{higroup="CursorLine", timeout=690}
   --   augroup END
   -- ]]
+
+  if require("profile").is_recording() then
+    require("profile").log_instant("pokerus:setup_end")
+  end
 end
 
 --- Call the Pokerus setup function for a Vim plugin.

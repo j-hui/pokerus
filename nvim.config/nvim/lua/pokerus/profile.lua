@@ -21,6 +21,7 @@ local function enable_profile()
     else
       require("profile").instrument("*")
     end
+    require("profile").log_instant("pokerus:profile_start")
   end
 end
 
