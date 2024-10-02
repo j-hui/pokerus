@@ -15,6 +15,8 @@ return {
         { "<leader>l", group = "lsp" },
         { "<leader>g", group = "git" },
         { "<leader>x", group = "exec" },
+        { "gk",        group = "trouble" },
+        { "gl",        group = "trouble-lsp" },
       },
     })
   end
