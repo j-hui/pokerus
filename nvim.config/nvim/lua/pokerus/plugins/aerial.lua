@@ -1,4 +1,4 @@
-return {
+return {} or {
   "stevearc/aerial.nvim",
   dependencies = {
     "neovim/nvim-lspconfig",
@@ -13,6 +13,8 @@ return {
   },
   cmd = { "AerialToggle", "AerialOpen" },
   keys = {
-    { "<leader>lo", "<cmd>AerialToggle!<CR>", mode = "n", desc = "lsp-outline" }
+    -- { "<leader>lo", "<cmd>AerialToggle!<CR>", mode = "n", desc = "lsp-outline" },
+    -- { "gl", "<cmd>AerialToggle<CR>", mode = "n", desc = "aerial-toggle" },
+    -- { "gL", "<cmd>AerialToggle!<CR>", mode = "n", desc = "aerial-toggle" },
   }
 }
