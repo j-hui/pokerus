@@ -72,9 +72,8 @@ function! s:navigationMaps() abort
   vnoremap <C-b>    h
 
   " Window navigation
-  noremap <C-w>n <Esc>:bn<CR>
-  noremap <C-w>p <Esc>:bp<CR>
-  noremap <C-w>q <Esc>:bd<CR>
+  noremap <C-w>s <C-w>v
+  noremap <C-w>x <C-w>s
 
   inoremap <C-F> <Right>
   inoremap <C-B> <Left>
