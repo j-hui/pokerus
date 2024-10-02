@@ -78,9 +78,12 @@ function M.init()
   end
 end
 
-function M.config(opts)
-  opts.ensure_installed = M.languages
-  require("nvim-treesitter.configs").setup(opts)
+-- NOTE: using the opts parameter from config(opts) seems to cause a stack
+-- overflow in treesitter, probably because of some funny business that
+-- Lazy is doing. So we use M.opts instead.
+function M.config()
+  M.opts.ensure_installed = M.languages
+  require("nvim-treesitter.configs").setup(M.opts)
   vim.opt.foldmethod = "expr"
   vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 end
