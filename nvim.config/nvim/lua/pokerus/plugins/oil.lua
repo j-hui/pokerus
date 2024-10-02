@@ -1,32 +1,28 @@
 local oil_detail = false
 
-local function open_oil(dir)
-  return function()
-    local filename = vim.fn.expand("%:t")
-    if not filename or filename == "" then
-      if vim.api.nvim_get_option_value("filetype", {}) ~= "oil" then
-        vim.notify("Cannot find parent directory: " .. filename, vim.log.levels.ERROR)
+local function split_oil()
+  local filename = vim.fn.expand("%:t")
+  if not filename or filename == "" then
+    if vim.api.nvim_get_option_value("filetype", {}) ~= "oil" then
+      vim.notify("Cannot find parent directory: " .. filename, vim.log.levels.ERROR)
+      return
+    else
+      -- We are in an oil buffer
+      filename = vim.fn.expand("%")
+      if filename == "oil:///" then
+        vim.notify("Already at root directory", vim.log.levels.WARN)
         return
-      else
-        -- We are in an oil buffer
-        filename = vim.fn.expand("%")
-        if filename == "oil:///" then
-          vim.notify("Already at root directory", vim.log.levels.WARN)
-          return
-        end
-        filename = string.sub(filename, string.find(filename, "[^/]*/$") or 0)
       end
+      filename = string.sub(filename, string.find(filename, "[^/]*/$") or 0)
     end
-
-    if dir then
-      vim.api.nvim_open_win(0, true, {
-        split = dir,
-      })
-    end
-
-    require("oil").open()
-    vim.fn.search(filename)
   end
+
+  vim.api.nvim_open_win(0, true, {
+    split = "left",
+  })
+
+  require("oil").open()
+  vim.fn.search(filename)
 end
 
 return {
@@ -58,8 +54,8 @@ return {
     }
   },
   keys = {
-    { "g-", "<cmd>Oil<CR>",    desc = "oil" },
-    { "gl", open_oil("right"), desc = "oil-right" },
-    { "gh", open_oil("left"),  desc = "oil-left" },
+    { "g-", "<cmd>Oil<CR>", desc = "oil-open" },
+    -- { "gl", open_oil("right"), desc = "oil-right" },
+    { "gh", split_oil,      desc = "oil-split" },
   },
 }
