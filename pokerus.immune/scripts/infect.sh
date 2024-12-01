@@ -1,11 +1,11 @@
 #!/usr/bin/env sh
 
 set -e
-TAG="[POKERUS]"
 
-pecho () { echo "$TAG           " "$@" >&2 ; }
-wecho () { echo "$TAG  WARN     " "$@" >&2 ; }
-eecho () { echo "$TAG  ERROR    " "$@" >&2 ; }
+TAG="[POKERUS]"
+pecho() { echo "$TAG           " "$@" >&2 ; }
+wecho() { echo "$TAG  WARN     " "$@" >&2 ; }
+eecho() { echo "$TAG  ERROR    " "$@" >&2 ; }
 
 # Sort out this realpath issue
 if [ -x "/opt/homebrew/opt/coreutils/libexec/gnubin/realpath" ]; then
@@ -14,22 +14,20 @@ if [ -x "/opt/homebrew/opt/coreutils/libexec/gnubin/realpath" ]; then
 elif [ -x "/usr/local/homebrew/opt/coreutils/libexec/gnubin/realpath" ]; then
   # this is probably x86 macOS; prefer GNU version of realpath
   export PATH="/usr/local/homebrew/opt/coreutils/libexec/gnubin:$PATH"
-else
-  # hope for the best and use whatever is already on PATH.
-  # note that this does fail with non-GNU versions of realpath
-  realpath="realpath"
 fi
+# else, hope for the best and use whatever is already on PATH.
+# note that this does fail with non-GNU versions of realpath
 
 pecho "Using realpath: $(which realpath)"
 pecho "Using readlink: $(which readlink)"
 
-if ! "realpath" --relative-to=/bin /etc >/dev/null 2>/dev/null ; then
+if ! realpath --relative-to=/bin /etc >/dev/null 2>/dev/null ; then
   eecho "realpath implementation not supported.\nIf on macOS, please run 'brew install coreutils'"
   exit 1
 fi
 
 # Echoes "." if we want to ignore it
-ignores () {
+ignores() {
     case "$1" in
         .DS_STORE)
             echo .
@@ -49,7 +47,7 @@ ignores () {
     esac
 }
 
-infect () {
+infect() {
     src="$1"
     dst="$2"
 

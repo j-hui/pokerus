@@ -15,10 +15,6 @@ Then, retrieve this repo and set up git aliases:
 
     git clone git@github.com:j-hui/pokerus.git ~/pokerus && cd ~/pokerus && git config --local include.path ../.gitconfig
 
-Optionally, disinfect your system (warning: not well-tested):
-
-    git disinfect
-
 Install Bash hook, and setup Git and Bash:
 
     git homemaker && git infect bash git
