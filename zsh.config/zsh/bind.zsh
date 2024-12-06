@@ -20,6 +20,8 @@ bindkey '\e\e[D' backward-word
 bindkey '\e\e[C' beginning-of-line
 bindkey '\e\e[D' end-of-line
 
+bindkey '^U' backward-kill-line
+
 # From: https://stackoverflow.com/a/4766798
 # This was written entirely by Mikael Magnusson (Mikachu)
 # Basically type '...' to get '../..' with successive .'s adding /..
