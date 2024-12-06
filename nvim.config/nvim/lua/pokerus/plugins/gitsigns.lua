@@ -1,24 +1,43 @@
-local function gitsigns_maps()
-  local gs = package.loaded.gitsigns
+local function gitsigns_attach(bufnr)
+  local gs = require("gitsigns")
 
-  vim.keymap.set("n", "<leader>ga", gs.stage_hunk, { desc = "git-stage-hunk" })
-  vim.keymap.set("n", "<leader>gu", gs.undo_stage_hunk, { desc = "git-unstage-hunk" })
-  vim.keymap.set("n", "<leader>gr", gs.reset_hunk, { desc = "git-reset-hunk" })
-  vim.keymap.set("n", "<leader>gk", gs.blame_line, { desc = "git-blame" })
+  local function map(desc, mode, l, r, opts)
+    opts = opts or {}
+    opts.desc = desc
+    opts.buffer = bufnr
+    vim.keymap.set(mode, l, r, opts)
+  end
 
-  vim.keymap.set("n", "<leader>gx", gs.toggle_current_line_blame, { desc = "git-show-blame" })
-  vim.keymap.set("n", "<leader>gz", gs.toggle_deleted, { desc = "git-show-deleted" })
+  local function when_diff_do(keys)
+    if vim.wo.diff then
+      vim.cmd.normal({ keys, bang = true })
+      return true
+    else
+      return false
+    end
+  end
 
-  vim.keymap.set("x", "<leader>ga", gs.stage_hunk, { desc = "git-stage-hunk" })
-  vim.keymap.set("x", "<leader>gr", gs.reset_hunk, { desc = "git-reset-hunk" })
+  map("git-hunk-next", "n", "]c", function() _ = when_diff_do("]c") or gs.nav_hunk("next") end)
+  map("git-hunk-prev", "n", "[c", function() _ = when_diff_do("[c") or gs.nav_hunk("prev") end)
+  map("git-staged-next", "n", "]C", function() _ = when_diff_do("]c") or gs.nav_hunk("next", { target = "staged" }) end)
+  map("git-staged-next", "n", "[C", function() _ = when_diff_do("[c") or gs.nav_hunk("prev", { target = "staged" }) end)
 
-  vim.keymap.set("n", "[g", gs.prev_hunk, { desc = "git-prev-hunk" })
-  vim.keymap.set("n", "]g", gs.next_hunk, { desc = "git-next-hunk" })
-  vim.keymap.set("x", "[g", gs.prev_hunk, { desc = "git-prev-hunk" })
-  vim.keymap.set("x", "]g", gs.next_hunk, { desc = "git-next-hunk" })
+  map("inner-git-hunk", { "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
+  map("git-stage-hunk", "n", "<leader>ga", gs.stage_hunk)
+  map("git-reset-hunk", "n", "<leader>gr", gs.reset_hunk)
+  map("git-stage-hunk", "v", "<leader>ga", function() gs.stage_hunk { vim.fn.line("."), vim.fn.line("v") } end)
+  map("git-reset-hunk", "v", "<leader>gr", function() gs.reset_hunk { vim.fn.line("."), vim.fn.line("v") } end)
+  map("git-undo-stage-hunk", "n", "<leader>hu", gs.undo_stage_hunk)
 
-  vim.keymap.set("o", "ih", ":<C-U>Gitsigns select_hunk<CR>", { desc = "inner-git-hunk" })
-  vim.keymap.set("x", "ih", ":<C-U>Gitsigns select_hunk<CR>", { desc = "inner-git-hunk" })
+  map("git-stage-buffer", "n", "<leader>gw", gs.stage_buffer)
+  map("git-stage-buffer", "n", "<leader>gA", gs.stage_buffer)
+  map("git-reset-buffer", "n", "<leader>gR", gs.reset_buffer)
+
+  map("git-blame-line", "n", "<leader>gk", gs.blame_line)
+  map("git-blame", "n", "<leader>gK", gs.blame)
+  map("git-show-deleted", "n", "<leader>gx", gs.toggle_deleted)
+
+  map("git-diff", "n", "<leader>gd", gs.diffthis)
 end
 
 return {
@@ -27,7 +46,16 @@ return {
     "nvim-lua/plenary.nvim",
   },
   event = "VeryLazy",
-  opts = {
-    on_attach = gitsigns_maps,
-  }
+  config = function()
+    require("gitsigns").setup({
+      on_attach = gitsigns_attach,
+    })
+
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = "gitsigns-blame",
+      callback = function()
+        vim.keymap.set("n", "q", "<cmd>quit<CR>", { buffer = true })
+      end,
+    })
+  end,
 }
