@@ -55,6 +55,7 @@
     ui = auto
 [core]
     excludesfile = ~/.gitignore_global
+    fsmonitor = true
 [commit]
     verbose = true
 
