@@ -47,10 +47,6 @@ M.keys = {
   { "<leader>u",        M.extension "undo",                                                          desc = "telescope-undo" },
 
   { "<leader>gf",       M.builtin "git_files",                                                       desc = "git-files" },
-  { "<leader>gF",       M.builtin "git_status",                                                      desc = "git-modified-files" },
-  { "<leader>gl",       M.builtin "git_commits",                                                     desc = "git-log" },
-  { "<leader>gL",       M.builtin "git_bcommits",                                                    desc = "git-buffer-log" },
-  { "<leader>gb",       M.builtin "git_branches",                                                    desc = "git-branches" },
 
   { "<leader>ld",       M.builtin "diagnostics",                                                     desc = "telescope-diagnostics" },
   { "<leader>l?",       M.builtin "lsp_workspace_symbols",                                           desc = "lsp-workspace-symbols" },
