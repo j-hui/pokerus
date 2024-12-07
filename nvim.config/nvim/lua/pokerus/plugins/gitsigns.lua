@@ -20,7 +20,7 @@ local function gitsigns_attach(bufnr)
   map("git-hunk-next", "n", "]c", function() _ = when_diff_do("]c") or gs.nav_hunk("next") end)
   map("git-hunk-prev", "n", "[c", function() _ = when_diff_do("[c") or gs.nav_hunk("prev") end)
   map("git-staged-next", "n", "]C", function() _ = when_diff_do("]c") or gs.nav_hunk("next", { target = "staged" }) end)
-  map("git-staged-next", "n", "[C", function() _ = when_diff_do("[c") or gs.nav_hunk("prev", { target = "staged" }) end)
+  map("git-staged-prev", "n", "[C", function() _ = when_diff_do("[c") or gs.nav_hunk("prev", { target = "staged" }) end)
 
   map("inner-git-hunk", { "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
   map("git-stage-hunk", "n", "<leader>ga", gs.stage_hunk)
