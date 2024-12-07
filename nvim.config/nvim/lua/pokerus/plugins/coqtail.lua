@@ -59,10 +59,10 @@ local function def_coqtail_maps(t)
 
   nmap("<C-]>", "<Plug>CoqGotoDef", "coq-goto-def")
 
-  nmap("]c", "<Plug>CoqGotoGoalNextStart", "coq-goto-goal-next")
-  nmap("]C", "<Plug>CoqGotoGoalNextEnd", "coq-goto-goal-next-end")
-  nmap("[c", "<Plug>CoqGotoGoalPrevStart", "coq-goto-goal-prev")
-  nmap("[C", "<Plug>CoqGotoGoalPrevEnd", "coq-goto-goal-prev-end")
+  nmap("]g", "<Plug>CoqGotoGoalNextStart", "coq-goto-goal-next")
+  nmap("]G", "<Plug>CoqGotoGoalNextEnd", "coq-goto-goal-next-end")
+  nmap("[g", "<Plug>CoqGotoGoalPrevStart", "coq-goto-goal-prev")
+  nmap("[G", "<Plug>CoqGotoGoalPrevEnd", "coq-goto-goal-prev-end")
   nmap("[d", "<Plug>CoqJumpToError", "coq-jump-to-error")
   nmap("]d", "<Plug>CoqJumpToError", "coq-jump-to-error")
 end
