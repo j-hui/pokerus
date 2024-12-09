@@ -112,8 +112,7 @@ function M.on_attach(_, bufnr)
   -- ^NOTE: causes weird issue sometimes but that can be ignored
 
   vim.api.nvim_create_user_command("Fmt", M.format, { desc = "format" })
-  vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-
+  -- vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 end
 
 return M
