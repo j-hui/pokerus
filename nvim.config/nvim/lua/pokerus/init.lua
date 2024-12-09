@@ -85,7 +85,7 @@ local function setup_nvim_ftdetect()
       [".envrc"] = "sh",
     },
     extension = {
-      h = "c",
+      h = "cpp",
       v = "coq",
       x = "alex",
       y = "happy",
