@@ -1,5 +1,21 @@
 local M = {}
 
+M.keys = {
+  { "K",          vim.lsp.buf.hover,           desc = "lsp-hover" },
+  { "<leader>lk", vim.lsp.buf.hover,           desc = "lsp-hover" },
+  { "<leader>la", vim.lsp.buf.code_action,     desc = "lsp-code-action" },
+  { "<leader>ls", vim.lsp.buf.rename,          desc = "lsp-rename" },
+  { "<leader>ld", vim.lsp.buf.definition,      desc = "lsp-definition" },
+  { "<leader>le", vim.lsp.buf.declaration,     desc = "lsp-declaration" },
+  { "<leader>lm", vim.lsp.buf.implementation,  desc = "lsp-implementation" },
+  { "<leader>li", vim.lsp.buf.incoming_calls,  desc = "lsp-incoming-calls" },
+  { "<leader>lo", vim.lsp.buf.outgoing_calls,  desc = "lsp-outgoing-calls" },
+  { "<leader>lr", vim.lsp.buf.references,      desc = "lsp-references" },
+  { "<leader>lt", vim.lsp.buf.type_definition, desc = "lsp-type-definition" },
+  { "<leader>lh", vim.lsp.buf.typehierarchy,   desc = "lsp-type-hierarchy" },
+  { "<leader>lc", vim.lsp.codelens.run,        desc = "lsp-codelens" },
+}
+
 local function nmap(...)
   vim.keymap.set("n", ...)
 end
