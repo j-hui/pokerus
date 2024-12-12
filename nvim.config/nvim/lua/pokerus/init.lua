@@ -98,6 +98,15 @@ local function setup_nvim_ftdetect()
   }
 end
 
+local function setup_nvim_editorconfig()
+  pcall(function()
+    ---@diagnostic disable-next-line: duplicate-set-field
+    require("editorconfig").properties.trim_trailing_whitespace = function()
+      -- disable this specific behavior. it screws up my diffs.
+    end
+  end)
+end
+
 --- Entry point to my Neovim configuration.
 ---
 --- Called from init.vim.
@@ -158,6 +167,8 @@ function M.setup()
   setup_nvim_keybinds()
 
   setup_nvim_ftdetect()
+
+  setup_nvim_editorconfig()
 
   vim.fn["pokerus#commands#setup"]()
 
