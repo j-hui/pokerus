@@ -34,18 +34,44 @@ function M.source()
   require("luasnip.loaders.from_snipmate").lazy_load({ path = "./snippets" })
 end
 
+function M.forward()
+  local ls = require("luasnip")
+  if ls.jumpable(1) then
+    ls.jump(1)
+  else
+    vim.cmd("normal! w")
+  end
+end
+
+function M.backward()
+  local ls = require("luasnip")
+  if ls.jumpable(-1) then
+    ls.jump(-1)
+  else
+    vim.cmd("normal! b")
+  end
+end
+
+function M.clear()
+  require("luasnip").unlink_current()
+end
+
 return {
   "L3MON4D3/LuaSnip",
   event = "InsertEnter",
   dependencies = {
     "rafamadriz/friendly-snippets",
   },
+  keys = {
+    { "<M-f>", mode = { "n", "s", "i" }, M.forward,  desc = "luasnip-next" },
+    { "<M-b>", mode = { "n", "s", "i" }, M.backward, desc = "luasnip-prev" },
+    { "<M-l>", mode = { "n", "s", "i" }, M.clear,    desc = "luasnip-clear" },
+  },
   config = function()
     vim.api.nvim_create_user_command("LuaSnipEdit", M.edit, { nargs = "?", complete = "filetype" })
     vim.api.nvim_create_user_command("LSE", M.edit, { nargs = "?", complete = "filetype" })
     vim.api.nvim_create_user_command("LuaSnipRefresh", M.source, {})
     vim.api.nvim_create_user_command("LSE", M.source, {})
-
     M.source()
   end,
 }

@@ -53,33 +53,25 @@ function M.mapping()
   local ls = require("luasnip")
 
   return {
-    ["<C-n>"] = cmp.mapping.select_next_item {
-      behavior = cmp.SelectBehavior.Insert,
-    },
-    ["<C-p>"] = cmp.mapping.select_prev_item {
-      behavior = cmp.SelectBehavior.Insert,
-    },
-    ["<Down>"] = cmp.mapping.select_next_item {
-      behavior = cmp.SelectBehavior.Select,
-    },
-    ["<Up>"] = cmp.mapping.select_prev_item {
-      behavior = cmp.SelectBehavior.Select,
-    },
+    ["<C-n>"] = cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Insert },
+    ["<C-p>"] = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Insert },
+    ["<Down>"] = cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Select },
+    ["<Up>"] = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Select },
     ["<M-p>"] = cmp.mapping.scroll_docs(-4),
     ["<M-n>"] = cmp.mapping.scroll_docs(4),
-    -- ["<C-x>"] = cmp.mapping.complete(), -- show completion
-    ["<C-q>"] = cmp.mapping.abort(), -- close menu, restore text
-    ["<C-e>"] = cmp.mapping.close(), -- close menu, keeping text
-    ["<C-l>"] = cmp.mapping(function(fallback)
-      if ls.expand_or_jumpable() then
-        ls.expand_or_jump()
-      elseif cmp.visible() then
-        cmp.confirm({ -- default was <C-y>
-          behavior = cmp.ConfirmBehavior.Replace,
-          select = true,
-        })
+    ["<C-e>"] = cmp.mapping.close(),   -- close menu, keeping text
+    ["<C-x>"] = cmp.mapping(function() -- toggle completion
+      if cmp.visible() then
+        cmp.abort()                    -- close menu, restoring text
       else
-        fallback()
+        cmp.complete()                 -- show completion menu
+      end
+    end),
+    ["<C-y>"] = cmp.mapping(function()
+      if ls.expandable() then
+        ls.expand()
+      elseif cmp.visible() then
+        cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })
       end
     end),
   }
