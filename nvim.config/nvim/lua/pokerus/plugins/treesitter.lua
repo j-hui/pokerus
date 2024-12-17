@@ -56,6 +56,29 @@ M.languages_need_compile = {
   "ocamllex",
 }
 
+M.actions = {
+  next = function()
+    local ts = require("nvim-treesitter.ts_utils")
+    local src = ts.get_node_at_cursor()
+    local dst = src and ts.get_next_node(src, false, false)
+    if src and dst and dst:start() - src:start() == 0 then
+      ts.goto_node(dst, false, true)
+    else
+      vim.cmd("normal! w")
+    end
+  end,
+  prev = function()
+    local ts = require("nvim-treesitter.ts_utils")
+    local src = ts.get_node_at_cursor()
+    local dst = src and ts.get_previous_node(src, false, false)
+    if src and dst and dst:start() - src:start() == 0 then
+      ts.goto_node(dst, false, true)
+    else
+      vim.cmd("normal! b")
+    end
+  end,
+}
+
 M.keys = {
   -- { "gr",        mode = "n", desc = "treesitter-refactor" },
   { "cl",        mode = "n", desc = "treesitter-swap-next-param" },
