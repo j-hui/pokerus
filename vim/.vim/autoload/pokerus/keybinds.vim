@@ -6,8 +6,6 @@ function! s:readlineMaps() abort
   endif
 
   function! s:MapMeta() abort
-    noremap!    <M-b> <S-Left>
-    noremap!    <M-f> <S-Right>
     noremap!    <M-d> <C-O>dw
     cnoremap    <M-d> <S-Right><C-W>
     noremap!    <M-n> <Down>
@@ -52,8 +50,13 @@ function! s:navigationMaps() abort
   inoremap <C-c>  <Esc>
   " inoremap kj   <Esc>
 
+  " center cursorline when scrolling
   nnoremap <C-d>  <C-d>zz
   nnoremap <C-u>  <C-u>zz
+
+  " clear screen and highlights with <C-l>
+  nnoremap <C-l>  <cmd>noh<cr><C-l>
+  inoremap <C-l>  <cmd>noh<cr><C-o><C-l>
 
   " Normal mode readline style navigation
   nnoremap <C-n>    <C-e>j
