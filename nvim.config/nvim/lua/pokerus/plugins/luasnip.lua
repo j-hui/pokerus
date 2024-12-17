@@ -16,7 +16,7 @@ function M.edit(args)
   else
     local fts = { "all", ".init" }
 
-    local cur_ft = vim.api.nvim_buf_get_option(0, "filetype")
+    local cur_ft = vim.api.nvim_get_option_value("filetype", {})
     if type(cur_ft) == "string" and #cur_ft > 0 then
       table.insert(fts, 1, cur_ft)
     end
