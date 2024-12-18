@@ -76,6 +76,12 @@ local function setup_nvim_keybinds()
 
   vim.keymap.set("n", "g-", ":edit %:h<CR>", { desc = "open-.." })
   vim.keymap.set("n", "g=", ":edit .<CR>", { desc = "open-cwd" })
+
+  vim.keymap.set("n", "]t", "<cmd>tnext<cr>", { desc = "tab-next", silent = true })
+  vim.keymap.set("n", "[t", "<cmd>tprev<cr>", { desc = "tab-prev", silent = true })
+
+  vim.keymap.set("n", "]q", "<cmd>cnext<cr>", { desc = "quickfix-next", silent = true })
+  vim.keymap.set("n", "[q", "<cmd>cprev<cr>", { desc = "quickfix-prev", silent = true })
 end
 
 local function setup_nvim_ftdetect()

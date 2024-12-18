@@ -1,7 +1,5 @@
 return {
   -- No setup {{{
-  { "tpope/vim-unimpaired", event = "VeryLazy" },
-  -- ]* and [* mappings
 
   { "tpope/vim-abolish",
     event = "VeryLazy",
