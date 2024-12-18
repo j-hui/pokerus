@@ -3,7 +3,6 @@ return {
   event = { "BufRead Cargo.toml" },
   dependencies = {
     "nvim-lua/plenary.nvim",
-    "hrsh7th/nvim-cmp",
   },
   opts = {
     lsp = {
@@ -14,11 +13,6 @@ return {
       actions = true,
       completion = true,
       hover = true,
-    },
-    src = {
-      cmp = {
-        enabled = true,
-      },
     },
   },
 }
