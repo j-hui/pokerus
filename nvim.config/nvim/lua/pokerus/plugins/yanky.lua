@@ -12,7 +12,7 @@ return {
     { mode = "n",          "<leader>y", "<cmd>YankyRingHistory<CR>",                        desc = "yanky-history" },
     { mode = "n",          "<leader>y", "<cmd>YankyClearHistory<CR>",                       desc = "yanky-clear-history" },
 
-    { mode = { "o", "x" }, "y",         function() require("yanky.textobj").last_put() end, desc = "last-put" },
+    { mode = { "o", "x" }, "Y",         function() require("yanky.textobj").last_put() end, desc = "last-put" },
   },
   opts = {
     highlight = {
