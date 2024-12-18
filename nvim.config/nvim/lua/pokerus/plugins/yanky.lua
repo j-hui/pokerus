@@ -1,5 +1,6 @@
 return {
   "gbprod/yanky.nvim",
+  event = "VeryLazy",
   cmd = { "YankyClearHistory", "YankyRingHistory" },
   keys = {
     { mode = { "n", "x" }, "p",         "<Plug>(YankyPutAfter)",                            desc = "put-after" },
