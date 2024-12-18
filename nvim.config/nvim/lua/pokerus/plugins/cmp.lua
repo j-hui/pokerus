@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-fields
 local M = {
   "hrsh7th/nvim-cmp",
   event = "InsertEnter",
@@ -102,12 +103,26 @@ function M.config()
     },
     mapping = M.mapping(),
     sources = cmp.config.sources(M.sources, M.fallback_sources),
+    formatting = {
+      format = function(_, vim_item)
+        vim_item.menu = "" -- this part should be rendered by ghost_text anyway
+        return vim_item
+      end,
+    },
+    view = {
+      docs = { auto_open = true },
+    },
     window = {
       documentation = cmp.config.window.bordered(),
     },
-    -- experimental = {
-    --   ghost_text = true,
-    -- },
+    performance = {
+      max_view_entries = 32,
+      -- ^^^ not only does this improve performance, it also reduces chance of
+      -- extremely wide entries screwing up the formatting
+    },
+    experimental = {
+      ghost_text = true,
+    },
   })
 
   cmp.setup.cmdline("/", {

@@ -125,6 +125,7 @@ function! s:Appearance() abort
   set sidescrolloff=2       " Keep a few lines to the side of the cursor
   set cmdheight=2           " Extra space in command line at bottom
   set noshowmode            " We already have lightline
+  set pumheight=8           " Limit the number of items shown in pop-up menu
 
   if has('nvim')
     " Neovim plugins I use tend to make a lot of use of the sign column
