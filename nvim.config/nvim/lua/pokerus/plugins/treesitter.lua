@@ -80,17 +80,13 @@ M.actions = {
 }
 
 M.keys = {
-  -- { "gr",        mode = "n", desc = "treesitter-refactor" },
-  { "cl",        mode = "n", desc = "treesitter-swap-next-param" },
-  { "ch",        mode = "n", desc = "treesitter-swap-prev-param" },
-  { "<leader>v", mode = "n", desc = "treesitter-select" },
-  { "a.",        mode = "o", desc = "treesitter-outer-function" },
-  { "i.",        mode = "o", desc = "treesitter-outer-function" },
-  { "cc",        mode = "o", desc = "treesitter-inner-comment" },
-  { "ac",        mode = "o", desc = "treesitter-outer-class" },
-  { "ic",        mode = "o", desc = "treesitter-inner-class" },
-  { "ab",        mode = "o", desc = "treesitter-outer-block" },
-  { "ib",        mode = "o", desc = "treesitter-inner-block" },
+  { "a.", mode = "o", desc = "treesitter-outer-function" },
+  { "i.", mode = "o", desc = "treesitter-outer-function" },
+  { "cc", mode = "o", desc = "treesitter-inner-comment" },
+  { "ac", mode = "o", desc = "treesitter-outer-class" },
+  { "ic", mode = "o", desc = "treesitter-inner-class" },
+  { "ab", mode = "o", desc = "treesitter-outer-block" },
+  { "ib", mode = "o", desc = "treesitter-inner-block" },
 }
 
 function M.init()
@@ -111,42 +107,74 @@ function M.config()
   vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 end
 
-M.opts = {
-  highlight = {
-    enable = true,
-    disable = function(lang, buf)
-      local max_filesize = 100 * 1024 -- 100 KB
-      local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-      if ok and stats and stats.size > max_filesize then
-        return true
-      end
-    end,
-  },
-  endwise = { enable = true, },
-  textobjects = {
-    select = {
-      enable = true,
-      lookahead = true,
-      keymaps = {
-        ["af"] = "@function.outer",
-        ["if"] = "@function.inner",
-        ["ic"] = "@comment.inner",
-        ["ab"] = "@block.outer",
-        ["ib"] = "@block.inner",
-        ["ax"] = "@call.outer",
-        ["ix"] = "@call.inner",
-      },
-    },
-    swap = {
-      enable = true,
-      swap_next = {
-        ["gl"] = "@parameter.inner",
-      },
-      swap_previous = {
-        ["gh"] = "@parameter.inner",
-      },
-    },
-  },
+M.opts = {}
+
+M.opts.highlight = {
+  enable = true,
+  disable = function(lang, buf)
+    local max_filesize = 100 * 1024 -- 100 KB
+    local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+    if ok and stats and stats.size > max_filesize then
+      return true
+    end
+  end,
 }
+
+M.opts.endwise = { enable = true }
+
+M.opts.textobjects = {}
+
+local objs = {
+  ["a"] = "attribute",
+  ["b"] = "block",
+  ["c"] = "comment",
+  ["f"] = "function",
+  ["p"] = "parameter",
+  ["t"] = "class",
+  ["x"] = "call",
+}
+
+M.opts.textobjects.select = {
+  enable = true,
+  lookhead = true,
+  keymaps = {},
+}
+
+for k, q in pairs(objs) do
+  local query
+  query = "@" .. q .. ".outer"
+  M.opts.textobjects.select.keymaps["a" .. k] = { query = query, desc = query }
+  query = "@" .. q .. ".inner"
+  M.opts.textobjects.select.keymaps["i" .. k] = { query = query, desc = query }
+end
+
+M.opts.textobjects.move = {
+  enable = true,
+  set_jumps = true,
+  goto_next_start = {},
+  goto_previous_start = {},
+  goto_next_end = {},
+  goto_previous_end = {},
+}
+
+for k, q in pairs(objs) do
+  local m = M.opts.textobjects.move
+  m.goto_next_start["]m" .. k] = { query = "@" .. q .. ".outer", desc = "goto-next-@" .. q }
+  m.goto_previous_start["[m" .. k] = { query = "@" .. q .. ".outer", desc = "goto-prev-@" .. q }
+  m.goto_next_end["]M" .. k] = { query = "@" .. q .. ".outer", desc = "pass-next-@" .. q }
+  m.goto_previous_end["[M" .. k] = { query = "@" .. q .. ".outer", desc = "pass-prev-@" .. q }
+end
+
+M.opts.textobjects.swap = {
+  enable = true,
+  swap_next = {},
+  swap_previous = {},
+}
+
+for k, q in pairs(objs) do
+  local m = M.opts.textobjects.swap
+  m.swap_next["]s" .. k] = { query = "@" .. q .. ".inner", desc = "swap-next-@" .. q }
+  m.swap_previous["[s" .. k] = { query = "@" .. q .. ".inner", desc = "swap-previous-@" .. q }
+end
 
 return M
