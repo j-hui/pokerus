@@ -1,43 +1,23 @@
-local function gitsigns_attach(bufnr)
-  local gs = require("gitsigns")
-
-  local function map(desc, mode, l, r, opts)
-    opts = opts or {}
-    opts.desc = desc
-    opts.buffer = bufnr
-    vim.keymap.set(mode, l, r, opts)
+local function gs(name)
+  return function()
+    require("gitsigns")[name]()
   end
+end
 
-  local function when_diff_do(keys)
+local function gsv(name)
+  return function()
+    require("gitsigns")[name] { vim.fn.line("."), vim.fn.line("v") }
+  end
+end
+
+local function nav_hunk(fallback, direction, opts)
+  return function()
     if vim.wo.diff then
-      vim.cmd.normal({ keys, bang = true })
-      return true
+      vim.cmd.normal { fallback, bang = true }
     else
-      return false
+      require("gitsigns").nav_hunk(direction, opts)
     end
   end
-
-  map("git-hunk-next", "n", "]c", function() _ = when_diff_do("]c") or gs.nav_hunk("next") end)
-  map("git-hunk-prev", "n", "[c", function() _ = when_diff_do("[c") or gs.nav_hunk("prev") end)
-  map("git-staged-next", "n", "]C", function() _ = when_diff_do("]c") or gs.nav_hunk("next", { target = "staged" }) end)
-  map("git-staged-prev", "n", "[C", function() _ = when_diff_do("[c") or gs.nav_hunk("prev", { target = "staged" }) end)
-
-  map("inner-git-hunk", { "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
-  map("git-stage-hunk", "n", "<leader>ga", gs.stage_hunk)
-  map("git-reset-hunk", "n", "<leader>gr", gs.reset_hunk)
-  map("git-stage-hunk", "v", "<leader>ga", function() gs.stage_hunk { vim.fn.line("."), vim.fn.line("v") } end)
-  map("git-reset-hunk", "v", "<leader>gr", function() gs.reset_hunk { vim.fn.line("."), vim.fn.line("v") } end)
-  map("git-undo-stage-hunk", "n", "<leader>gu", gs.undo_stage_hunk)
-
-  map("git-stage-buffer", "n", "<leader>gw", gs.stage_buffer)
-  map("git-stage-buffer", "n", "<leader>gA", gs.stage_buffer)
-  map("git-reset-buffer", "n", "<leader>gR", gs.reset_buffer)
-
-  map("git-blame-line", "n", "<leader>gk", gs.blame_line)
-  map("git-blame", "n", "<leader>gK", gs.blame)
-  map("git-show-deleted", "n", "<leader>gx", gs.toggle_deleted)
-
-  map("git-diff", "n", "<leader>gd", gs.diffthis)
 end
 
 return {
@@ -46,10 +26,36 @@ return {
     "nvim-lua/plenary.nvim",
   },
   event = "VeryLazy",
+  init = function()
+    require("pokerus.keybinds").add_prefix("<leader>g", "git")
+  end,
+  keys = {
+    { desc = "git-stage-hunk",      "<leader>ga", gs "stage_hunk" },
+    { desc = "git-stage-hunk",      "<leader>ga", gsv "stage_hunk",                             mode = "v" },
+    { desc = "git-reset-hunk",      "<leader>gr", gs "reset_hunk" },
+    { desc = "git-reset-hunk",      "<leader>gr", gsv "reset_hunk",                             mode = "v" },
+    { desc = "git-undo-stage-hunk", "<leader>gu", gs "undo_stage_hunk" },
+
+    { desc = "git-stage-buffer",    "<leader>gw", gs "stage_buffer" },
+    { desc = "git-stage-buffer",    "<leader>gA", gs "stage_buffer" },
+    { desc = "git-reset-buffer",    "<leader>gR", gs "reset_buffer" },
+
+    { desc = "git-blame-line",      "<leader>gk", gs "blame_line" },
+    { desc = "git-blame",           "<leader>gK", gs "blame" },
+    { desc = "git-show-deleted",    "<leader>gx", gs "toggle_deleted" },
+
+    { desc = "git-diff",            "<leader>gd", gs "diffthis" },
+
+    { desc = "git-diff-next",       "]c",         nav_hunk("]c", "next") },
+    { desc = "git-diff-prev",       "]c",         nav_hunk("[c", "prev") },
+
+    { desc = "git-staged-next",     "]c",         nav_hunk("]c", "next", { target = "staged" }) },
+    { desc = "git-staged-prev",     "]c",         nav_hunk("[c", "prev", { target = "staged" }) },
+
+    { desc = "inner-git-hunk",      "ih",         ":<C-U>Gitsigns select_hunk<CR>",             mode = { "o", "x" } },
+  },
   config = function()
-    require("gitsigns").setup({
-      on_attach = gitsigns_attach,
-    })
+    require("gitsigns").setup()
 
     vim.api.nvim_create_autocmd("FileType", {
       pattern = "gitsigns-blame",
