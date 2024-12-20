@@ -47,10 +47,10 @@ return {
     { desc = "git-diff",            "<leader>gd", gs "diffthis" },
 
     { desc = "git-diff-next",       "]c",         nav_hunk("]c", "next") },
-    { desc = "git-diff-prev",       "]c",         nav_hunk("[c", "prev") },
+    { desc = "git-diff-prev",       "[c",         nav_hunk("[c", "prev") },
 
-    { desc = "git-staged-next",     "]c",         nav_hunk("]c", "next", { target = "staged" }) },
-    { desc = "git-staged-prev",     "]c",         nav_hunk("[c", "prev", { target = "staged" }) },
+    { desc = "git-staged-next",     "]C",         nav_hunk("]c", "next", { target = "staged" }) },
+    { desc = "git-staged-prev",     "[C",         nav_hunk("[c", "prev", { target = "staged" }) },
 
     { desc = "inner-git-hunk",      "ih",         ":<C-U>Gitsigns select_hunk<CR>",             mode = { "o", "x" } },
   },
