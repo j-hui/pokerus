@@ -27,7 +27,7 @@ local function gitsigns_attach(bufnr)
   map("git-reset-hunk", "n", "<leader>gr", gs.reset_hunk)
   map("git-stage-hunk", "v", "<leader>ga", function() gs.stage_hunk { vim.fn.line("."), vim.fn.line("v") } end)
   map("git-reset-hunk", "v", "<leader>gr", function() gs.reset_hunk { vim.fn.line("."), vim.fn.line("v") } end)
-  map("git-undo-stage-hunk", "n", "<leader>hu", gs.undo_stage_hunk)
+  map("git-undo-stage-hunk", "n", "<leader>gu", gs.undo_stage_hunk)
 
   map("git-stage-buffer", "n", "<leader>gw", gs.stage_buffer)
   map("git-stage-buffer", "n", "<leader>gA", gs.stage_buffer)
