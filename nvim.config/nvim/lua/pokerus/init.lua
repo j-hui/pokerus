@@ -19,28 +19,6 @@ local function ensure_lazy()
   vim.opt.rtp:prepend(lazypath)
 end
 
-local nvim_use_virtual_text = true
-
-local function nvim_configure_diagnostics()
-  local virtual_text_config = {
-    severity = {
-      min = vim.diagnostic.severity.WARN,
-    }
-  }
-  if nvim_use_virtual_text then
-    vim.diagnostic.config({
-      severity_sort = true,
-      virtual_text = virtual_text_config
-    })
-  else
-    vim.diagnostic.config({
-      severity_sort = true,
-      virtual_text = false
-    })
-  end
-  nvim_use_virtual_text = not nvim_use_virtual_text
-end
-
 --- Neovim-specific settings that aren't associated with any specific plugin.
 local function setup_nvim_colorscheme()
   local signs = {
@@ -53,35 +31,6 @@ local function setup_nvim_colorscheme()
   for _, sign in ipairs(signs) do
     vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })
   end
-end
-
---- Neovim-specific keybindings that aren't associated with any specific plugin.
-local function setup_nvim_keybinds()
-  local function goto_next_diagnostic()
-    vim.diagnostic.goto_next({ severity = { min = vim.diagnostic.severity.WARN } })
-  end
-
-  local function goto_prev_diagnostic()
-    vim.diagnostic.goto_prev({ severity = { min = vim.diagnostic.severity.WARN } })
-  end
-
-  vim.keymap.set("n", "]d", goto_next_diagnostic, { desc = "diagnostic-next", silent = true })
-  vim.keymap.set("n", "[d", goto_prev_diagnostic, { desc = "diagnostic-prev", silent = true })
-
-  vim.keymap.set("n", "<leader>lj", vim.diagnostic.open_float, { desc = "diagnostic-show", silent = true })
-  vim.keymap.set("n", "<leader>lL", nvim_configure_diagnostics, { desc = "virtual-text-toggle", silent = true })
-
-  vim.keymap.set("n", "<leader>+", ":lua ", { desc = "lua-run" })
-  vim.keymap.set("n", "<leader>=", ":lua =()<left>", { desc = "lua-eval" })
-
-  vim.keymap.set("n", "g-", ":edit %:h<CR>", { desc = "open-.." })
-  vim.keymap.set("n", "g=", ":edit .<CR>", { desc = "open-cwd" })
-
-  vim.keymap.set("n", "]t", "<cmd>tnext<cr>", { desc = "tab-next", silent = true })
-  vim.keymap.set("n", "[t", "<cmd>tprev<cr>", { desc = "tab-prev", silent = true })
-
-  vim.keymap.set("n", "]q", "<cmd>cnext<cr>", { desc = "quickfix-next", silent = true })
-  vim.keymap.set("n", "[q", "<cmd>cprev<cr>", { desc = "quickfix-prev", silent = true })
 end
 
 local function setup_nvim_ftdetect()
@@ -164,13 +113,12 @@ function M.setup()
   })
 
   vim.fn["pokerus#settings#setup"]()
-  nvim_configure_diagnostics()
 
   setup_nvim_colorscheme()
   require("pokerus.callback").colorscheme(setup_nvim_colorscheme)
 
   vim.fn["pokerus#keybinds#setup"]()
-  setup_nvim_keybinds()
+  require("pokerus.keybinds").setup()
 
   setup_nvim_ftdetect()
 

@@ -28,4 +28,8 @@ return {
     { "glo", mode = "n", "<cmd>Trouble lsp_outgoing_calls toggle<cr>",   desc = "lsp-outgoing-calls" },
     { "glt", mode = "n", "<cmd>Trouble lsp_type_definitions toggle<cr>", desc = "lsp-type-definitions" },
   },
+  init = function()
+    require("pokerus.keybinds").add_prefix("gk", "trouble")
+    require("pokerus.keybinds").add_prefix("gl", "trouble-lsp")
+  end,
 }

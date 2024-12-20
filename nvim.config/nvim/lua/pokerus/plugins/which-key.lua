@@ -1,23 +1,12 @@
 return {
   "folke/which-key.nvim",
+
   config = function()
     local wk = require("which-key")
-
     wk.setup()
 
-    wk.add({
-      { -- Override verbose descriptions
-        mode = "n",
-        { "gx", desc = "Open file or link" },
-      },
-      { -- Mnemonics for my own groups
-        mode = { "n", "v" },
-        { "<leader>l", group = "lsp" },
-        { "<leader>g", group = "git" },
-        { "<leader>x", group = "exec" },
-        { "gk",        group = "trouble" },
-        { "gl",        group = "trouble-lsp" },
-      },
-    })
-  end
+    for prefix, name in pairs(require("pokerus.keybinds").prefixes) do
+      wk.add({ prefix, group = name })
+    end
+  end,
 }

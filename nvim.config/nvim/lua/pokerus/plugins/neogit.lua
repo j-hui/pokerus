@@ -18,6 +18,9 @@ return {
     "nvim-telescope/telescope.nvim", -- optional
   },
   cmd = { "Neogit", "NeogitLog" },
+  init = function()
+    require("pokerus.keybinds").add_prefix("<leader>g", "git")
+  end,
   keys = {
     { "<leader>gc", open { "commit" },                 mode = "n", desc = "git-commit" },
     { "<leader>gg", open { kind = "split_above_all" }, mode = "n", desc = "git-status" },
