@@ -4,11 +4,11 @@ return {
   opts = {
     keymaps = {
       -- I don't want to set '<localleader>' to 'g' but am otherwise happy with the bindings.
+      close = { n = "q" },
       replace = { n = "gr" },
       qflist = { n = "gq" },
       syncLocations = { n = "gs" },
       syncLine = { n = "gl" },
-      close = { n = "gc" },
       historyOpen = { n = "gt" },
       historyAdd = { n = "ga" },
       refresh = { n = "gf" },
@@ -23,6 +23,17 @@ return {
       swapEngine = { n = "ge" },
       previewLocation = { n = "gi" },
       swapReplacementInterpreter = { n = "gx" },
-    }
+    },
+  },
+  keys = {
+    { desc = "grug-far", "g/", "<cmd>GrugFar<cr>" },
+    {
+      desc = "grug-far",
+      mode = "v",
+      "g/",
+      function()
+        require("grug-far").with_visual_selection()
+      end,
+    },
   },
 }
