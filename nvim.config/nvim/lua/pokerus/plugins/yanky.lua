@@ -11,7 +11,7 @@ return {
     { mode = "n",          "[y",        "<Plug>(YankyCycleForward)",                        desc = "yanky-history-forward" },
     { mode = "n",          "]y",        "<Plug>(YankyCycleBackward)",                       desc = "yanky-history-backward" },
     { mode = "n",          "<leader>y", "<cmd>YankyRingHistory<CR>",                        desc = "yanky-history" },
-    { mode = "n",          "<leader>y", "<cmd>YankyClearHistory<CR>",                       desc = "yanky-clear-history" },
+    { mode = "n",          "<leader>Y", "<cmd>YankyClearHistory<CR>",                       desc = "yanky-clear-history" },
 
     { mode = { "o", "x" }, "Y",         function() require("yanky.textobj").last_put() end, desc = "last-put" },
   },
