@@ -1,118 +1,59 @@
 local M = {}
 
-M.keys = {
-  { "K",          vim.lsp.buf.hover,           desc = "lsp-hover" },
-  { "<leader>lk", vim.lsp.buf.hover,           desc = "lsp-hover" },
-  { "<leader>la", vim.lsp.buf.code_action,     desc = "lsp-code-action" },
-  { "<leader>ls", vim.lsp.buf.rename,          desc = "lsp-rename" },
-  { "<leader>ld", vim.lsp.buf.definition,      desc = "lsp-definition" },
-  { "<leader>le", vim.lsp.buf.declaration,     desc = "lsp-declaration" },
-  { "<leader>lm", vim.lsp.buf.implementation,  desc = "lsp-implementation" },
-  { "<leader>li", vim.lsp.buf.incoming_calls,  desc = "lsp-incoming-calls" },
-  { "<leader>lo", vim.lsp.buf.outgoing_calls,  desc = "lsp-outgoing-calls" },
-  { "<leader>lr", vim.lsp.buf.references,      desc = "lsp-references" },
-  { "<leader>lt", vim.lsp.buf.type_definition, desc = "lsp-type-definition" },
-  { "<leader>lh", vim.lsp.buf.typehierarchy,   desc = "lsp-type-hierarchy" },
-  { "<leader>lc", vim.lsp.codelens.run,        desc = "lsp-codelens" },
+local lsp_buf_apis = {
+  { "hover",            key = { "K", "<leader>lk" }, },
+  { "definition",       key = "<leader>ld",          opts = { reuse_win = true }, },
+  { "declaration",      key = "<leader>le",          opts = { reuse_win = true }, },
+  { "type_definition",  key = "<leader>lt",          opts = { reuse_win = true }, },
+  { "implementation",   key = "<leader>lm",          opts = { reuse_win = true }, },
+  { "code_action",      key = "<leader>la",          mode = { "n", "x" } },
+  { "references",       key = "<leader>ln", },
+  { "typehierarchy",    key = "<leader>lh", },
+  { "incoming_calls",   key = "<leader>li",          desc = "incoming-calls", },
+  { "outgoing_calls",   key = "<leader>lo",          desc = "outgoing-calls", },
+  { "document_symbol",  key = "<leader>ls",          desc = "document-symbols", },
+  { "workspace_symbol", key = "<leader>lS",          desc = "workspace-symbols", },
+  { "rename",           key = "<leader>lr", },
+  { "format",           opts = { async = true }, },
+  { "command", },
 }
 
-local function nmap(...)
-  vim.keymap.set("n", ...)
-end
-
-local function xmap(...)
-  vim.keymap.set("x", ...)
-end
-
-local function opt_jump(opt)
-  opt = opt or {}
-  if opt.jump == "split" then
-    vim.cmd [[wincmd s]]
-  elseif opt.jump == "vsplit" then
-    vim.cmd [[wincmd v]]
+for _, api in ipairs(lsp_buf_apis) do
+  api.mode = api.mode or { "n" }
+  if type(api.mode) ~= "table" then
+    api.mode = { api.mode }
   end
-end
 
-function M.hover()
-  vim.lsp.buf.hover()
-end
+  if api.key and type(api.key) ~= "table" then
+    api.key = { api.key }
+  end
 
-function M.declaration(opt)
-  opt_jump(opt)
-  vim.lsp.buf.declaration { reuse_win = true }
-end
-
-function M.definition(opt)
-  opt_jump(opt)
-  vim.lsp.buf.definition { reuse_win = true }
-end
-
-function M.typedef(opt)
-  opt_jump(opt)
-  vim.lsp.buf.type_definition { reuse_win = true }
-end
-
-function M.implementation(opt)
-  opt_jump(opt)
-  vim.lsp.buf.implementation { reuse_win = true }
-end
-
-function M.references(opt)
-  opt_jump(opt)
-  vim.lsp.buf.references()
-end
-
-function M.code_action()
-  vim.lsp.buf.code_action()
-end
-
-function M.rename()
-  vim.lsp.buf.rename()
-end
-
-function M.codelens()
-  vim.lsp.codelens.run()
-end
-
-function M.format()
-  vim.lsp.buf.format { async = true }
+  M[api[1]] = function()
+    vim.lsp.buf[api[1]](api.opts or {})
+  end
 end
 
 function M.on_attach(_, bufnr)
-  local function lsp_keymap(desc)
-    return {
-      desc = "lsp-" .. desc,
-      buffer = bufnr,
-      silent = true,
-    }
-  end
-
-  nmap("K", M.hover, lsp_keymap "hover")
-  nmap("<leader>lk", M.hover, lsp_keymap "hover")
-  -- nmap("<leader>l=", M.format, lsp_keymap "format") -- delegated to conform.nvim
-  nmap("<leader>la", M.code_action, lsp_keymap "code-action")
-  nmap("<leader>lr", M.rename, lsp_keymap "rename")
-  xmap("<leader>la", M.code_action, lsp_keymap "code-action")
-  nmap("<leader>lx", M.codelens, lsp_keymap "codelens")
-
-  for _, km in ipairs {
-    { "d", "definition" },
-    { "e", "declaration" },
-    { "i", "implementation" },
-    { "t", "typedef" },
-    { "*", "references" },
-  } do
-    local key, func = km[1], km[2]
-    nmap("<leader>l" .. key, M[func], lsp_keymap("goto-" .. func))
-    nmap("<leader>lv" .. key, function() M[func] { jump = "vsplit" } end, lsp_keymap("vsplit-" .. func))
-    nmap("<leader>ls" .. key, function() M[func] { jump = "split" } end, lsp_keymap("split-" .. func))
-  end
-
   -- vim.cmd [[autocmd CursorHold,CursorHoldI,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
-  -- ^NOTE: causes weird issue sometimes but that can be ignored
+  -- ^ causes weird issue sometimes but that can be ignored
 
-  vim.api.nvim_create_user_command("Fmt", M.format, { desc = "format" })
   -- vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+end
+
+-- TODO codelens
+
+function M.setup()
+  for _, api in ipairs(lsp_buf_apis) do
+    for _, key in ipairs(api.key or {}) do
+      for _, mode in ipairs(api.mode) do
+        vim.keymap.set(mode, key, M[api[1]], {
+          desc = "lsp-" .. (api.desc or api[1]),
+          silent = true
+        })
+      end
+    end
+  end
+  vim.api.nvim_create_user_command("Fmt", M.format, { desc = "format" })
 end
 
 return M

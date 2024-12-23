@@ -6,6 +6,7 @@ local M = {}
 
 local function ensure_lazy()
   local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+  ---@diagnostic disable-next-line: undefined-field
   if not vim.loop.fs_stat(lazypath) then
     vim.fn.system({
       "git",
@@ -31,6 +32,10 @@ local function setup_nvim_colorscheme()
   for _, sign in ipairs(signs) do
     vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })
   end
+
+  vim.api.nvim_set_hl(0, "LspReferenceRead", { underline = true })
+  vim.api.nvim_set_hl(0, "LspReferenceWrite", { underline = true })
+  vim.api.nvim_set_hl(0, "LspReferenceText", { underline = true })
 end
 
 local function setup_nvim_ftdetect()
@@ -119,6 +124,8 @@ function M.setup()
 
   vim.fn["pokerus#keybinds#setup"]()
   require("pokerus.keybinds").setup()
+
+  require("pokerus.lsp").setup()
 
   setup_nvim_ftdetect()
 

@@ -2,7 +2,8 @@ local M = {
   "ibhagwan/fzf-lua",
   dependencies = {
     "nvim-tree/nvim-web-devicons",
-    { "junegunn/fzf", build = "./install --bin" }
+    { "junegunn/fzf", build = "./install --bin" },
+    "folke/trouble.nvim",
   },
   cmd = { "FzfLua" },
 }
@@ -50,7 +51,8 @@ M.config = function()
         ["enter"]  = fzf.actions.file_edit,
         ["ctrl-x"] = fzf.actions.file_split,
         ["ctrl-s"] = fzf.actions.file_vsplit,
-        ["ctrl-y"] = fzf.actions.file_sel_to_qf,
+        -- ["ctrl-y"] = fzf.actions.file_sel_to_qf,
+        ["ctrl-y"] = require("trouble.sources.fzf").actions.open,
       },
     },
   })
@@ -62,10 +64,6 @@ local function cmd(name)
   return function()
     require("fzf-lua")[name]()
   end
-end
-
-function M.init()
-  require("pokerus.keybinds").add_prefix("<leader>/", "grep")
 end
 
 M.keys = {
@@ -81,6 +79,7 @@ M.keys = {
 
   { "<leader>//",       cmd("grep"),          desc = "grep" },
   { "<leader>/.",       cmd("grep_cword"),    desc = "grep-cword" },
+  { "<leader>/u",       cmd("grep_last"),     desc = "grep-last" },
   { "<leader>/",        cmd("grep_visual"),   desc = "grep-visual",   mode = { "v" } },
 
   { "<C-g>x",           cmd("complete_path"), desc = "complete-path", mode = { "n", "v", "i" } },

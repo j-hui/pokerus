@@ -7,13 +7,8 @@ local M = {
     "nvim-treesitter/nvim-treesitter",
     -- "chipsenkbeil/org-mouse.nvim",
     "hrsh7th/nvim-cmp",
-    { "chipsenkbeil/org-roam.nvim",          tag = "0.1.0" },
-    { "nvim-orgmode/telescope-orgmode.nvim", dependencies = { "nvim-telescope/telescope.nvim" } },
+    { "chipsenkbeil/org-roam.nvim", tag = "0.1.0" },
   },
-}
-
-M.keys = {
-  { "<leader>oe", mode = "n", desc = "org headings", function() require("telescope").extensions.orgmode.search_headings() end, },
 }
 
 function M.org_path(file)
@@ -101,7 +96,7 @@ function M.config()
         org_timestamp_up = "+",
         org_timestamp_down = "-",
         org_export = false,
-        org_refile = false, -- Overridden by telescope-orgmode, below
+        -- org_refile = false, -- Overridden by telescope-orgmode, below
         org_insert_link = false,
       },
     },
@@ -118,18 +113,16 @@ function M.config()
     callback = function(e)
       vim.cmd [[set formatoptions-=r]]
       vim.cmd [[set tabstop=2]]
-      vim.keymap.set('n', '<leader>or', require('telescope').extensions.orgmode.refile_heading, {
-        desc = "org refile",
-        buffer = e.buf,
-      })
-      vim.keymap.set('n', '<leader>oli', require('telescope').extensions.orgmode.insert_link, {
-        desc = "org insert link",
-        buffer = e.buf,
-      })
+      -- vim.keymap.set('n', '<leader>or', require('telescope').extensions.orgmode.refile_heading, {
+      --   desc = "org refile",
+      --   buffer = e.buf,
+      -- })
+      -- vim.keymap.set('n', '<leader>oli', require('telescope').extensions.orgmode.insert_link, {
+      --   desc = "org insert link",
+      --   buffer = e.buf,
+      -- })
     end,
   })
-
-  require("telescope").load_extension "orgmode"
 end
 
 return M

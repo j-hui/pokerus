@@ -6,7 +6,12 @@ function M.add_prefix(prefix, name)
   M.prefixes[prefix] = name
 end
 
+-- The obvious prefixes
 M.add_prefix("<leader>l", "lsp")
+M.add_prefix("<leader>s", "shell")
+M.add_prefix("<leader>g", "git")
+M.add_prefix("<leader>/", "search")
+M.add_prefix("<leader>t", "test")
 
 local nvim_use_virtual_text = true
 
@@ -44,8 +49,8 @@ function M.setup()
   vim.keymap.set("n", "]d", goto_next_diagnostic, { desc = "diagnostic-next", silent = true })
   vim.keymap.set("n", "[d", goto_prev_diagnostic, { desc = "diagnostic-prev", silent = true })
 
-  vim.keymap.set("n", "<leader>lj", vim.diagnostic.open_float, { desc = "diagnostic-show", silent = true })
-  vim.keymap.set("n", "<leader>lL", diagnostics_toggle, { desc = "diagnostic-toggle", silent = true })
+  vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, { desc = "diagnostic-show", silent = true })
+  vim.keymap.set("n", "<leader>D", diagnostics_toggle, { desc = "diagnostic-toggle", silent = true })
 
   vim.keymap.set("n", "<leader>+", ":lua ", { desc = "lua-run" })
   vim.keymap.set("n", "<leader>=", ":lua =()<left>", { desc = "lua-eval" })

@@ -1,13 +1,7 @@
 return {
   "johmsalas/text-case.nvim",
-  dependencies = { "nvim-telescope/telescope.nvim" },
   event = "VeryLazy",
-  keys = {
-    { mode = { "n", "v" }, "ga<leader>", "<cmd>TextCaseOpenTelescope<CR>", desc = "Telescope" },
-    { mode = { "n", "v" }, "<leader>lR", "<cmd>TextCaseOpenTelescopeLSPChange<CR>", desc = "lsp-refactor-case" },
-    { mode = { "n", "v" }, "ga;", "<cmd>TextCaseStartReplacingCommand<CR>", desc = "Start replacing" },
-    { mode = { "n", "v" }, "ga:", "<cmd>TextCaseStartReplacingCommand<CR>", desc = "Start replacing" },
-  },
+  keys = { "ga" },
   config = function()
     local tc, prefix = require("textcase"), "ga"
 
@@ -41,7 +35,5 @@ return {
       operator = "o/",
       lsp_rename = "?",
     })
-
-    require("telescope").load_extension("textcase")
   end,
 }

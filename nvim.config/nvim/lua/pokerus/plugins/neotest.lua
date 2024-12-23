@@ -1,5 +1,4 @@
--- require("pokerus.plugins.which-key").add_mapping { "<leader>x", group = "neotest" }
-
+---@diagnostic disable: missing-fields
 return {
   "nvim-neotest/neotest",
   dependencies = {
@@ -20,19 +19,15 @@ return {
     -- "mrcjkb/neotest-haskell", -- takes a long time to build
   },
   event = "VeryLazy",
-  init = function()
-    require("pokerus.keybinds").add_prefix("<leader>x", "neotest")
-  end,
   keys = {
-    { "<leader>x<space>", "<cmd>Neotest summary<CR>",      desc = "neotest-summary" },
-    { "<leader>xx",       "<cmd>Neotest run<CR>",          desc = "neotest-run" },
-    { "<leader>xX",       "<cmd>Neotest run file<CR>",     desc = "neotest-run-file" },
-    { "<leader>xq",       "<cmd>Neotest stop<CR>",         desc = "neotest-stop" },
-    { "<leader>xk",       "<cmd>Neotest output<CR>",       desc = "neotest-output" },
-    { "<leader>xo",       "<cmd>Neotest output-panel<CR>", desc = "neotest-output-panel" },
-    { "<leader>xo",       "<cmd>Neotest output-panel<CR>", desc = "neotest-output-panel" },
-    { "]x",               "<cmd>Neotest jump next<CR>",    desc = "neotest-next" },
-    { "[x",               "<cmd>Neotest jump prev<CR>",    desc = "neotest-prev" },
+    { "<leader>tt", "<cmd>Neotest summary<CR>",      desc = "neotest-summary" },
+    { "<leader>tr", "<cmd>Neotest run<CR>",          desc = "neotest-run" },
+    { "<leader>t.", "<cmd>Neotest run file<CR>",     desc = "neotest-run-file" },
+    { "<leader>tq", "<cmd>Neotest stop<CR>",         desc = "neotest-stop" },
+    { "<leader>tk", "<cmd>Neotest output<CR>",       desc = "neotest-output" },
+    { "<leader>to", "<cmd>Neotest output-panel<CR>", desc = "neotest-output-panel" },
+    { "]T",         "<cmd>Neotest jump next<CR>",    desc = "neotest-next" },
+    { "[T",         "<cmd>Neotest jump prev<CR>",    desc = "neotest-prev" },
     {
       "<leader>xd",
       function()

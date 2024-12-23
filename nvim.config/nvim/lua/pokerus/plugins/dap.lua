@@ -3,8 +3,8 @@ local M = {
   dependencies = {
     { "rcarriga/nvim-dap-ui",            config = true },
     { "theHamsta/nvim-dap-virtual-text", config = true },
-    "nvim-telescope/telescope.nvim",
-    "nvim-telescope/telescope-dap.nvim",
+    -- "nvim-telescope/telescope.nvim",
+    -- "nvim-telescope/telescope-dap.nvim",
   },
   keys = {
     { "<leader>d<CR>", function() require("dapui").toggle() end,           mode = "n",          desc = "dap-ui" },
@@ -117,7 +117,8 @@ function M.config()
     end
   })
 
-  require("telescope").load_extension("dap")
+  -- require("telescope").load_extension("dap")
 end
 
-return M
+return {}
+-- return M
