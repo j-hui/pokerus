@@ -1,9 +1,0 @@
-#!/usr/bin/env gtk-launch
-
-[Desktop Entry]
-Terminal=false
-Type=Application
-Name=Google Keep
-Exec=google-chrome-stable --new-window --app=https://keep.google.com/u/1
-StartupWMClass=WhatsApp
-#Icon=
