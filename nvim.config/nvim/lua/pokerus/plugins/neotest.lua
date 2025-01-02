@@ -29,7 +29,7 @@ return {
     { "]T",         "<cmd>Neotest jump next<CR>",    desc = "neotest-next" },
     { "[T",         "<cmd>Neotest jump prev<CR>",    desc = "neotest-prev" },
     {
-      "<leader>xd",
+      "<leader>td",
       function()
         require("neotest").run.run({ strategy = "dap" })
       end,

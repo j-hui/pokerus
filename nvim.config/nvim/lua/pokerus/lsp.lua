@@ -4,10 +4,10 @@ local lsp_buf_apis = {
   { "hover",            key = { "K", "<leader>lk" }, },
   { "definition",       key = "<leader>ld",          opts = { reuse_win = true }, },
   { "declaration",      key = "<leader>le",          opts = { reuse_win = true }, },
-  { "type_definition",  key = "<leader>lt",          opts = { reuse_win = true }, },
   { "implementation",   key = "<leader>lm",          opts = { reuse_win = true }, },
-  { "code_action",      key = "<leader>la",          mode = { "n", "x" } },
-  { "references",       key = "<leader>ln", },
+  { "type_definition",  key = "<leader>lt",          opts = { reuse_win = true }, desc = "typedef" },
+  { "code_action",      key = "<leader>la",          mode = { "n", "x" },         desc = "code-action" },
+  { "references",       key = "<leader>ll", },
   { "typehierarchy",    key = "<leader>lh", },
   { "incoming_calls",   key = "<leader>li",          desc = "incoming-calls", },
   { "outgoing_calls",   key = "<leader>lo",          desc = "outgoing-calls", },
@@ -15,7 +15,7 @@ local lsp_buf_apis = {
   { "workspace_symbol", key = "<leader>lS",          desc = "workspace-symbols", },
   { "rename",           key = "<leader>lr", },
   { "format",           opts = { async = true }, },
-  { "command", },
+  { "command", }, -- NOTE: unclear what this is for
 }
 
 for _, api in ipairs(lsp_buf_apis) do
