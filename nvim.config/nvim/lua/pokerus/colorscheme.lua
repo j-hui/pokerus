@@ -83,7 +83,32 @@ end
 if not M.main then
   vim.notify("Warning: no main theme specified. Defaulting to habamax.", vim.log.levels.WARN)
   M.main = "habamax"
-  vim.cmd.colorscheme(M.main)
+end
+
+local function setup_colo_overrides()
+  local function colo_overrides()
+    local signs = {
+      { name = "DiagnosticSignError", text = "✖" },
+      { name = "DiagnosticSignWarn", text = "‼" },
+      { name = "DiagnosticSignHint", text = "ℹ" },
+      { name = "DiagnosticSignInfo", text = "»" },
+    }
+
+    for _, sign in ipairs(signs) do
+      vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })
+    end
+
+    vim.api.nvim_set_hl(0, "LspReferenceRead", { underline = true })
+    vim.api.nvim_set_hl(0, "LspReferenceWrite", { underline = true })
+    vim.api.nvim_set_hl(0, "LspReferenceText", { underline = true })
+  end
+
+  colo_overrides()
+  require("pokerus.callback").colorscheme(colo_overrides)
+end
+
+function M.setup()
+  setup_colo_overrides()
 end
 
 return M
