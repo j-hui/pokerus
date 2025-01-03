@@ -1,8 +1,8 @@
-return false or {
+local M = {}
+M.opts = {
   settings = {
     ["rust-analyzer"] = {
-      check = {
-        -- allTargets = false,
+      check = { 
         -- extraArgs = { "--target", "thumbv6m-none-eabi" },
         command = "clippy",
       },
@@ -11,8 +11,10 @@ return false or {
         disabled = {
           "inactive-code",
           "unresolved-proc-macro",
-        },
+        }, 
       },
     },
-  }
+  },
 }
+
+return M

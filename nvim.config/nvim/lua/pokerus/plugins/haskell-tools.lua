@@ -1,3 +1,5 @@
+local hls_opts = require("pokerus.lspconfig.hls").opts or {}
+
 return {
   "mrcjkb/haskell-tools.nvim",
   dependencies = {
@@ -11,14 +13,7 @@ return {
         on_attach = function(client, bufnr)
           require("pokerus.lsp").on_attach(client, bufnr)
         end,
-        settings = {
-          haskell = {
-            formattingProvider = "fourmolu",
-            plugin = {
-              stan = { globalOn = false },
-            },
-          },
-        },
+        settings = hls_opts.settings,
       },
     }
   end,

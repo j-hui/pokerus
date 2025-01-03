@@ -1,3 +1,5 @@
+local M = {}
+
 local fwdsearch = nil
 
 if vim.fn.has("mac") then
@@ -33,7 +35,7 @@ elseif vim.fn.has("linux") then
   end
 end
 
-return {
+M.opts = {
   on_attach = function(client, bufnr)
     require("pokerus.lsp").on_attach(client, bufnr)
     vim.keymap.set("n", "<leader>lc", "<cmd>TexlabBuild<CR>", { desc = "tex-build" })
@@ -59,3 +61,5 @@ return {
     },
   },
 }
+
+return M

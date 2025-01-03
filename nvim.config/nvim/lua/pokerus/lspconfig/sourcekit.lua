@@ -1,2 +1,3 @@
-return false and {
+return {
+  lspconfig = false,
 }

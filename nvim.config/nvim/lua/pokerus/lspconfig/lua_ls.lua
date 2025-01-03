@@ -1,4 +1,6 @@
-return {
+local M = {}
+
+M.opts = {
   settings = {
     Lua = {
       diagnostics = {
@@ -36,3 +38,5 @@ return {
     return primary or backup
   end,
 }
+
+return M

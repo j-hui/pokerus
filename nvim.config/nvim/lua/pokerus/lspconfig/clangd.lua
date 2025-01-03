@@ -17,6 +17,7 @@ end
 return {
   -- TODO: Get rid of this awful config.
   -- Tracking: https://github.com/clangd/clangd/issues/539
-  -- cmd = {"clangd", "--query-driver=/**/*"}
-  cmd = { "clangd", "--query-driver=" .. table.concat(driver_paths, ",") }
+  opts = {
+    cmd = { "clangd", "--query-driver=" .. table.concat(driver_paths, ",") }
+  } 
 }

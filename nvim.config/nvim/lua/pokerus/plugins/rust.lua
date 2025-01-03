@@ -9,6 +9,8 @@ local ferris = {
   ft = "rust",
 }
 
+local ra_opts = require("pokerus.lspconfig.rust_analyzer").opts or {}
+
 local rustaceanvim = {
   "mrcjkb/rustaceanvim",
   version = "^4",
@@ -28,22 +30,7 @@ local rustaceanvim = {
         on_attach = function(client, bufnr)
           require("pokerus.lsp").on_attach(client, bufnr)
         end,
-        default_settings = {
-          ["rust-analyzer"] = {
-            check = {
-              -- allTargets = false,
-              -- extraArgs = { "--target", "thumbv6m-none-eabi" },
-              command = "clippy",
-            },
-            -- cargo = { features = { "mlua" } },
-            diagnostics = {
-              disabled = {
-                "inactive-code",
-                "unresolved-proc-macro",
-              },
-            },
-          },
-        },
+        default_settings = ra_opts.settings,
       },
     }
 
