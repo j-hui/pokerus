@@ -100,8 +100,8 @@ local function lint_show()
     linenr = linenr + 1
   end
 
-  vim.api.nvim_buf_set_option(popup.bufnr, "modifiable", false)
-  vim.api.nvim_buf_set_option(popup.bufnr, "readonly", true)
+  vim.api.nvim_set_option_value("modifiable", false, { buf = popup.bufnr })
+  vim.api.nvim_set_option_value("readonly", true, { buf = popup.bufnr })
   vim.api.nvim_buf_set_keymap(popup.bufnr, "n", "q", "", { callback = function() popup:unmount() end })
 end
 

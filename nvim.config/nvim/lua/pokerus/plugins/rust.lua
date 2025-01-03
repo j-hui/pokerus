@@ -9,8 +9,6 @@ local ferris = {
   ft = "rust",
 }
 
-local ra_opts = require("pokerus.lspconfig.rust_analyzer").opts or {}
-
 local rustaceanvim = {
   "mrcjkb/rustaceanvim",
   version = "^4",
@@ -23,6 +21,8 @@ local rustaceanvim = {
 
   config = function()
     -- NOTE: See how to configure different settings per project here: https://github.com/mrcjkb/rustaceanvim?tab=readme-ov-file#how-to-dynamically-load-different-rust-analyzer-settings-per-project
+
+    local ra_opts = require("pokerus.lspconfig.rust_analyzer").opts or {}
 
     vim.g.rustaceanvim = {
       -- LSP configuration

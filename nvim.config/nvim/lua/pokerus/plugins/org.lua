@@ -5,7 +5,6 @@ local M = {
   ft = { "org", "orgagenda" },
   dependencies = {
     "nvim-treesitter/nvim-treesitter",
-    -- "chipsenkbeil/org-mouse.nvim",
     "hrsh7th/nvim-cmp",
     { "chipsenkbeil/org-roam.nvim", tag = "0.1.0" },
   },
@@ -110,7 +109,7 @@ function M.config()
   -- Buffer-local options
   vim.api.nvim_create_autocmd("FileType", {
     pattern = "org",
-    callback = function(e)
+    callback = function()
       vim.cmd [[set formatoptions-=r]]
       vim.cmd [[set tabstop=2]]
       -- vim.keymap.set('n', '<leader>or', require('telescope').extensions.orgmode.refile_heading, {
