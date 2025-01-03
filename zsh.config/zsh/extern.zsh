@@ -28,6 +28,10 @@ fi
 
 export RIPGREP_CONFIG_PATH=~/.config/ripgrep/ripgreprc
 
+if (( $+commands[op] )) ; then
+  eval "$(op completion zsh)"; compdef _op op
+fi
+
 if (( $+commands[lsd] )); then
   alias ls='lsd'
   alias ll='lsd -la'
