@@ -29,7 +29,7 @@ for _, api in ipairs(lsp_buf_apis) do
   end
 
   M[api[1]] = function()
-    vim.lsp.buf[api[1]](api.opts or {})
+    vim.lsp.buf[api[1]](api.opts)
   end
 end
 
@@ -46,7 +46,7 @@ function M.setup()
   for _, api in ipairs(lsp_buf_apis) do
     for _, key in ipairs(api.key or {}) do
       for _, mode in ipairs(api.mode) do
-        vim.keymap.set(mode, key, M[api[1]], {
+        vim.keymap.set(mode, key, function() M[api[1]]() end, {
           desc = "lsp-" .. (api.desc or api[1]),
           silent = true
         })
