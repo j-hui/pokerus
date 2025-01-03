@@ -69,3 +69,7 @@ if [ -n "$KITTY_PID" ] ; then
 fi
 
 [ -f ~/.local/share/git-subrepo/.rc ] && source ~/.local/share/git-subrepo/.rc
+
+if [ -n "${GHOSTTY_RESOURCES_DIR}" ]; then
+    builtin source "${GHOSTTY_RESOURCES_DIR}/shell-integration/zsh/ghostty-integration"
+fi

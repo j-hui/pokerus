@@ -46,6 +46,10 @@ if [ -n "$KITTY_PID" ] ; then
   alias ssh='kitten ssh'
 fi
 
+if [ -n "${GHOSTTY_RESOURCES_DIR}" ]; then
+    builtin source "${GHOSTTY_RESOURCES_DIR}/shell-integration/bash/ghostty.bash"
+fi
+
 export RIPGREP_CONFIG_PATH=~/.config/ripgrep/ripgreprc
 
 ### OS-specific configuration
