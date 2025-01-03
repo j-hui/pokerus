@@ -22,8 +22,14 @@ return {
       -- },
     })
 
-    -- local R = require "nvim-autopairs.rule"
-    -- local cond = require "nvim-autopairs.conds"
+    -- Integration with nvim-cmp
+    local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+    local cmp = require('cmp')
+    cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
+
+    -- This rule seems to cause some trouble due to triple-backtick syntax.
+    npairs.remove_rule('`')
+
     -- -- Adapted from: https://github.com/IndianBoy42/LunarVim/blob/0ec62e6ef5dff125065557347f840a65bea580a1/lua/lv-autopairs/init.lua
     --
     -- npairs.add_rules {
@@ -76,10 +82,5 @@ return {
     -- for lp, rp in pairs(texpairs) do
     --   npairs.add_rule(R(lp, rp, "tex"):with_pair(cond.not_after_regex "%%"))
     -- end
-
-    -- Integration with nvim-cmp
-    local cmp_autopairs = require('nvim-autopairs.completion.cmp')
-    local cmp = require('cmp')
-    cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
   end,
 }
