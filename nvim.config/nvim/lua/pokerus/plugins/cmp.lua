@@ -17,18 +17,39 @@ local M = {
     "hrsh7th/cmp-cmdline",
     "hrsh7th/cmp-nvim-lua",
     -- "hrsh7th/cmp-nvim-lsp-signature-help",
-    -- Snippets
-    "L3MON4D3/LuaSnip",
-    "saadparwaiz1/cmp_luasnip",
   },
 }
 
 M.sources = {
-  { name = "luasnip" },
   { name = "nvim_lua" },
   { name = "nvim_lsp" },
   { name = "path" },
 }
+
+local snippet_opt = nil
+
+if vim.snippet then
+  table.insert(M.dependencies, {
+    "garymjr/nvim-snippets",
+    dependencies = { "rafamadriz/friendly-snippets" },
+    opts = {
+      friendly_snippets = true,
+      create_cmp_source = true,
+    },
+    keys = {
+      { mode = { "s", "i", "n" }, "<M-l>", function() vim.snippet.jump(1) end,  desc = "snippet-next" },
+      { mode = { "s", "i", "n" }, "<M-h>", function() vim.snippet.jump(-1) end, desc = "snippet-prev" },
+      { mode = { "s", "i", "n" }, "<M-k>", function() vim.snippet.stop() end,   desc = "snippet-stop" },
+    },
+  })
+
+  table.insert(M.sources, 1, { name = "snippets" })
+  snippet_opt = {
+    expand = function(args)
+      vim.snippet.expand(args.body)
+    end,
+  }
+end
 
 M.fallback_sources = {
   {
@@ -51,7 +72,6 @@ M.fallback_sources = {
 
 function M.mapping()
   local cmp = require("cmp")
-  local ls = require("luasnip")
 
   return {
     ["<C-n>"] = cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Insert },
@@ -69,9 +89,7 @@ function M.mapping()
       end
     end),
     ["<C-y>"] = cmp.mapping(function()
-      if ls.expandable() then
-        ls.expand()
-      elseif cmp.visible() then
+      if cmp.visible() then
         cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })
       end
     end),
@@ -96,11 +114,7 @@ function M.config()
 
       return true
     end,
-    snippet = {
-      expand = function(args)
-        require("luasnip").lsp_expand(args.body)
-      end,
-    },
+    snippet = snippet_opt,
     mapping = M.mapping(),
     sources = cmp.config.sources(M.sources, M.fallback_sources),
     formatting = {
